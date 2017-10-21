@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="59ef823d-40fd-404d-9437-24d47fd9d34e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\info2017\\Documents\\NetBeansProjects\\SistemaVentas2.0\\src\\Reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="idsucursal" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="sucursal" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT * from public.sp_mostrarresumen($P{idsucursal});]]>
+	</queryString>
+	<field name="prodreg" class="java.lang.Long"/>
+	<field name="prodbajo" class="java.lang.Long"/>
+	<field name="clireg" class="java.lang.Long"/>
+	<field name="provreg" class="java.lang.Long"/>
+	<field name="emplereg" class="java.lang.Long"/>
+	<field name="ventanio" class="java.math.BigDecimal"/>
+	<field name="ventmes" class="java.math.BigDecimal"/>
+	<field name="ventmesenero" class="java.math.BigDecimal"/>
+	<field name="ventmesfebrero" class="java.math.BigDecimal"/>
+	<field name="ventmesmarzo" class="java.math.BigDecimal"/>
+	<field name="ventmesabril" class="java.math.BigDecimal"/>
+	<field name="ventmesmayo" class="java.math.BigDecimal"/>
+	<field name="ventmesjunio" class="java.math.BigDecimal"/>
+	<field name="ventmesjulio" class="java.math.BigDecimal"/>
+	<field name="ventmesagosto" class="java.math.BigDecimal"/>
+	<field name="ventmessetiembre" class="java.math.BigDecimal"/>
+	<field name="ventmesactubre" class="java.math.BigDecimal"/>
+	<field name="ventmesnov" class="java.math.BigDecimal"/>
+	<field name="ventmesdic" class="java.math.BigDecimal"/>
+	<field name="ventdia" class="java.math.BigDecimal"/>
+	<field name="ventproc" class="java.lang.Long"/>
+	<field name="empleames" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="555" splitType="Stretch">
+			<barChart>
+				<chart>
+					<reportElement x="16" y="25" width="770" height="265" uuid="433ede19-1619-4a82-8b6a-ab2805ea4488"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset resetType="Page" incrementType="Report"/>
+					<categorySeries>
+						<seriesExpression><![CDATA["Enero"]]></seriesExpression>
+						<categoryExpression><![CDATA["Enero"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmesenero}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Febrero"]]></seriesExpression>
+						<categoryExpression><![CDATA["Febrero"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmesfebrero}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Marzo"]]></seriesExpression>
+						<categoryExpression><![CDATA["Marzo"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmesmarzo}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Abril"]]></seriesExpression>
+						<categoryExpression><![CDATA["Abril"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmesabril}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Mayo"]]></seriesExpression>
+						<categoryExpression><![CDATA["Mayo"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmesmayo}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Junio"]]></seriesExpression>
+						<categoryExpression><![CDATA["Junio"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmesjunio}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Julio"]]></seriesExpression>
+						<categoryExpression><![CDATA["Julio"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmesjulio}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Agosto"]]></seriesExpression>
+						<categoryExpression><![CDATA["Agosto"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmesagosto}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Septiembre"]]></seriesExpression>
+						<categoryExpression><![CDATA["Septiembre"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmessetiembre}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Octubre"]]></seriesExpression>
+						<categoryExpression><![CDATA["Octubre"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmesactubre}]]></valueExpression>
+						<labelExpression><![CDATA["Octubre"]]></labelExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Noviembre"]]></seriesExpression>
+						<categoryExpression><![CDATA["Noviembre"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmesnov}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Diciembre"]]></seriesExpression>
+						<categoryExpression><![CDATA["Diciembre"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventmesdic}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<textField>
+				<reportElement x="16" y="309" width="240" height="20" uuid="aa203216-cf3d-48aa-9de9-d21efc6581f9"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Productos Registrados: "+$F{prodreg}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="16" y="336" width="240" height="20" uuid="d60cba6f-1548-4d3a-88dd-cd806c9640f1"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Productos con bajo stock: "+$F{prodbajo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="16" y="363" width="240" height="20" uuid="2140b293-bec1-4990-a45a-3d22dbc23a46"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Clientes registrados: "+$F{clireg}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="16" y="391" width="240" height="20" uuid="f1df9587-ecd6-4e9a-b7fb-06b3d748b42e"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Proveedores registrados: "+$F{provreg}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="16" y="420" width="240" height="20" uuid="fc04806c-9e91-4c5b-bc60-89085fa6cfba"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Empleados registrados: "+$F{emplereg}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="352" y="363" width="144" height="20" uuid="e977a2a1-9973-4b29-a145-867f204f040c"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ventanio}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="352" y="309" width="144" height="20" uuid="292fccd3-13f8-453f-95a1-0ca58e609c15"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ventmes}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="352" y="336" width="144" height="20" uuid="e359e483-870c-49ae-b5e8-b229e8d7ed62"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ventdia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="266" y="391" width="230" height="20" uuid="d8c4f394-5ee4-49ec-9e5b-3e5e09685ee1"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ventas en proceso: "+$F{ventproc}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="266" y="309" width="86" height="20" uuid="9638d5d9-68b3-4996-beba-7d67aa5243ed"/>
+				<textElement>
+					<font fontName="Segoe UI Light"/>
+				</textElement>
+				<text><![CDATA[Total ventas mes:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="266" y="336" width="86" height="20" uuid="1056abfb-543f-445a-b439-35a820d164a6"/>
+				<textElement>
+					<font fontName="Segoe UI Light"/>
+				</textElement>
+				<text><![CDATA[Total ventas dia:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="266" y="363" width="86" height="20" uuid="3eea68c2-feb6-417f-abca-8986ce14613c"/>
+				<textElement>
+					<font fontName="Segoe UI Light"/>
+				</textElement>
+				<text><![CDATA[Total ventas año:]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="517" y="309" width="269" height="233" uuid="c4310f70-5ed0-4928-ab00-f4699add08bd"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rankingventasmes.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="305" y="0" width="252" height="20" uuid="9685336b-a51d-4d93-8ad0-3e01d3e18202"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["VENTAS DEL AÑO "+$P{sucursal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="597" y="0" width="205" height="20" uuid="49ce8d2c-20fb-4f1f-938f-efdfc9e74c17"/>
+				<textElement textAlignment="Right">
+					<font fontName="Segoe UI Light" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

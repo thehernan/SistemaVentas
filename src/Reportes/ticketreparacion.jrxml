@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="204" pageHeight="421" columnWidth="164" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="494bff22-7237-4a39-ac80-c8079afa12f2">
+	<property name="ireport.zoom" value="2.1435888100000016"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="21"/>
+	<parameter name="id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select suscursal.nombre,reparacion.atendido, to_char(fecha_recepcion,'DD/MM/YYYY')as fecha,
+to_char(fecha_recepcion,'HH24:MI:SS')as hora,reparacion.precio,reparacion.abono,reparacion.codigo from reparacion
+inner join suscursal on suscursal.id_sucursal=reparacion.id_sucursal where id_reparacion=$P{id};]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="atendido" class="java.lang.String"/>
+	<field name="fecha" class="java.lang.String"/>
+	<field name="hora" class="java.lang.String"/>
+	<field name="precio" class="java.math.BigDecimal"/>
+	<field name="abono" class="java.math.BigDecimal"/>
+	<field name="codigo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="205" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="164" height="11" uuid="8d093a5a-ec37-4fd7-8b46-26b371fd34b6"/>
+				<textElement textAlignment="Center">
+					<font fontName="Segoe UI Light" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TICKET DE PAGO CAJA GSMSTORE]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="24" y="128" width="119" height="23" uuid="a137e8fb-6eaa-474a-a40a-ec110b2162e7"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="true" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{codigo}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="1" y="39" width="108" height="11" uuid="f6f63dc6-b608-49f5-8b2f-3bd8dd0fb6b3"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="67" width="160" height="12" uuid="c333952e-bd4e-429b-96c2-175595573046"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{atendido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="25" y="81" width="61" height="14" uuid="5236444d-90b6-49ea-b56b-43f7caacee2a"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="107" y="81" width="57" height="14" uuid="4f6da15d-22dd-4137-8d4c-0633b7bdcfbb"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="27" y="97" width="135" height="12" uuid="6ae1c335-3153-422c-afea-a3235eb0ac77"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="25" width="47" height="12" uuid="8972d355-30b0-4796-b7f0-3309c54e3a96"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sucursal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="55" width="58" height="12" uuid="66607c3d-439f-4627-9983-63b8d1633b91"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Vendedor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="81" width="23" height="14" uuid="df86da26-8574-4fbe-b891-15c31f690e0c"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="86" y="81" width="21" height="14" uuid="5dceee15-dbd8-4fe6-a2c8-0f2fde0944c5"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Hora:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="97" width="25" height="12" uuid="da09c691-7fec-4400-bc2f-824bdb9ab576"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Monto:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="29" y="112" width="100" height="11" uuid="0ccd9aa3-81d9-4421-b832-625f23c33b8c"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abono}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="112" width="25" height="11" uuid="2e6a36cc-4f3a-4df0-9ece-5b8d3882b12b"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Abono:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="12" width="164" height="11" uuid="12854a95-7532-47b5-a3d1-9873718d1eac"/>
+				<textElement textAlignment="Center">
+					<font fontName="Segoe UI Light" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GRACIAS POR SU PREFERENCIA]]></text>
+			</staticText>
+		</band>
+	</title>
+</jasperReport>

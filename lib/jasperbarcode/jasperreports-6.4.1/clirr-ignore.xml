@@ -1,0 +1,28 @@
+<differences>
+	<difference>
+		<className>net/sf/jasperreports/data/http/HttpDataLocation</className>
+		<differenceType>7012</differenceType>
+		<method>*getBody()</method>
+	</difference>
+	<difference>
+		<className>net/sf/jasperreports/engine/ReportContext</className>
+		<differenceType>7012</differenceType>
+		<method>*clearParameterValues()</method>
+	</difference>
+	<difference>
+		<className>net/sf/jasperreports/engine/ReportContext</className>
+		<differenceType>7012</differenceType>
+		<method>*removeParameterValue(java.lang.String)</method>
+	</difference>
+	<difference>
+		<className>net/sf/jasperreports/engine/export/oasis/GraphicStyle</className>
+		<differenceType>7002</differenceType>
+		<method>*GraphicStyle(net.sf.jasperreports.engine.export.oasis.WriterHelper, net.sf.jasperreports.engine.JRPrintGraphicElement)</method>
+	</difference>
+	<difference>
+		<className>net/sf/jasperreports/data/http/HttpDataService</className>
+		<differenceType>7005</differenceType>
+		<method>*setAuthentication(java.util.Map, org.apache.http.client.protocol.HttpClientContext)</method>
+		<to>*setAuthentication(java.util.Map, org.apache.http.impl.client.HttpClientBuilder)</to>
+	</difference>
+</differences>

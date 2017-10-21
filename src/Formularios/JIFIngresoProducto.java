@@ -1,0 +1,931 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Formularios;
+
+import DAO.ComprasDAO;
+import DAO.DetalleComprasDAO;
+import DAO.ProductoDAO;
+import Pojos.Compras;
+import Pojos.DetalleCompras;
+import Pojos.Producto;
+
+import Pojos.SucursalSingleton;
+import java.awt.Frame;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+
+
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author info2017
+ */
+public class JIFIngresoProducto extends javax.swing.JInternalFrame {
+
+    /**
+     * Creates new form JIFIngresoProducto
+     */
+//    Proveedor proveedor=new Proveedor();
+    
+    ProductoDAO daoproducto = new ProductoDAO();
+    Producto producto=new Producto();
+    ComprasDAO  daocompras = new ComprasDAO();
+    Compras compras =new Compras();
+    DetalleComprasDAO daodetcompra=new DetalleComprasDAO();
+    int cont=0;
+//    DetalleCompras[] miarray1 = new DetalleCompras[5];
+    List<DetalleCompras> listadet = new ArrayList<DetalleCompras>();
+    DefaultTableModel modelo= new DefaultTableModel(){
+    public boolean isCellEditable(int row, int column) {
+//          if (column == 5 ) return true;
+//          else if(column==6) return true;
+//          else if (column==7) return true;
+//          else 
+          return false;
+}
+  };      
+    SucursalSingleton sucursalsingleton = SucursalSingleton.getinstancia();
+    boolean editar = false;
+    public JIFIngresoProducto(){
+        initComponents();
+//        daoproducto.llenarcombobox(jcbdescripcion,sucursalsingleton.getId());
+//        AutoCompleteDecorator.decorate(jcbdescripcion);
+        String titulos[]={"iddetalle","ID","CODIGO","DESCRIPCION","CANTIDAD LLEGO","CANTIDAD ACORDADA","PRECIO","IMPORTE"};
+        modelo.setColumnIdentifiers(titulos);
+        jtabla.setModel(modelo);
+        
+        jtabla.getColumnModel().getColumn(0).setMaxWidth(0);
+        jtabla.getColumnModel().getColumn(0).setMinWidth(0);
+        jtabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+        
+        jtabla.getColumnModel().getColumn(1).setMaxWidth(0);
+        jtabla.getColumnModel().getColumn(1).setMinWidth(0);
+        jtabla.getColumnModel().getColumn(1).setPreferredWidth(0);
+        
+        bloqueajbtn(false, false);
+        setvisibleabono(false, false);
+        jtfabono.setValue(0);
+    }
+    public void bloqueajbtn(boolean guardar,boolean ingresar){
+    jbtnguadar.setEnabled(guardar);
+    jbtningresar.setEnabled(ingresar);
+    
+    }
+    public void setvisibleabono(boolean labelabono, boolean abono){
+        jlblabono.setVisible(labelabono);
+        jtfabono.setVisible(abono);
+    }
+    
+    public void setproveedor(Compras compra,String nombre,String rut){
+//    this.proveedor=proveedor;
+    this.compras=compra;
+//    jtfproveedor.setText(proveedor.getNombrerazons());
+//    jtfrut.setText(proveedor.getRut());
+    jtfproveedor.setText(nombre);
+    jtfrut.setText(rut);
+            
+    }
+    public void limpiarjtf(){
+    jtfcodigo.setText("CODIGO");
+    jtfdescripcion.setText("");
+    jtfprecio.setValue(0);
+    jtfcantidad.setValue(0);
+    jlblimporte.setValue(0);
+    jtfstock.setValue(0);
+    jtfcantidadacordada.setValue(0);
+    producto = new Producto();
+    }
+    public void calculaimporte(){
+        try {
+            double cantidad = Double.parseDouble(jtfcantidad.getValue().toString());
+            double precio = Double.parseDouble(jtfprecio.getValue().toString());
+        
+            double importe= cantidad*precio;
+            jlblimporte.setValue(importe);
+        } catch (NullPointerException ex) {
+        }
+        
+    }
+    public void calculatotal(){
+        Double total=0.0,subtotal,iva;
+        
+        for (int i=0;i<=modelo.getRowCount()-1 ;i++){
+         total = total + Double.parseDouble(modelo.getValueAt(i, 7).toString());
+        } 
+        subtotal= total/1.19;
+        iva = total-subtotal;
+              
+        jlbltotal.setValue(total);
+        jlblsubtotal.setValue(subtotal);
+        jlbliva.setValue(iva);
+    }
+    public void validaingresar(){
+//        boolean validacant= validacantidad();
+        try {
+             if (!producto.getDescripcion().equals("") && Double.parseDouble(jtfprecio.getValue().toString())>0
+                && Double.parseDouble(jtfcantidad.getValue().toString())>0 && 
+                     Double.parseDouble(jtfcantidadacordada.getValue().toString()) > 0 )//&& validacant==true)
+             {
+            jbtningresar.setEnabled(true);
+        
+             }else{
+                    jbtningresar.setEnabled(false);
+                  }
+        } catch (NumberFormatException e) {
+            jbtningresar.setEnabled(false);
+        }catch(NullPointerException ee){
+             jbtningresar.setEnabled(false);
+        
+        }
+       
+    
+    }
+    
+//    public boolean validacantidad(){
+//        boolean valida;
+//        if(Double.parseDouble(jtfcantidad.getValue().toString()) > Double.parseDouble(jtfcantidadacordada.getValue().toString())){
+//            valida=false;
+//            jlblmsjcantidad.setText("LA CANTIDAD NO DEBE SER MAYOR A LA CANTIDAD ACORDADA");
+//        }else {
+//            valida=true;
+//            jlblmsjcantidad.setText("");
+//        }
+//    return valida;
+//    }
+    public boolean validaabono(){
+         boolean valida=false;
+        try {
+           
+            double abono=Double.parseDouble(jtfabono.getValue().toString());
+            double total= Double.parseDouble(jlbltotal.getText());
+            System.out.println("abono"+abono);
+            if(abono<=total && abono>=0){
+                valida=true;
+
+            }else {
+                jlblabono.setText("INGRESE UN ABONO VALIDO");
+            }
+            
+        } catch (NumberFormatException e) {
+            valida=false;
+        }
+        
+    return valida;
+    }
+    
+    public void validaguardar(){
+        System.out.println("date"+jdatapicker.getDate());
+        boolean valida= validaabono();
+        try {
+            if (!jtfproveedor.getText().equals("PROVEEDOR") && jtfnumero.getText().length()>0 && !jtfnumero.getText().equals("NUMERO")
+                && modelo.getRowCount() >0 && jdatapicker.getDate()!=null && valida==true ){
+            jbtnguadar.setEnabled(true);
+        
+            }else { jbtnguadar.setEnabled(false);}
+        } catch (NullPointerException e) {
+            jbtnguadar.setEnabled(false);
+        }
+        
+    
+    }
+    public void setbuscar(long id){      
+    listadet = new ArrayList<DetalleCompras>();
+    modelo=daocompras.buscar(jtabla, id,jtfproveedor,jtfrut,compras,listadet ); //,jlbltotal,jlblsubtotal,jlbliva);
+    System.out.println("lsitaa"+listadet.size());
+    jdatapicker.setDate(compras.getFecha());
+    jcbdocumento.setSelectedItem(compras.getDocumento());
+    jtfnumero.setText(compras.getNumero());
+    jcbtipopago.setSelectedItem(compras.getTipopago());
+    jtfabono.setValue(compras.getAbono());
+    editar = true ;
+    calculatotal();
+    
+    }
+    public void seteliminar(){
+        boolean valida;
+    int index=jtabla.getSelectedRow();
+               long iddet= Long.parseLong(jtabla.getValueAt(index, 0).toString());
+               long idprod = Long.parseLong(jtabla.getValueAt(index, 1).toString());
+               System.out.println("idde"+iddet+"idpro"+idprod);
+              
+               if (iddet != 0){
+                valida=daodetcompra.eliminar(iddet, idprod);
+                if(valida==true){
+                modelo.removeRow(index);
+                listadet.remove(index);
+                
+                }
+               }else {
+                modelo.removeRow(index);
+               listadet.remove(index);
+               }
+               calculatotal();
+               validaguardar();
+    
+    
+    }
+    public void seteditar(DetalleCompras det,String cod,String des,Object impor){
+    int index=jtabla.getSelectedRow();
+    listadet.add(index, det);
+    DecimalFormat formatea = new DecimalFormat("###");
+//        Object[] miarray = new Object[8];
+//        miarray[0]=det.getIddetallecompra();
+//        miarray[1]=det.getIdproducto();
+//        miarray[2]=cod;
+//        miarray[3]=des;
+//        miarray[4]=formatea.format(det.getCantidad());
+//        miarray[5]= formatea.format(det.getCantidadacord());
+//        miarray[6]=formatea.format(det.getPrecio());
+//        miarray[7]=formatea.format(impor);
+    
+    modelo.setValueAt(formatea.format(det.getCantidad()), index, 4);
+    modelo.setValueAt(formatea.format(det.getCantidadacord()), index, 5);
+    modelo.setValueAt(formatea.format(det.getPrecio()), index, 6);
+    modelo.setValueAt(formatea.format(impor), index, 7);
+    calculatotal();
+    validaguardar();
+    }
+    public void nuevo(){
+        modelo= new DefaultTableModel(){
+        public boolean isCellEditable(int row, int column) {
+    //          if (column == 5 ) return true;
+    //          else if(column==6) return true;
+    //          else if (column==7) return true;
+    //          else 
+          return false;
+    }
+    };
+        String titulos[]={"iddetalle","ID","CODIGO","DESCRIPCION","CANTIDAD LLEGO","CANTIDAD ACORDADA","PRECIO","IMPORTE"};
+        modelo.setColumnIdentifiers(titulos);
+        jtabla.setModel(modelo);
+        jtabla.getColumnModel().getColumn(0).setMaxWidth(0);
+        jtabla.getColumnModel().getColumn(0).setMinWidth(0);
+        jtabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+        
+        jtabla.getColumnModel().getColumn(1).setMaxWidth(0);
+        jtabla.getColumnModel().getColumn(1).setMinWidth(0);
+        jtabla.getColumnModel().getColumn(1).setPreferredWidth(0);
+        compras= new Compras();
+        listadet = new ArrayList<DetalleCompras>();
+        producto = new Producto();
+        jdatapicker.setDate(null);
+        jtfproveedor.setText("PROVEEDOR");
+        jtfrut.setText("RUT");
+        jcbdocumento.setSelectedItem("FACTURA");
+        jcbtipopago.setSelectedItem("CONTADO");
+        jtfabono.setValue(0);
+        jtfnumero.setText("NUMERO");
+        calculatotal();
+    
+    }       
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jtfproveedor = new javax.swing.JTextField();
+        jbtnbuscarproveedor = new javax.swing.JButton();
+        jtfrut = new javax.swing.JTextField();
+        jcbtipopago = new javax.swing.JComboBox();
+        jbtnguadar = new javax.swing.JButton();
+        jbtnsalir = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jtfnumero = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jcbdocumento = new javax.swing.JComboBox();
+        jbtnbuscar = new javax.swing.JButton();
+        jdatapicker = new org.jdesktop.swingx.JXDatePicker();
+        jtfabono = new javax.swing.JFormattedTextField();
+        jlblabono = new javax.swing.JLabel();
+        jlblmensajeabono = new javax.swing.JLabel();
+        jlblsubtotal = new javax.swing.JFormattedTextField();
+        jlbliva = new javax.swing.JFormattedTextField();
+        jlbltotal = new javax.swing.JFormattedTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jtfcodigo = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jtfdescripcion = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jtfstock = new javax.swing.JFormattedTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jtfcantidad = new javax.swing.JFormattedTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jtfcantidadacordada = new javax.swing.JFormattedTextField();
+        jtfprecio = new javax.swing.JFormattedTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jlblimagen = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jlblimporte = new javax.swing.JFormattedTextField();
+        jbtningresar = new javax.swing.JButton();
+        jlblmsjcantidad = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jtabla = new javax.swing.JTable();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        setTitle("INGRESO PRODUCTOS");
+        setPreferredSize(new java.awt.Dimension(1154, 560));
+
+        jPanel1.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel1.setText("Fecha:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, 20));
+
+        jtfproveedor.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jtfproveedor.setText("PROVEEDOR");
+        jtfproveedor.setEnabled(false);
+        jtfproveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfproveedorActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jtfproveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 10, 320, -1));
+
+        jbtnbuscarproveedor.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnbuscarproveedor.setText("...");
+        jbtnbuscarproveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnbuscarproveedorActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnbuscarproveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 10, -1, -1));
+
+        jtfrut.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
+        jtfrut.setText("R.U.T");
+        jtfrut.setEnabled(false);
+        jPanel1.add(jtfrut, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 10, 150, -1));
+
+        jcbtipopago.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
+        jcbtipopago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CONTADO", "CREDITO" }));
+        jcbtipopago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbtipopagoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jcbtipopago, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 200, -1));
+
+        jbtnguadar.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnguadar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnguadar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnguadar.setText("Guardar");
+        jbtnguadar.setToolTipText("Guardar");
+        jbtnguadar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnguadarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnguadar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, -1, -1));
+
+        jbtnsalir.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnsalir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnsalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel.png"))); // NOI18N
+        jbtnsalir.setText("Salir Cancelar");
+        jbtnsalir.setToolTipText("Salir");
+        jbtnsalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnsalirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnsalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 450, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
+        jLabel4.setText("SUBTOTAL :");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 440, -1, 20));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
+        jLabel5.setText("I.V.A (19 %):");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 470, -1, 20));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
+        jLabel6.setText("TOTAL:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 500, -1, -1));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jtfnumero.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jtfnumero.setText("NUMERO");
+        jtfnumero.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtfnumeroFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnumeroFocusLost(evt);
+            }
+        });
+        jtfnumero.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfnumeroKeyReleased(evt);
+            }
+        });
+        jPanel2.add(jtfnumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 160, -1));
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel7.setText("Nº");
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, 20));
+
+        jcbdocumento.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jcbdocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "FACTURA", "BOLETA", "GUIA" }));
+        jcbdocumento.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jcbdocumento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbdocumentoActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jcbdocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 190, -1));
+
+        jbtnbuscar.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Searchx32.png"))); // NOI18N
+        jbtnbuscar.setToolTipText("Buscar Documento");
+        jbtnbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnbuscarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jbtnbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 40, 40));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 10, 250, 70));
+
+        jdatapicker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jdatapickerActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jdatapicker, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 10, 150, -1));
+
+        jtfabono.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfabono.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jtfabono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfabonoKeyReleased(evt);
+            }
+        });
+        jPanel1.add(jtfabono, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, 200, -1));
+
+        jlblabono.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblabono.setText("Abono:");
+        jPanel1.add(jlblabono, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 40, -1, 20));
+
+        jlblmensajeabono.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jlblmensajeabono.setForeground(new java.awt.Color(255, 51, 51));
+        jPanel1.add(jlblmensajeabono, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 119, 260, 20));
+
+        jlblsubtotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlblsubtotal.setCaretColor(new java.awt.Color(255, 51, 51));
+        jlblsubtotal.setDisabledTextColor(new java.awt.Color(255, 51, 51));
+        jlblsubtotal.setEnabled(false);
+        jPanel1.add(jlblsubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 440, 390, -1));
+
+        jlbliva.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlbliva.setCaretColor(new java.awt.Color(255, 51, 51));
+        jlbliva.setDisabledTextColor(new java.awt.Color(255, 51, 51));
+        jlbliva.setEnabled(false);
+        jPanel1.add(jlbliva, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 470, 390, -1));
+
+        jlbltotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlbltotal.setCaretColor(new java.awt.Color(255, 51, 51));
+        jlbltotal.setDisabledTextColor(new java.awt.Color(255, 51, 51));
+        jlbltotal.setEnabled(false);
+        jPanel1.add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 500, 390, -1));
+
+        jPanel3.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "PRODUCTO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Light", 0, 12))); // NOI18N
+        jPanel3.setForeground(new java.awt.Color(255, 255, 204));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jtfcodigo.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jtfcodigo.setText("CODIGO");
+        jtfcodigo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtfcodigoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfcodigoFocusLost(evt);
+            }
+        });
+        jtfcodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfcodigoKeyReleased(evt);
+            }
+        });
+        jPanel3.add(jtfcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(9, 21, 310, -1));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel2.setText("Descripcion:");
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(9, 51, -1, 20));
+
+        jtfdescripcion.setEditable(false);
+        jtfdescripcion.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jPanel3.add(jtfdescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 51, 590, -1));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel8.setText("Stock:");
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(349, 21, -1, 20));
+
+        jtfstock.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfstock.setEnabled(false);
+        jPanel3.add(jtfstock, new org.netbeans.lib.awtextra.AbsoluteConstraints(393, 21, 240, -1));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel9.setText("Cantidad Lllego:");
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(9, 86, -1, 20));
+
+        jtfcantidad.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfcantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfcantidadKeyReleased(evt);
+            }
+        });
+        jPanel3.add(jtfcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 86, 90, -1));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel10.setText("Cantidad acordada:");
+        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 86, -1, 20));
+
+        jtfcantidadacordada.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfcantidadacordada.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfcantidadacordadaKeyReleased(evt);
+            }
+        });
+        jPanel3.add(jtfcantidadacordada, new org.netbeans.lib.awtextra.AbsoluteConstraints(306, 86, 110, -1));
+
+        jtfprecio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfprecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfprecioKeyReleased(evt);
+            }
+        });
+        jPanel3.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 86, 120, -1));
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel11.setText("Precio");
+        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(426, 86, -1, 20));
+
+        jlblimagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel3.add(jlblimagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(916, 18, 203, 99));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel3.setText("Importe:");
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(597, 86, -1, 20));
+
+        jlblimporte.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlblimporte.setCaretColor(new java.awt.Color(255, 51, 51));
+        jlblimporte.setDisabledTextColor(new java.awt.Color(255, 51, 51));
+        jlblimporte.setEnabled(false);
+        jPanel3.add(jlblimporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(651, 86, 130, -1));
+
+        jbtningresar.setBackground(new java.awt.Color(255, 255, 255));
+        jbtningresar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtningresar.setText("INGRESAR");
+        jbtningresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtningresarActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jbtningresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(801, 86, -1, -1));
+
+        jlblmsjcantidad.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jlblmsjcantidad.setForeground(new java.awt.Color(255, 51, 51));
+        jPanel3.add(jlblmsjcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(129, 124, 360, 20));
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 1130, 120));
+
+        jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jtabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jtabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jtablaMouseReleased(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jtabla);
+
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 1132, 230));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jtfproveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfproveedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfproveedorActionPerformed
+
+    private void jcbdocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbdocumentoActionPerformed
+        // TODO add your handling code here:
+        validaguardar();
+    }//GEN-LAST:event_jcbdocumentoActionPerformed
+
+    private void jbtnbuscarproveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarproveedorActionPerformed
+        // TODO add your handling code here:
+        JDBuscarProveedor Bproveedor= new JDBuscarProveedor(new java.awt.Frame(), isVisible(),this,compras);
+        Bproveedor.setVisible(true);
+    }//GEN-LAST:event_jbtnbuscarproveedorActionPerformed
+
+    private void jtfcodigoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcodigoFocusGained
+        // TODO add your handling code here:
+        if(jtfcodigo.getText().equals("CODIGO")){
+            jtfcodigo.setText("");
+        
+        }
+    }//GEN-LAST:event_jtfcodigoFocusGained
+
+    private void jtfcodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcodigoFocusLost
+        // TODO add your handling code here:
+         if(jtfcodigo.getText().equals("")){
+            jtfcodigo.setText("CODIGO");
+        
+        }
+    }//GEN-LAST:event_jtfcodigoFocusLost
+
+    private void jtfnumeroFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnumeroFocusGained
+        // TODO add your handling code here:
+       if(jtfnumero.getText().equals("NUMERO")){
+           jtfnumero.setText("");
+       
+       
+       }
+    }//GEN-LAST:event_jtfnumeroFocusGained
+
+    private void jtfnumeroFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnumeroFocusLost
+        // TODO add your handling code here:
+        if(jtfnumero.getText().equals("")){
+            jtfnumero.setText("NUMERO");
+        
+        }
+    }//GEN-LAST:event_jtfnumeroFocusLost
+
+    private void jbtningresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtningresarActionPerformed
+        // TODO add your handling code here:
+        int index= jtabla.getSelectedRow();
+        //long id = Long.parseLong(jtabla.getValueAt(index,0).toString());
+        String cod=jtfcodigo.getText();
+        String descrip=jtfdescripcion.getText();
+        Double cantidad=Double.parseDouble(jtfcantidad.getValue().toString());
+        Double cantidaacor= Double.parseDouble(jtfcantidadacordada.getValue().toString());
+        Double precio= Double.parseDouble(jtfprecio.getValue().toString());
+//        Double importe= Double.parseDouble(jlblimporte.getValue().toString());
+              
+        DetalleCompras detcompra= new DetalleCompras();
+       // List<Object> ejeoLista = new ArrayList<Object>();
+       // modelo.(producto.getIdproducto(), 0, 0);
+        detcompra.setIddetallecompra(0);
+        detcompra.setIdproducto(producto.getIdproducto());
+        detcompra.setPrecio(precio);
+        detcompra.setCantidad(cantidad);
+        detcompra.setCantidadacord(cantidaacor);
+        listadet.add(detcompra);
+        DecimalFormat formatea = new DecimalFormat("###");
+        Object[] miarray = new Object[8];
+        miarray[0]=0;
+        miarray[1]=producto.getIdproducto();
+        miarray[2]=cod;
+        miarray[3]=descrip;
+        miarray[4]=formatea.format(jtfcantidad.getValue());
+        miarray[5]= formatea.format(jtfcantidadacordada.getValue());
+        miarray[6]=formatea.format(jtfprecio.getValue());
+        miarray[7]=formatea.format(jlblimporte.getValue());
+        
+        modelo.addRow(miarray);
+        calculatotal();
+        limpiarjtf();
+        validaguardar();
+//        jtabla.setValueAt(descrip, 0, 2);
+//        jtabla.setValueAt(cantidad, 0, 3);
+//        jtabla.setValueAt(precio, 0, 4);
+    }//GEN-LAST:event_jbtningresarActionPerformed
+
+    private void jbtnguadarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnguadarActionPerformed
+               // TODO add your handling code here:
+   if (JOptionPane.showConfirmDialog(null, "DOCUMENTO COMFORME","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){  
+      
+  
+       String estado;
+       double abono=Double.parseDouble(jtfabono.getValue().toString());
+       double total= Double.parseDouble(jlbltotal.getText());
+       if(jcbtipopago.getSelectedIndex()==1){
+           if(abono==total){
+               estado= "CANCELADO";
+           }else {
+               estado= "DEBE";
+           
+           }
+       }else {
+           estado= "CANCELADO";
+       }
+        compras.setDocumento(jcbdocumento.getSelectedItem().toString());
+        compras.setNumero(jtfnumero.getText().trim());
+        System.out.println("idprov"+compras.getId_proveedor());
+        compras.setId_proveedor(compras.getId_proveedor());
+        compras.setFecha(new java.sql.Date(jdatapicker.getDate().getTime()));
+        compras.setId_sucursal(sucursalsingleton.getId());
+        compras.setTipopago(jcbtipopago.getSelectedItem().toString());
+        
+        compras.setAbono(abono);
+        compras.setEstado(estado);
+        
+         if(compras.getId_compra() == 0){
+            long idcompra=daocompras.insertar(compras);
+            System.out.println("idc"+idcompra);
+            daodetcompra.insertar(listadet,idcompra);    
+       }else {
+           daodetcompra.insertar(listadet,compras.getId_compra());          
+           daocompras.editar(compras);
+       
+       } 
+         nuevo();
+    }
+    }//GEN-LAST:event_jbtnguadarActionPerformed
+
+    private void jtfcodigoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcodigoKeyReleased
+        // TODO add your handling code here:
+        String codigo= jtfcodigo.getText().trim();
+        if(codigo.length()>=10){
+            producto=daoproducto.buscarproducto("CODIGO", 0,sucursalsingleton.getId(), jlblimagen, codigo);
+           // jtfcodigo.setText(producto.getCodigo());
+            jtfstock.setValue((producto.getCantidad()));
+            jtfdescripcion.setText(producto.getDescripcion());
+        
+        }
+        validaingresar();
+        
+    }//GEN-LAST:event_jtfcodigoKeyReleased
+
+    private void jcbtipopagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbtipopagoActionPerformed
+        // TODO add your handling code here:
+        if(jcbtipopago.getSelectedIndex()==0){
+            setvisibleabono(false, false);
+            jtfabono.setValue(0);
+        }else { if( jcbtipopago.getSelectedIndex()==1){
+            setvisibleabono(true,true);
+        }
+        
+        
+        }
+        validaguardar();
+    }//GEN-LAST:event_jcbtipopagoActionPerformed
+
+    private void jbtnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnsalirActionPerformed
+        // TODO add your handling code here:
+    if(JOptionPane.showConfirmDialog(null,"DESEA SALIR DEL INGRESO DE PRODUCTOS","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+       this.dispose();
+    }   
+    }//GEN-LAST:event_jbtnsalirActionPerformed
+
+    private void jtfnumeroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnumeroKeyReleased
+        // TODO add your handling code here:
+        validaguardar();
+    }//GEN-LAST:event_jtfnumeroKeyReleased
+
+    private void jtfabonoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfabonoKeyReleased
+        // TODO add your handling code here:
+    validaguardar();
+      
+    }//GEN-LAST:event_jtfabonoKeyReleased
+
+    private void jdatapickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jdatapickerActionPerformed
+        // TODO add your handling code here:
+        validaguardar();
+    }//GEN-LAST:event_jdatapickerActionPerformed
+
+    private void jbtnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarActionPerformed
+        // TODO add your handling code here:
+        JDBuscarIngresoProducto buscaringreso = new JDBuscarIngresoProducto(new Frame(), isVisible(),this);
+        buscaringreso.setVisible(true);
+    }//GEN-LAST:event_jbtnbuscarActionPerformed
+
+    private void jtfcantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcantidadKeyReleased
+        // TODO add your handling code here:
+        validaingresar();
+        calculaimporte();
+    }//GEN-LAST:event_jtfcantidadKeyReleased
+
+    private void jtfcantidadacordadaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcantidadacordadaKeyReleased
+        // TODO add your handling code here:
+        validaingresar();
+    }//GEN-LAST:event_jtfcantidadacordadaKeyReleased
+
+    private void jtfprecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecioKeyReleased
+        // TODO add your handling code here:
+        validaingresar();
+        calculaimporte();
+    }//GEN-LAST:event_jtfprecioKeyReleased
+
+    private void jtablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMouseReleased
+        // TODO add your handling code here:
+             int index = jtabla.getSelectedRow();
+        if(index>=0){
+            if (evt.getClickCount()==2){
+           String cod= jtabla.getValueAt(index, 2).toString();
+           String descrip = jtabla.getValueAt(index, 3).toString();
+           
+          JDEditarEliminarDetalleCompra eedetcomp = new JDEditarEliminarDetalleCompra(new Frame(),isVisible()
+          ,listadet.get(index),cod,descrip,this);
+          eedetcomp.setVisible(true);
+        }
+        
+        }
+        
+    }//GEN-LAST:event_jtablaMouseReleased
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JButton jbtnbuscar;
+    private javax.swing.JButton jbtnbuscarproveedor;
+    private javax.swing.JButton jbtnguadar;
+    private javax.swing.JButton jbtningresar;
+    private javax.swing.JButton jbtnsalir;
+    private javax.swing.JComboBox jcbdocumento;
+    private javax.swing.JComboBox jcbtipopago;
+    private org.jdesktop.swingx.JXDatePicker jdatapicker;
+    private javax.swing.JLabel jlblabono;
+    private javax.swing.JLabel jlblimagen;
+    private javax.swing.JFormattedTextField jlblimporte;
+    private javax.swing.JFormattedTextField jlbliva;
+    private javax.swing.JLabel jlblmensajeabono;
+    private javax.swing.JLabel jlblmsjcantidad;
+    private javax.swing.JFormattedTextField jlblsubtotal;
+    private javax.swing.JFormattedTextField jlbltotal;
+    private javax.swing.JTable jtabla;
+    private javax.swing.JFormattedTextField jtfabono;
+    private javax.swing.JFormattedTextField jtfcantidad;
+    private javax.swing.JFormattedTextField jtfcantidadacordada;
+    private javax.swing.JTextField jtfcodigo;
+    private javax.swing.JTextField jtfdescripcion;
+    private javax.swing.JTextField jtfnumero;
+    private javax.swing.JFormattedTextField jtfprecio;
+    private javax.swing.JTextField jtfproveedor;
+    private javax.swing.JTextField jtfrut;
+    private javax.swing.JFormattedTextField jtfstock;
+    // End of variables declaration//GEN-END:variables
+}

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="204" pageHeight="421" columnWidth="164" leftMargin="20" rightMargin="20" topMargin="5" bottomMargin="20" isIgnorePagination="true" uuid="db949892-5cd2-4502-9179-be2e411fb90e">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT  venta.codigo, to_char(fecha,'DD/MM/YYYY')as fecha,
+to_char(fecha,'HH24:MI:SS')as hora, empleado.nombre as atendido, suscursal.nombre as sucursal,
+sum (detalle_venta.precio*detalle_venta.cantidad) as importe, venta.descuento, sum (detalle_venta.precio*detalle_venta.cantidad)-venta.descuento as total
+  FROM public.venta inner join detalle_venta on detalle_venta.id_venta=venta.id_venta 
+  inner join cliente on  cliente.id_cliente=venta.id_cliente inner join suscursal
+  on suscursal.id_sucursal=venta.id_sucursal inner join empleado on empleado.id_empleado
+  = venta.id_empleado  where venta.id_venta=$P{id}  group by venta.codigo, cliente.nombre_razons,fecha, empleado.nombre,
+  suscursal.nombre,venta.descuento;]]>
+	</queryString>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="fecha" class="java.lang.String"/>
+	<field name="hora" class="java.lang.String"/>
+	<field name="atendido" class="java.lang.String"/>
+	<field name="sucursal" class="java.lang.String"/>
+	<field name="importe" class="java.math.BigDecimal"/>
+	<field name="descuento" class="java.math.BigDecimal"/>
+	<field name="total" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="317" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="59" width="54" height="10" backcolor="#000000" uuid="15e5c71f-97a5-413a-a1c7-5f6b70fddeb7"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Vendedor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="162" height="13" uuid="36898cc4-7135-452f-a290-4b3d7b311d71"/>
+				<textElement textAlignment="Center">
+					<font fontName="Segoe UI Light" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TICKET DE PAGO CAJA GSMSTORE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="31" width="54" height="10" uuid="5091496f-2244-4c28-9523-8c871e9e36df"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sucursal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="87" y="89" width="21" height="14" backcolor="#000000" uuid="9ba26c98-c331-424b-87c9-d170492717cf"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Hora:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="89" width="23" height="14" backcolor="#000000" uuid="0a22f369-4151-4fe3-b2f6-776d14e52e93"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="107" width="32" height="10" backcolor="#000000" uuid="47e351dc-4830-4b9f-ab39-0c59ca60ab66"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Importe:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="71" width="162" height="13" backcolor="#000000" uuid="b69d88de-5655-4b3a-813b-d673a4e13501"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{atendido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="42" width="161" height="13" backcolor="#000000" uuid="39f49894-926e-4bc6-8bd0-a7c34364ea39"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sucursal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="24" y="89" width="63" height="14" backcolor="#000000" uuid="b9c73f92-d855-4e33-91d1-2b018b224324"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="108" y="89" width="56" height="14" backcolor="#000000" uuid="0fe33385-19bf-4caf-a727-b1b450c42ec9"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hora}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="123" width="39" height="10" backcolor="#000000" uuid="118d169b-3879-4aee-8c83-8d82a8744413"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Descuento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="140" width="39" height="10" backcolor="#000000" uuid="cda46efc-99fb-48db-bbe0-70a7de7613d4"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Total Pagar:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="32" y="107" width="100" height="10" backcolor="#000000" uuid="84beb98e-04a3-4388-b394-3662931cd01f"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="40" y="123" width="100" height="10" backcolor="#000000" uuid="b88cd017-7c21-425b-ba33-6032cdd8d94f"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="44" y="140" width="100" height="10" backcolor="#000000" uuid="06222be3-5916-452f-b512-cef466906f8d"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="18" y="160" width="114" height="24" uuid="0ff3fbef-f1af-4c79-91ec-1b99bb3a9e28"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="true" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{codigo}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<staticText>
+				<reportElement x="0" y="184" width="100" height="11" uuid="2238d38e-dcaa-478e-bbc4-ea1533400435"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[www.Infosegurity.cl   cel.: +56965927149]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="13" width="162" height="13" uuid="6eb8c2f8-4a1a-475e-9c78-55860d41cbbd"/>
+				<textElement textAlignment="Center">
+					<font fontName="Segoe UI Light" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GRACIAS POR SU PREFERENCIA]]></text>
+			</staticText>
+		</band>
+	</title>
+</jasperReport>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="297" pageHeight="421" columnWidth="287" leftMargin="5" rightMargin="5" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="23cdd57d-551a-4d48-b160-1cb8331107b5">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select codigo from producto where id_producto=$P{id};]]>
+	</queryString>
+	<field name="codigo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="257" splitType="Stretch">
+			<componentElement>
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="159" y="0" width="135" height="101" uuid="4e05e992-8736-45c3-819b-0f8b5edd5b6c"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="EAN13" drawText="true" checksumRequired="false" barHeight="60">
+					<jr:codeExpression><![CDATA[$F{codigo}.substring( 0, 12)]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="8" y="0" width="135" height="101" uuid="acfad7ff-0820-4b5f-9b1b-b128d7b1df5a"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="EAN13" drawText="true" checksumRequired="false" barHeight="60">
+					<jr:codeExpression><![CDATA[$F{codigo}.substring( 0, 12)]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+		</band>
+	</title>
+</jasperReport>
