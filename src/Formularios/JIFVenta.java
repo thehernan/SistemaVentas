@@ -304,6 +304,11 @@ public class JIFVenta extends javax.swing.JInternalFrame {
                 jtfrutFocusLost(evt);
             }
         });
+        jtfrut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfrutActionPerformed(evt);
+            }
+        });
         jtfrut.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfrutKeyReleased(evt);
@@ -858,15 +863,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 
     private void jtfrutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrutKeyReleased
         // TODO add your handling code here:
-        String rut= jtfrut.getText().trim();
-       
-        idcliente=daocliente.buscarclientevent(rut,jlblmensaje,jtfcliente,jtftotalcompras,jtfcompras);
-        if(idcliente==0){
-        jtfcliente.setEnabled(true);
-        
-        }else {
-        jtfcliente.setEnabled(false);
-        }
+     
                
     }//GEN-LAST:event_jtfrutKeyReleased
 
@@ -1039,6 +1036,19 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         
         }
     }//GEN-LAST:event_jtfcantidadKeyReleased
+
+    private void jtfrutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfrutActionPerformed
+        // TODO add your handling code here:
+           String rut= jtfrut.getText().trim();
+       
+        idcliente=daocliente.buscarclientevent(rut,jlblmensaje,jtfcliente,jtftotalcompras,jtfcompras);
+        if(idcliente==0){
+        jtfcliente.setEnabled(true);
+        
+        }else {
+        jtfcliente.setEnabled(false);
+        }
+    }//GEN-LAST:event_jtfrutActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
