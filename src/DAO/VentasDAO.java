@@ -42,12 +42,13 @@ public class VentasDAO {
      try{
             
             System.out.println("SELECT * from sp_insertarventa("+venta.getIdcliente()+","+venta.getIdempleado()+")");
-            String sql=("SELECT * from sp_insertarventa(?,?,?,?)");         
+            String sql=("SELECT * from sp_insertarventa(?,?,?,?,?)");         
             PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
             ps.setLong(1, venta.getIdcliente());
             ps.setLong(2, venta.getIdempleado());
             ps.setLong(3, venta.getId_sucursal());
             ps.setBigDecimal(4,new BigDecimal(venta.getDescuento()));
+            ps.setString(5, venta.getMotivodescuento());
             ResultSet rs= ps.executeQuery();
        if  (rs.next()){
          id=(rs.getLong("vidventa"));
@@ -73,12 +74,13 @@ public long insertarnocliente(Ventas venta){
      try{
             
             System.out.println("SELECT * from sp_insertarventanocliente("+venta.getIdcliente()+","+venta.getIdempleado()+")");
-            String sql=("SELECT * from sp_insertarventanocliente(?,?,?)");         
+            String sql=("SELECT * from sp_insertarventanocliente(?,?,?,?)");         
             PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
           
             ps.setLong(1, venta.getIdempleado());
             ps.setLong(2, venta.getId_sucursal());
             ps.setBigDecimal(3,new BigDecimal(venta.getDescuento()));
+            ps.setString(4, venta.getMotivodescuento());
             ResultSet rs= ps.executeQuery();
        if  (rs.next()){
            id=(rs.getLong("vidventa"));

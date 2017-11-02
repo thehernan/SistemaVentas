@@ -12,9 +12,10 @@ public class Conexion {
 	private DataSource dataSource=null;
 	private BasicDataSource basicDataSource=null;
 	private Connection connection=null;
-//        private boolean valida;
+        private boolean valida=true;
 	public Conexion()
 	{
+           
 		try
 		{
 			basicDataSource=new BasicDataSource();
@@ -22,13 +23,13 @@ public class Conexion {
 			basicDataSource.setDriverClassName("org.postgresql.Driver");
 			basicDataSource.setUsername("postgres");
 			basicDataSource.setPassword("hernan$123");
-			basicDataSource.setUrl("jdbc:postgresql://192.168.20.1:5432/BDVentas");
+			basicDataSource.setUrl("jdbc:postgresql://192.168.0.109:5432/BDVentas");
 			basicDataSource.setMaxActive(50);
 			basicDataSource.setMaxIdle(20);
                         basicDataSource.setMaxOpenPreparedStatements(1000);
 			basicDataSource.setRemoveAbandoned(true);
 			basicDataSource.setRemoveAbandonedTimeout(300);
-			basicDataSource.setMaxWait(6000);
+			basicDataSource.setMaxWait(1000);
 			basicDataSource.setDefaultAutoCommit(true);
                         
 			dataSource=basicDataSource;
@@ -38,14 +39,17 @@ public class Conexion {
 		}
 		catch(SQLException ex )
 		{
-			JOptionPane.showMessageDialog(null,"SqlException "+ex.getMessage());
-                        JOptionPane.showMessageDialog(null,"No se obtuvo conexion con la base de datos","",JOptionPane.ERROR_MESSAGE);
+//			JOptionPane.showMessageDialog(null,"SqlException "+ex.getMessage());
+//                        JOptionPane.showMessageDialog(null,"No se obtuvo conexion con la base de datos","",JOptionPane.ERROR_MESSAGE);
+                     valida=false;
 		}
 		catch(Exception ex)
 		{
 			///System.out.println("Exception "+ex.getMessage());
-                        JOptionPane.showMessageDialog(null,"Exception "+ex.getMessage());
+//                        JOptionPane.showMessageDialog(null,"Exception "+ex.getMessage());
+                      valida=false; 
 		}
+             
 	}
 	
 	public void devolverConexionPool()
@@ -72,6 +76,11 @@ public class Conexion {
 //                }else {valida=true;}
 		return connection;
 	}
+        
+        public boolean pruebaconexion(){
+       return valida;
+        
+        }
 //        public boolean valida(){
 //            
 //        return valida ;

@@ -8,6 +8,7 @@ package Formularios;
 
 import ClasesGlobales.CifradoMD5;
 import ClasesGlobales.LookAndFeel;
+import Conexion.Conexion;
 import DAO.EmpleadoDAO;
 import DAO.SucursalDAO;
 import DAO.UsuariosDAO;
@@ -42,6 +43,8 @@ public class Login extends javax.swing.JFrame {
     
     List<Sucursal> listsucursal= new ArrayList<>();
     LookAndFeel look = new LookAndFeel();
+    
+    
     public Login() {
         initComponents();
        try {
@@ -52,6 +55,23 @@ public class Login extends javax.swing.JFrame {
         
        setLocationRelativeTo(null);
        listsucursal=daosucursal.llenarcombo(jcbsucursal);
+       pruebaconexion();
+    }
+    
+    public void pruebaconexion(){
+     Conexion conexion= new Conexion();
+     conexion.getConnection();
+     
+     if(conexion.pruebaconexion()==true){
+         jlblrpruebaconexion.setText("");
+     } else{ 
+         jlblrpruebaconexion.setText("No se obtuvo conexion con el servidor pongase en contacto con el administrador del sistema");
+         jcbsucursal.setEnabled(false);
+         jtfusuario.setEnabled(false);
+         jtfclave.setEnabled(false);
+         jlblaceptar.setVisible(false);
+     }
+     conexion.devolverConexionPool();
     }
 
     /**
@@ -63,6 +83,7 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jlblrpruebaconexion = new javax.swing.JLabel();
         jtfusuario = new javax.swing.JTextField();
         jtfclave = new javax.swing.JPasswordField();
         jlblcerrar = new javax.swing.JLabel();
@@ -73,6 +94,10 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jlblrpruebaconexion.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jlblrpruebaconexion.setForeground(new java.awt.Color(255, 51, 51));
+        getContentPane().add(jlblrpruebaconexion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 510, 20));
 
         jtfusuario.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfusuario.setText("USUARIO");
@@ -126,7 +151,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jlblaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, 70, -1));
 
         jcbsucursal.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jcbsucursal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbsucursal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sin conexion" }));
         getContentPane().add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, 270, -1));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/login3.png"))); // NOI18N
@@ -281,6 +306,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JComboBox jcbsucursal;
     private javax.swing.JLabel jlblaceptar;
     private javax.swing.JLabel jlblcerrar;
+    private javax.swing.JLabel jlblrpruebaconexion;
     private javax.swing.JPasswordField jtfclave;
     private javax.swing.JTextField jtfusuario;
     // End of variables declaration//GEN-END:variables

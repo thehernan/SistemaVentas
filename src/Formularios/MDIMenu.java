@@ -32,6 +32,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
  
@@ -157,6 +158,7 @@ final class MDIMenu extends javax.swing.JFrame {
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
          
          ////////////////////////////////////////////////////////
+         if(user.isUseri()==true){
          JButton usuari= new JButton("USUARIOS");
          usuari.addActionListener(new ActionListener() {
 
@@ -193,7 +195,7 @@ final class MDIMenu extends javax.swing.JFrame {
          usuari.setBounds(20, 70, 200, 50);
          usuari.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          usuari.setBackground(new java.awt.Color(255, 204, 51));
-         
+         }
          /////////////////////////////////////////////////////////
            JButton cerrar= new JButton("CERRAR SESION");
          cerrar.addActionListener(new ActionListener() {
@@ -1246,6 +1248,7 @@ final class MDIMenu extends javax.swing.JFrame {
         jbtnactualizar = new javax.swing.JButton();
         jbtnimprimir = new javax.swing.JButton();
         jlblmensajeprint = new javax.swing.JLabel();
+        jlblminimizar = new javax.swing.JLabel();
         jlblfondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -1368,8 +1371,8 @@ final class MDIMenu extends javax.swing.JFrame {
             .addGap(0, 673, Short.MAX_VALUE)
         );
 
-        jlblmensajeinfo.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblmensajeinfo.setForeground(new java.awt.Color(255, 51, 51));
+        jlblmensajeinfo.setFont(new java.awt.Font("Segoe UI Light", 1, 13)); // NOI18N
+        jlblmensajeinfo.setForeground(new java.awt.Color(0, 102, 255));
 
         jPanel1.setBackground(new java.awt.Color(204, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1493,6 +1496,16 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblmensajeprint.setForeground(new java.awt.Color(255, 51, 51));
         jPanel1.add(jlblmensajeprint, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 470, 170, 20));
 
+        jlblminimizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/minimize2.png"))); // NOI18N
+        jlblminimizar.setToolTipText("Minimizar");
+        jlblminimizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblminimizar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlblminimizarMouseReleased(evt);
+            }
+        });
+        jPanel1.add(jlblminimizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 0, -1, -1));
+
         jlblfondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/panel.png"))); // NOI18N
         jlblfondo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -1511,7 +1524,7 @@ final class MDIMenu extends javax.swing.JFrame {
                 .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jlblmensajeinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(2636, Short.MAX_VALUE))
+                .addContainerGap(2027, Short.MAX_VALUE))
         );
         jDesktopLayout.setVerticalGroup(
             jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1523,8 +1536,8 @@ final class MDIMenu extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlblmensajeinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+                .addComponent(jlblmensajeinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
         );
         jDesktop.setLayer(jpanelcontenedor, javax.swing.JLayeredPane.MODAL_LAYER);
         jDesktop.setLayer(jlblmensajeinfo, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -1554,9 +1567,9 @@ final class MDIMenu extends javax.swing.JFrame {
                 .addGap(43, 43, 43)
                 .addComponent(jlblmenusucursal)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addComponent(jDesktop)
-                .addContainerGap())
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(jDesktop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1748,6 +1761,11 @@ final class MDIMenu extends javax.swing.JFrame {
          jlblmensajeprint.setText("");
     }//GEN-LAST:event_jbtnimprimirMouseExited
 
+    private void jlblminimizarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblminimizarMouseReleased
+        // TODO add your handling code here:
+         setExtendedState(JFrame.CROSSHAIR_CURSOR);
+    }//GEN-LAST:event_jlblminimizarMouseReleased
+
     /**
      * @param args the command line arguments
      */
@@ -1807,6 +1825,7 @@ final class MDIMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jlblmenusucursal;
     private javax.swing.JLabel jlblmenuuser;
     private javax.swing.JLabel jlblmenuventa;
+    private javax.swing.JLabel jlblminimizar;
     private javax.swing.JLabel jlblprodbajo;
     private javax.swing.JLabel jlblprodreg;
     private javax.swing.JLabel jlblprovreg;

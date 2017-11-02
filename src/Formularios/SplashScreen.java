@@ -25,9 +25,11 @@ public class SplashScreen extends javax.swing.JFrame {
    
     boolean valida;
     Login login= new Login() ;
-    public SplashScreen() {
+   
+    public  SplashScreen() {
          setUndecorated(true);
         initComponents();
+        
          try {
             setIconImage(new ImageIcon(getClass().getResource("/imagenes/logoicono.png")).getImage());
             
@@ -54,8 +56,7 @@ public class SplashScreen extends javax.swing.JFrame {
                     if(i==23){
 //                        jlblMensaje.setText("Comprobando base de datos...");
                         
-//                        Conexion conexion= new Conexion();
-//                        conexion.getConnection();
+                       
 //                        valida=conexion.valida();
 //                        System.out.println("val"+valida);
 //                        if(valida==false){
@@ -68,7 +69,16 @@ public class SplashScreen extends javax.swing.JFrame {
                         jlblMensaje.setText("Cargando archivos de configuración...");
                     }
                     if(i==90){
-                        jlblMensaje.setText("Bienvenido al Sistema...");
+//                         Conexion conexion= new Conexion();
+//                         
+//                        if(conexion.Conexion()==false){
+//                        jlblMensaje.setText("No se obtuvo conexion con el servidor...");
+//                        compruebaconexion=false;
+//                        } else 
+//                        {
+//                        jlblMensaje.setText("Bienvenido al sistema");
+//                         compruebaconexion=true;
+//                        }
 //                        dispose();
 //                        AWTUtilities.setWindowOpaque(login, false);
 //                        login.setVisible(true);
@@ -96,7 +106,7 @@ public class SplashScreen extends javax.swing.JFrame {
 //            Logger.getLogger(SistemaVentas20.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //        this.dispose();
-        
+     
     }
    
 

@@ -23,6 +23,7 @@ public class Ventas {
     private String estado;
     private long id_sucursal;
     private double descuento;
+    private String motivodescuento;
     public Ventas() {
     }
 
@@ -35,6 +36,14 @@ public class Ventas {
         this.estado = estado;
         this.id_sucursal = id_sucursal;
         this.descuento = descuento;
+    }
+
+    public String getMotivodescuento() {
+        return motivodescuento;
+    }
+
+    public void setMotivodescuento(String motivodescuento) {
+        this.motivodescuento = motivodescuento;
     }
 
     public double getDescuento() {

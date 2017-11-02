@@ -64,6 +64,8 @@ public class JIFVenta extends javax.swing.JInternalFrame {
        jtfcantidad.grabFocus();
 //        this.user= user;
        jtfdescuento.setValue(0);
+       jtadescripprod.setLineWrap(true);
+        jlblcargarventa.setVisible(false);
        
        ////// IMAGEN DEL PRODUCTO POR DEFAULT////////////////
 //       ImageIcon imageIcon= new ImageIcon( getClass().getResource("/imagenes/product.png"));
@@ -129,7 +131,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
       
         jlblcodigo.setText(producto.getCodigo());
         jlblproducto.setText(producto.getDescripcion());
-        jtaobservaciones.setText(producto.getObservacion());
+        jtadescripprod.setText(producto.getObservacion());
         producto.getFoto();
         jlblprecio.setValue(producto.getPrecio());
         jlblstock.setValue(producto.getCantidad());
@@ -140,9 +142,10 @@ public class JIFVenta extends javax.swing.JInternalFrame {
     public boolean validadescuento(){
         boolean valida;
     double descuento = Double.parseDouble(jtfdescuento.getValue().toString());
-    double descuentomax= Double.parseDouble(jlbltotal.getValue().toString())*0.1;
-        if(descuento> descuentomax){
-            jlblmsjdescuento.setText("EL DESCUENTO DEBE SER MENOR O IGUAL AL 10% DEL TOTAL VENDIDO");
+    double total= Double.parseDouble(jlbltotal.getValue().toString());
+//    double descuentomax= Double.parseDouble(jlbltotal.getValue().toString())*0.1;
+        if(descuento> total){
+            jlblmsjdescuento.setText("El descuento debe ser menor del total vendido");
             valida = false;
         }else {
             valida=true;
@@ -170,11 +173,12 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         jlbltotal = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
+        jlblcargarventa = new javax.swing.JLabel();
         panelNice2 = new org.edisoncor.gui.panel.PanelNice();
         jtfrut = new org.edisoncor.gui.textField.TextFieldRoundIcon();
         jtfcliente = new org.edisoncor.gui.textField.TextFieldRoundIcon();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jtaobservaciones = new javax.swing.JTextArea();
+        jtadescripprod = new javax.swing.JTextArea();
         jtfdescuento = new javax.swing.JFormattedTextField();
         jLabel2 = new javax.swing.JLabel();
         jlblmensaje = new javax.swing.JLabel();
@@ -183,6 +187,10 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         jtfcompras = new javax.swing.JFormattedTextField();
         jtftotalcompras = new javax.swing.JFormattedTextField();
         jlblmsjdescuento = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jtamotivodesc = new javax.swing.JTextArea();
+        jLabel6 = new javax.swing.JLabel();
         panelNice3 = new org.edisoncor.gui.panel.PanelNice();
         jtbtn7 = new org.edisoncor.gui.button.ButtonColoredAction();
         jbtn8 = new org.edisoncor.gui.button.ButtonColoredAction();
@@ -220,6 +228,14 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         jtfvender.setBackground(new java.awt.Color(255, 255, 255));
         jtfvender.setText("Vender (F2)");
         jtfvender.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
+        jtfvender.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jtfvenderMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jtfvenderMousePressed(evt);
+            }
+        });
         jtfvender.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtfvenderActionPerformed(evt);
@@ -286,7 +302,11 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtabla);
 
-        panelNice1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 610, 380));
+        panelNice1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 590, 380));
+
+        jlblcargarventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading_cart.gif"))); // NOI18N
+        jlblcargarventa.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        panelNice1.add(jlblcargarventa, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, 250, 210));
 
         panelNice2.setBackground(new java.awt.Color(255, 255, 255));
         panelNice2.setBorderColor(new java.awt.Color(173, 173, 173));
@@ -314,7 +334,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
                 jtfrutKeyReleased(evt);
             }
         });
-        panelNice2.add(jtfrut, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 130, 30));
+        panelNice2.add(jtfrut, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 170, 30));
 
         jtfcliente.setBackground(new java.awt.Color(204, 204, 204));
         jtfcliente.setForeground(new java.awt.Color(255, 255, 255));
@@ -336,29 +356,39 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         });
         panelNice2.add(jtfcliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 220, 30));
 
-        jtaobservaciones.setEditable(false);
-        jtaobservaciones.setColumns(20);
-        jtaobservaciones.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
-        jtaobservaciones.setRows(5);
-        jtaobservaciones.setText("OBSERVACIONES");
-        jScrollPane2.setViewportView(jtaobservaciones);
+        jtadescripprod.setEditable(false);
+        jtadescripprod.setColumns(20);
+        jtadescripprod.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        jtadescripprod.setRows(5);
+        jtadescripprod.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtadescripprodFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtadescripprodFocusLost(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jtadescripprod);
 
-        panelNice2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 250, 200));
+        panelNice2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 410, 250, 90));
 
         jtfdescuento.setBackground(new java.awt.Color(204, 204, 204));
         jtfdescuento.setForeground(new java.awt.Color(255, 51, 51));
         jtfdescuento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
         jtfdescuento.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtfdescuento.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtfdescuentoKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfdescuentoKeyReleased(evt);
             }
         });
-        panelNice2.add(jtfdescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 130, -1));
+        panelNice2.add(jtfdescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 140, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("DESCUENTO:");
-        panelNice2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, -1, 20));
+        jLabel2.setText("Descuento:");
+        panelNice2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, 20));
 
         jlblmensaje.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jlblmensaje.setForeground(new java.awt.Color(255, 51, 51));
@@ -366,21 +396,33 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Compras:");
-        panelNice2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, 20));
+        panelNice2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, 20));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setText("Total de Compras:");
-        panelNice2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, 20));
+        panelNice2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, 20));
 
         jtfcompras.setEditable(false);
-        panelNice2.add(jtfcompras, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 110, -1));
+        panelNice2.add(jtfcompras, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 110, -1));
 
         jtftotalcompras.setEditable(false);
-        panelNice2.add(jtftotalcompras, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 150, -1));
+        panelNice2.add(jtftotalcompras, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 150, -1));
 
         jlblmsjdescuento.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jlblmsjdescuento.setForeground(new java.awt.Color(255, 51, 51));
-        panelNice2.add(jlblmsjdescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 240, 320, 20));
+        panelNice2.add(jlblmsjdescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 250, 20));
+
+        jLabel5.setText("Descripción del Producto:");
+        panelNice2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, -1, -1));
+
+        jtamotivodesc.setColumns(20);
+        jtamotivodesc.setRows(5);
+        jScrollPane3.setViewportView(jtamotivodesc);
+
+        panelNice2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 250, -1));
+
+        jLabel6.setText("Motivo del descuento:");
+        panelNice2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
 
         panelNice3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -541,6 +583,9 @@ public class JIFVenta extends javax.swing.JInternalFrame {
             }
         });
         jtfcantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtfcantidadKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfcantidadKeyReleased(evt);
             }
@@ -612,14 +657,14 @@ public class JIFVenta extends javax.swing.JInternalFrame {
                     .addComponent(jtfcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelNice3, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelNice1, javax.swing.GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
+                .addComponent(panelNice1, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelNice2, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtfvender, javax.swing.GroupLayout.PREFERRED_SIZE, 59, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jtfvender, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtfsalir, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -863,6 +908,20 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 
     private void jtfrutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrutKeyReleased
         // TODO add your handling code here:
+             String rut= jtfrut.getText().trim();
+       
+        idcliente=daocliente.buscarclientevent(rut,jlblmensaje,jtfcliente,jtftotalcompras,jtfcompras);
+        if(idcliente==0){
+        jtfcliente.setEnabled(true);
+        
+        }else {
+        jtfcliente.setEnabled(false);
+        }
+        
+           if(evt.getKeyCode()==113){
+           jtfvender.doClick();
+        
+        }
      
                
     }//GEN-LAST:event_jtfrutKeyReleased
@@ -953,6 +1012,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
                 venta.setIdempleado(user.getIdempleado());
                 venta.setId_sucursal(sucursalsingleton.getId());
                 venta.setDescuento(Double.parseDouble(jtfdescuento.getValue().toString()));
+                venta.setMotivodescuento(jtamotivodesc.getText().toUpperCase());
                 if(idcliente!=0){
                  venta.setIdventa(daoventa.insertar(venta));
                 }else {
@@ -965,10 +1025,16 @@ public class JIFVenta extends javax.swing.JInternalFrame {
              System.out.println("idvnetqa"+venta.getIdventa());
             daoventa.imprimirticketcaja(venta.getIdventa());
             newventa();
+            
+            
         }
+         jlblcargarventa.setVisible(false);
+          
+         
         
         }else{
             JOptionPane.showMessageDialog(null, "INGRESE DATOS VALIDOS");
+            
         }
         
         
@@ -991,6 +1057,13 @@ public class JIFVenta extends javax.swing.JInternalFrame {
     private void jtfdescuentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescuentoKeyReleased
         // TODO add your handling code here:
         validadescuento();
+           if(evt.getKeyCode()==113){
+             
+               
+           jtfvender.doClick();
+           
+        
+        }
     }//GEN-LAST:event_jtfdescuentoKeyReleased
 
     private void jtfclienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfclienteKeyTyped
@@ -1033,6 +1106,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         
          if(evt.getKeyCode()==113){
            jtfvender.doClick();
+          
         
         }
     }//GEN-LAST:event_jtfcantidadKeyReleased
@@ -1050,17 +1124,61 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jtfrutActionPerformed
 
+    private void jtadescripprodFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtadescripprodFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtadescripprodFocusGained
+
+    private void jtadescripprodFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtadescripprodFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtadescripprodFocusLost
+
+    private void jtfvenderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfvenderMousePressed
+        // TODO add your handling code here:
+          if(listprod.size()>0 && validadescuento()==true){
+               jlblcargarventa.setVisible(true);
+          }
+       
+    }//GEN-LAST:event_jtfvenderMousePressed
+
+    private void jtfvenderMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfvenderMouseExited
+        // TODO add your handling code here:
+        jlblcargarventa.setVisible(false);
+    }//GEN-LAST:event_jtfvenderMouseExited
+
+    private void jtfcantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcantidadKeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode()==113){
+             if(listprod.size()>0 && validadescuento()==true){
+               jlblcargarventa.setVisible(true);
+          }   
+               
+               }
+    }//GEN-LAST:event_jtfcantidadKeyPressed
+
+    private void jtfdescuentoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescuentoKeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode()==113){
+             if(listprod.size()>0 && validadescuento()==true){
+               jlblcargarventa.setVisible(true);
+          }   
+               
+               }
+    }//GEN-LAST:event_jtfdescuentoKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private org.edisoncor.gui.button.ButtonColoredAction jbtn0;
     private org.edisoncor.gui.button.ButtonColoredAction jbtn1;
     private org.edisoncor.gui.button.ButtonColoredAction jbtn2;
@@ -1074,6 +1192,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
     private org.edisoncor.gui.button.ButtonColoredAction jbtnborrartodo;
     private org.edisoncor.gui.button.ButtonColoredAction jbtncoma;
     private org.edisoncor.gui.button.ButtonColoredAction jbtnenter;
+    private javax.swing.JLabel jlblcargarventa;
     private javax.swing.JLabel jlblcodigo;
     private javax.swing.JLabel jlblimagen;
     private javax.swing.JLabel jlblmensaje;
@@ -1083,7 +1202,8 @@ public class JIFVenta extends javax.swing.JInternalFrame {
     private javax.swing.JFormattedTextField jlblstock;
     private javax.swing.JFormattedTextField jlbltotal;
     private javax.swing.JTable jtabla;
-    private javax.swing.JTextArea jtaobservaciones;
+    private javax.swing.JTextArea jtadescripprod;
+    private javax.swing.JTextArea jtamotivodesc;
     private org.edisoncor.gui.button.ButtonColoredAction jtbtn7;
     private org.edisoncor.gui.textField.TextFieldRoundIcon jtfcantidad;
     private org.edisoncor.gui.textField.TextFieldRoundIcon jtfcliente;

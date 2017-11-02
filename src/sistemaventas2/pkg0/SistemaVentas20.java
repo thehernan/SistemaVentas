@@ -5,6 +5,7 @@
  */
 package sistemaventas2.pkg0;
 
+import Conexion.Conexion;
 import Formularios.Login;
 import Formularios.SplashScreen;
 import com.sun.awt.AWTUtilities;
@@ -26,7 +27,7 @@ public class SistemaVentas20 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+       
           try{
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 //             UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
@@ -49,17 +50,33 @@ public class SistemaVentas20 {
         } catch (InterruptedException ex) {
             Logger.getLogger(SistemaVentas20.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+      
         s.dispose();
+        
+        
         SwingUtilities.invokeLater(new Runnable(){
 //            @Override
             public void run(){
                 /*Aquí crean el objeto hacía su aplicación, para hacer visible*/
+                 
                 Login nuevaSesion = new Login();
                 AWTUtilities.setWindowOpaque(nuevaSesion, false);
                 nuevaSesion.setVisible(true);
             }
-        });        
+        });
+        
         // TODO code application logic here
     }
-    
 }
+//     public void pruebaconexion(){
+//     Conexion conexion= new Conexion();
+//     if(conexion.Conexion()==true)
+////         jlblrpruebaconexion.setText("");
+//     else 
+////         jlblrpruebaconexion.setText("No se obtuvo conexion con el servidor pongase en contacto con el administrador del sistema");
+//    
+//     conexion.devolverConexionPool();
+//    }
+//    
+//}
