@@ -15,6 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +99,7 @@ public class ComprasDAO {
 }
    
 }
-     public void mostrar(JTable tabla,long idsucur){
+     public List<Compras> mostrar(JTable tabla,long idsucur){
         
     DefaultTableModel modelo= new DefaultTableModel(){
     public boolean isCellEditable(int row, int column) {
@@ -106,14 +108,12 @@ public class ComprasDAO {
    return false;
   }
   };      
- String titulos[]={"ID","DOCUMENTO","NUMERO","PROVEEDOR","FECHA","TIPO PAGO","ABONO"};
+ String titulos[]={"DOCUMENTO","NUMERO","PROVEEDOR","FECHA","TIPO PAGO","ABONO"};
  modelo.setColumnIdentifiers(titulos);
  tabla.setModel(modelo);
- tabla.getColumnModel().getColumn(0).setMaxWidth(0);
- tabla.getColumnModel().getColumn(0).setMinWidth(0);
- tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+
   Conexion conexion = new Conexion();
-          
+    List<Compras> listcompra= new ArrayList<>();
      
     try{
 	
@@ -122,27 +122,27 @@ public class ComprasDAO {
         PreparedStatement ps = conexion.getConnection().prepareStatement(sql);
         ps.setLong(1, idsucur);
         ResultSet rs = ps.executeQuery();
-        Object datosR[] = new Object[7];
+        Object datosR[] = new Object[6];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
-                         
-                     datosR[i] = rs.getObject("id");
-                     i++;
-                     datosR[i] = rs.getObject("vdocumento");
-                     i++;
-                     datosR[i] = rs.getObject("vnumero");
-                     i++;
-                     datosR[i] = rs.getObject("vproveedor");
-                     i++;
-                     datosR[i] = rs.getObject("vfecha");
-                     i++;
-                     datosR[i] = rs.getObject("vtipopago");
-                     i++;
-                     datosR[i] = rs.getObject("vabono");
-                     i++;
-                    
-                    modelo.addRow(datosR);
-		}
+           Compras compra = new Compras();
+           compra.setId_compra(rs.getLong("id"));
+           
+            
+             datosR[0] = rs.getObject("vdocumento");
+
+             datosR[1] = rs.getObject("vnumero");
+
+             datosR[2] = rs.getObject("vproveedor");
+
+             datosR[3] = rs.getObject("vfecha");
+
+             datosR[4] = rs.getObject("vtipopago");
+
+             datosR[5] = rs.getObject("vabono");
+               
+            listcompra.add(compra);
+            modelo.addRow(datosR);
+		
         }
 	ps.close();
         rs.close();
@@ -153,7 +153,7 @@ public class ComprasDAO {
                 conexion.devolverConexionPool();
             }    
 
-    
+    return listcompra;
     }
      
 public void pendientes(JTable tabla,long idsucur){
@@ -331,9 +331,9 @@ public void pendientesporproveedor(JTable tabla,long idsucur,long idprove){
 public DefaultTableModel  buscar(JTable tabla,long idcompra,JTextField proveedor,JTextField proveerut,
         Compras compra,List<DetalleCompras> listdet    ){//,JFormattedTextField total,JFormattedTextField subtotal,
 //        JFormattedTextField iva){
-        DecimalFormat formatea = new DecimalFormat("###");
+        NumberFormat formatea = NumberFormat.getInstance();
         DefaultTableModel modelo= new DefaultTableModel(
-                new String[]{"iddetalle","ID","CODIGO","DESCRIPCION","CANTIDAD LLEGO","CANTIDAD ACORDADA","PRECIO","IMPORTE"}, 0) {
+                new String[]{"CODIGO","DESCRIPCION","CANTIDAD LLEGO","CANTIDAD ACORDADA","PRECIO","IMPORTE"}, 0) {
    
              public boolean isCellEditable(int row, int column) {
 //        //      if (column == 5) return true;
@@ -353,7 +353,7 @@ public DefaultTableModel  buscar(JTable tabla,long idcompra,JTextField proveedor
         ps.setLong(1, idcompra);
         ResultSet rs = ps.executeQuery();
 //        ID","CODIGO","DESCRIPCION","CANTIDAD","PRECIO","IMPORTE
-        Object datosR[] = new Object[8];
+        Object datosR[] = new Object[6];
         
         while (rs.next()){
             compra.setId_compra(rs.getLong("id"));
@@ -368,48 +368,40 @@ public DefaultTableModel  buscar(JTable tabla,long idcompra,JTextField proveedor
 //            total.setValue(rs.getObject("vtotal"));
 //            subtotal.setValue(rs.getObject("vsubtotal"));   
 //            iva.setValue(rs.getObject("iva"));
-            for(int i =0; i<=1; i++){
+            
                     
                      DetalleCompras detcompra= new DetalleCompras();
                      iddet=rs.getLong("viddetalle");
                      if(iddet!=0){          
-                     idprod= rs.getLong("vidprod");
-                     cantidad=rs.getDouble("vcantidad");
-                     precio= rs.getDouble("vprecio");
-                     cantidadacordad=rs.getDouble("vcantidadacordada");
-                     
+                                         
                      detcompra.setIddetallecompra(iddet);
-                     detcompra.setIdproducto(idprod);
-                     detcompra.setCantidad(cantidad);
-                     detcompra.setPrecio(precio);
-                     detcompra.setCantidadacord(cantidadacordad);
+                     detcompra.setIdproducto( rs.getLong("vidprod"));
+                     detcompra.setCantidad(rs.getDouble("vcantidad"));
+                     detcompra.setPrecio(rs.getDouble("vprecio"));
+                     detcompra.setCantidadacord(rs.getDouble("vcantidadacordada"));
+                     detcompra.setImporte(rs.getDouble("vimporte"));
                      listdet.add(detcompra);
-                     datosR[i] = iddet;
-                     i++;    
-                     datosR[i] = idprod;
-                     i++;
-                     datosR[i] = rs.getObject("vcodigo");
-                     i++;
-                     datosR[i] = rs.getObject("vdescripcion");
-                     i++;
-                     datosR[i] =formatea.format(cantidad);
-                     i++;
-                     datosR[i] = formatea.format(cantidadacordad);
-                     i++;
-                     datosR[i] = formatea.format(precio);
-                     i++;
-                     datosR[i] = formatea.format(rs.getDouble("vimporte"));
-                     i++;
+               
+                     datosR[0] = rs.getObject("vcodigo");
+                    
+                     datosR[1] = rs.getObject("vdescripcion");
+                    
+                     datosR[2] =formatea.format(detcompra.getCantidad());
+                    
+                     datosR[3] = formatea.format(detcompra.getCantidadacord());
+                    
+                     datosR[4] = formatea.format(detcompra.getPrecio());
+                    
+                     datosR[5] = formatea.format(detcompra.getImporte());
+                     
                     
                     
                     modelo.addRow(datosR);
-                    }
+                    
 		}
         }
         tabla.setModel(modelo);
-        tabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        tabla.getColumnModel().getColumn(0).setMinWidth(0);
-        tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+      
 	ps.close();
         rs.close();
         } catch(Exception e)

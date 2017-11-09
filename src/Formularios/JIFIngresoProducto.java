@@ -11,11 +11,14 @@ import DAO.ProductoDAO;
 import Pojos.Compras;
 import Pojos.DetalleCompras;
 import Pojos.Producto;
+import Pojos.Proveedor;
 
 import Pojos.SucursalSingleton;
 import java.awt.Frame;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -52,25 +55,27 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
   };      
     SucursalSingleton sucursalsingleton = SucursalSingleton.getinstancia();
     boolean editar = false;
+//    Proveedor proveedor;
     public JIFIngresoProducto(){
         initComponents();
 //        daoproducto.llenarcombobox(jcbdescripcion,sucursalsingleton.getId());
 //        AutoCompleteDecorator.decorate(jcbdescripcion);
-        String titulos[]={"iddetalle","ID","CODIGO","DESCRIPCION","CANTIDAD LLEGO","CANTIDAD ACORDADA","PRECIO","IMPORTE"};
+        String titulos[]={"CODIGO","DESCRIPCION","CANTIDAD LLEGO","CANTIDAD ACORDADA","PRECIO","IMPORTE"};
         modelo.setColumnIdentifiers(titulos);
         jtabla.setModel(modelo);
         
-        jtabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        jtabla.getColumnModel().getColumn(0).setMinWidth(0);
-        jtabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-        
-        jtabla.getColumnModel().getColumn(1).setMaxWidth(0);
-        jtabla.getColumnModel().getColumn(1).setMinWidth(0);
-        jtabla.getColumnModel().getColumn(1).setPreferredWidth(0);
-        
+//        jtabla.getColumnModel().getColumn(0).setMaxWidth(0);
+//        jtabla.getColumnModel().getColumn(0).setMinWidth(0);
+//        jtabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+//        
+//        jtabla.getColumnModel().getColumn(1).setMaxWidth(0);
+//        jtabla.getColumnModel().getColumn(1).setMinWidth(0);
+//        jtabla.getColumnModel().getColumn(1).setPreferredWidth(0);
+//        
         bloqueajbtn(false, false);
         setvisibleabono(false, false);
         jtfabono.setValue(0);
+        jdatapicker.setDate(new Date());
     }
     public void bloqueajbtn(boolean guardar,boolean ingresar){
     jbtnguadar.setEnabled(guardar);
@@ -82,13 +87,14 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         jtfabono.setVisible(abono);
     }
     
-    public void setproveedor(Compras compra,String nombre,String rut){
+    public void setproveedor(Proveedor proveedor){
 //    this.proveedor=proveedor;
-    this.compras=compra;
+  
 //    jtfproveedor.setText(proveedor.getNombrerazons());
 //    jtfrut.setText(proveedor.getRut());
-    jtfproveedor.setText(nombre);
-    jtfrut.setText(rut);
+   compras.setId_proveedor(proveedor.getIdproveedor());
+    jtfproveedor.setText(proveedor.getNombrerazons());
+    jtfrut.setText(proveedor.getRut());
             
     }
     public void limpiarjtf(){
@@ -99,6 +105,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
     jlblimporte.setValue(0);
     jtfstock.setValue(0);
     jtfcantidadacordada.setValue(0);
+    jlblimagen.setIcon(null);
     producto = new Producto();
     }
     public void calculaimporte(){
@@ -108,15 +115,16 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         
             double importe= cantidad*precio;
             jlblimporte.setValue(importe);
-        } catch (NullPointerException ex) {
+        } catch (Exception e) {
+             System.err.println("exception calculaimporte"+e);
         }
         
     }
     public void calculatotal(){
         Double total=0.0,subtotal,iva;
         
-        for (int i=0;i<=modelo.getRowCount()-1 ;i++){
-         total = total + Double.parseDouble(modelo.getValueAt(i, 7).toString());
+        for (DetalleCompras det : listadet){
+         total = total + det.getImporte();
         } 
         subtotal= total/1.19;
         iva = total-subtotal;
@@ -128,7 +136,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
     public void validaingresar(){
 //        boolean validacant= validacantidad();
         try {
-             if (!producto.getDescripcion().equals("") && Double.parseDouble(jtfprecio.getValue().toString())>0
+             if (producto.getIdproducto()!=0 && Double.parseDouble(jtfprecio.getValue().toString())>0
                 && Double.parseDouble(jtfcantidad.getValue().toString())>0 && 
                      Double.parseDouble(jtfcantidadacordada.getValue().toString()) > 0 )//&& validacant==true)
              {
@@ -137,11 +145,11 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
              }else{
                     jbtningresar.setEnabled(false);
                   }
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             jbtningresar.setEnabled(false);
-        }catch(NullPointerException ee){
-             jbtningresar.setEnabled(false);
-        
+       
+           
+              System.err.println("exception validaingresar"+e);
         }
        
     
@@ -160,10 +168,13 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
 //    }
     public boolean validaabono(){
          boolean valida=false;
+         Double total=0.0;
         try {
            
             double abono=Double.parseDouble(jtfabono.getValue().toString());
-            double total= Double.parseDouble(jlbltotal.getText());
+            for (DetalleCompras det : listadet){
+            total = total + det.getImporte();
+           } 
             System.out.println("abono"+abono);
             if(abono<=total && abono>=0){
                 valida=true;
@@ -172,8 +183,9 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
                 jlblabono.setText("INGRESE UN ABONO VALIDO");
             }
             
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             valida=false;
+            System.err.println("exception valida abono"+e);
         }
         
     return valida;
@@ -183,19 +195,20 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         System.out.println("date"+jdatapicker.getDate());
         boolean valida= validaabono();
         try {
-            if (!jtfproveedor.getText().equals("PROVEEDOR") && jtfnumero.getText().length()>0 && !jtfnumero.getText().equals("NUMERO")
-                && modelo.getRowCount() >0 && jdatapicker.getDate()!=null && valida==true ){
+            if (compras.getId_proveedor()!=0 && jtfnumero.getText().length()>0 && !jtfnumero.getText().equals("NUMERO")
+                && listadet.size()>0 && jdatapicker.getDate()!=null && valida==true ){
             jbtnguadar.setEnabled(true);
         
             }else { jbtnguadar.setEnabled(false);}
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             jbtnguadar.setEnabled(false);
+            System.out.println("se produjo una exception"+ e);
         }
         
     
     }
     public void setbuscar(long id){      
-    listadet = new ArrayList<DetalleCompras>();
+   
     modelo=daocompras.buscar(jtabla, id,jtfproveedor,jtfrut,compras,listadet ); //,jlbltotal,jlblsubtotal,jlbliva);
     System.out.println("lsitaa"+listadet.size());
     jdatapicker.setDate(compras.getFecha());
@@ -207,15 +220,16 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
     calculatotal();
     
     }
-    public void seteliminar(){
+    public void seteliminar(DetalleCompras detc){
         boolean valida;
     int index=jtabla.getSelectedRow();
-               long iddet= Long.parseLong(jtabla.getValueAt(index, 0).toString());
-               long idprod = Long.parseLong(jtabla.getValueAt(index, 1).toString());
-               System.out.println("idde"+iddet+"idpro"+idprod);
-              
-               if (iddet != 0){
-                valida=daodetcompra.eliminar(iddet, idprod);
+//               long iddet= Long.parseLong(jtabla.getValueAt(index, 0).toString());
+//               long idprod = Long.parseLong(jtabla.getValueAt(index, 1).toString());
+//               System.out.println("idde"+iddet+"idpro"+idprod);
+            
+               if (detc.getIddetallecompra()!= 0){
+                  
+                valida=daodetcompra.eliminar(detc.getIddetallecompra(), detc.getIdproducto());
                 if(valida==true){
                 modelo.removeRow(index);
                 listadet.remove(index);
@@ -230,10 +244,10 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
     
     
     }
-    public void seteditar(DetalleCompras det,String cod,String des,Object impor){
+    public void seteditar(DetalleCompras det){
     int index=jtabla.getSelectedRow();
-    listadet.add(index, det);
-    DecimalFormat formatea = new DecimalFormat("###");
+    listadet.set(index, det);
+        NumberFormat nf = NumberFormat.getInstance();
 //        Object[] miarray = new Object[8];
 //        miarray[0]=det.getIddetallecompra();
 //        miarray[1]=det.getIdproducto();
@@ -244,10 +258,10 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
 //        miarray[6]=formatea.format(det.getPrecio());
 //        miarray[7]=formatea.format(impor);
     
-    modelo.setValueAt(formatea.format(det.getCantidad()), index, 4);
-    modelo.setValueAt(formatea.format(det.getCantidadacord()), index, 5);
-    modelo.setValueAt(formatea.format(det.getPrecio()), index, 6);
-    modelo.setValueAt(formatea.format(impor), index, 7);
+    modelo.setValueAt(nf.format(det.getCantidad()), index, 2);
+    modelo.setValueAt(nf.format(det.getCantidadacord()), index, 3);
+    modelo.setValueAt(nf.format(det.getPrecio()), index, 4);
+    modelo.setValueAt(nf.format(det.getImporte()), index, 5);
     calculatotal();
     validaguardar();
     }
@@ -261,16 +275,16 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
           return false;
     }
     };
-        String titulos[]={"iddetalle","ID","CODIGO","DESCRIPCION","CANTIDAD LLEGO","CANTIDAD ACORDADA","PRECIO","IMPORTE"};
+        String titulos[]={"CODIGO","DESCRIPCION","CANTIDAD LLEGO","CANTIDAD ACORDADA","PRECIO","IMPORTE"};
         modelo.setColumnIdentifiers(titulos);
         jtabla.setModel(modelo);
-        jtabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        jtabla.getColumnModel().getColumn(0).setMinWidth(0);
-        jtabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-        
-        jtabla.getColumnModel().getColumn(1).setMaxWidth(0);
-        jtabla.getColumnModel().getColumn(1).setMinWidth(0);
-        jtabla.getColumnModel().getColumn(1).setPreferredWidth(0);
+//        jtabla.getColumnModel().getColumn(0).setMaxWidth(0);
+//        jtabla.getColumnModel().getColumn(0).setMinWidth(0);
+//        jtabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+//        
+//        jtabla.getColumnModel().getColumn(1).setMaxWidth(0);
+//        jtabla.getColumnModel().getColumn(1).setMinWidth(0);
+//        jtabla.getColumnModel().getColumn(1).setPreferredWidth(0);
         compras= new Compras();
         listadet = new ArrayList<DetalleCompras>();
         producto = new Producto();
@@ -282,6 +296,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         jtfabono.setValue(0);
         jtfnumero.setText("NUMERO");
         calculatotal();
+        jbtnguadar.setEnabled(false);
     
     }       
 
@@ -338,6 +353,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         jlblmsjcantidad = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
+        jlblmensaje = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -400,6 +416,14 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         jbtnguadar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
         jbtnguadar.setText("Guardar");
         jbtnguadar.setToolTipText("Guardar");
+        jbtnguadar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jbtnguadarMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jbtnguadarMousePressed(evt);
+            }
+        });
         jbtnguadar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnguadarActionPerformed(evt);
@@ -410,7 +434,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         jbtnsalir.setBackground(new java.awt.Color(255, 255, 255));
         jbtnsalir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jbtnsalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel.png"))); // NOI18N
-        jbtnsalir.setText("Salir Cancelar");
+        jbtnsalir.setText("Salir");
         jbtnsalir.setToolTipText("Salir");
         jbtnsalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -421,15 +445,15 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel4.setText("SUBTOTAL :");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 440, -1, 20));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 450, -1, 20));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel5.setText("I.V.A (19 %):");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 470, -1, 20));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 480, -1, 20));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel6.setText("TOTAL:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 500, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 510, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -491,6 +515,9 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfabonoKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfabonoKeyTyped(evt);
+            }
         });
         jPanel1.add(jtfabono, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, 200, -1));
 
@@ -506,19 +533,19 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         jlblsubtotal.setCaretColor(new java.awt.Color(255, 51, 51));
         jlblsubtotal.setDisabledTextColor(new java.awt.Color(255, 51, 51));
         jlblsubtotal.setEnabled(false);
-        jPanel1.add(jlblsubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 440, 390, -1));
+        jPanel1.add(jlblsubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 450, 410, -1));
 
         jlbliva.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
         jlbliva.setCaretColor(new java.awt.Color(255, 51, 51));
         jlbliva.setDisabledTextColor(new java.awt.Color(255, 51, 51));
         jlbliva.setEnabled(false);
-        jPanel1.add(jlbliva, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 470, 390, -1));
+        jPanel1.add(jlbliva, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 480, 410, -1));
 
         jlbltotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
         jlbltotal.setCaretColor(new java.awt.Color(255, 51, 51));
         jlbltotal.setDisabledTextColor(new java.awt.Color(255, 51, 51));
         jlbltotal.setEnabled(false);
-        jPanel1.add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 500, 390, -1));
+        jPanel1.add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 510, 410, -1));
 
         jPanel3.setBackground(new java.awt.Color(238, 238, 238));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "PRODUCTO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Light", 0, 12))); // NOI18N
@@ -642,7 +669,10 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         });
         jScrollPane3.setViewportView(jtabla);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 1132, 230));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 1090, 230));
+
+        jlblmensaje.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jPanel1.add(jlblmensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 500, 370, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -671,7 +701,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
 
     private void jbtnbuscarproveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarproveedorActionPerformed
         // TODO add your handling code here:
-        JDBuscarProveedor Bproveedor= new JDBuscarProveedor(new java.awt.Frame(), isVisible(),this,compras);
+        JDBuscarProveedor Bproveedor= new JDBuscarProveedor(new java.awt.Frame(), isVisible(),this);
         Bproveedor.setVisible(true);
     }//GEN-LAST:event_jbtnbuscarproveedorActionPerformed
 
@@ -712,8 +742,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         int index= jtabla.getSelectedRow();
         //long id = Long.parseLong(jtabla.getValueAt(index,0).toString());
-        String cod=jtfcodigo.getText();
-        String descrip=jtfdescripcion.getText();
+      
         Double cantidad=Double.parseDouble(jtfcantidad.getValue().toString());
         Double cantidaacor= Double.parseDouble(jtfcantidadacordada.getValue().toString());
         Double precio= Double.parseDouble(jtfprecio.getValue().toString());
@@ -727,22 +756,26 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         detcompra.setPrecio(precio);
         detcompra.setCantidad(cantidad);
         detcompra.setCantidadacord(cantidaacor);
+        detcompra.setImporte(precio*cantidad);
+        
         listadet.add(detcompra);
-        DecimalFormat formatea = new DecimalFormat("###");
-        Object[] miarray = new Object[8];
-        miarray[0]=0;
-        miarray[1]=producto.getIdproducto();
-        miarray[2]=cod;
-        miarray[3]=descrip;
-        miarray[4]=formatea.format(jtfcantidad.getValue());
-        miarray[5]= formatea.format(jtfcantidadacordada.getValue());
-        miarray[6]=formatea.format(jtfprecio.getValue());
-        miarray[7]=formatea.format(jlblimporte.getValue());
+         NumberFormat nf = NumberFormat.getInstance();
+        Object[] miarray = new Object[6];
+        
+    
+        miarray[0]=producto.getCodigo();
+        miarray[1]=producto.getDescripcion();
+        miarray[2]=nf.format(jtfcantidad.getValue());
+        miarray[3]= nf.format(jtfcantidadacordada.getValue());
+        miarray[4]=nf.format(jtfprecio.getValue());
+        miarray[5]=nf.format(jlblimporte.getValue());
         
         modelo.addRow(miarray);
         calculatotal();
         limpiarjtf();
         validaguardar();
+        jbtningresar.setEnabled(false);
+        jtfcodigo.requestFocus();
 //        jtabla.setValueAt(descrip, 0, 2);
 //        jtabla.setValueAt(cantidad, 0, 3);
 //        jtabla.setValueAt(precio, 0, 4);
@@ -752,10 +785,12 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
                // TODO add your handling code here:
    if (JOptionPane.showConfirmDialog(null, "DOCUMENTO COMFORME","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){  
       
-  
+       Double total=0.0;
        String estado;
        double abono=Double.parseDouble(jtfabono.getValue().toString());
-       double total= Double.parseDouble(jlbltotal.getText());
+       for (DetalleCompras det : listadet){
+         total = total + det.getImporte();
+        } 
        if(jcbtipopago.getSelectedIndex()==1){
            if(abono==total){
                estado= "CANCELADO";
@@ -773,7 +808,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         compras.setFecha(new java.sql.Date(jdatapicker.getDate().getTime()));
         compras.setId_sucursal(sucursalsingleton.getId());
         compras.setTipopago(jcbtipopago.getSelectedItem().toString());
-        
+//        compras.setId_proveedor(proveedor.getIdproveedor());
         compras.setAbono(abono);
         compras.setEstado(estado);
         
@@ -788,6 +823,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
        } 
          nuevo();
     }
+    jlblmensaje.setText("");
     }//GEN-LAST:event_jbtnguadarActionPerformed
 
     private void jtfcodigoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcodigoKeyReleased
@@ -869,8 +905,8 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
              int index = jtabla.getSelectedRow();
         if(index>=0){
             if (evt.getClickCount()==2){
-           String cod= jtabla.getValueAt(index, 2).toString();
-           String descrip = jtabla.getValueAt(index, 3).toString();
+           String cod= jtabla.getValueAt(index, 0).toString();
+           String descrip = jtabla.getValueAt(index, 1).toString();
            
           JDEditarEliminarDetalleCompra eedetcomp = new JDEditarEliminarDetalleCompra(new Frame(),isVisible()
           ,listadet.get(index),cod,descrip,this);
@@ -880,6 +916,21 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_jtablaMouseReleased
+
+    private void jtfabonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfabonoKeyTyped
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jtfabonoKeyTyped
+
+    private void jbtnguadarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbtnguadarMousePressed
+        // TODO add your handling code here:
+        jlblmensaje.setText("Generando Documento ...");
+    }//GEN-LAST:event_jbtnguadarMousePressed
+
+    private void jbtnguadarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbtnguadarMouseExited
+        // TODO add your handling code here:
+          jlblmensaje.setText("");
+    }//GEN-LAST:event_jbtnguadarMouseExited
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -912,6 +963,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jlblimagen;
     private javax.swing.JFormattedTextField jlblimporte;
     private javax.swing.JFormattedTextField jlbliva;
+    private javax.swing.JLabel jlblmensaje;
     private javax.swing.JLabel jlblmensajeabono;
     private javax.swing.JLabel jlblmsjcantidad;
     private javax.swing.JFormattedTextField jlblsubtotal;

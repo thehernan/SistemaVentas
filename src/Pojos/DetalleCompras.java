@@ -16,6 +16,7 @@ public class DetalleCompras {
     private double precio;
     private long idcompra;
     private double cantidadacord;
+    private double importe;
     public DetalleCompras() {
     }
 
@@ -26,6 +27,14 @@ public class DetalleCompras {
         this.precio = precio;
         this.idcompra = idcompra;
         this.cantidadacord = cantidadacord;
+    }
+
+    public double getImporte() {
+        return importe;
+    }
+
+    public void setImporte(double importe) {
+        this.importe = importe;
     }
 
     public double getCantidadacord() {

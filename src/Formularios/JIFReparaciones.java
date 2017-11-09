@@ -17,9 +17,8 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -56,6 +55,7 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         reparacion.setFoto(fotoB);//LE ENVIO 0 BYTES POR DEFAULT
 //        daoreparacion.llenarcombobox(jcbdispositivo);
         listprecio=daoreparacion.llenarcombobox(jcbdispositivo);
+        jXDate.setDate(new Date());
     }
     public void setempleado(Empleado empleado){
         this.empleado= empleado;
@@ -82,16 +82,22 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         
         try {
             System.out.println(jtfprecio.getText());
-             
-            if (empleado.getId_empleado()!=0 && !jtfmarca.getText().equals("MARCA") && !jtfmarca.getText().equals("")&& !jtfmodelo.getText().equals("MODELO") &&
+             Double precio = Double.parseDouble(jtfprecio.getText());
+             Double preciorev = Double.parseDouble(jtfpreciorevision.getText());
+             String dispo=jcbdispositivo.getSelectedItem().toString();
+                     
+                     
+                     
+                     
+            if (empleado.getId_empleado()!=0  && !jtfmarca.getText().equals("")&&
                 !jtfmodelo.getText().equals("") && !jtafallas.getText().equals("")
-                && !jtafallas.getText().equals("FALLAS") && cliente.getId_cliente()!= 0  && precio.getId() !=0){
+                && cliente.getId_cliente()!= 0  && precio >= 0 && preciorev >=0 && !dispo.equals("") ){
                 jbtnaceptar.setEnabled( true);
 //                jlblmensaje.setText("");
             }else {
                 jbtnaceptar.setEnabled(false);
             }
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
                 jbtnaceptar.setEnabled(false);
 //                jlblmensaje.setText("INGRESE PRECIO");
         }
@@ -136,6 +142,10 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         jtafallas = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtacausas = new javax.swing.JTextArea();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jtaobservacion = new javax.swing.JTextArea();
         panelNice1 = new org.edisoncor.gui.panel.PanelNice();
@@ -154,30 +164,29 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         jspmin = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
-        jtfprecio = new javax.swing.JFormattedTextField();
         jLabel6 = new javax.swing.JLabel();
-        jtfpreciorevision = new javax.swing.JFormattedTextField();
         jcbdispositivo = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jtfdescuento = new javax.swing.JFormattedTextField();
+        jtfprecio = new javax.swing.JTextField();
+        jtfpreciorevision = new javax.swing.JTextField();
+        jtfdescuento = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
 
         setClosable(true);
-        setIconifiable(true);
-        setMaximizable(true);
-        setResizable(true);
         setTitle("NUEVA REPARACIÓN");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("TECNICO REPARACIÓN:");
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel1.setText("Técnico:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 136, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "DATOS DEL PRODUCTO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
-        jtfmarca.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jtfmarca.setText("MARCA");
+        jtfmarca.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfmarca.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfmarcaFocusGained(evt);
@@ -195,8 +204,7 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
             }
         });
 
-        jtfmodelo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jtfmodelo.setText("MODELO");
+        jtfmodelo.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfmodelo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfmodeloFocusGained(evt);
@@ -215,9 +223,8 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         });
 
         jtafallas.setColumns(20);
-        jtafallas.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        jtafallas.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtafallas.setRows(5);
-        jtafallas.setText("FALLAS");
         jtafallas.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtafallasFocusGained(evt);
@@ -237,9 +244,8 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(jtafallas);
 
         jtacausas.setColumns(20);
-        jtacausas.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        jtacausas.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtacausas.setRows(5);
-        jtacausas.setText("CAUSAS");
         jtacausas.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtacausasFocusGained(evt);
@@ -258,43 +264,67 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(jtacausas);
 
+        jLabel9.setText("Marca:");
+
+        jLabel10.setText("Modelo:");
+
+        jLabel11.setText("Fallas:");
+
+        jLabel12.setText("Causas:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jtfmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
-                        .addComponent(jtfmodelo, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtfmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtfmodelo, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel12))
+                        .addGap(0, 33, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(13, 13, 13)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtfmarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfmodelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jtfmodelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jtfmarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addGap(19, 19, 19))
+                .addComponent(jLabel11)
+                .addGap(3, 3, 3)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                .addGap(2, 2, 2)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
         );
 
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 184, -1, 240));
+
         jtaobservacion.setColumns(20);
-        jtaobservacion.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        jtaobservacion.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtaobservacion.setRows(5);
-        jtaobservacion.setText("OBSERVACIÓN");
         jtaobservacion.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtaobservacionFocusGained(evt);
@@ -313,32 +343,40 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         });
         jScrollPane3.setViewportView(jtaobservacion);
 
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 452, 590, 100));
+
         panelNice1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jlblfoto.setBackground(new java.awt.Color(255, 255, 255));
         panelNice1.add(jlblfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 210, 170));
 
+        jPanel1.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(663, 10, 322, 190));
+
         jbtnfoto.setBackground(new java.awt.Color(255, 255, 255));
         jbtnfoto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jbtnfoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/FOTO.png"))); // NOI18N
-        jbtnfoto.setText("FOTO");
+        jbtnfoto.setText("Foto");
         jbtnfoto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnfotoActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 200, 160, 50));
 
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
         jbtnaceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Checked.png"))); // NOI18N
+        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setText("Aceptar");
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 500, -1, 40));
 
-        jlblnombre.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblnombre.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblnombre.setText("---");
+        jPanel1.add(jlblnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 136, 350, -1));
 
         jbtnbuscartecnico.setBackground(new java.awt.Color(255, 255, 255));
         jbtnbuscartecnico.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -348,12 +386,15 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
                 jbtnbuscartecnicoActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnbuscartecnico, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 136, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("CLIENTE:");
+        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel2.setText("Cliente:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 98, -1, -1));
 
-        jlblcliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblcliente.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblcliente.setText("---");
+        jPanel1.add(jlblcliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 98, 400, -1));
 
         jbtncliente.setBackground(new java.awt.Color(255, 255, 255));
         jbtncliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -363,13 +404,14 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
                 jbtnclienteActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtncliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 98, -1, -1));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "FECHA Y HORA DE ENTREGA", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel3.add(jXDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 160, -1));
+        jPanel3.add(jXDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 180, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel4.setText("HORA:");
         jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, -1, 20));
 
@@ -377,7 +419,7 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         jsphora.setModel(new javax.swing.SpinnerListModel(new String[] {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}));
         jPanel3.add(jsphora, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 50, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel3.setText("MIN:");
         jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 20, -1, 20));
 
@@ -385,155 +427,82 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         jspmin.setModel(new javax.swing.SpinnerListModel(new String[] {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"}));
         jPanel3.add(jspmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 50, -1));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel5.setText("PRECIO:");
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 600, 68));
 
-        jtfprecio.setEditable(false);
-        jtfprecio.setForeground(new java.awt.Color(255, 51, 102));
-        jtfprecio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###,###"))));
-        jtfprecio.setCaretColor(new java.awt.Color(255, 51, 102));
-        jtfprecio.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jtfprecio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfprecioKeyReleased(evt);
-            }
-        });
+        jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel5.setText("Precio:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(643, 314, -1, 20));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel6.setText("PRECIO REVISIÓN:");
+        jLabel6.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel6.setText("Precio Revisión:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 370, -1, -1));
 
-        jtfpreciorevision.setEditable(false);
-        jtfpreciorevision.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
-        jtfpreciorevision.setCaretColor(new java.awt.Color(255, 51, 51));
-
-        jcbdispositivo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jcbdispositivo.setEditable(true);
+        jcbdispositivo.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jcbdispositivo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jcbdispositivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbdispositivoActionPerformed(evt);
             }
         });
+        jPanel1.add(jcbdispositivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(643, 280, 270, -1));
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel7.setText("DISPOSITIVO:");
+        jLabel7.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel7.setText("Dispositivo");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(643, 260, -1, -1));
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel8.setText("DESCUENTO:");
+        jLabel8.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel8.setText("Descuento:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 420, -1, -1));
 
-        jtfdescuento.setCaretColor(new java.awt.Color(255, 51, 51));
+        jtfprecio.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jtfprecio.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jtfprecioMouseReleased(evt);
+            }
+        });
+        jtfprecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfprecioKeyReleased(evt);
+            }
+        });
+        jPanel1.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 340, 270, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(57, 57, 57)
-                                .addComponent(jlblcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)
-                                .addComponent(jbtncliente))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(29, 29, 29)
-                                .addComponent(jlblnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jbtnbuscartecnico)))))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(panelNice1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
-                        .addComponent(jbtnfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel7)
-                    .addComponent(jcbdispositivo, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(jtfprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(jtfpreciorevision, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane3)
-                .addGap(30, 30, 30)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jtfdescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(170, 170, 170)
-                        .addComponent(jbtnaceptar)))
-                .addGap(5, 5, 5))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jlblcliente)
-                            .addComponent(jbtncliente))
-                        .addGap(7, 7, 7)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jlblnombre)
-                            .addComponent(jbtnbuscartecnico))
-                        .addGap(17, 17, 17)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(panelNice1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                        .addGap(3, 3, 3)
-                        .addComponent(jbtnfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(7, 7, 7)
-                        .addComponent(jLabel7)
-                        .addGap(5, 5, 5)
-                        .addComponent(jcbdispositivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(9, 9, 9)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jtfprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel6)
-                        .addGap(5, 5, 5)
-                        .addComponent(jtfpreciorevision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(7, 7, 7)))
-                .addGap(2, 2, 2)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-                        .addGap(33, 33, 33))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(5, 5, 5)
-                        .addComponent(jtfdescuento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtnaceptar)))
-                .addGap(7, 7, 7))
-        );
+        jtfpreciorevision.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jtfpreciorevision.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jtfpreciorevisionMousePressed(evt);
+            }
+        });
+        jtfpreciorevision.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfpreciorevisionKeyReleased(evt);
+            }
+        });
+        jPanel1.add(jtfpreciorevision, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 390, 270, -1));
+
+        jtfdescuento.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jtfdescuento.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfdescuentoKeyReleased(evt);
+            }
+        });
+        jPanel1.add(jtfdescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 440, 270, -1));
+
+        jLabel13.setText("Observación:");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
         );
 
         pack();
@@ -546,88 +515,54 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbtnbuscartecnicoActionPerformed
 
     private void jtfmarcaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfmarcaFocusGained
-        // TODO add your handling code here:
-        if(jtfmarca.getText().equals("MARCA")){
-          jtfmarca.setText("");
-        
-        
-        }
+    
     }//GEN-LAST:event_jtfmarcaFocusGained
 
     private void jtfmarcaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfmarcaFocusLost
         // TODO add your handling code here:
-         if(jtfmarca.getText().equals("")){
-          jtfmarca.setText("MARCA");
-        
-        
-        }
+      
     }//GEN-LAST:event_jtfmarcaFocusLost
 
     private void jtfmodeloFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfmodeloFocusGained
         // TODO add your handling code here:
-        if(jtfmodelo.getText().equals("MODELO")){
-          jtfmodelo.setText("");
-        
-        
-        }
+   
     }//GEN-LAST:event_jtfmodeloFocusGained
 
     private void jtafallasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtafallasFocusGained
-        // TODO add your handling code here:
-        if(jtafallas.getText().equals("FALLAS")){
-          jtafallas.setText("");
-              
-        }
+     
         
     }//GEN-LAST:event_jtafallasFocusGained
 
     private void jtfmodeloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfmodeloFocusLost
         // TODO add your handling code here:
-        if(jtfmodelo.getText().equals("")){
-          jtfmodelo.setText("MODELO");
-        
-        
-        }
+    
     }//GEN-LAST:event_jtfmodeloFocusLost
 
     private void jtafallasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtafallasFocusLost
         // TODO add your handling code here:
-        if(jtafallas.getText().equals("")){
-          jtafallas.setText("FALLAS");
-              
-        }
+       
     }//GEN-LAST:event_jtafallasFocusLost
 
     private void jtacausasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtacausasFocusGained
         // TODO add your handling code here:
-         if(jtacausas.getText().equals("CAUSAS")){
-          jtacausas.setText("");
-              
-        }
+      
     }//GEN-LAST:event_jtacausasFocusGained
 
     private void jtacausasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtacausasFocusLost
         // TODO add your handling code here:
-        if(jtacausas.getText().equals("")){
-          jtacausas.setText("CAUSAS");
-              
-        }
+       
+        
     }//GEN-LAST:event_jtacausasFocusLost
 
     private void jtaobservacionFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtaobservacionFocusGained
         // TODO add your handling code here:
-        if(jtaobservacion.getText().equals("OBSERVACIÓN")){
-          jtaobservacion.setText("");
-              
-        }
+    
     }//GEN-LAST:event_jtaobservacionFocusGained
 
     private void jtaobservacionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtaobservacionFocusLost
         // TODO add your handling code here:
-        if(jtaobservacion.getText().equals("")){
-          jtaobservacion.setText("OBSERVACIÓN");
-              
-        }
+        
+        
     }//GEN-LAST:event_jtaobservacionFocusLost
 
     private void jbtnfotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnfotoActionPerformed
@@ -665,9 +600,7 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
     private void jbtnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnaceptarActionPerformed
         // TODO add your handling code here:
         String codigo;
-        if (empleado.getId_empleado()!=0 && !jtfmarca.getText().equals("MARCA") && !jtfmarca.getText().equals("")&& !jtfmodelo.getText().equals("MODELO") &&
-                !jtfmodelo.getText().equals("") && !jtafallas.getText().equals("")
-                && !jtafallas.getText().equals("FALLAS")&& cliente.getId_cliente()!= 0 && precio.getId() !=0){
+      
             reparacion.setIdempleado(empleado.getId_empleado());
             reparacion.setIdcliente(cliente.getId_cliente());
             reparacion.setAtendido(empleadosingleton.getNombre());
@@ -677,8 +610,8 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
             reparacion.setCausas(jtacausas.getText());
             reparacion.setObservacion(jtaobservacion.getText());
            // reparacion.setDiagnostico(jtadiagnostico.getText());
-            System.out.println(jtfprecio.getValue());
-            reparacion.setPrecio(Double.parseDouble(jtfprecio.getValue().toString()));
+            System.out.println(jtfprecio.getText());
+            reparacion.setPrecio(Double.parseDouble(jtfprecio.getText()));
 //            System.out.println(jXDate.getDate().getTime()+" "+jsphora.getValue()+":"+jspmin.getValue()+":"+"00");
 //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 //        jXDate.setFormats(dateFormat); 
@@ -694,18 +627,15 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
             reparacion.setFechaE(new java.sql.Timestamp(jXDate.getDate().getTime()));
             reparacion.setHora(jsphora.getValue()+":"+jspmin.getValue());
             reparacion.setId_sucural(sucursalsingleton.getId());
-            reparacion.setPrecio(Double.parseDouble(jtfprecio.getValue().toString()));
-            reparacion.setPreciorevision(Double.parseDouble(jtfpreciorevision.getValue().toString()));
-            reparacion.setDescuento(Double.parseDouble(jtfdescuento.getValue().toString()));
+            reparacion.setPrecio(Double.parseDouble(jtfprecio.getText().toString()));
+            reparacion.setPreciorevision(Double.parseDouble(jtfpreciorevision.getText()));
+            reparacion.setDescuento(Double.parseDouble(jtfdescuento.getText()));
             idreparacion=daoreparacion.insertar(reparacion);
 //            JOptionPane.showMessageDialog(null, codigo,"TOME NOTA DEL CODIGO DE REPARACION",JOptionPane.INFORMATION_MESSAGE);
             daoreparacion.imprimirticketcaja(idreparacion);
             nuevo();                                                                         
             
-        }else {
-            JOptionPane.showMessageDialog(null, "RELLENE LOS CAMPOS OBLIGATORIOS");
-        
-        }
+       
         
         
         
@@ -742,17 +672,12 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         Bcliente.setVisible(true);
     }//GEN-LAST:event_jbtnclienteActionPerformed
 
-    private void jtfprecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecioKeyReleased
-        // TODO add your handling code here:
-        validaaceptar();
-    }//GEN-LAST:event_jtfprecioKeyReleased
-
     private void jcbdispositivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbdispositivoActionPerformed
         // TODO add your handling code here:
-        int index=jcbdispositivo.getSelectedIndex();
-        precio= listprecio.get(index);
-        jtfprecio.setValue(precio.getPrecio());
-        jtfpreciorevision.setValue(precio.getPreciorevision());
+//        int index=jcbdispositivo.getSelectedIndex();
+//        precio= listprecio.get(index);
+//        jtfprecio.setValue(precio.getPrecio());
+//        jtfpreciorevision.setValue(precio.getPreciorevision());
         validaaceptar();
     }//GEN-LAST:event_jcbdispositivoActionPerformed
 
@@ -781,9 +706,38 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
          mayus.convertirmayusTA( jtaobservacion);
     }//GEN-LAST:event_jtaobservacionKeyTyped
 
+    private void jtfprecioMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfprecioMouseReleased
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jtfprecioMouseReleased
+
+    private void jtfpreciorevisionMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfpreciorevisionMousePressed
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jtfpreciorevisionMousePressed
+
+    private void jtfdescuentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescuentoKeyReleased
+        // TODO add your handling code here:
+        validaaceptar();
+    }//GEN-LAST:event_jtfdescuentoKeyReleased
+
+    private void jtfprecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecioKeyReleased
+        // TODO add your handling code here:
+         validaaceptar();
+    }//GEN-LAST:event_jtfprecioKeyReleased
+
+    private void jtfpreciorevisionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfpreciorevisionKeyReleased
+        // TODO add your handling code here:
+         validaaceptar();
+    }//GEN-LAST:event_jtfpreciorevisionKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -791,6 +745,7 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -811,11 +766,11 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
     private javax.swing.JTextArea jtacausas;
     private javax.swing.JTextArea jtafallas;
     private javax.swing.JTextArea jtaobservacion;
-    private javax.swing.JFormattedTextField jtfdescuento;
+    private javax.swing.JTextField jtfdescuento;
     private javax.swing.JTextField jtfmarca;
     private javax.swing.JTextField jtfmodelo;
-    private javax.swing.JFormattedTextField jtfprecio;
-    private javax.swing.JFormattedTextField jtfpreciorevision;
+    private javax.swing.JTextField jtfprecio;
+    private javax.swing.JTextField jtfpreciorevision;
     private org.edisoncor.gui.panel.PanelNice panelNice1;
     // End of variables declaration//GEN-END:variables
 }

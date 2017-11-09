@@ -6,7 +6,10 @@
 package Formularios;
 
 import DAO.ComprasDAO;
+import Pojos.Compras;
 import Pojos.SucursalSingleton;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,6 +24,8 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
     ComprasDAO daocompras= new ComprasDAO();
     SucursalSingleton sucursalsingleton = SucursalSingleton.getinstancia();  
     JIFIngresoProducto frmingresoprod;
+     List<Compras> listcompra= new ArrayList<>();
+     Compras compra = new Compras();
     public JDBuscarIngresoProducto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -29,7 +34,7 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
      public JDBuscarIngresoProducto(java.awt.Frame parent, boolean modal,JIFIngresoProducto frmingresoprod) {
         super(parent, modal);
         initComponents();
-        daocompras.mostrar(jtabla, sucursalsingleton.getId());
+        listcompra=daocompras.mostrar(jtabla, sucursalsingleton.getId());
         this.frmingresoprod= frmingresoprod;
         jbtnaceptar.setEnabled(false);
         this.setLocationRelativeTo(null);
@@ -53,7 +58,7 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("N°: ");
@@ -66,7 +71,8 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
         });
 
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Checked.png"))); // NOI18N
+        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setText("Aceptar");
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
@@ -98,11 +104,11 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(33, 33, 33)
                 .addComponent(jLabel1)
-                .addGap(8, 8, 8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtfnumero, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(180, 180, 180)
+                .addGap(179, 179, 179)
                 .addComponent(jbtnaceptar))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
@@ -113,15 +119,12 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtnaceptar)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfnumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(9, 9, 9)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtfnumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
                 .addGap(18, 18, 18))
         );
 
@@ -143,8 +146,8 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
         // TODO add your handling code here:
         int index = jtabla.getSelectedRow();
         if (index >=0){
-            long id =Long.parseLong(jtabla.getValueAt(index, 0).toString());
-            frmingresoprod.setbuscar(id);
+            compra = listcompra.get(index);
+            frmingresoprod.setbuscar(compra.getId_compra());
             
             
             jbtnaceptar.setEnabled(true);

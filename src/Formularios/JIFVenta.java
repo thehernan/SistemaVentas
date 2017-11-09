@@ -908,15 +908,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 
     private void jtfrutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrutKeyReleased
         // TODO add your handling code here:
-             String rut= jtfrut.getText().trim();
-       
-        idcliente=daocliente.buscarclientevent(rut,jlblmensaje,jtfcliente,jtftotalcompras,jtfcompras);
-        if(idcliente==0){
-        jtfcliente.setEnabled(true);
-        
-        }else {
-        jtfcliente.setEnabled(false);
-        }
+     
         
            if(evt.getKeyCode()==113){
            jtfvender.doClick();

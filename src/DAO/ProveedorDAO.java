@@ -11,6 +11,8 @@ import Pojos.Proveedor;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -20,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
  * @author info2017
  */
 public class ProveedorDAO {
-      public void mostrarproveedor(JTable tabla){
+      public List<Proveedor> mostrarproveedor(JTable tabla){
         
             DefaultTableModel modelo= new DefaultTableModel(){
        public boolean isCellEditable(int row, int column) {
@@ -29,38 +31,39 @@ public class ProveedorDAO {
       return false;
      }
        };      
-      String titulos[]={"ID","RUT","NOMBRES","CELULAR"};
+      String titulos[]={"RUT","NOMBRES","CELULAR"};
       modelo.setColumnIdentifiers(titulos);
 
        Conexion conexion = new Conexion();
          Statement st=null;
-   
+         List<Proveedor> listprov= new ArrayList<>();
     
      
     try{
 	String sql=("SELECT * from sp_mostrarproveedor()");
         PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
        ResultSet rs=ps.executeQuery(); 
-        Object datosR[] = new Object[4];
+        Object datosR[] = new Object[3];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
-                         
-                     datosR[i] = rs.getObject("id");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vnombre");
-                     i++;
-                     datosR[i] = rs.getObject("vcelular");
-                     i++;
                     
-                    modelo.addRow(datosR);
-		}
+            Proveedor prove = new Proveedor();
+            prove.setIdproveedor(rs.getLong("id"));
+            prove.setRut(rs.getString("vrut"));
+            prove.setNombrerazons( rs.getString("vnombre"));
+            prove.setCelular( rs.getString("vcelular"));
+           
+             datosR[0] =prove.getRut();
+           
+             datosR[1] = prove.getNombrerazons();
+            
+             datosR[2] = prove.getCelular();
+            
+             listprov.add(prove);
+            modelo.addRow(datosR);
+		
         }
         tabla.setModel(modelo);
-        tabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        tabla.getColumnModel().getColumn(0).setMinWidth(0);
-        tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+
         rs.close();
         ps.close();
 	
@@ -71,10 +74,10 @@ public class ProveedorDAO {
                 conexion.devolverConexionPool();
             }    
 
-    
+    return listprov;
     }
     
-    public void busquedasensitivaproveedor(String tipoB,String cadena,JTable tabla){
+public  List<Proveedor> busquedasensitivaproveedor(String tipoB,String cadena,JTable tabla){
         
        DefaultTableModel modelo= new DefaultTableModel(){
   public boolean isCellEditable(int row, int column) {
@@ -83,11 +86,11 @@ public class ProveedorDAO {
  return false;
 }
   };      
- String titulos[]={"ID","RUT","NOMBRES","CELULAR"};
+ String titulos[]={"RUT","NOMBRES","CELULAR"};
  modelo.setColumnIdentifiers(titulos);
  
  Conexion conexion= new Conexion();
- 
+   List<Proveedor> listprov= new ArrayList<>();
      
     try{
 	String sql = ("SELECT * from sp_busquedasensitivaproveedor(?,?)");
@@ -97,26 +100,27 @@ public class ProveedorDAO {
         ps.setString(1, tipoB);
         ps.setString(2, cadena);
         ResultSet rs=ps.executeQuery();
-        Object datosR[] = new Object[4];
+        Object datosR[] = new Object[3];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
-                         
-                     datosR[i] = rs.getObject("id");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vnombre");
-                     i++;
-                     datosR[i] = rs.getObject("vcelular");
-                     i++;
+            Proveedor prove = new Proveedor();
+            prove.setIdproveedor(rs.getLong("id"));
+            prove.setRut(rs.getString("vrut"));
+            prove.setNombrerazons( rs.getString("vnombre"));
+            prove.setCelular( rs.getString("vcelular"));
+           
+             datosR[0] =prove.getRut();
+           
+             datosR[1] = prove.getNombrerazons();
+            
+             datosR[2] = prove.getCelular();
+            
+             listprov.add(prove);
                     
                     modelo.addRow(datosR);
-		}
+		
         }
         tabla.setModel(modelo);
-        tabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        tabla.getColumnModel().getColumn(0).setMinWidth(0);
-        tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+      
 	rs.close();
         ps.close();
         } catch(Exception e)
@@ -125,7 +129,7 @@ public class ProveedorDAO {
             }finally{
               conexion.devolverConexionPool();
             }    
-
+    return listprov;
     
     }
 

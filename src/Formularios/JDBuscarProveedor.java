@@ -9,6 +9,8 @@ import ClasesGlobales.Mayusculas;
 import DAO.ProveedorDAO;
 import Pojos.Compras;
 import Pojos.Proveedor;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,29 +26,30 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
     JIFIngresoProducto IngresoProd;
     
     Mayusculas mayus= new Mayusculas();
-    Compras compras;
+  
     String op;
     JIFIngresoProdPendiente frmprodpend;
-    
+    List<Proveedor> listprov = new ArrayList<>();
+    Proveedor proveedor= new Proveedor();
     public JDBuscarProveedor(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        daoproveedor.mostrarproveedor(jtabla);
+        listprov=daoproveedor.mostrarproveedor(jtabla);
         this.setLocationRelativeTo(null);
     }
-    public JDBuscarProveedor(java.awt.Frame parent, boolean modal,JIFIngresoProducto IngresoProd,Compras compras) {
+    public JDBuscarProveedor(java.awt.Frame parent, boolean modal,JIFIngresoProducto IngresoProd) {
         super(parent, modal);
         initComponents();
-        daoproveedor.mostrarproveedor(jtabla);
+        listprov=daoproveedor.mostrarproveedor(jtabla);
         this.IngresoProd=IngresoProd;
         this.setLocationRelativeTo(null);
-        this.compras=compras;
+      
         op="INGRESOPROD";
     }
      public JDBuscarProveedor(java.awt.Frame parent, boolean modal,JIFIngresoProdPendiente frmprodpend) {
         super(parent, modal);
         initComponents();
-        daoproveedor.mostrarproveedor(jtabla);
+        listprov=daoproveedor.mostrarproveedor(jtabla);
         this.setLocationRelativeTo(null);
         this.frmprodpend=frmprodpend;
         op= "PENDIENTES";
@@ -70,9 +73,9 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("BUSCAR PROVEEDOR");
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jtfrazonsocial.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jtfrazonsocial.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfrazonsocial.setText("NOMBRE O RAZON SOCIAL");
         jtfrazonsocial.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -98,14 +101,15 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
 
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
         jbtnaceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Checked.png"))); // NOI18N
+        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setText("Aceptar");
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
 
-        jtabla.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -125,27 +129,27 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jtfrazonsocial, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addComponent(jbtnaceptar))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jtfrazonsocial, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbtnaceptar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)))
                 .addGap(18, 18, 18))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jtfrazonsocial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtfrazonsocial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbtnaceptar))
                 .addGap(9, 9, 9)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
                 .addGap(24, 24, 24))
         );
 
@@ -186,31 +190,29 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
     private void jtfrazonsocialKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrazonsocialKeyReleased
         // TODO add your handling code here:
         String razonS= jtfrazonsocial.getText().trim().toUpperCase();
-        daoproveedor.busquedasensitivaproveedor("NOMBRE", razonS,jtabla);
+        listprov=daoproveedor.busquedasensitivaproveedor("NOMBRE", razonS,jtabla);
     }//GEN-LAST:event_jtfrazonsocialKeyReleased
 
     private void jbtnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnaceptarActionPerformed
         // TODO add your handling code here:
         int index= jtabla.getSelectedRow();
         if(index>=0){
-            long id = Long.parseLong(jtabla.getValueAt(index, 0).toString());
-            String razonS= jtabla.getValueAt(index,2).toString();
-            String rut= jtabla.getValueAt(index, 1).toString();
+             proveedor = listprov.get(index);
             if(op.equals("INGRESOPROD")){
                 
         //        proveedor.setIdproveedor(id);
         //        proveedor.setNombrerazons(razonS);
         //        proveedor.setRut(rut);
-                compras.setId_proveedor(id);
-                IngresoProd.setproveedor(compras,razonS,rut);
+              
+                IngresoProd.setproveedor(proveedor);
                 IngresoProd.validaguardar();
                 this.dispose(); 
             }
             if(op.equals("PENDIENTES")){
-               Proveedor proveedor = new Proveedor();
-               proveedor.setIdproveedor(id);
-               proveedor.setNombrerazons(razonS);
-               proveedor.setRut(rut);
+             
+               proveedor.setIdproveedor(proveedor.getIdproveedor());
+               proveedor.setNombrerazons(proveedor.getNombrerazons());
+               proveedor.setRut(proveedor.getRut());
                frmprodpend.setproveedor(proveedor);
                this.dispose(); 
             }

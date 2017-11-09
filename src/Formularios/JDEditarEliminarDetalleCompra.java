@@ -81,7 +81,7 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jlblcodigo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -206,7 +206,7 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
 
     private void jbtneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtneliminarActionPerformed
         // TODO add your handling code here:
-        frmingresoprod.seteliminar();
+        frmingresoprod.seteliminar(detcompra);
         this.dispose();
     }//GEN-LAST:event_jbtneliminarActionPerformed
 
@@ -234,17 +234,17 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
     private void jbtnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnguardarActionPerformed
         // TODO add your handling code here:
         System.out.println("iddet"+detcompra.getIddetallecompra());
-        if(detcompra.getIddetallecompra()!=0){
         detcompra.setCantidad(Double.parseDouble(jtfcantllego.getValue().toString()));
         detcompra.setCantidadacord(Double.parseDouble(jtfcantacord.getValue().toString()));
         detcompra.setPrecio(Double.parseDouble(jtfprecio.getValue().toString()));
+        detcompra.setImporte(Double.parseDouble(jtfimporte.getValue().toString()));
+        if(detcompra.getIddetallecompra()!=0){
+        
             System.out.println("idprodguardar"+detcompra.getIdproducto());
         daodetc.editar(detcompra);
-        frmingresoprod.seteditar(detcompra,jlblcodigo.getText(),jlbldescripcion.getText(),
-                jtfimporte.getValue());
+        frmingresoprod.seteditar(detcompra);
         }else {
-        frmingresoprod.seteditar(detcompra,jlblcodigo.getText(),jlbldescripcion.getText(),
-                jtfimporte.getValue());
+        frmingresoprod.seteditar(detcompra);
         
         }
         this.dispose();

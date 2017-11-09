@@ -524,8 +524,7 @@ return repara;
         
 	PreparedStatement ps=conexion.getConnection().prepareStatement("SELECT * from sp_mostrarprecioporreparacion()");
        ResultSet rs=ps.executeQuery();
-        modelo.addElement("<<SELECCIONE>>");
-        listprecio.add(null);
+        
         while (rs.next()){
             PrecioReparacion precio = new PrecioReparacion();
             precio.setDispositivo(rs.getString("vdispositivo"));

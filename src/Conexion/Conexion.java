@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
-import javax.swing.JOptionPane;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -23,7 +22,7 @@ public class Conexion {
 			basicDataSource.setDriverClassName("org.postgresql.Driver");
 			basicDataSource.setUsername("postgres");
 			basicDataSource.setPassword("hernan$123");
-			basicDataSource.setUrl("jdbc:postgresql://192.168.0.109:5432/BDVentas");
+			basicDataSource.setUrl("jdbc:postgresql://192.168.20.1:5432/BDVentas");
 			basicDataSource.setMaxActive(50);
 			basicDataSource.setMaxIdle(20);
                         basicDataSource.setMaxOpenPreparedStatements(1000);
