@@ -148,7 +148,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
     
     }
     public void setagregar(Producto prod ,Double cant){
-    
+        System.out.println("idordem"+orden.getIdordensalidaentrada());
         if(orden.getIdordensalidaentrada() ==0){
           /// INSERT ORDEN
             
@@ -163,6 +163,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
             orden.setTipoop("SALIDA");
             orden.setIdordensalidaentrada(daoorden.insertar(orden));
            ////// INSERT DETALLE
+            System.out.print("cant1"+cant);
             detorden.setCantidad(cant);
             detorden.setIdproducto(prod.getIdproducto());
             detorden.setIdordensalidaentrada(orden.getIdordensalidaentrada());
@@ -171,6 +172,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
             
         }else {
            ////// INSERT DETALLE
+              System.out.print("cant2"+cant);
             detorden.setCantidad(cant);
             detorden.setIdproducto(prod.getIdproducto());
             detorden.setIdordensalidaentrada(orden.getIdordensalidaentrada());

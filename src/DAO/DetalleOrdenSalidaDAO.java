@@ -33,6 +33,7 @@ public class DetalleOrdenSalidaDAO {
         String sql=("SELECT * from sp_insertardetalleordensalida(?,?,?)"); 
         PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
         ps.setLong(1, orsalida.getIdproducto());
+        System.out.print("cantinsert"+orsalida.getCantidad());
         ps.setBigDecimal(2,new BigDecimal(orsalida.getCantidad()));
         ps.setLong(3, orsalida.getIdordensalidaentrada());
         

@@ -22,16 +22,19 @@ public class JDCantidadSalida extends javax.swing.JDialog {
    JIFOrdenSalida jifordensalida;
    Producto prod;
     ProductoDAO daoprod= new ProductoDAO();
+    JDBuscarProductoVenta jdbuscar;
+    
     public JDCantidadSalida(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
        
     } 
-      public JDCantidadSalida(java.awt.Frame parent, boolean modal,JIFOrdenSalida jifordensalida,Producto prod) {
+      public JDCantidadSalida(java.awt.Frame parent, boolean modal,JIFOrdenSalida jifordensalida,Producto prod,JDBuscarProductoVenta jdbuscar) {
         super(parent, modal);
         initComponents();
        this.jifordensalida=jifordensalida;
        this.prod=prod;
+       this.jdbuscar =jdbuscar;
        this.setLocationRelativeTo(null);
     }   
         
@@ -109,6 +112,7 @@ public class JDCantidadSalida extends javax.swing.JDialog {
         System.out.println("cant"+cant);
         if(daoprod.validastockrequerido(cant,prod.getIdproducto())==true){
              jifordensalida.setagregar(prod, cant);
+            jdbuscar.mostrar();
              this.dispose();
         }else {
             JOptionPane.showMessageDialog(null,"Imposible retirar esa cantidad");

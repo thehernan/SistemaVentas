@@ -63,6 +63,11 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
          listfamilia = daofamilia.llenarcombo(jcbfamilia);
     }
     
+    public void mostrar(){
+     listprod= daoproducto.inventario(jtabla, sucursalsingleton.getId(),sucursalsingleton.getStockmin(),"");
+    
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -214,7 +219,8 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         // TODO add your handling code here:
         if(from.equals("salida")){
             prod= listprod.get(jtabla.getSelectedRow());
-            JDCantidadSalida jdcantidad= new JDCantidadSalida(new Frame(), isVisible(),jifsalida,prod);
+            JDCantidadSalida jdcantidad= new JDCantidadSalida(new Frame(), isVisible(),jifsalida,prod,this);
+            
             jdcantidad.setVisible(true);
 //            this.dispose();
         }else {
