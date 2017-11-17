@@ -272,7 +272,7 @@ public void mostrarenproceso(JTable tab,long idsucur,JLabel msj){
     return false;
     }
     }; 
-    String titulos[]={"IDvent","EMPLEADO","R.U.T","SUCURSAL","DIRECCION","IMPORTE","DESCUENTO","TOTAL"};
+    String titulos[]={"IDvent","COD. VENTA","EMPLEADO","R.U.T","SUCURSAL","DIRECCION","IMPORTE","DESCUENTO","TOTAL"};
     tabla.setColumnIdentifiers(titulos);
     tab.setModel(tabla);
     tab.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -286,32 +286,31 @@ public void mostrarenproceso(JTable tab,long idsucur,JLabel msj){
         ps.setLong(1, idsucur);
        
         ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[8];
+        Object datosR[] = new Object[9];
         msj.setText("");
         int cont=0;
         while (rs.next()){
-           
-            for(int i =0; i<=1; i++){
-                     datosR[i] = rs.getObject("vidventa");
-                     i++;
+         
+                     datosR[0] = rs.getObject("vidventa");
+                 
+                     datosR[1]=rs.getObject("vcodigo");
+                     datosR[2] = rs.getObject("vnombre");
+                   
+                     datosR[3] = rs.getObject("vrut");
+                   
+                     datosR[4] = rs.getObject("vsucursal");
                     
-                     datosR[i] = rs.getObject("vnombre");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vsucursal");
-                     i++;
-                     datosR[i] = rs.getObject("vsucurdirec");
-                     i++;
-                      datosR[i] = rs.getObject("vimporte");
-                     i++;
-                      datosR[i] = rs.getObject("vdescuento");
-                     i++;
-                     datosR[i] = rs.getObject("vtotal");
-                     i++;
+                     datosR[5] = rs.getObject("vsucurdirec");
+                  
+                      datosR[6] = rs.getObject("vimporte");
+                  
+                      datosR[7] = rs.getObject("vdescuento");
+                 
+                     datosR[8] = rs.getObject("vtotal");
+                   
                     
                     tabla.addRow(datosR);
-		}
+		
             cont++;
         }
         rs.close();

@@ -27,6 +27,7 @@ public final class JIFReparacionesPendientes extends javax.swing.JInternalFrame 
         mostrar(usuariosingleton.getIdempleado()); 
     }
     public void mostrar(long idemple){
+        System.out.println("idemple"+idemple);
          daoreparacion.mostrarpendientes(jtabla,idemple);
          System.out.println(" mostrar");
     }

@@ -44,14 +44,11 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         jlblmsj = new javax.swing.JLabel();
 
         setClosable(true);
-        setIconifiable(true);
-        setMaximizable(true);
-        setResizable(true);
         setTitle("VENTAS EN PROCESO");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jtabla.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

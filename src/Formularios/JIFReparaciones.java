@@ -108,14 +108,14 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
     reparacion= new Reparacion();
     cliente=new Cliente();
     idreparacion=0;
-    jtfmarca.setText("MARCA");
-    jtfmodelo.setText("MODELO");
+    jtfmarca.setText("");
+    jtfmodelo.setText("");
     jlblfoto.setIcon(null);
-    jlblnombre.setText("---");
-    jlblcliente.setText("---");
-    jtafallas.setText("FALLAS");
-    jtacausas.setText("CAUSAS");
-    jtaobservacion.setText("OBSERVACIÓN");
+    jlblnombre.setText("");
+    jlblcliente.setText("");
+    jtafallas.setText("");
+    jtacausas.setText("");
+    jtaobservacion.setText("");
 //    jtadiagnostico.setText("DIAGNOSTICO");
     jbtnaceptar.setEnabled(false);
    
