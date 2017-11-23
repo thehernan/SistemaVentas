@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f3a0c06-3c41-4d0f-b463-821ad7bd37d2">
 	<property name="ireport.zoom" value="1.0000000000000009"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="88"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#6666FF"/>
@@ -30,7 +30,7 @@
 	<queryString>
 		<![CDATA[SELECT  atendido,cliente.nombre_razons,cliente.celular, marca,modelo,fallas,causas, observacion,
  empleado.id_empleado, empleado.nombre,diagnostico,
-  fecha_recepcion, concat_ws(' ',to_char(fecha_entrega,'dd-mm-yyyy'),hora_entrega), precio,abono, precio-coalesce(abono,0), codigo 
+  fecha_recepcion, concat_ws(' ',to_char(fecha_entrega,'dd-mm-yyyy'),hora_entrega), precio+preciorevision as precio,descuento,abono, (precio+preciorevision)-(descuento+coalesce(abono,0)), codigo 
   FROM public.reparacion inner join cliente on cliente.id_cliente=reparacion.id_cliente 
   inner join empleado on empleado.id_empleado=reparacion.id_empleado where id_reparacion=$P{id};]]>
 	</queryString>
@@ -48,6 +48,7 @@
 	<field name="fecha_recepcion" class="java.sql.Timestamp"/>
 	<field name="concat_ws" class="java.lang.String"/>
 	<field name="precio" class="java.math.BigDecimal"/>
+	<field name="descuento" class="java.math.BigDecimal"/>
 	<field name="abono" class="java.math.BigDecimal"/>
 	<field name="?column?" class="java.math.BigDecimal"/>
 	<field name="codigo" class="java.lang.String"/>
@@ -149,7 +150,7 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="314">
+		<band height="347">
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="7" width="81" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="7c827742-4343-4b39-a74a-94b9ee51b15a"/>
 				<textElement textAlignment="Left">
@@ -284,14 +285,14 @@
 				<text><![CDATA[VALOR:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="268" width="108" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="69d4be74-902c-4975-bd30-e8f59c3cef00"/>
+				<reportElement mode="Opaque" x="0" y="287" width="108" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="69d4be74-902c-4975-bd30-e8f59c3cef00"/>
 				<textElement textAlignment="Left">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ABONO:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="288" width="108" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e3340bf9-0857-474a-8818-686b42b0aaa2"/>
+				<reportElement mode="Opaque" x="0" y="307" width="108" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e3340bf9-0857-474a-8818-686b42b0aaa2"/>
 				<textElement textAlignment="Left">
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -304,7 +305,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="108" y="188" width="442" height="20" uuid="28679123-658e-4b1c-87a7-00ea41b71995"/>
 				<textElement>
 					<font size="10"/>
@@ -326,14 +327,14 @@
 				<textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
-				<reportElement x="108" y="268" width="389" height="20" forecolor="#FF3333" uuid="7fdf4674-057b-4529-ae87-6ba4af966dec"/>
+				<reportElement x="108" y="287" width="389" height="20" forecolor="#FF3333" uuid="7fdf4674-057b-4529-ae87-6ba4af966dec"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abono}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0">
-				<reportElement x="108" y="288" width="375" height="20" forecolor="#FF3333" uuid="22698713-574b-4852-80a6-86faf5a9ee2d"/>
+				<reportElement x="108" y="307" width="375" height="20" forecolor="#FF3333" uuid="22698713-574b-4852-80a6-86faf5a9ee2d"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -402,13 +403,27 @@
 				<reportElement x="108" y="227" width="352" height="20" uuid="40787879-c8fe-4e30-82a8-08d0b9326e85"/>
 				<textFieldExpression><![CDATA[$F{concat_ws}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="0" y="267" width="100" height="20" uuid="0a4b7963-121c-4c37-86e5-fa01b029cec1"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCUENTO:]]></text>
+			</staticText>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="108" y="267" width="389" height="20" forecolor="#FF3333" uuid="e3034979-86e3-41bc-a149-823e123911f4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnFooter>
 		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band height="102">
+		<band height="125">
 			<textField>
 				<reportElement mode="Opaque" x="0" y="83" width="515" height="13" backcolor="#E6E6E6" uuid="107d7005-76ab-4779-b74f-b8c6f21bcf79"/>
 				<textElement textAlignment="Right"/>

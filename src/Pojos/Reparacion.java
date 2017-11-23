@@ -34,7 +34,25 @@ public class Reparacion {
     private long id_sucural;
     private double preciorevision;
     private double descuento;
+    private String motivo;
+    private double total;
     public Reparacion() {
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 
     public Reparacion(long idreparacion, long idcliente, long idempleado, String atendido, String marca, String modelo, String fallas, String causas, String observacion, String diagnostico, Timestamp fechaR, Timestamp fechaE, String estado, byte[] foto, String entregado, Double precio, String codigo, String hora, long id_sucural, double preciorevision, double descuento) {

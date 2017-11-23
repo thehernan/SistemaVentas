@@ -7,6 +7,7 @@ package DAO;
 
 import Conexion.Conexion;
 import Pojos.DetalleCaja;
+import java.math.BigDecimal;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,6 +59,38 @@ public class DetalleCajaDAO {
             conexion.devolverConexionPool();
             
      }
+    }
+     
+      public void insertaregreso(DetalleCaja detallecaja){
+ 
+         
+        Conexion conexion = new Conexion();
+ 
+     try{
+               
+            
+            String insertImageSql = "SELECT * from sp_insertardetallecajaegreso(?,?,?)";
+            
+
+           PreparedStatement ps = conexion.getConnection().prepareStatement(insertImageSql);                  
+           ps.setLong(1, detallecaja.getIdcaja());
+           ps.setString(2, detallecaja.getMotivoanulacion());
+           ps.setBigDecimal(3,new BigDecimal(detallecaja.getAbono()));
+          
+           
+           
+            ps.execute();
+            ps.close();
+            
+
+        }
+     catch(Exception e)
+            {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            }finally{
+            conexion.devolverConexionPool();
+            
+     }
 
 }
     public void mostrar(JTable tabla,Long idcaja, JFormattedTextField total,
@@ -78,11 +111,11 @@ public class DetalleCajaDAO {
 //        String titulos[]={"DOCUMENTO","NUMERO","NOMBRES","RUT","IMPORTE","TIPO OP.","ANULADA"};
 //        modelo.setColumnIdentifiers(titulos);
         DefaultTableModel modelo= new DefaultTableModel(
-                new String[]{"DOCUMENTO","NUMERO","NOMBRES","RUT","IMPORTE","TIPO OP.","ANULADA"}, 0) {
+                new String[]{"DOCUMENTO","NUMERO","NOMBRES","RUT","IMPORTE","TIPO OP.","MOTIVO","ANULADA"}, 0) {
  
             Class[] types = new Class[]{
                  java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,java.lang.Object.class,
-                java.lang.Object.class,java.lang.Object.class,java.lang.Boolean.class
+                java.lang.Object.class,java.lang.Object.class,java.lang.Object.class,java.lang.Boolean.class
             };
  
             public Class getColumnClass(int columnIndex) {
@@ -111,28 +144,28 @@ public class DetalleCajaDAO {
              PreparedStatement ps1=conexion.getConnection().prepareStatement(sql1);
              ps1.setLong(1, idcaja);
              ResultSet rs1 = ps1.executeQuery();
-             Object datosR[]= new Object[7];
+             Object datosR[]= new Object[8];
              
              while (rs.next()){
                  
-                  for(int i =0; i<=1; i++){
                          
-                     datosR[i] = rs.getObject("vdocumento");
-                     i++;
-                     datosR[i] = rs.getObject("vnumero");
-                     i++;
-                     datosR[i] = rs.getObject("vrazons");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vimporte");
-                     i++;
-                     datosR[i] = rs.getObject("vtipo");
-                     i++;
-                     datosR[i] = rs.getBoolean("vanulada");
-                     i++;
+                     datosR[0] = rs.getObject("vdocumento");
+                    
+                     datosR[1] = rs.getObject("vnumero");
+                    
+                     datosR[2] = rs.getObject("vrazons");
+                  
+                     datosR[3] = rs.getObject("vrut");
+                  
+                     datosR[4] = rs.getObject("vimporte");
+                 
+                     datosR[5] = rs.getObject("vtipo");
+                     datosR[6] = rs.getObject("vmotivo");
+                  
+                     datosR[7] = rs.getBoolean("vanulada");
+               
                     modelo.addRow(datosR);
-		}
+		
                   
              }
              if(rs1.next()){

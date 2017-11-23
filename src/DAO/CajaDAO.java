@@ -8,6 +8,7 @@ package DAO;
 import Conexion.Conexion;
 
 import Pojos.Caja;
+import Pojos.SucursalSingleton;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,6 +21,7 @@ import java.net.UnknownHostException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
@@ -32,7 +34,7 @@ import javax.swing.table.DefaultTableModel;
  * @author info2017
  */
 public class CajaDAO {
-    
+    SucursalSingleton sucursal = SucursalSingleton.getinstancia();   
     
 public Caja insertar(Caja caja){
      try{
@@ -119,9 +121,10 @@ public Caja validapertura(long idempledado){
          try{
              
              System.out.println("SELECT * from sp_validaperturacaja("+idempledado+")");
-             String sql=("SELECT * from sp_validaperturacaja(?)");
+             String sql=("SELECT * from sp_validaperturacaja(?,?)");
              PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
              ps.setLong(1, idempledado);
+             ps.setLong(2, sucursal.getId());
              rs = ps.executeQuery();
              
              
@@ -194,7 +197,7 @@ public void cierre(Caja caja){
     tabla.getColumnModel().getColumn(0).setMinWidth(0);
     tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
     Conexion conexion = new Conexion();
-    
+     DateFormat df = DateFormat.getDateInstance();
      
     try{
 	
@@ -238,7 +241,7 @@ public void cierre(Caja caja){
         rs.close();
         ps.close();
         if(cont==0){
-            jmensaje.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO "+fdesde+" AL "+fhasta);
+            jmensaje.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO "+df.format(fdesde)+" AL "+df.format(fhasta));
         }else{
             jmensaje.setText("");
         }

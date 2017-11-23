@@ -11,7 +11,7 @@
 to_char(fecha,'HH24:MI:SS')as hora, empleado.nombre as atendido, suscursal.nombre as sucursal,
 sum (detalle_venta.precio*detalle_venta.cantidad) as importe, venta.descuento, sum (detalle_venta.precio*detalle_venta.cantidad)-venta.descuento as total
   FROM public.venta inner join detalle_venta on detalle_venta.id_venta=venta.id_venta 
-  inner join cliente on  cliente.id_cliente=venta.id_cliente inner join suscursal
+  left join cliente on  cliente.id_cliente=venta.id_cliente inner join suscursal
   on suscursal.id_sucursal=venta.id_sucursal inner join empleado on empleado.id_empleado
   = venta.id_empleado  where venta.id_venta=$P{id}  group by venta.codigo, cliente.nombre_razons,fecha, empleado.nombre,
   suscursal.nombre,venta.descuento;]]>

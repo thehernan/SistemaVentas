@@ -24,6 +24,9 @@ public class Ventas {
     private long id_sucursal;
     private double descuento;
     private String motivodescuento;
+    private double iva;
+    private double total;
+    private double suvtotal;
     public Ventas() {
     }
 
@@ -36,6 +39,30 @@ public class Ventas {
         this.estado = estado;
         this.id_sucursal = id_sucursal;
         this.descuento = descuento;
+    }
+
+    public double getIva() {
+        return iva;
+    }
+
+    public void setIva(double iva) {
+        this.iva = iva;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public double getSuvtotal() {
+        return suvtotal;
+    }
+
+    public void setSuvtotal(double suvtotal) {
+        this.suvtotal = suvtotal;
     }
 
     public String getMotivodescuento() {

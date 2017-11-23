@@ -8,7 +8,7 @@
 	</parameter>
 	<queryString>
 		<![CDATA[select suscursal.nombre,reparacion.atendido, to_char(fecha_recepcion,'DD/MM/YYYY')as fecha,
-to_char(fecha_recepcion,'HH24:MI:SS')as hora,reparacion.precio,reparacion.abono,reparacion.codigo from reparacion
+to_char(fecha_recepcion,'HH24:MI:SS')as hora,(reparacion.precio+reparacion.preciorevision)-reparacion.descuento as precio,reparacion.codigo from reparacion
 inner join suscursal on suscursal.id_sucursal=reparacion.id_sucursal where id_reparacion=$P{id};]]>
 	</queryString>
 	<field name="nombre" class="java.lang.String"/>
@@ -16,7 +16,6 @@ inner join suscursal on suscursal.id_sucursal=reparacion.id_sucursal where id_re
 	<field name="fecha" class="java.lang.String"/>
 	<field name="hora" class="java.lang.String"/>
 	<field name="precio" class="java.math.BigDecimal"/>
-	<field name="abono" class="java.math.BigDecimal"/>
 	<field name="codigo" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -64,10 +63,10 @@ inner join suscursal on suscursal.id_sucursal=reparacion.id_sucursal where id_re
 				</textElement>
 				<textFieldExpression><![CDATA[$F{hora}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="27" y="97" width="135" height="12" uuid="6ae1c335-3153-422c-afea-a3235eb0ac77"/>
+			<textField pattern="#,##0">
+				<reportElement x="27" y="98" width="135" height="19" uuid="6ae1c335-3153-422c-afea-a3235eb0ac77"/>
 				<textElement>
-					<font fontName="Segoe UI Light" size="7"/>
+					<font fontName="Segoe UI Light" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
 			</textField>
@@ -105,20 +104,6 @@ inner join suscursal on suscursal.id_sucursal=reparacion.id_sucursal where id_re
 					<font fontName="Segoe UI Light" size="7"/>
 				</textElement>
 				<text><![CDATA[Monto:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="29" y="112" width="100" height="11" uuid="0ccd9aa3-81d9-4421-b832-625f23c33b8c"/>
-				<textElement>
-					<font fontName="Segoe UI Light" size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{abono}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="2" y="112" width="25" height="11" uuid="2e6a36cc-4f3a-4df0-9ece-5b8d3882b12b"/>
-				<textElement>
-					<font fontName="Segoe UI Light" size="7"/>
-				</textElement>
-				<text><![CDATA[Abono:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="1" y="12" width="164" height="11" uuid="12854a95-7532-47b5-a3d1-9873718d1eac"/>

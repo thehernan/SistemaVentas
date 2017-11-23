@@ -994,7 +994,8 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         if(listprod.size()>0 && validadescuento()==true){
          if (JOptionPane.showConfirmDialog(null, "SEGURO CONFIRMAR LA VENTA","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
              
-              if(idcliente ==0 ){ //VALIDO BUSQUEDA DE CLIENTE
+              if(idcliente ==0 && !jtfrut.getText().equals("R.U.T CLIENTE") && !jtfcliente.getText().equals("NOMBRE CLIENTE")
+                      && !jtfrut.getText().equals("") && !jtfcliente.getText().equals("") ){ //VALIDO BUSQUEDA DE CLIENTE
                     cliente.setRut(jtfrut.getText());
                     cliente.setNombre_razons(jtfcliente.getText());
                     idcliente=daocliente.insertarcliente(cliente);

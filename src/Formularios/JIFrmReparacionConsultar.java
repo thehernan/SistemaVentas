@@ -7,6 +7,10 @@ package Formularios;
 
 import DAO.ReparacionDAO;
 import Pojos.Cliente;
+import Pojos.Reparacion;
+import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
 
 /**
@@ -20,6 +24,9 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
      */
     ReparacionDAO daoreparacion= new ReparacionDAO();
     Cliente cliente = new Cliente();
+    List<Reparacion> listreparacli=new ArrayList<>();
+     List<Reparacion> listreparatecni=new ArrayList<>();
+    Reparacion repara;
     public JIFrmReparacionConsultar() {
         initComponents();
         
@@ -30,7 +37,12 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
         this.cliente=cliente;
         jlblcliente.setText(cliente.getNombre_razons());
         jlblrut.setText(cliente.getRut());
-        daoreparacion.mostrarporcliente(jtablacliente,  cliente.getId_cliente(),jlblmsjcliente);
+       listreparacli= daoreparacion.mostrarporcliente(jtablacliente,  cliente.getId_cliente(),jlblmsjcliente,jlbltotalclient);
+        jbtnimprimirtodo.setEnabled(true);
+    }
+    
+       public void refrescar(){    
+        listreparacli=daoreparacion.mostrarporcliente(jtablacliente,  cliente.getId_cliente(),jlblmsjcliente,jlbltotalclient);
         jbtnimprimirtodo.setEnabled(true);
     }
 
@@ -53,11 +65,12 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
         jdphasta = new org.jdesktop.swingx.JXDatePicker();
         jbtnbuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtablatecnico = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jlblmensaje = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jlbltotal = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -68,14 +81,16 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
         jlblrut = new javax.swing.JLabel();
         jbtnimprimir = new javax.swing.JButton();
         jlblmsjcliente = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jlbltotalclient = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
 
         setClosable(true);
-        setIconifiable(true);
-        setMaximizable(true);
         setResizable(true);
-        setTitle("CONSULTAR REPARACION");
 
-        jTabbedPane1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jTabbedPane1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -84,14 +99,14 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "INGRESE FECHA", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("DESDE:");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel2.setText("HASTA:");
 
         jbtnbuscar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/search_documen.png"))); // NOI18N
+        jbtnbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Searchx32.png"))); // NOI18N
         jbtnbuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnbuscarActionPerformed(evt);
@@ -113,7 +128,7 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
                 .addComponent(jdphasta, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50)
                 .addComponent(jbtnbuscar)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,7 +147,7 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
                 .addGap(0, 9, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtablatecnico.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -143,27 +158,27 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
 
             }
         ));
-        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        jtablatecnico.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jtablatecnico.getTableHeader().setReorderingAllowed(false);
+        jtablatecnico.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jTable1MousePressed(evt);
+                jtablatecnicoMousePressed(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jtablatecnico);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 51, 51));
         jLabel3.setText("DOBLE CLIC PARA VER EL DETALLE");
 
-        jlblmensaje.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jlblmensaje.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblmensaje.setForeground(new java.awt.Color(255, 51, 51));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 51, 51));
         jLabel5.setText("LA BUSQUEDA SE REALIZA DE  ");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 51, 51));
         jLabel4.setText("ACUERDO A LA FECHA DE RECEPCION");
 
@@ -200,10 +215,14 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
                         .addGap(20, 20, 20)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
-                .addGap(23, 23, 23))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
+
+        jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
+        jlbltotal.setForeground(new java.awt.Color(255, 51, 51));
+        jlbltotal.setText("* * *");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -212,12 +231,18 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jlbltotal)
+                .addGap(15, 15, 15))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(8, 8, 8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlbltotal)
+                .addGap(10, 10, 10))
         );
 
         jTabbedPane1.addTab("POR TECNICO", jPanel3);
@@ -225,10 +250,10 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel6.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
         jLabel6.setText("CLIENTE:");
 
-        jtablacliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jtablacliente.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtablacliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -249,12 +274,12 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(jtablacliente);
 
-        jlblcliente.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jlblcliente.setText(". . .");
+        jlblcliente.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jlblcliente.setText("* * *");
 
         jbtnbuscarcliente.setBackground(new java.awt.Color(255, 255, 255));
         jbtnbuscarcliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnbuscarcliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Search-.png"))); // NOI18N
+        jbtnbuscarcliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Searchx32.png"))); // NOI18N
         jbtnbuscarcliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnbuscarclienteActionPerformed(evt);
@@ -263,7 +288,7 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
 
         jbtnimprimirtodo.setBackground(new java.awt.Color(255, 255, 255));
         jbtnimprimirtodo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnimprimirtodo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print_46933.png"))); // NOI18N
+        jbtnimprimirtodo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
         jbtnimprimirtodo.setText("TODO");
         jbtnimprimirtodo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -271,42 +296,63 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
             }
         });
 
-        jlblrut.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jlblrut.setText(". . .");
+        jlblrut.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jlblrut.setText("* * *");
 
         jbtnimprimir.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print_46933.png"))); // NOI18N
+        jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
 
-        jlblmsjcliente.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jlblmsjcliente.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblmsjcliente.setForeground(new java.awt.Color(255, 51, 51));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel7.setText("Doble clic para anular reparación");
+
+        jlbltotalclient.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
+        jlbltotalclient.setForeground(new java.awt.Color(255, 51, 51));
+        jlbltotalclient.setText("* * *");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
+        jLabel8.setText("R.U.T:");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jlbltotalclient))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel6))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(80, 80, 80)
-                                .addComponent(jlblcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(80, 80, 80)
-                                .addComponent(jlblrut, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(510, 510, 510)
-                                .addComponent(jbtnbuscarcliente))
-                            .addComponent(jlblmsjcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(15, 15, 15)
-                        .addComponent(jbtnimprimirtodo)
-                        .addGap(7, 7, 7)
-                        .addComponent(jbtnimprimir))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 890, Short.MAX_VALUE))
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addGroup(jPanel4Layout.createSequentialGroup()
+                                                    .addComponent(jlblmsjcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jLabel7))
+                                                .addGroup(jPanel4Layout.createSequentialGroup()
+                                                    .addComponent(jLabel8)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jbtnbuscarcliente)))
+                                            .addComponent(jLabel6)))
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addGap(80, 80, 80)
+                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jlblrut, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jlblcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(23, 23, 23)
+                                .addComponent(jbtnimprimirtodo)
+                                .addGap(7, 7, 7)
+                                .addComponent(jbtnimprimir))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 886, Short.MAX_VALUE))))
                 .addGap(16, 16, 16))
         );
         jPanel4Layout.setVerticalGroup(
@@ -316,34 +362,74 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jlblrut, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jlblcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jlblrut, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jbtnbuscarcliente)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
-                        .addComponent(jlblmsjcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jbtnimprimirtodo)
                     .addComponent(jbtnimprimir))
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-                .addGap(34, 34, 34))
+                .addGap(2, 2, 2)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jlblmsjcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel7)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlbltotalclient)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("POR CLIENTE", jPanel4);
+
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
+
+        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("CONSULTAR REPARACIONES");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel11)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel11)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
+            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1))
         );
 
         pack();
@@ -352,30 +438,29 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
     private void jbtnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarActionPerformed
         // TODO add your handling code here:
         if(jdpdesde.getDate()!=null && jdphasta.getDate()!=null){
-               daoreparacion.mostrar(jTable1,new java.sql.Timestamp(jdpdesde.getDate().getTime())
-                       ,new java.sql.Timestamp( jdphasta.getDate().getTime()), jlblmensaje);
+              listreparatecni= daoreparacion.mostrar(jtablatecnico,new java.sql.Timestamp(jdpdesde.getDate().getTime())
+                       ,new java.sql.Timestamp( jdphasta.getDate().getTime()), jlblmensaje,jlbltotal);
         }else {
             jlblmensaje.setText("INGRESE FECHA");
         
         }
     }//GEN-LAST:event_jbtnbuscarActionPerformed
 
-    private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
+    private void jtablatecnicoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablatecnicoMousePressed
         // TODO add your handling code here:
-        int index= jTable1.getSelectedRow();
+        int index= jtablatecnico.getSelectedRow();
         if(index >=0){
-            long idemple= Long.parseLong(jTable1.getValueAt(index, 0).toString());
-            long idsucur= Long.parseLong(jTable1.getValueAt(index, 1).toString());
+           repara=listreparatecni.get(index);
         if(evt.getClickCount()==2){
-            JDReparacionesEmpleado Rempleado= new JDReparacionesEmpleado(new java.awt.Frame(), isVisible(),idemple,
-            idsucur,new java.sql.Timestamp(jdpdesde.getDate().getTime()),new java.sql.Timestamp(jdphasta.getDate().getTime()));
+            JDReparacionesEmpleado Rempleado= new JDReparacionesEmpleado(new java.awt.Frame(), isVisible(),repara
+                    ,new java.sql.Timestamp(jdpdesde.getDate().getTime()),new java.sql.Timestamp(jdphasta.getDate().getTime()));
             Rempleado.setVisible(true);
         }
         
         
         }
         
-    }//GEN-LAST:event_jTable1MousePressed
+    }//GEN-LAST:event_jtablatecnicoMousePressed
 
     private void jbtnbuscarclienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarclienteActionPerformed
         // TODO add your handling code here:
@@ -386,6 +471,17 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
     private void jtablaclienteMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaclienteMouseReleased
         // TODO add your handling code here:
         jbtnimprimir.setEnabled(true);
+        if(jtablacliente.getSelectedRow()>=0){
+         repara= listreparacli.get(jtablacliente.getSelectedRow());
+            System.out.println("idreparaclic"+repara.getIdreparacion());
+         if(evt.getClickCount()==2){
+         
+        JDMotivoExtorno motivo =new JDMotivoExtorno(new Frame(),isVisible(),repara,this);
+        motivo.setVisible(true);
+        }
+            
+        
+        }
     }//GEN-LAST:event_jtablaclienteMouseReleased
 
     private void jbtnimprimirtodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirtodoActionPerformed
@@ -396,19 +492,22 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JButton jbtnbuscar;
     private javax.swing.JButton jbtnbuscarcliente;
     private javax.swing.JButton jbtnimprimir;
@@ -419,6 +518,9 @@ public class JIFrmReparacionConsultar extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jlblmensaje;
     private javax.swing.JLabel jlblmsjcliente;
     private javax.swing.JLabel jlblrut;
+    private javax.swing.JLabel jlbltotal;
+    private javax.swing.JLabel jlbltotalclient;
     private javax.swing.JTable jtablacliente;
+    private javax.swing.JTable jtablatecnico;
     // End of variables declaration//GEN-END:variables
 }

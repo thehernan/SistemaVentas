@@ -6,7 +6,12 @@
 package Formularios;
 
 import DAO.ReparacionDAO;
+import Pojos.Reparacion;
+import java.awt.Frame;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -18,19 +23,32 @@ public class JDReparacionesEmpleado extends javax.swing.JDialog {
      * Creates new form JDFReparacionesEmpleado
      */
     ReparacionDAO daoreparacion= new ReparacionDAO();
-    public JDReparacionesEmpleado(java.awt.Frame parent, boolean modal,long idemple,long idsucur,
+    List<Reparacion> listrepa =new ArrayList<>();
+    Reparacion repara = new Reparacion();
+    Reparacion reparacion;
+    Timestamp desde,hasta;
+    public JDReparacionesEmpleado(java.awt.Frame parent, boolean modal,Reparacion repara,
             Timestamp desde,Timestamp hasta) {
         super(parent, modal);
         initComponents();
-        jlblrangofecha.setText("RANGO DE FECHAS DEL "+desde+" HASTA "+hasta);
-        daoreparacion.mostrarporempleado(jTable1, idemple, idsucur, jlblempleado, jlblsucursal,
+        this.reparacion=repara;
+        this.desde=desde;
+        this.hasta=hasta;
+        DateFormat df = DateFormat.getDateInstance();
+        jlblrangofecha.setText("RANGO DE FECHAS DEL "+df.format(desde)+" HASTA "+df.format(hasta));
+       listrepa= daoreparacion.mostrarporempleado(jtabla,reparacion, jlblempleado, jlblsucursal,
         desde,hasta);
+        System.out.println("tamañolsit"+listrepa.size());
         this.setLocationRelativeTo(null);
     }
     public JDReparacionesEmpleado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
        
+    }
+    public void mostrar(){
+    listrepa= daoreparacion.mostrarporempleado(jtabla, reparacion, jlblempleado, jlblsucursal,
+        desde,hasta);
     }
 
     /**
@@ -44,16 +62,19 @@ public class JDReparacionesEmpleado extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtabla = new javax.swing.JTable();
         jlblempleado = new javax.swing.JLabel();
         jlblrangofecha = new javax.swing.JLabel();
         jlblsucursal = new javax.swing.JLabel();
+        jlbblmens = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -64,18 +85,33 @@ public class JDReparacionesEmpleado extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jtabla.getTableHeader().setReorderingAllowed(false);
+        jtabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jtablaMouseReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtabla);
 
-        jlblempleado.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblempleado.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblempleado.setText("jLabel1");
 
-        jlblrangofecha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblrangofecha.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblrangofecha.setText("jLabel1");
 
-        jlblsucursal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblsucursal.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblsucursal.setText("jLabel1");
+
+        jlbblmens.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jlbblmens.setForeground(new java.awt.Color(255, 51, 51));
+        jlbblmens.setText("Doble clic para anular reparación");
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
+        jLabel1.setText("Empleado:");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
+        jLabel2.setText("Sucursal:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -83,31 +119,42 @@ public class JDReparacionesEmpleado extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1105, Short.MAX_VALUE)
-                .addGap(38, 38, 38))
+                .addComponent(jScrollPane1)
+                .addGap(20, 20, 20))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(36, 36, 36)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jlblsucursal))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jlblsucursal)
-                        .addGap(479, 479, 479)
-                        .addComponent(jlblrangofecha)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jlblempleado)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(12, 12, 12)))
+                .addGap(424, 424, 424)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlbblmens)
+                    .addComponent(jlblrangofecha))
+                .addContainerGap(432, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jlblempleado)
-                .addGap(22, 22, 22)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlblempleado)
+                    .addComponent(jLabel1))
+                .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlblrangofecha)
-                    .addComponent(jlblsucursal))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                    .addComponent(jlblsucursal)
+                    .addComponent(jLabel2))
+                .addGap(2, 2, 2)
+                .addComponent(jlbblmens)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
                 .addGap(27, 27, 27))
         );
 
@@ -115,9 +162,7 @@ public class JDReparacionesEmpleado extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,6 +171,23 @@ public class JDReparacionesEmpleado extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jtablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMouseReleased
+        // TODO add your handling code here:
+        if(jtabla.getSelectedRow()>=0){
+            repara= listrepa.get(jtabla.getSelectedRow());
+            System.out.println("idreparaclic"+repara.getIdreparacion());
+         if(evt.getClickCount()==2){
+         
+        JDMotivoExtorno motivo =new JDMotivoExtorno(new Frame(),isVisible(),repara,this);
+        motivo.setVisible(true);
+        }
+            
+            
+        }
+       
+        
+    }//GEN-LAST:event_jtablaMouseReleased
 
     /**
      * @param args the command line arguments
@@ -171,11 +233,14 @@ public class JDReparacionesEmpleado extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel jlbblmens;
     private javax.swing.JLabel jlblempleado;
     private javax.swing.JLabel jlblrangofecha;
     private javax.swing.JLabel jlblsucursal;
+    private javax.swing.JTable jtabla;
     // End of variables declaration//GEN-END:variables
 }

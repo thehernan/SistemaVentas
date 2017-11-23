@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 
 import net.sf.jasperreports.engine.JRException;
@@ -143,7 +146,7 @@ public class ReparacionDAO {
   }; 
     String titulos[]={"CODIGO","PRODUCTO","CANTIDAD","PRECIO","IMPORTE"};
     tabla.setColumnIdentifiers(titulos);
-    tab.setModel(tabla);
+    NumberFormat nf=NumberFormat.getInstance();
     try{
 	
         System.out.println("SELECT * from sp_busquedareparacion('"+cod+"')");
@@ -170,23 +173,30 @@ public class ReparacionDAO {
            subtotal.setValue(rs.getBigDecimal("vsubtotal"));
            iva.setValue(rs.getBigDecimal("viva"));
            abono.setValue(rs.getBigDecimal("vabono"));
-            for(int i =0; i<=1; i++){
-                     datosR[i] = repara.getCodigo();
-                     i++;    
-                     datosR[i] = rs.getObject("vproducto");
-                     i++;
-                     datosR[i] = rs.getObject("vcantidad");
-                     i++;
-                     datosR[i] = rs.getObject("vprecio");
-                     i++;
-                     datosR[i] = rs.getObject("vprecio");
-                     i++;
+            
+                     datosR[0] = repara.getCodigo();
+                     
+                     datosR[1] = rs.getObject("vproducto");
+                   
+                     datosR[2] = rs.getObject("vcantidad");
+                   
+                     datosR[3] =nf.format(rs.getObject("vprecio"));
+                  
+                     datosR[4] =nf.format(rs.getObject("vprecio"));
+                    
 //                     datosR[i] = rs.getObject("vcelular");
 //                     i++;
                     
                     tabla.addRow(datosR);
-		}
+		
         }
+        tab.setModel(tabla);
+        TableColumnModel columnModel = tab.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(100);
+        columnModel.getColumn(1).setPreferredWidth(500);
+        columnModel.getColumn(2).setPreferredWidth(50);
+        columnModel.getColumn(3).setPreferredWidth(50);
+        columnModel.getColumn(4).setPreferredWidth(50);
         if (cont==0){
             JOptionPane.showMessageDialog(null,"LA REPARACION SE ENCUENTRA EN PROCESO");//SI NO ENCUENTRA LA REPARACION O ESTA EN PROCESO
         }
@@ -204,7 +214,7 @@ return repara;
     
     }
     
-    public void mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel msj){
+    public List<Reparacion> mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel msj,JLabel jtotal){
         
      
     Conexion conexion = new Conexion();
@@ -217,17 +227,13 @@ return repara;
     return false;
     }
     }; 
-    String titulos[]={"IDEMPLE","IDSUCUR","EMPLEADO","R.U.T","SUCURSAL","DIRECCION","TOTAL"};
+    String titulos[]={"EMPLEADO","R.U.T","SUCURSAL","DIRECCION","IMPORTE","DESCUENTO","TOTAL"};
     tabla.setColumnIdentifiers(titulos);
     tab.setModel(tabla);
-    
-    tab.getColumnModel().getColumn(0).setMaxWidth(0);
-    tab.getColumnModel().getColumn(0).setMinWidth(0);
-    tab.getColumnModel().getColumn(0).setPreferredWidth(0);
-    
-    tab.getColumnModel().getColumn(1).setMaxWidth(0);
-    tab.getColumnModel().getColumn(1).setMinWidth(0);
-    tab.getColumnModel().getColumn(1).setPreferredWidth(0);
+
+        DateFormat df= DateFormat.getDateInstance();
+        NumberFormat nf = NumberFormat.getInstance();
+        List<Reparacion> listrepa= new ArrayList<>();
     try{
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
@@ -239,32 +245,35 @@ return repara;
         Object datosR[] = new Object[7];
         msj.setText("");
         int cont=0;
+        double total=0.0;
         while (rs.next()){
            
-            for(int i =0; i<=1; i++){
-                     datosR[i] = rs.getObject("videmple");
-                     i++;
-                     datosR[i] = rs.getObject("vidsucur");
-                     i++;
-                     datosR[i] = rs.getObject("vnombre");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vsucursal");
-                     i++;
-                     datosR[i] = rs.getObject("vsucurdirec");
-                     i++;
-                     datosR[i] = rs.getObject("vtotal");
-                     i++;
-                    
-                    tabla.addRow(datosR);
-		}
+            Reparacion repara= new Reparacion();
+            repara.setIdempleado(rs.getLong("videmple"));
+            repara.setId_sucural(rs.getLong("vidsucur"));
+            repara.setTotal(rs.getDouble("vtotal"));
+            total = total+repara.getTotal();
+             
+             datosR[0] = rs.getObject("vnombre");
+            
+             datosR[1] = rs.getObject("vrut");
+             
+             datosR[2] = rs.getObject("vsucursal");
+            
+             datosR[3] = rs.getObject("vsucurdirec");
+             datosR[4] = nf.format(rs.getObject("vimporte"));
+             datosR[5] = nf.format(rs.getObject("vdescuento"));
+             datosR[6] =nf.format(repara.getTotal());             
+
+            tabla.addRow(datosR);
+            listrepa.add(repara);
             cont++;
         }
+        jtotal.setText("Total: "+nf.format(total));
         rs.close();
         ps.close();
         if(cont == 0){
-            msj.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO DE "+desde+" AL "+hasta);
+            msj.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO DE "+df.format(desde)+" AL "+df.format(hasta));
         }else {
             msj.setText("REGISTROS ENCONTRADOS "+cont);
         }
@@ -276,10 +285,10 @@ return repara;
                 conexion.devolverConexionPool();
                        
             }    
-
+    return listrepa;
     
     }
-     public void mostrarporempleado(JTable tab,long idemple,long idsucur,JLabel emple,JLabel sucur,
+     public List<Reparacion> mostrarporempleado(JTable tab,Reparacion repair,JLabel emple,JLabel sucur,
      Timestamp desde, Timestamp hasta){
         
      
@@ -294,53 +303,62 @@ return repara;
     }
   };     
     
-    String titulos[]={"CODIGO","CLIENTE","ATENDIO","MARCA","MODELO","FALLAS","DIAGNOSTICO","ESTADO","FECHA REP.","FECHA ENTRE.","PRECIO"};
+    String titulos[]={"CODIGO","CLIENTE","ATENDIO","MARCA","MODELO","FALLAS","DIAGNOSTICO","FECHA REP.","FECHA ENTRE.","PRECIO","DESC.","TOTAL","ESTADO","MOTIVO"};
     tabla.setColumnIdentifiers(titulos);
     tab.setModel(tabla);
+     List<Reparacion> listrepa= new ArrayList<>();
+         NumberFormat nf = NumberFormat.getInstance();
     try{
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
         String sql=("SELECT * from sp_mostrarreparacionempleado(?,?,?,?)"); 
         PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
-        ps.setLong(1, idemple);
-        ps.setLong(2, idsucur);
+        ps.setLong(1, repair.getIdempleado());
+        ps.setLong(2,repair.getId_sucural());
         ps.setTimestamp(3, desde);
         ps.setTimestamp(4, hasta);
         ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[11];
-        
+        Object datosR[] = new Object[14];
+       
         
         while (rs.next()){
+            Reparacion repa = new Reparacion();
             emple.setText(rs.getString("vempleado"));
             sucur.setText(rs.getString("vsucursal"));
-            for(int i =0; i<=1; i++){
-                       
-                     datosR[i] = rs.getObject("vcodigo");
-                     i++;
-                     datosR[i] = rs.getObject("vcliente");
-                     i++;
-                     datosR[i] = rs.getObject("vatentido");
-                     i++;
-                     datosR[i] = rs.getObject("vmarca");
-                     i++;
-                     datosR[i] = rs.getObject("vmodelo");
-                     i++;
-                     datosR[i] = rs.getObject("vfallas");
-                     
-                     i++;
-                     datosR[i] = rs.getObject("vdiagnostico");
-                     i++;
-                     datosR[i] = rs.getObject("vestado");
-                     i++;
-                     datosR[i] = rs.getObject("vfecharecep");
-                     i++;
-                     datosR[i] = rs.getObject("vvfechaentre");
-                     i++;
-                     datosR[i] = rs.getObject("vprecio");
-                     i++;
-                                        
-                    tabla.addRow(datosR);
-		}
+       
+            repa.setIdreparacion(rs.getLong("vidrepa"));
+            System.out.println("idreparalist"+repa.getIdreparacion());
+             datosR[0] = rs.getObject("vcodigo");
+
+             datosR[1] = rs.getObject("vcliente");
+
+             datosR[2] = rs.getObject("vatentido");
+
+             datosR[3] = rs.getObject("vmarca");
+
+             datosR[4] = rs.getObject("vmodelo");
+
+             datosR[5] = rs.getObject("vfallas");
+
+
+             datosR[6] = rs.getObject("vdiagnostico");
+
+             
+
+             datosR[7] = rs.getObject("vfecharecep");
+
+             datosR[8] = rs.getObject("vvfechaentre");
+
+             datosR[9] =nf.format(rs.getObject("vprecio"));
+             datosR[10] =nf.format(rs.getObject("vdescuento"));
+             datosR[11] =nf.format(rs.getObject("vtotal"));
+             
+             datosR[12] = rs.getObject("vestado");
+             datosR[13] = rs.getObject("vmotivo");
+
+
+            tabla.addRow(datosR);
+            listrepa.add(repa);
            
         }
         
@@ -354,10 +372,10 @@ return repara;
                        
             }    
 
-    
+    return listrepa;
     }
      
-     public void mostrarporcliente(JTable tab,long id, JLabel msj){
+     public List<Reparacion> mostrarporcliente(JTable tab,long id, JLabel msj,JLabel jtotal){
         
      
     Conexion conexion = new Conexion();
@@ -371,12 +389,12 @@ return repara;
     }
   };     
     
-    String titulos[]={"id","SUCURSAL","CODIGO","TECNICO","ATENDIO","MARCA","MODELO","DIAGNOSTICO","FECHA REP.","FECHA ENTRE.","ESTADO","PRECIO","PRECIO REVISION","DESCUENTO"};
+    String titulos[]={"SUCURSAL","CODIGO","TECNICO","ATENDIO","MARCA","MODELO","DIAGNOSTICO","FECHA REP.","FECHA ENTRE.","ESTADO","PRECIO","PRECIO REVISION","DESCUENTO","TOTAL"};
     tabla.setColumnIdentifiers(titulos);
     tab.setModel(tabla);
-    tab.getColumnModel().getColumn(0).setMaxWidth(0);
-    tab.getColumnModel().getColumn(0).setMinWidth(0);
-    tab.getColumnModel().getColumn(0).setPreferredWidth(0);
+   List<Reparacion> listrep= new ArrayList<>();
+   double total=0.0;
+   NumberFormat nf =NumberFormat.getInstance();
     try{
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
@@ -391,42 +409,46 @@ return repara;
         Integer cont=0;
         while (rs.next()){
            cont++;
-             for(int i =0; i<=1; i++){
-                     datosR[i] = rs.getObject("vidreparacion");
-                     i++;
-                      datosR[i] = rs.getObject("vsucursal");
-                     i++;  
-                     datosR[i] = rs.getObject("vcodigo");
-                     i++;
-                     datosR[i] = rs.getObject("vempleado");
-                     i++;
-                     datosR[i] = rs.getObject("vatentido");
-                     i++;
-                     datosR[i] = rs.getObject("vmarca");
-                     i++;
-                     datosR[i] = rs.getObject("vmodelo");
-                     i++;
-                     datosR[i] = rs.getObject("vdiagnostico");
-                     i++;
-                     datosR[i] = rs.getObject("vfecharecep");
-                     
-                     i++;
-                     datosR[i] = rs.getObject("vvfechaentre");
-                     i++;
-                     datosR[i] = rs.getObject("vestado");
-                     i++;
-                     datosR[i] = rs.getObject("vprecio");
-                     i++;
-                     datosR[i] = rs.getObject("vpreciorevision");
-                     i++;
-                     datosR[i] = rs.getObject("vdescuento");
-                     i++;
+           Reparacion repara = new Reparacion();
+             repara.setIdreparacion(rs.getLong("vidreparacion"));
+             repara.setTotal(rs.getDouble("vtotal"));
+             total=total+repara.getTotal();
+              datosR[0] = rs.getObject("vsucursal");
+               
+             datosR[1] = rs.getObject("vcodigo");
+             
+             datosR[2] = rs.getObject("vempleado");
+            
+             datosR[3] = rs.getObject("vatentido");
+            
+             datosR[4] = rs.getObject("vmarca");
+            
+             datosR[5] = rs.getObject("vmodelo");
+             
+             datosR[6] = rs.getObject("vdiagnostico");
+             
+             datosR[7] = rs.getObject("vfecharecep");
+
+             
+             datosR[8] = rs.getObject("vvfechaentre");
+           
+             datosR[9] = rs.getObject("vestado");
+            
+             datosR[10] = nf.format(rs.getObject("vprecio"));
+             
+             datosR[11] = nf.format(rs.getObject("vpreciorevision"));
+            
+             datosR[12] = nf.format(rs.getObject("vdescuento"));
+             datosR[13] = nf.format(repara.getTotal());
+            
                                         
-                    tabla.addRow(datosR);
-		}
+            tabla.addRow(datosR);
+            listrep.add(repara);
+		
            
         }
         msj.setText("REGISTROS ENCONTRADOS "+cont.toString());
+        jtotal.setText("Total: "+nf.format(total));
 	rs.close();
         ps.close();
         } catch(Exception e)
@@ -437,7 +459,7 @@ return repara;
                        
             }    
 
-    
+    return listrep;
     }
       public void mostrarpendientes(JTable tab,long idemple){
         
@@ -470,35 +492,35 @@ return repara;
         
         while (rs.next()){
             
-            for(int i =0; i<=1; i++){
-                    datosR[i] = rs.getObject("vidreparacion");
-                     i++;
-                    datosR[i] = rs.getObject("vsucursal");
-                     i++;
-                     datosR[i] = rs.getObject("vcodigo");
-                     i++;
-                     datosR[i] = rs.getObject("vcliente");
-                     i++;
-                     datosR[i] = rs.getObject("vatentido");
-                     i++;
-                     datosR[i] = rs.getObject("vmarca");
-                     i++;
-                     datosR[i] = rs.getObject("vmodelo");
-                     i++;
-                     datosR[i] = rs.getObject("vfallas");
-                     
-                     i++;
+
+            datosR[0] = rs.getObject("vidreparacion");
+             
+            datosR[1] = rs.getObject("vsucursal");
+             
+             datosR[2] = rs.getObject("vcodigo");
+            
+             datosR[3] = rs.getObject("vcliente");
+            
+             datosR[4] = rs.getObject("vatentido");
+            
+             datosR[5] = rs.getObject("vmarca");
+             
+             datosR[6] = rs.getObject("vmodelo");
+            
+             datosR[7] = rs.getObject("vfallas");
+
+            
 //                     datosR[i] = rs.getObject("vdiagnostico");
 //                     i++;
-                     datosR[i] = rs.getObject("vfecharecep");
-                     i++;
-                     datosR[i] = rs.getObject("vvfechaentre");
-                     i++;
+             datosR[8] = rs.getObject("vfecharecep");
+             
+             datosR[9] = rs.getObject("vvfechaentre");
+             
 //                     datosR[i] = rs.getObject("vprecio");
 //                     i++;
-                                        
-                    tabla.addRow(datosR);
-		}
+
+            tabla.addRow(datosR);
+		
            
         }
         
@@ -543,6 +565,29 @@ return repara;
                 conexion.devolverConexionPool();
             }    
     return listprecio;
+    
+    }
+ 
+ public void extornar(Reparacion repara){
+ 
+  Conexion conexion = new Conexion();
+    
+  
+    try{
+        
+	PreparedStatement ps=conexion.getConnection().prepareStatement("SELECT * from sp_extornareparacion(?,?)");
+        ps.setLong(1, repara.getIdreparacion());
+        ps.setString(2, repara.getMotivo());
+       ps.executeQuery();
+       ps.close();
+	
+        } catch(Exception e)
+            {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            }finally{
+                conexion.devolverConexionPool();
+            }    
+    
     
     }
 

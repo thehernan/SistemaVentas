@@ -6,31 +6,72 @@
 package Formularios;
 
 import ClasesGlobales.Mayusculas;
+import DAO.ReparacionDAO;
 import DAO.VentasDAO;
+import Pojos.Reparacion;
+import Pojos.Ventas;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author info2017
  */
-public class JDMotivoExtornoVenta extends javax.swing.JDialog {
+public class JDMotivoExtorno extends javax.swing.JDialog {
 
     /**
-     * Creates new form JDMotivoExtornoVenta
+     * Creates new form JDMotivoExtorno
      */
     VentasDAO daoventa=new VentasDAO();
-    long id;
+   
     Mayusculas mayus = new Mayusculas();
-    public JDMotivoExtornoVenta(java.awt.Frame parent, boolean modal) {
+    String identifi;
+    ReparacionDAO daorepa = new ReparacionDAO();
+    Reparacion reparacion = new Reparacion();
+    JDReparacionesEmpleado jdrepara;
+    JIFrmReparacionConsultar jifreparaconsul;
+    Ventas venta;
+    JDVentasEmpleado jdventas;
+    JIFVentaConsultar jifventaconsu;
+    public JDMotivoExtorno(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
     
-    public JDMotivoExtornoVenta(java.awt.Frame parent, boolean modal,long id) {
+    public JDMotivoExtorno(java.awt.Frame parent, boolean modal,Ventas venta, JDVentasEmpleado jdventas) {
         super(parent, modal);
         initComponents();
-        this.id=id;
+        this.venta=venta;
+        this.jdventas=jdventas;
         this.setLocationRelativeTo(null);
+        identifi="VENTAEMPLEADO";
+    }
+    
+    public JDMotivoExtorno(java.awt.Frame parent, boolean modal,Ventas venta, JIFVentaConsultar jifventaconsu) {
+        super(parent, modal);
+        initComponents();
+        this.venta=venta;
+        this.jifventaconsu=jifventaconsu;
+        this.setLocationRelativeTo(null);
+        identifi="VENTACLIENTE";
+    }
+    
+     public JDMotivoExtorno(java.awt.Frame parent, boolean modal,Reparacion repara,JDReparacionesEmpleado jdrepara) {
+        super(parent, modal);
+        initComponents();
+       
+        this.reparacion=repara;
+        this.jdrepara=jdrepara;
+        this.setLocationRelativeTo(null);
+        identifi="REPARAEMPLEADO";
+    }
+      public JDMotivoExtorno(java.awt.Frame parent, boolean modal,Reparacion repara,JIFrmReparacionConsultar jifreparaconsul) {
+        super(parent, modal);
+        initComponents();
+       
+        this.reparacion=repara;
+        this.jifreparaconsul=jifreparaconsul;
+        this.setLocationRelativeTo(null);
+        identifi="REPARACLIENTE";
     }
 
     /**
@@ -76,20 +117,21 @@ public class JDMotivoExtornoVenta extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jtamotivo);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 450, 120));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 450, 160));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("MOTIVO:");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jbtnaceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Checked.png"))); // NOI18N
+        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setText("Aceptar");
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 160, -1, -1));
+        jPanel2.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 200, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -109,10 +151,55 @@ public class JDMotivoExtornoVenta extends javax.swing.JDialog {
         // TODO add your handling code here:
         
                  if(jtamotivo.getText().replaceAll("\\s", "").length()>0){
+                     if(identifi.equals("VENTAEMPLEADO")){
                      if(JOptionPane.showConfirmDialog(null,"ESTA SEGURO DE ANULAR LA VENTA, ESTA OPERACION NO SE PODRA REVERTIR","MENSAJE SISTEMA",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-                     daoventa.extornarconcretada(id,jtamotivo.getText());
+                     daoventa.extornarconcretada(venta.getIdventa(),jtamotivo.getText());
+                     jdventas.refrescar();
+                     
                      this.dispose();
+                     }                     
+                     
                      }
+                     
+                      if(identifi.equals("VENTACLIENTE")){
+                     if(JOptionPane.showConfirmDialog(null,"ESTA SEGURO DE ANULAR LA VENTA, ESTA OPERACION NO SE PODRA REVERTIR","MENSAJE SISTEMA",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+                     daoventa.extornarconcretada(venta.getIdventa(),jtamotivo.getText());
+                     jifventaconsu.refrecar();
+                     
+                     this.dispose();
+                     }                     
+                     
+                     }
+                      
+                      if(identifi.equals("REPARAEMPLEADO")){
+                          
+                        if(JOptionPane.showConfirmDialog(null,"ESTA SEGURO DE ANULAR LA REPARACION, ESTA OPERACION NO SE PODRA REVERTIR","MENSAJE SISTEMA",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+                         reparacion.setMotivo(jtamotivo.getText());
+                         reparacion.getIdreparacion();
+                            System.out.println("idrepara"+reparacion.getIdreparacion());
+                         daorepa.extornar(reparacion);
+                         
+                         
+                         jdrepara.mostrar();
+                        this.dispose();
+                      }
+                      }
+                      
+                       if(identifi.equals("REPARACLIENTE")){
+                          
+                        if(JOptionPane.showConfirmDialog(null,"ESTA SEGURO DE ANULAR LA REPARACION, ESTA OPERACION NO SE PODRA REVERTIR","MENSAJE SISTEMA",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+                         reparacion.setMotivo(jtamotivo.getText());
+                         reparacion.getIdreparacion();
+                            System.out.println("idrepara"+reparacion.getIdreparacion());
+                         daorepa.extornar(reparacion);
+                         
+                         
+                         jifreparaconsul.refrescar();
+                        this.dispose();
+                      }
+                      }
+                     
+                     
                  }else {
                      JOptionPane.showMessageDialog(null, "INGRESE MOTIVO");
                  
@@ -144,20 +231,21 @@ public class JDMotivoExtornoVenta extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JDMotivoExtornoVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDMotivoExtorno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JDMotivoExtornoVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDMotivoExtorno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JDMotivoExtornoVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDMotivoExtorno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JDMotivoExtornoVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDMotivoExtorno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JDMotivoExtornoVenta dialog = new JDMotivoExtornoVenta(new javax.swing.JFrame(), true);
+                JDMotivoExtorno dialog = new JDMotivoExtorno(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

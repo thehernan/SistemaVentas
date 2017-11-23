@@ -15,13 +15,17 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -98,9 +102,8 @@ public long insertarnocliente(Ventas venta){
   return id;  
 }
     
-public Ventas buscarventa(javax.swing.JTable tab,String cod,JLabel nombre,JLabel rut,
-            JFormattedTextField total,JFormattedTextField iva,JFormattedTextField subottotal,
-            JFormattedTextField descuento){
+public Ventas buscarventa(javax.swing.JTable tab,String cod,JLabel nombre,JLabel rut
+            ){
         
      
     Conexion conexion = new Conexion();
@@ -115,7 +118,10 @@ public Ventas buscarventa(javax.swing.JTable tab,String cod,JLabel nombre,JLabel
     };
     String titulos[]={"CODIGO","PRODUCTO","CANTIDAD","PRECIO","IMPORTE"};
     tabla.setColumnIdentifiers(titulos);
-    tab.setModel(tabla);
+  
+
+    NumberFormat nf= NumberFormat.getInstance();
+            
     try{
 	
         System.out.println("SELECT * from sp_busquedaventa('"+cod+"')");
@@ -124,17 +130,13 @@ public Ventas buscarventa(javax.swing.JTable tab,String cod,JLabel nombre,JLabel
         ps.setString(1, cod);
         ResultSet rs= ps.executeQuery();
         
-        String sql1=("SELECT * from sp_busquedaventatotal(?)"); 
-        PreparedStatement ps1= conexion.getConnection().prepareStatement(sql1);
-        ps1.setString(1, cod);
-        ResultSet rs1= ps1.executeQuery();
+     
+        
         Object datosR[] = new Object[5];
         nombre.setText("");
         rut.setText("");
-        total.setValue(0);
-        iva.setValue(0);
-        subottotal.setValue(0);
-        descuento.setValue(0);
+        double total =0.0,importe=0.0,iva=0.0,subtotal=0.0;
+      
         while (rs.next()){
             nombre.setText(rs.getString("vnombre"));
            // System.out.println("NOMBRE: "+rs.getString("vnombre"));
@@ -142,32 +144,35 @@ public Ventas buscarventa(javax.swing.JTable tab,String cod,JLabel nombre,JLabel
             venta.setIdventa(rs.getLong("vidventa"));
             venta.setFecha(rs.getDate("vfecha"));
             venta.setDescuento(rs.getDouble("vdescuento"));
-            for(int i =0; i<=1; i++){
-                     datosR[i] = rs.getObject("vcodigo");
-                     i++;    
-                     datosR[i] = rs.getObject("vproducto");
-                     i++;
-                     datosR[i] = rs.getObject("vcantidad");
-                     i++;
-                     datosR[i] = rs.getObject("vprecio");
-                     i++;
-                     datosR[i] = rs.getObject("vimporte");
-                     i++;
-//                     datosR[i] = rs.getObject("vcelular");
-//                     i++;
-                    
-                    tabla.addRow(datosR);
-		}
+             importe = rs.getDouble("vimporte");
+             datosR[0] = rs.getObject("vcodigo");
+              
+             datosR[1] = rs.getObject("vproducto");
+             
+             datosR[2] = nf.format(rs.getObject("vcantidad"));
+           
+             datosR[3] = nf.format(rs.getObject("vprecio"));
+             
+             datosR[4] =nf.format(importe);
+             total = total+ importe;
+             tabla.addRow(datosR);
+		
         }
-        if(rs1.next()){
-            total.setValue(rs1.getDouble("vtotal"));
-            iva.setValue(rs1.getDouble("viva"));
-            subottotal.setValue(rs1.getDouble("vsubtotal"));
-            descuento.setValue(rs1.getDouble("vdescuento"));
+        subtotal = total/1.19;
+        iva = total-subtotal;
+        venta.setTotal(total);
+        venta.setIva(iva);
+        venta.setSuvtotal(subtotal);
         
-        }
-        ps1.close();
-        rs1.close();
+        tab.setModel(tabla); 
+        TableColumnModel columnModel = tab.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(100);
+        columnModel.getColumn(1).setPreferredWidth(500);
+        columnModel.getColumn(2).setPreferredWidth(50);
+        columnModel.getColumn(3).setPreferredWidth(50);
+        columnModel.getColumn(4).setPreferredWidth(50);
+       
+       
         ps.close();
         rs.close();
 	
@@ -181,7 +186,7 @@ return venta;
     
     }
 
-public void mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel msj){
+public List<Ventas> mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel msj){
      
     Conexion conexion = new Conexion();
    
@@ -192,16 +197,12 @@ public void mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel msj){
     return false;
     }
     }; 
-    String titulos[]={"IDEMPLE","IDSUCUR","EMPLEADO","R.U.T","SUCURSAL","DIRECCION","IMPORTE","DESCUENTOS","TOTAL","%","COMISION"};
+    String titulos[]={"EMPLEADO","R.U.T","SUCURSAL","DIRECCION","IMPORTE","DESCUENTOS","TOTAL","%","COMISION"};
     tabla.setColumnIdentifiers(titulos);
     tab.setModel(tabla);
-    tab.getColumnModel().getColumn(0).setMaxWidth(0);
-    tab.getColumnModel().getColumn(0).setMinWidth(0);
-    tab.getColumnModel().getColumn(0).setPreferredWidth(0);
-        
-    tab.getColumnModel().getColumn(1).setMaxWidth(0);
-    tab.getColumnModel().getColumn(1).setMinWidth(0);
-    tab.getColumnModel().getColumn(1).setPreferredWidth(0);
+    List<Ventas> listvent=new ArrayList<>();
+    DateFormat df = DateFormat.getDateInstance();
+    NumberFormat nf= NumberFormat.getInstance();
     try{
 	
         System.out.println("SELECT * from sp_mostrarventa('"+desde+"','"+hasta+"')");
@@ -210,43 +211,42 @@ public void mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel msj){
         ps.setTimestamp(1, desde);
         ps.setTimestamp(2, hasta);
         ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[11];
+        Object datosR[] = new Object[9];
         msj.setText("");
         int cont=0;
         while (rs.next()){
+           Ventas vent= new Ventas();
+           vent.setId_sucursal(rs.getLong("vidsucur"));
+           vent.setIdempleado(rs.getLong("videmple"));
+          
            
-            for(int i =0; i<=1; i++){
-                     datosR[i] = rs.getObject("videmple");
-                     i++;
-                     datosR[i] = rs.getObject("vidsucur");
-                     i++;
-                     datosR[i] = rs.getObject("vnombre");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vsucursal");
-                     i++;
-                     datosR[i] = rs.getObject("vsucurdirec");
-                     i++;
-                      datosR[i] = rs.getObject("vimporte");
-                     i++;
-                      datosR[i] = rs.getObject("vdescuento");
-                     i++;
-                     datosR[i] = rs.getObject("vtotal");
-                     i++;
-                     datosR[i] = rs.getObject("vporcentaje");
-                     i++;
-                     datosR[i] = rs.getObject("vcomision");
-                     i++;
-                    
-                    tabla.addRow(datosR);
-		}
+             datosR[0] = rs.getObject("vnombre");
+            
+             datosR[1] = rs.getObject("vrut");
+             
+             datosR[2] = rs.getObject("vsucursal");
+            
+             datosR[3] = rs.getObject("vsucurdirec");
+           
+              datosR[4] =nf.format(rs.getObject("vimporte"));
+            
+              datosR[5] =nf.format(rs.getObject("vdescuento"));
+             
+             datosR[6] = nf.format(rs.getObject("vtotal"));
+            
+             datosR[7] = rs.getObject("vporcentaje");
+            
+             datosR[8] =nf.format( rs.getObject("vcomision"));
+            
+             listvent.add(vent);
+            tabla.addRow(datosR);
+		
             cont++;
         }
         rs.close();
         ps.close();
         if(cont == 0){
-            msj.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO DE "+desde+" AL "+hasta);
+            msj.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO DE "+df.format(desde)+" AL "+df.format(hasta));
         }else {
             msj.setText("REGISTROS ENCONTRADOS "+cont);
         }
@@ -258,7 +258,7 @@ public void mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel msj){
                 conexion.devolverConexionPool();
                        
             }    
-
+    return listvent;
     
     }
 public void mostrarenproceso(JTable tab,long idsucur,JLabel msj){
@@ -404,71 +404,91 @@ public void extornarconcretada(long idvent,String motivo){
     
     }
 
-public void mostrarporempleado(JTable tab,long idemple,long idsucur,JLabel emple,JLabel sucur,
-     Timestamp desde, Timestamp hasta){
+public List<Ventas> mostrarporempleado(JTable tab,Ventas ventaa,JLabel emple,JLabel sucur,
+     Timestamp desde, Timestamp hasta,JLabel jtotal){
         
      
     Conexion conexion = new Conexion();
  
-   
-    DefaultTableModel tabla=new DefaultTableModel(){
-    public boolean isCellEditable(int row, int column) {
-    //      if (column == 5) return true;
-    //else
-     return false;
-    }
-  };     
+     DefaultTableModel tabla= new DefaultTableModel(
+                new String[]{"CODIGO","DOCUMENTO","NUMERO","CLIENTE","FECHA","IMPORTE","DESCUENTO","MOT.DESC","TOTAL","ANULADA","MOT. ANU","FECHA. ANU"}, 0) {
+ 
+            Class[] types = new Class[]{
+                 java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,java.lang.Object.class,
+                java.lang.Object.class,java.lang.Object.class,java.lang.Object.class,java.lang.Object.class,java.lang.Object.class
+                    ,java.lang.Boolean.class,java.lang.Object.class,java.lang.Object.class
+            };
+ 
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+             public boolean isCellEditable(int row, int column) {
+//        //      if (column == 5) return true;
+//        //else
+            return false;
+            }
+            };
     
-    String titulos[]={"ID","CODIGO","DOCUMENTO","NUMERO","CLIENTE","FECHA","IMPORTE","DESCUENTO","TOTAL"};
-    tabla.setColumnIdentifiers(titulos);
-    tab.setModel(tabla);
-    tab.getColumnModel().getColumn(0).setMaxWidth(0);
-    tab.getColumnModel().getColumn(0).setMinWidth(0);
-    tab.getColumnModel().getColumn(0).setPreferredWidth(0);
+    
+    
+        tab.setModel(tabla);
+        List<Ventas> listventa = new ArrayList<>();
+        boolean extor;
+        double total=0.0;
+        double importe=0.0;
+        NumberFormat nf = NumberFormat.getInstance();
+       
     try{
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
         String sql=("SELECT * from sp_mostrarventaempleado(?,?,?,?)"); 
         PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
-        ps.setLong(1, idemple);
-        ps.setLong(2, idsucur);
+        ps.setLong(1, ventaa.getIdempleado());
+        ps.setLong(2,ventaa.getId_sucursal());
         ps.setTimestamp(3, desde);
         ps.setTimestamp(4, hasta);
         ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[11];
+        Object datosR[] = new Object[12];
         
         
         while (rs.next()){
             emple.setText(rs.getString("vempleado"));
             sucur.setText(rs.getString("vsucursal"));
-            for(int i =0; i<=1; i++){
-                      datosR[i] = rs.getObject("vidventa");
-                     i++;  
-                     datosR[i] = rs.getObject("vcodigo");
-                     i++;
-                     datosR[i] = rs.getObject("vdocumento");
-                     i++;
-                     datosR[i] = rs.getObject("vnumero");
-                     i++;
-                     datosR[i] = rs.getObject("vcliente");
-                     i++;
-                     datosR[i] = rs.getObject("vfecha");
-                     i++;
-                     datosR[i] = rs.getObject("vimporte");
-                     
-                     i++;
-                     datosR[i] = rs.getObject("vdescuento");
-                     
-                     i++;
-                     datosR[i] = rs.getObject("vtotal");
-                     
-                     i++;
-                                  
-                    tabla.addRow(datosR);
-		}
+             Ventas venta = new Ventas();
+             venta.setIdventa(rs.getLong("vidventa"));     
+             extor= rs.getBoolean("vextornado"); 
+             importe=rs.getDouble("vtotal");
+             if(extor==false){
+             total=total+importe;
+             
+             }
+             datosR[0] = rs.getObject("vcodigo");
+
+             datosR[1] = rs.getObject("vdocumento");
+
+             datosR[2] = rs.getObject("vnumero");
+
+             datosR[3] = rs.getObject("vcliente");
+
+             datosR[4] = rs.getObject("vfecha");
+
+             datosR[5] =nf.format(rs.getObject("vimporte"));
+
+
+             datosR[6] =nf.format(rs.getObject("vdescuento"));
+              datosR[7] =(rs.getObject("vmotivodes"));
+
+             datosR[8] =nf.format(importe);
+             
+             datosR[9] =extor;
+             datosR[10] =(rs.getObject("vmotivo"));
+             datosR[11] =(rs.getObject("vfechaext"));
+
+            tabla.addRow(datosR);
+	    listventa.add(venta);
            
         }
-        
+        jtotal.setText("Total Vendido: "+nf.format(total));
 	rs.close();
         ps.close();
         } catch(Exception e)
@@ -479,20 +499,20 @@ public void mostrarporempleado(JTable tab,long idemple,long idsucur,JLabel emple
                        
             }    
 
-    
+    return listventa;
     }
 
-public void mostrarporcliente(JTable tab,long idcliente,JLabel msj){
+public List<Ventas> mostrarporcliente(JTable tab,long idcliente,JLabel msj){
    Conexion conexion = new Conexion();
  
    
     DefaultTableModel tabla= new DefaultTableModel(
-                new String[]{"ID","CODIGO","DOCUMENTO","NUMERO","CLIENTE","FECHA","IMPORTE","DESCUENTO","TOTAL","ANULADA"}, 0) {
+                new String[]{"CODIGO","DOCUMENTO","NUMERO","CLIENTE","FECHA","IMPORTE","DESCUENTO","TOTAL","ANULADA"}, 0) {
  
             Class[] types = new Class[]{
                  java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,java.lang.Object.class,
                 java.lang.Object.class,java.lang.Object.class,java.lang.Object.class,java.lang.Object.class
-                    ,java.lang.Object.class,java.lang.Boolean.class
+                    ,java.lang.Boolean.class
             };
  
             public Class getColumnClass(int columnIndex) {
@@ -508,9 +528,7 @@ public void mostrarporcliente(JTable tab,long idcliente,JLabel msj){
 //    String titulos[]={"ID","CODIGO","DOCUMENTO","NUMERO","CLIENTE","FECHA","IMPORTE","DESCUENTO","TOTAL","ANULADA"};
 //    tabla.setColumnIdentifiers(titulos);
     tab.setModel(tabla);
-    tab.getColumnModel().getColumn(0).setMaxWidth(0);
-    tab.getColumnModel().getColumn(0).setMinWidth(0);
-    tab.getColumnModel().getColumn(0).setPreferredWidth(0);
+     List<Ventas> listvent= new ArrayList<>();
     try{
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
@@ -519,42 +537,40 @@ public void mostrarporcliente(JTable tab,long idcliente,JLabel msj){
         ps.setLong(1, idcliente);
       
         ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[10];
+        Object datosR[] = new Object[9];
         
         Integer cont = 0;
         while (rs.next()){
-         
-            for(int i =0; i<=1; i++){
-                cont++;
-                      datosR[i] = rs.getObject("vidventa");
-                     i++;  
+         Ventas venta = new Ventas();
+                      cont++;
+                    venta.setIdventa(rs.getLong("vidventa"));
+                    
 //                     datosR[i] = rs.getObject("vsucursal");
 //                     i++;  
-                     datosR[i] = rs.getObject("vcodigo");
-                     i++;
-                     datosR[i] = rs.getObject("vdocumento");
-                     i++;
-                     datosR[i] = rs.getObject("vnumero");
-                     i++;
-                     datosR[i] = rs.getObject("vcliente");
-                     i++;
-                     datosR[i] = rs.getObject("vfecha");
-                     i++;
-                     datosR[i] = rs.getObject("vimporte");
+                     datosR[0] = rs.getObject("vcodigo");
+                  
+                     datosR[1] = rs.getObject("vdocumento");
+                   
+                     datosR[2] = rs.getObject("vnumero");
+                    
+                     datosR[3] = rs.getObject("vcliente");
+                   
+                     datosR[4] = rs.getObject("vfecha");
+                  
+                     datosR[5] = rs.getObject("vimporte");
                      
-                     i++;
-                     datosR[i] = rs.getObject("vdescuento");
+                   
+                     datosR[6] = rs.getObject("vdescuento");
                      
-                     i++;
-                     datosR[i] = rs.getObject("vtotal");
+                    
+                     datosR[7] = rs.getObject("vtotal");
                      
-                     i++;
-                      datosR[i] = rs.getBoolean("vanulada");
-                     
-                     i++;
+                    
+                      datosR[8] = rs.getBoolean("vanulada");
+                   
                                   
                     tabla.addRow(datosR);
-		}
+                    listvent.add(venta);
            
         }
         msj.setText("REGISTROS ENCONTRADOS "+cont.toString());
@@ -568,7 +584,7 @@ public void mostrarporcliente(JTable tab,long idcliente,JLabel msj){
                        
             }    
 
-    
+    return listvent;
     }
 
 public void mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,JLabel msj){
