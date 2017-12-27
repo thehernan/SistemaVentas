@@ -43,7 +43,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
     return false;
 }
   }; 
-    DetalleOrdeSalidaEntrada detorden = new DetalleOrdeSalidaEntrada();
+    
     OrdenSalidaEntrada orden = new OrdenSalidaEntrada();
     OrdenSalidaDAO daoorden = new OrdenSalidaDAO();
     DetalleOrdenSalidaDAO daodetorden = new DetalleOrdenSalidaDAO();
@@ -70,6 +70,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
         jbtnaceptar.setEnabled(false);
         jdfechapedido.setDate(new Date());
         jdfechaentrega.setDate(new Date());
+      
     }
     
     
@@ -96,14 +97,14 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
     
     
     
-    public void enableencabezado(boolean val){
-        jdfechaentrega.setEnabled(val);
-        jdfechapedido.setEnabled(val);
-        jcbsucursal.setEnabled(val);
-        jtfautorizado.setEnabled(val);
-        jtfrecibido.setEnabled(val);
-    
-    }
+//    public void enableencabezado(boolean val){
+//        jdfechaentrega.setEnabled(val);
+//        jdfechapedido.setEnabled(val);
+//        jcbsucursal.setEnabled(val);
+//        jtfautorizado.setEnabled(val);
+//        jtfrecibido.setEnabled(val);
+//    
+//    }
     public void nuevoprod(){
 //        jtfcodigo.setText("");
 //        jtfstock.setValue(0);
@@ -113,7 +114,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
 //        jlblimagen.setIcon(null);
         producto = new Producto();
         ///// enable orden /////
-        enableencabezado(false);
+//        enableencabezado(false);
     
     }
     public void nuevoorden(){
@@ -127,7 +128,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
         orden = new OrdenSalidaEntrada();
         jtfautorizado.setText("");
         jtfrecibido.setText("");
-         enableencabezado(true);
+//         enableencabezado(true);
          ////////// NUEVO MODELO //////////////////////////
         for (int i = 0; i < jtabla.getRowCount(); i++) {
         modelo.removeRow(i);
@@ -149,35 +150,36 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
     }
     public void setagregar(Producto prod ,Double cant){
         System.out.println("idordem"+orden.getIdordensalidaentrada());
-        if(orden.getIdordensalidaentrada() ==0){
-          /// INSERT ORDEN
-            
-            sucursarep=(listsucur.get(jcbsucursal.getSelectedIndex()));
-            orden.setIdsucurrecep(sucursarep.getId());
-            orden.setFecha_entrega(new java.sql.Timestamp(jdfechaentrega.getDate().getTime()));
-            orden.setFecha_pedido(new java.sql.Timestamp(jdfechapedido.getDate().getTime()));
-            orden.setSucurenvia(jlblsucursal.getText());
-            orden.setSucursolicita(jcbsucursal.getSelectedItem().toString());
-            orden.setAutorizado(jtfautorizado.getText());
-            orden.setRecibido(jtfrecibido.getText());
-            orden.setTipoop("SALIDA");
-            orden.setIdordensalidaentrada(daoorden.insertar(orden));
+//        if(orden.getIdordensalidaentrada() ==0){
+//          /// INSERT ORDEN
+//            
+//            sucursarep=(listsucur.get(jcbsucursal.getSelectedIndex()));
+//            orden.setIdsucurrecep(sucursarep.getId());
+//            orden.setFecha_entrega(new java.sql.Timestamp(jdfechaentrega.getDate().getTime()));
+//            orden.setFecha_pedido(new java.sql.Timestamp(jdfechapedido.getDate().getTime()));
+//            orden.setSucurenvia(jlblsucursal.getText());
+//            orden.setSucursolicita(jcbsucursal.getSelectedItem().toString());
+//            orden.setAutorizado(jtfautorizado.getText());
+//            orden.setRecibido(jtfrecibido.getText());
+//            orden.setTipoop("SALIDA");
+//            orden.setIdordensalidaentrada(daoorden.insertar(orden));
+//           ////// INSERT DETALLE
+//            System.out.print("cant1"+cant);
+//            detorden.setCantidad(cant);
+//            detorden.setIdproducto(prod.getIdproducto());
+//            detorden.setIdordensalidaentrada(orden.getIdordensalidaentrada());
+//            
+//            detorden.setId(daodetorden.insertar(detorden));
+//            
+//        }else {
            ////// INSERT DETALLE
-            System.out.print("cant1"+cant);
-            detorden.setCantidad(cant);
-            detorden.setIdproducto(prod.getIdproducto());
-            detorden.setIdordensalidaentrada(orden.getIdordensalidaentrada());
-            
-            detorden.setId(daodetorden.insertar(detorden));
-            
-        }else {
-           ////// INSERT DETALLE
+            DetalleOrdeSalidaEntrada detorden = new DetalleOrdeSalidaEntrada();
               System.out.print("cant2"+cant);
             detorden.setCantidad(cant);
             detorden.setIdproducto(prod.getIdproducto());
-            detorden.setIdordensalidaentrada(orden.getIdordensalidaentrada());
-            detorden.setId(daodetorden.insertar(detorden));
-        }
+//            detorden.setIdordensalidaentrada(orden.getIdordensalidaentrada());
+//            detorden.setId(daodetorden.insertar(detorden));
+//        }
         
         
              Object[] miarray = new Object[3];
@@ -196,11 +198,64 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
                    validaaceptar();
     }
     public void validaaceptar(){
-        if(listdet.size() > 0 && orden.getIdordensalidaentrada()!=0)
+        
+        String autoriza = jtfautorizado.getText().replaceAll("\\s", "");
+        String recibido = jtfrecibido.getText().replaceAll("\\s", "");
+        
+        if(listdet.size() > 0 && jcbsucursal.getSelectedIndex()!=0 && autoriza.length()>0 && recibido.length()>0 )
             jbtnaceptar.setEnabled(true);
         else 
             jbtnaceptar.setEnabled(false);
     
+    }
+    public void setlistaproductos(List<Producto> listprod){
+        double cant=0.0;
+        int i=1;   
+        for(Producto prod: listprod){   
+//         if(orden.getIdordensalidaentrada() ==0){
+          /// INSERT ORDEN
+            
+            
+           ////// INSERT DETALLE
+            System.out.print("cant1"+cant);
+            DetalleOrdeSalidaEntrada detorden = new DetalleOrdeSalidaEntrada();
+            detorden.setCantidad(cant);
+            detorden.setIdproducto(prod.getIdproducto());
+            System.out.println("idprod"+ detorden.getIdproducto());
+//            detorden.setIdordensalidaentrada(orden.getIdordensalidaentrada());
+            
+//            detorden.setId(daodetorden.insertar(detorden));
+//            
+////        }else {
+//           ////// INSERT DETALLE
+//              System.out.print("cant2"+cant);
+//            detorden.setCantidad(cant);
+//            detorden.setIdproducto(prod.getIdproducto());
+////            detorden.setIdordensalidaentrada(orden.getIdordensalidaentrada());
+//            detorden.setId(daodetorden.insertar(detorden));
+//        }
+        
+        
+             Object[] miarray = new Object[3];
+                  
+//                    miarray[0]=prod.getIdproducto();
+                    miarray[0]=prod.getCodigo();
+                    miarray[1]=prod.getDescripcion();
+                    miarray[2]=cant;
+               
+                    modelo.addRow(miarray);
+            
+                   nuevoprod();
+                   listdet.add(detorden);
+                   validaaceptar();
+                   
+                
+//         jlblmensaje.setText("Productos en tabla: "+i);
+//         i++;
+        }
+    }
+    public void enableboton(boolean bot){
+    jbtnsalir.setEnabled(bot);
     }
 
     /**
@@ -219,7 +274,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
         jcbsucursal = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
-        jtfsalir = new javax.swing.JButton();
+        jbtnsalir = new javax.swing.JButton();
         jbtnaceptar = new javax.swing.JButton();
         jdfechaentrega = new org.jdesktop.swingx.JXDatePicker();
         jdfechapedido = new org.jdesktop.swingx.JXDatePicker();
@@ -230,8 +285,12 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jbtnbusquedaavanzada = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtamensaje = new javax.swing.JTextArea();
 
-        setTitle("ORDEN DE SALIDA");
+        setResizable(true);
 
         jPanel1.setBackground(new java.awt.Color(238, 238, 238));
 
@@ -272,12 +331,12 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtabla);
 
-        jtfsalir.setBackground(new java.awt.Color(255, 255, 255));
-        jtfsalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel.png"))); // NOI18N
-        jtfsalir.setText("Cancelar / Salir");
-        jtfsalir.addActionListener(new java.awt.event.ActionListener() {
+        jbtnsalir.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnsalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel.png"))); // NOI18N
+        jbtnsalir.setText("Cancelar / Salir");
+        jbtnsalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfsalirActionPerformed(evt);
+                jbtnsalirActionPerformed(evt);
             }
         });
 
@@ -346,18 +405,65 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
             }
         });
 
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("ORDEN DE SALIDA");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel11)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel11)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jtamensaje.setEditable(false);
+        jtamensaje.setColumns(20);
+        jtamensaje.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
+        jtamensaje.setRows(5);
+        jtamensaje.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane2.setViewportView(jtamensaje);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jbtnbusquedaavanzada, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jbtnaceptar)
+                                .addGap(18, 18, 18)
+                                .addComponent(jbtnsalir))
+                            .addComponent(jbtnbusquedaavanzada, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(18, 18, 18)
+                                .addComponent(jtfrecibido, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jdfechapedido, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jdfechaentrega, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
@@ -367,70 +473,55 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jcbsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jdfechapedido, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jdfechaentrega, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(203, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jbtnaceptar)
-                                .addGap(18, 18, 18)
-                                .addComponent(jtfsalir))
-                            .addComponent(jScrollPane1))
-                        .addGap(17, 17, 17))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtfautorizado, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
-                        .addComponent(jtfrecibido, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtfautorizado, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 431, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jdfechapedido, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jdfechaentrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlblsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(7, 7, 7)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jcbsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jdfechapedido, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jdfechaentrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlblsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(7, 7, 7)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jcbsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfautorizado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfrecibido, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jbtnbusquedaavanzada))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfautorizado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfrecibido, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jbtnbusquedaavanzada)
-                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtnaceptar)
-                    .addComponent(jtfsalir))
-                .addGap(8, 8, 8))
+                    .addComponent(jbtnsalir))
+                .addGap(3, 3, 3))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -460,6 +551,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
     private void jtfautorizadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfautorizadoKeyReleased
         // TODO add your handling code here:
 //        validaagregar();
+        validaaceptar();
     }//GEN-LAST:event_jtfautorizadoKeyReleased
 
     private void jtfrecibidoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfrecibidoMousePressed
@@ -469,6 +561,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
     private void jtfrecibidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrecibidoKeyReleased
         // TODO add your handling code here:}
 //        validaagregar();
+        validaaceptar();
     }//GEN-LAST:event_jtfrecibidoKeyReleased
 
     private void jtfautorizadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfautorizadoKeyTyped
@@ -485,7 +578,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
 
     private void jcbsucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbsucursalActionPerformed
         // TODO add your handling code here:
-//         validaagregar();
+        validaaceptar();
     }//GEN-LAST:event_jcbsucursalActionPerformed
 
     private void jtablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMouseReleased
@@ -514,7 +607,7 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jtablaMouseReleased
 
-    private void jtfsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfsalirActionPerformed
+    private void jbtnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnsalirActionPerformed
         // TODO add your handling code here:
         if(JOptionPane.showConfirmDialog(null, "SEGURO DE CERRAR LA VENTANA ORDEN DE SALIDA, SE PERDERAN LOS DATOS INGRESADOS","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
            
@@ -522,69 +615,103 @@ public class JIFOrdenSalida extends javax.swing.JInternalFrame {
              
 //              DetalleOrdeSalidaEntrada detor= new DetalleOrdeSalidaEntrada();
 //              int cont=0;
+            jbtnbusquedaavanzada.setEnabled(false);
+            jbtnsalir.setEnabled(false);
+            jbtnaceptar.setEnabled(false);
+            jtabla.setEnabled(false);
              System.out.println("modelorow"+modelo.getRowCount()); 
-                for(DetalleOrdeSalidaEntrada det: listdet){
-                    
-                    daodetorden.eliminar(det);
-//                    //modelo.removeRow(i);
-//                    cont++;
-//            }           
-            }
-                if(orden.getIdordensalidaentrada()!=0){
-                    daoorden.eliminar(orden.getIdordensalidaentrada());
+              System.out.println("listdet"+listdet.size()); 
                 
-                }
-              
-            
-            this.dispose();
+             daoproducto.devolverstockrequerido(listdet,jtamensaje,this);
+                   
+           
+//                if(orden.getIdordensalidaentrada()!=0){
+//                    daoorden.eliminar(orden.getIdordensalidaentrada());
+//                
+//                }
+             
+      
         
         }
-    }//GEN-LAST:event_jtfsalirActionPerformed
+    }//GEN-LAST:event_jbtnsalirActionPerformed
 
     private void jbtnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnaceptarActionPerformed
         // TODO add your handling code here:
+        String autoriza = jtfautorizado.getText().replaceAll("\\s", "");
+        String recibido = jtfrecibido.getText().replaceAll("\\s", "");
+        if(jcbsucursal.getSelectedIndex()!=0 && autoriza.length()>0 && recibido.length()>0){
+            
+            sucursarep=(listsucur.get(jcbsucursal.getSelectedIndex()));
+            orden.setIdsucurrecep(sucursarep.getId());
+            orden.setFecha_entrega(new java.sql.Timestamp(jdfechaentrega.getDate().getTime()));
+            orden.setFecha_pedido(new java.sql.Timestamp(jdfechapedido.getDate().getTime()));
+            orden.setSucurenvia(jlblsucursal.getText());
+            orden.setSucursolicita(jcbsucursal.getSelectedItem().toString());
+            orden.setAutorizado(jtfautorizado.getText());
+            orden.setRecibido(jtfrecibido.getText());
+            orden.setTipoop("SALIDA");
+            orden.setIdordensalidaentrada(daoorden.insertar(orden));
+            
+
+            
+            
+            daodetorden.insertar(listdet,orden.getIdordensalidaentrada(),jtamensaje,jbtnsalir);
         
-        daoorden.imprimir(orden.getIdordensalidaentrada());
+        
+        
+        
         nuevoorden(); 
         jbtnaceptar.setEnabled(false);
+            
+            
+        }else {
+        JOptionPane.showMessageDialog(null, "Ingrese datos obligatorios");
+        jcbsucursal.requestFocus();
+        }
+            
         
     }//GEN-LAST:event_jbtnaceptarActionPerformed
 
     private void jbtnbusquedaavanzadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbusquedaavanzadaActionPerformed
         // TODO add your handling code here:
         
-        String autoriza = jtfautorizado.getText().replaceAll("\\s", "");
-        String recibido = jtfrecibido.getText().replaceAll("\\s", "");
-        if(jcbsucursal.getSelectedIndex()!=0 && autoriza.length()>0 && recibido.length()>0){
+//        String autoriza = jtfautorizado.getText().replaceAll("\\s", "");
+//        String recibido = jtfrecibido.getText().replaceAll("\\s", "");
+//        if(jcbsucursal.getSelectedIndex()!=0 && autoriza.length()>0 && recibido.length()>0){
         JDBuscarProductoVenta bprod = new JDBuscarProductoVenta(new Frame(), isVisible(),this);
         bprod.setVisible(true);
         
-        }else {
-        JOptionPane.showMessageDialog(null, "Ingrese datos obligatorios");
-        jcbsucursal.requestFocus();
-        }
+//        }else {
+//        JOptionPane.showMessageDialog(null, "Ingrese datos obligatorios");
+//        jcbsucursal.requestFocus();
+//        }
         
     }//GEN-LAST:event_jbtnbusquedaavanzadaActionPerformed
 
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbtnaceptar;
     private javax.swing.JButton jbtnbusquedaavanzada;
+    private javax.swing.JButton jbtnsalir;
     private javax.swing.JComboBox jcbsucursal;
     private org.jdesktop.swingx.JXDatePicker jdfechaentrega;
     private org.jdesktop.swingx.JXDatePicker jdfechapedido;
     private javax.swing.JLabel jlblsucursal;
     private javax.swing.JTable jtabla;
+    private javax.swing.JTextArea jtamensaje;
     private javax.swing.JTextField jtfautorizado;
     private javax.swing.JTextField jtfrecibido;
-    private javax.swing.JButton jtfsalir;
     // End of variables declaration//GEN-END:variables
 }

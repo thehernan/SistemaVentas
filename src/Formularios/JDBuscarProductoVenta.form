@@ -51,15 +51,17 @@
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jtfproducto" min="-2" pref="258" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="jcbfamilia" min="-2" pref="225" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jcbfamilia" min="-2" pref="213" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+                          <Component id="jbtntodo" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jbtnaceptar" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
               </Group>
-              <Component id="jPanel7" alignment="1" max="32767" attributes="0"/>
+              <Component id="jPanel7" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -67,15 +69,18 @@
               <Group type="102" alignment="1" attributes="0">
                   <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jtfproducto" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jbtnaceptar" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jcbfamilia" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jtfproducto" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jbtnaceptar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jcbfamilia" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="jbtntodo" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="403" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" min="-2" pref="394" max="-2" attributes="0"/>
+                  <EmptySpace pref="28" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -229,6 +234,17 @@
             </Component>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JButton" name="jbtntodo">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/imagenes/selectall.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Agregar todos los productos en tabla"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtntodoActionPerformed"/>
+          </Events>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

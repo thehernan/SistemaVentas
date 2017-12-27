@@ -125,6 +125,8 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
         String titulos[]={"CODIGO","DESCRIPCION","CANTIDAD"};
         modelo.setColumnIdentifiers(titulos);
         jtabla.setModel(modelo);
+        listadet = new ArrayList<>();
+        jbtnaceptar.setEnabled(false);
         ////////////////////////////////////////////   
     }
 
@@ -153,12 +155,13 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
         jLabel9 = new javax.swing.JLabel();
         jtfrecibido = new javax.swing.JTextField();
         jbtnaceptar = new javax.swing.JButton();
-        jtfsalir = new javax.swing.JButton();
+        jbtnsalir = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jtfnumeroorden = new javax.swing.JFormattedTextField();
         jlblsurcursalenvia = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtamensaje = new javax.swing.JTextArea();
 
-        setMaximizable(true);
         setResizable(true);
         setTitle("ORDEN DE ENTRADA");
 
@@ -249,12 +252,12 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
             }
         });
 
-        jtfsalir.setBackground(new java.awt.Color(255, 255, 255));
-        jtfsalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel.png"))); // NOI18N
-        jtfsalir.setText("Salir");
-        jtfsalir.addActionListener(new java.awt.event.ActionListener() {
+        jbtnsalir.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnsalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel.png"))); // NOI18N
+        jbtnsalir.setText("Salir");
+        jbtnsalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfsalirActionPerformed(evt);
+                jbtnsalirActionPerformed(evt);
             }
         });
 
@@ -280,14 +283,16 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
         jlblsurcursalenvia.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jlblsurcursalenvia.setText(". . .");
 
+        jtamensaje.setEditable(false);
+        jtamensaje.setColumns(20);
+        jtamensaje.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
+        jtamensaje.setRows(5);
+        jScrollPane2.setViewportView(jtamensaje);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
-                .addGap(16, 16, 16))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,59 +310,69 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jbtnaceptar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jtfsalir)
+                        .addComponent(jbtnsalir)
                         .addGap(39, 39, 39))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(jLabel10)
-                        .addGap(50, 50, 50)
-                        .addComponent(jtfnumeroorden, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel7)
-                        .addGap(15, 15, 15)
-                        .addComponent(jdfechapedido, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(60, 60, 60)
-                        .addComponent(jLabel6)
-                        .addGap(11, 11, 11)
-                        .addComponent(jdfechaentrega, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jLabel1)
-                        .addGap(12, 12, 12)
-                        .addComponent(jlblsurcursalenvia, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jlblsucursalrecep, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel10)
+                                .addGap(50, 50, 50)
+                                .addComponent(jtfnumeroorden, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(jLabel7)
+                                .addGap(15, 15, 15)
+                                .addComponent(jdfechapedido, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(60, 60, 60)
+                                .addComponent(jLabel6)
+                                .addGap(11, 11, 11)
+                                .addComponent(jdfechaentrega, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addComponent(jLabel1)
+                                .addGap(12, 12, 12)
+                                .addComponent(jlblsurcursalenvia, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(jlblsucursalrecep, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfnumeroorden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jdfechapedido, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jdfechaentrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblsurcursalenvia, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblsucursalrecep, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfnumeroorden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jdfechapedido, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jdfechaentrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblsurcursalenvia, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblsucursalrecep, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
                 .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -367,7 +382,7 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jbtnaceptar)
-                            .addComponent(jtfsalir))
+                            .addComponent(jbtnsalir))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jtfautorizado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(20, 20, 20)
@@ -462,17 +477,17 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
         idordensalida= orden.getIdordensalidaentrada();
         orden.setIdordensalidaentrada(daoorden.insertar(orden,idordensalida));
         System.out.println("idc"+orden.getIdordensalidaentrada());
-        daodetorden.insertar(listadet,orden.getIdordensalidaentrada(),sucursalsingleton.getId());
-        daoorden.imprimir(orden.getIdordensalidaentrada());
+        daodetorden.insertar(listadet,orden.getIdordensalidaentrada(),sucursalsingleton.getId(),jtamensaje,jbtnsalir);
+//        daoorden.imprimir(orden.getIdordensalidaentrada());
         nuevoorden();      
     }//GEN-LAST:event_jbtnaceptarActionPerformed
 
-    private void jtfsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfsalirActionPerformed
+    private void jbtnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnsalirActionPerformed
         // TODO add your handling code here:
         if(JOptionPane.showConfirmDialog(null, "SEGURO DE CERRAR LA VENTANA ORDEN DE ENTRADA, SE PERDERAN LOS DATOS INGRESADOS","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
             this.dispose();
         }
-    }//GEN-LAST:event_jtfsalirActionPerformed
+    }//GEN-LAST:event_jbtnsalirActionPerformed
 
     private void jtfnumeroordenMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfnumeroordenMousePressed
         // TODO add your handling code here:
@@ -507,15 +522,17 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbtnaceptar;
+    private javax.swing.JButton jbtnsalir;
     private org.jdesktop.swingx.JXDatePicker jdfechaentrega;
     private org.jdesktop.swingx.JXDatePicker jdfechapedido;
     private javax.swing.JLabel jlblsucursalrecep;
     private javax.swing.JLabel jlblsurcursalenvia;
     private javax.swing.JTable jtabla;
+    private javax.swing.JTextArea jtamensaje;
     private javax.swing.JTextField jtfautorizado;
     private javax.swing.JFormattedTextField jtfnumeroorden;
     private javax.swing.JTextField jtfrecibido;
-    private javax.swing.JButton jtfsalir;
     // End of variables declaration//GEN-END:variables
 }

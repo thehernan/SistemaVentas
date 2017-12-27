@@ -51,6 +51,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         jtfproducto.requestFocus();
         from = "venta";
         listfamilia = daofamilia.llenarcombo(jcbfamilia);
+        jbtntodo.setEnabled(false);
     }
     public JDBuscarProductoVenta(java.awt.Frame parent, boolean modal,JIFOrdenSalida jifsalida) {
         super(parent, modal);
@@ -87,6 +88,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         jcbfamilia = new javax.swing.JComboBox();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
+        jbtntodo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -175,6 +177,14 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jbtntodo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/selectall.png"))); // NOI18N
+        jbtntodo.setToolTipText("Agregar todos los productos en tabla");
+        jbtntodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtntodoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -187,26 +197,30 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jtfproducto, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jcbfamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jcbfamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(54, 54, 54)
+                        .addComponent(jbtntodo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jbtnaceptar)))
                 .addGap(14, 14, 14))
-            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jtfproducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnaceptar)
-                    .addComponent(jcbfamilia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jtfproducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbtnaceptar)
+                        .addComponent(jcbfamilia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jbtntodo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -316,6 +330,11 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         
     }//GEN-LAST:event_jcbfamiliaActionPerformed
 
+    private void jbtntodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtntodoActionPerformed
+        // TODO add your handling code here:
+        jifsalida.setlistaproductos(listprod);
+    }//GEN-LAST:event_jbtntodoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -365,6 +384,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnaceptar;
+    private javax.swing.JButton jbtntodo;
     private javax.swing.JComboBox jcbfamilia;
     private javax.swing.JTable jtabla;
     private javax.swing.JTextField jtfproducto;

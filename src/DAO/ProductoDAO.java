@@ -7,6 +7,9 @@ package DAO;
 
 import ClasesGlobales.ColorRowTabla;
 import Conexion.Conexion;
+import Formularios.JIFOrdenSalida;
+import Pojos.DetalleCaja;
+import Pojos.DetalleOrdeSalidaEntrada;
 import Pojos.Producto;
 import java.awt.HeadlessException;
 import java.awt.Image;
@@ -29,6 +32,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
@@ -747,6 +751,76 @@ public boolean validastockrequerido(Double cant, Long idprod){
     
 
 
+}
+public void devolverstockrequerido(List<DetalleOrdeSalidaEntrada> listdet,JTextArea mens,JIFOrdenSalida jifsalida){
+     Conexion conexion = new Conexion();
+    ResultSet rs=null;
+    PreparedStatement ps=null;  
+     
+     
+      Runnable miRunnable = new Runnable()
+      {
+         @Override
+         public void run()
+         {
+            
+            PreparedStatement ps = null;
+            try
+            {
+//               System.out.println("Me han pulsado");
+//               Thread.sleep(10000); //Tarea que consume diez segundos.
+//               System.out.println("Terminé");
+               
+               int i=1;
+               mens.append("Iniciando proceso ...");
+               mens.append(System.getProperty("line.separator"));
+               
+                if(listdet.size()>0){
+                
+                for(DetalleOrdeSalidaEntrada det: listdet){
+                    mens.append("Retornado del producto "+i);
+                    mens.append(System.getProperty("line.separator"));
+                    String sql=("SELECT * from sp_devolverstockrequerido(?,?)"); 
+                    ps=conexion.getConnection().prepareStatement(sql);
+                    ps.setBigDecimal(1,new BigDecimal(det.getCantidad()));
+                    ps.setLong(2, det.getIdproducto());
+
+                    ps.executeQuery();
+                    mens.setCaretPosition(mens.getDocument().getLength());
+                    i++;
+                    }
+             
+                
+                    ps.close();
+                }
+                
+                   
+                   
+                   
+                    mens.append("Extornado con exito ");
+                    mens.append(System.getProperty("line.separator"));
+                     mens.append("Saliendo.... ");
+                    mens.append(System.getProperty("line.separator"));
+                    Thread.sleep(500);
+                    jifsalida.dispose();
+                    mens.setCaretPosition(mens.getDocument().getLength());
+               
+               
+               
+            }
+            catch (SQLException e)
+            {
+            } catch (InterruptedException ex) {
+                 Logger.getLogger(DetalleOrdenSalidaDAO.class.getName()).log(Level.SEVERE, null, ex);
+             }finally{
+            conexion.devolverConexionPool();
+     }
+         }
+      };
+      Thread hilo = new Thread (miRunnable);
+      hilo.start();
+    
+  
 }
     
     

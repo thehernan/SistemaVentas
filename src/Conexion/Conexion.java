@@ -25,7 +25,7 @@ public class Conexion {
 			basicDataSource.setUrl("jdbc:postgresql://192.168.20.1:5432/BDVentas");
 			basicDataSource.setMaxActive(50);
 			basicDataSource.setMaxIdle(20);
-                        basicDataSource.setMaxOpenPreparedStatements(1000);
+                        basicDataSource.setMaxOpenPreparedStatements(1000000);
 			basicDataSource.setRemoveAbandoned(true);
 			basicDataSource.setRemoveAbandonedTimeout(300);
 			basicDataSource.setMaxWait(1000);

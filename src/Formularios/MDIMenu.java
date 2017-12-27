@@ -1368,7 +1368,7 @@ final class MDIMenu extends javax.swing.JFrame {
         );
         jpanelcontenedorLayout.setVerticalGroup(
             jpanelcontenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 673, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jlblmensajeinfo.setFont(new java.awt.Font("Segoe UI Light", 1, 13)); // NOI18N
@@ -1529,14 +1529,12 @@ final class MDIMenu extends javax.swing.JFrame {
         jDesktopLayout.setVerticalGroup(
             jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jpanelcontenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE))
-            .addGroup(jDesktopLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                 .addComponent(jlblmensajeinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
+            .addComponent(jpanelcontenedor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
         );
         jDesktop.setLayer(jpanelcontenedor, javax.swing.JLayeredPane.MODAL_LAYER);
         jDesktop.setLayer(jlblmensajeinfo, javax.swing.JLayeredPane.DEFAULT_LAYER);
