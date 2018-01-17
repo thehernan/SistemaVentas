@@ -43,6 +43,7 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         jbtnrefresh = new javax.swing.JButton();
         jlblmsj = new javax.swing.JLabel();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
         setTitle("VENTAS EN PROCESO");
 
@@ -101,7 +102,7 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
                         .addComponent(jbtnrefresh)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbtnextornar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 790, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 798, Short.MAX_VALUE))
                 .addGap(15, 15, 15))
         );
         jPanel1Layout.setVerticalGroup(
@@ -113,7 +114,7 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
                     .addComponent(jbtnrefresh)
                     .addComponent(jlblmsj, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
                 .addGap(15, 15, 15))
         );
 

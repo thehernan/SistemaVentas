@@ -139,6 +139,7 @@ public class JIFMerma extends javax.swing.JInternalFrame {
         jbtnaceptar = new javax.swing.JButton();
         jbtnsalir = new javax.swing.JButton();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setTitle("INGRESO DE MERMAS");
         setToolTipText("");
 

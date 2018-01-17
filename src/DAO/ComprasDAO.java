@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,7 +56,7 @@ public class ComprasDAO {
             ResultSet rs=ps.executeQuery();
        if  (rs.next()){
            id= rs.getLong("vidcompra");
-           JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
+//           JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
         }
 	
         } catch(SQLException | HeadlessException e)
@@ -176,29 +175,29 @@ public void pendientes(JTable tabla,long idsucur){
         ResultSet rs = ps.executeQuery();
         Object datosR[] = new Object[9];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
+                     
                          
-                     datosR[i] = rs.getObject("vdocumento");
-                     i++;
-                     datosR[i] = rs.getObject("vnumero");
-                     i++;
-                     datosR[i] = rs.getObject("vproveedor");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vfecha");
-                     i++;
-                     datosR[i] = rs.getObject("vcodigo");
-                     i++;
-                     datosR[i] = rs.getObject("vdescripcion");
-                     i++;
-                      datosR[i] = rs.getObject("vcantidad");
-                     i++;
-                      datosR[i] = rs.getObject("vcantidadacor");
-                     i++;
+                     datosR[0] = rs.getObject("vdocumento");
+                    
+                     datosR[1] = rs.getObject("vnumero");
+                    
+                     datosR[2] = rs.getObject("vproveedor");
+                    
+                     datosR[3] = rs.getObject("vrut");
+                    
+                     datosR[4] = rs.getObject("vfecha");
+                    
+                     datosR[5] = rs.getObject("vcodigo");
+                    
+                     datosR[6] = rs.getObject("vdescripcion");
+                    
+                      datosR[7] = rs.getObject("vcantidad");
+                     
+                      datosR[8] = rs.getObject("vcantidadacor");
+                     
                     
                     modelo.addRow(datosR);
-		}
+		
         }
 	ps.close();
         rs.close();
@@ -232,29 +231,29 @@ public void pendientesporproveedor(JTable tabla,long idsucur,long idprove){
         ResultSet rs = ps.executeQuery();
         Object datosR[] = new Object[9];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
+                     
                          
-                     datosR[i] = rs.getObject("vdocumento");
-                     i++;
-                     datosR[i] = rs.getObject("vnumero");
-                     i++;
-                     datosR[i] = rs.getObject("vproveedor");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vfecha");
-                     i++;
-                     datosR[i] = rs.getObject("vcodigo");
-                     i++;
-                     datosR[i] = rs.getObject("vdescripcion");
-                     i++;
-                      datosR[i] = rs.getObject("vcantidad");
-                     i++;
-                      datosR[i] = rs.getObject("vcantidadacor");
-                     i++;
+                     datosR[0] = rs.getObject("vdocumento");
+                     
+                     datosR[1] = rs.getObject("vnumero");
+                    
+                     datosR[2] = rs.getObject("vproveedor");
+                    
+                     datosR[3] = rs.getObject("vrut");
+                    
+                     datosR[4] = rs.getObject("vfecha");
+                    
+                     datosR[5] = rs.getObject("vcodigo");
+                   
+                     datosR[6] = rs.getObject("vdescripcion");
+                    
+                      datosR[7] = rs.getObject("vcantidad");
+                     
+                      datosR[8] = rs.getObject("vcantidadacor");
+                   
                     
                     modelo.addRow(datosR);
-		}
+		
         }
 	ps.close();
         rs.close();
@@ -296,26 +295,26 @@ public void pendientesporproveedor(JTable tabla,long idsucur,long idprove){
         ResultSet rs = ps.executeQuery();
         Object datosR[] = new Object[7];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
+                   
                          
-                     datosR[i] = rs.getObject("id");
-                     i++;
-                     datosR[i] = rs.getObject("vdocumento");
-                     i++;
-                     datosR[i] = rs.getObject("vnumero");
-                     i++;
-                     datosR[i] = rs.getObject("vproveedor");
-                     i++;
-                     datosR[i] = rs.getObject("vfecha");
-                     i++;
-                     datosR[i] = rs.getObject("vtipopago");
-                     i++;
-                     datosR[i] = rs.getObject("vabono");
-                     i++;
+                     datosR[0] = rs.getObject("id");
+                    
+                     datosR[1] = rs.getObject("vdocumento");
+                     
+                     datosR[2] = rs.getObject("vnumero");
+                    
+                     datosR[3] = rs.getObject("vproveedor");
+                    
+                     datosR[4] = rs.getObject("vfecha");
+                    
+                     datosR[5] = rs.getObject("vtipopago");
+                    
+                     datosR[6] = rs.getObject("vabono");
+                     
                     
                     modelo.addRow(datosR);
 		}
-        }
+        
 	ps.close();
         rs.close();
         } catch(Exception e)

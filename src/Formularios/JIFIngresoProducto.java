@@ -121,13 +121,13 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         
     }
     public void calculatotal(){
-        Double total=0.0,subtotal,iva;
+        Double total=0.0,subtotal=0.0,iva;
         
         for (DetalleCompras det : listadet){
-         total = total + det.getImporte();
+         subtotal = subtotal + det.getImporte();
         } 
-        subtotal= total/1.19;
-        iva = total-subtotal;
+        iva= subtotal-(subtotal/1.19);
+        total = subtotal+iva;
               
         jlbltotal.setValue(total);
         jlblsubtotal.setValue(subtotal);
@@ -368,6 +368,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setTitle("INGRESO PRODUCTOS");
         setPreferredSize(new java.awt.Dimension(1154, 560));
 
@@ -672,6 +673,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 1090, 230));
 
         jlblmensaje.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jlblmensaje.setForeground(new java.awt.Color(255, 51, 51));
         jPanel1.add(jlblmensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 500, 370, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -683,7 +685,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -783,7 +785,7 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
 
     private void jbtnguadarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnguadarActionPerformed
                // TODO add your handling code here:
-   if (JOptionPane.showConfirmDialog(null, "DOCUMENTO COMFORME","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){  
+   if (JOptionPane.showConfirmDialog(null, "DOCUMENTO CONFORME","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){  
       
        Double total=0.0;
        String estado;
@@ -815,9 +817,9 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
          if(compras.getId_compra() == 0){
             long idcompra=daocompras.insertar(compras);
             System.out.println("idc"+idcompra);
-            daodetcompra.insertar(listadet,idcompra);    
+            daodetcompra.insertar(listadet,idcompra,jlblmensaje);    
        }else {
-           daodetcompra.insertar(listadet,compras.getId_compra());          
+           daodetcompra.insertar(listadet,compras.getId_compra(),jlblmensaje);          
            daocompras.editar(compras);
        
        } 
@@ -924,12 +926,12 @@ public class JIFIngresoProducto extends javax.swing.JInternalFrame {
 
     private void jbtnguadarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbtnguadarMousePressed
         // TODO add your handling code here:
-        jlblmensaje.setText("Generando Documento ...");
+      
     }//GEN-LAST:event_jbtnguadarMousePressed
 
     private void jbtnguadarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbtnguadarMouseExited
         // TODO add your handling code here:
-          jlblmensaje.setText("");
+       
     }//GEN-LAST:event_jbtnguadarMouseExited
 
 

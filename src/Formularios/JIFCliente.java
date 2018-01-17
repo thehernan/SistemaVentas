@@ -100,6 +100,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -342,8 +343,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
                                 .addGap(10, 10, 10)
                                 .addComponent(jbtnguardar)
                                 .addGap(15, 15, 15)
-                                .addComponent(jbtneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(96, 96, 96))
+                                .addComponent(jbtneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 642, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)

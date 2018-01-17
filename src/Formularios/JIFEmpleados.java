@@ -118,6 +118,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));

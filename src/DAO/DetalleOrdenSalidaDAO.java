@@ -5,11 +5,8 @@
  */
 package DAO;
 
-import ClasesGlobales.PrintOutput;
 import Conexion.Conexion;
 import Pojos.DetalleOrdeSalidaEntrada;
-import java.awt.HeadlessException;
-import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,9 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 
 /**
@@ -72,7 +67,7 @@ public class DetalleOrdenSalidaDAO{
                     String sql=("SELECT * from sp_insertardetalleordensalida(?,?,?)"); 
                     ps=conexion.getConnection().prepareStatement(sql);
 //                    System.out.println("idprodinsert"+det.getIdproducto());
-                    mens.append("Insertando producto "+i);
+                    mens.append("Insertando Item "+i);
                     mens.append(System.getProperty("line.separator"));
                     ps.setLong(1, det.getIdproducto());
 //                    System.out.println("cantinsert"+det.getCantidad());
