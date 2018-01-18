@@ -1011,9 +1011,9 @@ final class MDIMenu extends javax.swing.JFrame {
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                   JIFOrdenSalida ordensalida = new JIFOrdenSalida();
-                Dimension desktopSize = jDesktop.getSize();
-                Dimension FrameSize = ordensalida.getSize();
-                ordensalida.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+//                Dimension desktopSize = jDesktop.getSize();
+//                Dimension FrameSize = ordensalida.getSize();
+//                ordensalida.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(ordensalida);
                 ordensalida.show();
                  panelconmin();
@@ -1044,9 +1044,9 @@ final class MDIMenu extends javax.swing.JFrame {
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                  JIFOrdenEntrada ordenentrada = new JIFOrdenEntrada();
-                Dimension desktopSize = jDesktop.getSize();
-                Dimension FrameSize = ordenentrada.getSize();
-                ordenentrada.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+//                Dimension desktopSize = jDesktop.getSize();
+//                Dimension FrameSize = ordenentrada.getSize();
+//                ordenentrada.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(ordenentrada);
                 ordenentrada.show();
                  panelconmin();
@@ -1077,9 +1077,9 @@ final class MDIMenu extends javax.swing.JFrame {
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 JIFConsultarMovimientosSucursal movsucursal = new JIFConsultarMovimientosSucursal();
-              Dimension desktopSize = jDesktop.getSize();
-              Dimension FrameSize = movsucursal.getSize();
-              movsucursal.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+//              Dimension desktopSize = jDesktop.getSize();
+//              Dimension FrameSize = movsucursal.getSize();
+//              movsucursal.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
               jDesktop.add(movsucursal);
               movsucursal.show();
                panelconmin();
@@ -1249,6 +1249,8 @@ final class MDIMenu extends javax.swing.JFrame {
         jbtnimprimir = new javax.swing.JButton();
         jlblmensajeprint = new javax.swing.JLabel();
         jlblminimizar = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jlblfondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -1347,7 +1349,7 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblhora.setForeground(new java.awt.Color(255, 255, 255));
         jlblhora.setText("* * *");
 
-        jDesktop.setBackground(new java.awt.Color(204, 255, 255));
+        jDesktop.setBackground(new java.awt.Color(37, 52, 62));
         jDesktop.setForeground(new java.awt.Color(204, 255, 255));
         jDesktop.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -1355,8 +1357,8 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        jpanelcontenedor.setBackground(new java.awt.Color(52, 152, 219));
-        jpanelcontenedor.setForeground(new java.awt.Color(52, 152, 219));
+        jpanelcontenedor.setBackground(new java.awt.Color(78, 109, 130));
+        jpanelcontenedor.setForeground(new java.awt.Color(78, 109, 130));
         jpanelcontenedor.setInheritsPopupMenu(true);
         jpanelcontenedor.setPreferredSize(new java.awt.Dimension(0, 0));
 
@@ -1374,94 +1376,111 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblmensajeinfo.setFont(new java.awt.Font("Segoe UI Light", 1, 13)); // NOI18N
         jlblmensajeinfo.setForeground(new java.awt.Color(0, 102, 255));
 
-        jPanel1.setBackground(new java.awt.Color(204, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(37, 52, 62));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jlbluser.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlbluser.setForeground(new java.awt.Color(0, 0, 0));
+        jlbluser.setBackground(new java.awt.Color(255, 255, 255));
+        jlbluser.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlbluser.setForeground(new java.awt.Color(255, 255, 255));
         jlbluser.setText("---");
-        jPanel1.add(jlbluser, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, -1, -1));
+        jPanel1.add(jlbluser, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 40, 170, -1));
 
-        jlblrut.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblrut.setForeground(new java.awt.Color(0, 0, 0));
+        jlblrut.setBackground(new java.awt.Color(255, 255, 255));
+        jlblrut.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblrut.setForeground(new java.awt.Color(255, 255, 255));
         jlblrut.setText("---");
-        jPanel1.add(jlblrut, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, -1, -1));
+        jPanel1.add(jlblrut, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Sucursal:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
 
-        jlblsucursal.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblsucursal.setForeground(new java.awt.Color(0, 0, 0));
+        jlblsucursal.setBackground(new java.awt.Color(255, 255, 255));
+        jlblsucursal.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblsucursal.setForeground(new java.awt.Color(255, 255, 255));
         jlblsucursal.setText("---");
-        jPanel1.add(jlblsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, -1, -1));
+        jPanel1.add(jlblsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, -1, -1));
 
-        jlblsucursaldireccion.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblsucursaldireccion.setForeground(new java.awt.Color(0, 0, 0));
+        jlblsucursaldireccion.setBackground(new java.awt.Color(255, 255, 255));
+        jlblsucursaldireccion.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblsucursaldireccion.setForeground(new java.awt.Color(255, 255, 255));
         jlblsucursaldireccion.setText("---");
-        jPanel1.add(jlblsucursaldireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, -1, -1));
+        jPanel1.add(jlblsucursaldireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, -1));
 
+        jcbsucursal.setFont(new java.awt.Font("Segoe Script", 0, 11)); // NOI18N
         jcbsucursal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jcbsucursal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbsucursalActionPerformed(evt);
             }
         });
-        jPanel1.add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, 200, -1));
+        jPanel1.add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 140, 290, -1));
 
-        jlblprodreg.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblprodreg.setForeground(new java.awt.Color(0, 0, 0));
+        jlblprodreg.setBackground(new java.awt.Color(255, 255, 255));
+        jlblprodreg.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblprodreg.setForeground(new java.awt.Color(255, 255, 255));
         jlblprodreg.setText("* * *");
         jPanel1.add(jlblprodreg, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 390, -1));
 
-        jlblprodbajo.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblprodbajo.setForeground(new java.awt.Color(0, 0, 0));
+        jlblprodbajo.setBackground(new java.awt.Color(255, 255, 255));
+        jlblprodbajo.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblprodbajo.setForeground(new java.awt.Color(255, 255, 255));
         jlblprodbajo.setText("* * *");
         jPanel1.add(jlblprodbajo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 380, -1));
 
-        jlblventaanio.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblventaanio.setForeground(new java.awt.Color(0, 0, 0));
+        jlblventaanio.setBackground(new java.awt.Color(255, 255, 255));
+        jlblventaanio.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblventaanio.setForeground(new java.awt.Color(255, 255, 255));
         jlblventaanio.setText("* * *");
         jPanel1.add(jlblventaanio, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 360, -1));
 
-        jlblprovreg.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblprovreg.setForeground(new java.awt.Color(0, 0, 0));
+        jlblprovreg.setBackground(new java.awt.Color(255, 255, 255));
+        jlblprovreg.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblprovreg.setForeground(new java.awt.Color(255, 255, 255));
         jlblprovreg.setText("* * *");
         jPanel1.add(jlblprovreg, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 300, -1));
 
-        jlblventadia.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblventadia.setForeground(new java.awt.Color(0, 0, 0));
+        jlblventadia.setBackground(new java.awt.Color(255, 255, 255));
+        jlblventadia.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblventadia.setForeground(new java.awt.Color(255, 255, 255));
         jlblventadia.setText("* * *");
         jPanel1.add(jlblventadia, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 320, -1));
 
-        jlblclireg.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblclireg.setForeground(new java.awt.Color(0, 0, 0));
+        jlblclireg.setBackground(new java.awt.Color(255, 255, 255));
+        jlblclireg.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblclireg.setForeground(new java.awt.Color(255, 255, 255));
         jlblclireg.setText("* * *");
         jPanel1.add(jlblclireg, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 300, -1));
 
-        jlblempleadomes.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblempleadomes.setForeground(new java.awt.Color(0, 0, 0));
+        jlblempleadomes.setBackground(new java.awt.Color(255, 255, 255));
+        jlblempleadomes.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblempleadomes.setForeground(new java.awt.Color(255, 255, 255));
         jlblempleadomes.setText("* * *");
         jPanel1.add(jlblempleadomes, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 450, 320, -1));
 
-        jlblventames.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblventames.setForeground(new java.awt.Color(0, 0, 0));
+        jlblventames.setBackground(new java.awt.Color(255, 255, 255));
+        jlblventames.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblventames.setForeground(new java.awt.Color(255, 255, 255));
         jlblventames.setText("* * *");
         jPanel1.add(jlblventames, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 370, -1));
 
-        jlblventproc.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblventproc.setForeground(new java.awt.Color(0, 0, 0));
+        jlblventproc.setBackground(new java.awt.Color(255, 255, 255));
+        jlblventproc.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblventproc.setForeground(new java.awt.Color(255, 255, 255));
         jlblventproc.setText("* * *");
         jPanel1.add(jlblventproc, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, 330, -1));
 
-        jlbltitulo.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlbltitulo.setForeground(new java.awt.Color(0, 0, 0));
+        jlbltitulo.setBackground(new java.awt.Color(255, 255, 255));
+        jlbltitulo.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlbltitulo.setForeground(new java.awt.Color(255, 255, 255));
         jlbltitulo.setText("Resumen:");
-        jPanel1.add(jlbltitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, -1, 30));
+        jPanel1.add(jlbltitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, -1, 30));
 
-        jlblemplereg.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblemplereg.setForeground(new java.awt.Color(0, 0, 0));
+        jlblemplereg.setBackground(new java.awt.Color(255, 255, 255));
+        jlblemplereg.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jlblemplereg.setForeground(new java.awt.Color(255, 255, 255));
         jlblemplereg.setText("* * *");
         jPanel1.add(jlblemplereg, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 360, -1));
 
@@ -1496,7 +1515,6 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblmensajeprint.setForeground(new java.awt.Color(255, 51, 51));
         jPanel1.add(jlblmensajeprint, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 470, 170, 20));
 
-        jlblminimizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/minimize2.png"))); // NOI18N
         jlblminimizar.setToolTipText("Minimizar");
         jlblminimizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblminimizar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1504,15 +1522,23 @@ final class MDIMenu extends javax.swing.JFrame {
                 jlblminimizarMouseReleased(evt);
             }
         });
-        jPanel1.add(jlblminimizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 0, -1, -1));
+        jPanel1.add(jlblminimizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 10, 60, 20));
 
-        jlblfondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/panel.png"))); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jLabel1.setText("Bienvenido");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 40, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
+        jLabel3.setText("R.U.T.:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, -1, -1));
+
+        jlblfondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/panel2.jpg"))); // NOI18N
         jlblfondo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jlblfondoMouseReleased(evt);
             }
         });
-        jPanel1.add(jlblfondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 460, 480));
+        jPanel1.add(jlblfondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 460, 510));
 
         javax.swing.GroupLayout jDesktopLayout = new javax.swing.GroupLayout(jDesktop);
         jDesktop.setLayout(jDesktopLayout);
@@ -1524,7 +1550,7 @@ final class MDIMenu extends javax.swing.JFrame {
                 .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jlblmensajeinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(2027, Short.MAX_VALUE))
+                .addContainerGap(2039, Short.MAX_VALUE))
         );
         jDesktopLayout.setVerticalGroup(
             jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1799,7 +1825,9 @@ final class MDIMenu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktop;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JButton jbtnactualizar;

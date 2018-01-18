@@ -99,7 +99,7 @@ public class Login extends javax.swing.JFrame {
         jlblrpruebaconexion.setForeground(new java.awt.Color(255, 51, 51));
         getContentPane().add(jlblrpruebaconexion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 510, 20));
 
-        jtfusuario.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jtfusuario.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
         jtfusuario.setText("USUARIO");
         jtfusuario.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -114,7 +114,7 @@ public class Login extends javax.swing.JFrame {
                 jtfusuarioActionPerformed(evt);
             }
         });
-        getContentPane().add(jtfusuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 190, 270, 20));
+        getContentPane().add(jtfusuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 270, 20));
 
         jtfclave.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfclave.setText("CLAVE");
@@ -131,7 +131,7 @@ public class Login extends javax.swing.JFrame {
                 jtfclaveActionPerformed(evt);
             }
         });
-        getContentPane().add(jtfclave, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, 270, 20));
+        getContentPane().add(jtfclave, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 270, 20));
 
         jlblcerrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblcerrar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -139,7 +139,7 @@ public class Login extends javax.swing.JFrame {
                 jlblcerrarMousePressed(evt);
             }
         });
-        getContentPane().add(jlblcerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 70, 60, 30));
+        getContentPane().add(jlblcerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, 60, 30));
 
         jlblaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/enter.png"))); // NOI18N
         jlblaceptar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -148,13 +148,13 @@ public class Login extends javax.swing.JFrame {
                 jlblaceptarMousePressed(evt);
             }
         });
-        getContentPane().add(jlblaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, 70, -1));
+        getContentPane().add(jlblaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 240, 70, -1));
 
-        jcbsucursal.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jcbsucursal.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
         jcbsucursal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sin conexion" }));
         getContentPane().add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, 270, -1));
 
-        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/login3.png"))); // NOI18N
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/login2.jpg"))); // NOI18N
         fondo.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 fondoMouseDragged(evt);
@@ -165,7 +165,7 @@ public class Login extends javax.swing.JFrame {
                 fondoMousePressed(evt);
             }
         });
-        getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 310));
+        getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 30, 470, 340));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

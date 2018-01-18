@@ -604,6 +604,9 @@ public class JIFVenta extends javax.swing.JInternalFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfcantidadKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfcantidadKeyTyped(evt);
+            }
         });
 
         jlblprecio.setEditable(false);
@@ -1160,12 +1163,12 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 
     private void jtfcantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcantidadKeyPressed
         // TODO add your handling code here:
-         if(evt.getKeyCode()==113){
-             if(listprod.size()>0 && validadescuento()==true){
-               jlblcargarventa.setVisible(true);
-          }   
-               
-               }
+//         if(evt.getKeyCode()==113){
+//             if(listprod.size()>0 && validadescuento()==true){
+//               jlblcargarventa.setVisible(true);
+//          }   
+//               
+//               }
     }//GEN-LAST:event_jtfcantidadKeyPressed
 
     private void jtfdescuentoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescuentoKeyPressed
@@ -1177,6 +1180,10 @@ public class JIFVenta extends javax.swing.JInternalFrame {
                
                }
     }//GEN-LAST:event_jtfdescuentoKeyPressed
+
+    private void jtfcantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcantidadKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfcantidadKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

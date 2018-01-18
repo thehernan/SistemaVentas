@@ -140,8 +140,13 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         jtfnumero.setText("");
         jtfcodigo.setText("COD. VENTA");
         jcbcomprobante.setSelectedIndex(0);
+        jtfdescuento.setValue(0);
         
-        
+    }
+    public void setventa(Ventas venta){
+        jtfcodigo.setText(venta.getCodigo());
+        jbtnenter.doClick();
+    
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -197,7 +202,9 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         jtfnumero = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
+        jbtnventas = new javax.swing.JButton();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -234,13 +241,13 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel2.setText("R.U.T:");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel5.setText("SUBTOTAL :");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel6.setText("I.V.A (19 %):");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel7.setText("TOTAL PAGAR:");
 
         jlblcliente.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
@@ -251,7 +258,7 @@ public class JIFCaja extends javax.swing.JInternalFrame {
 
         jlblsubtotal.setEditable(false);
         jlblsubtotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
-        jlblsubtotal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblsubtotal.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblsubtotal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jlblsubtotalActionPerformed(evt);
@@ -260,24 +267,26 @@ public class JIFCaja extends javax.swing.JInternalFrame {
 
         jlbliva.setEditable(false);
         jlbliva.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
-        jlbliva.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbliva.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
 
         jlbltotal.setEditable(false);
         jlbltotal.setForeground(new java.awt.Color(255, 51, 51));
         jlbltotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
-        jlbltotal.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel8.setText("ABONO:");
 
         jlblabono.setEditable(false);
         jlblabono.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlblabono.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel9.setText("DESCUENTO:");
 
         jtfdescuento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
         jtfdescuento.setEnabled(false);
+        jtfdescuento.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
 
         jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
@@ -309,20 +318,6 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                         .addGap(9, 9, 9)
                         .addComponent(jlblsubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelNice1Layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jLabel8)
-                        .addGap(13, 13, 13)
-                        .addComponent(jlblabono, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel6)
-                        .addGap(8, 8, 8)
-                        .addComponent(jlbliva, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelNice1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel7)
-                        .addGap(10, 10, 10)
-                        .addComponent(jlbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelNice1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 989, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -333,7 +328,23 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jlblrut, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
-                            .addComponent(jlblcliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jlblcliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(panelNice1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel7))
+                        .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelNice1Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jlblabono, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jlbliva, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelNice1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jlbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelNice1Layout.setVerticalGroup(
@@ -348,24 +359,25 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2)
                     .addComponent(jlblrut))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(jtfdescuento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(jlblsubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
+                .addGap(6, 6, 6)
                 .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblabono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(jlbliva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel6)
+                        .addComponent(jlblabono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jlbliva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, 0)
+                .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                    .addComponent(jlbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
@@ -564,6 +576,7 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         });
 
         jbtnegreso.setText("Egreso");
+        jbtnegreso.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
         jbtnegreso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnegresoActionPerformed(evt);
@@ -609,6 +622,14 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jbtnventas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/compra.png"))); // NOI18N
+        jbtnventas.setToolTipText("En cola");
+        jbtnventas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnventasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -621,18 +642,23 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jcbcomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(733, 733, 733)
-                        .addComponent(jtfcierrecaja, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jtfcobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jcbcomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(959, 959, 959))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jbtnventas)
+                                .addGap(18, 18, 18)
+                                .addComponent(jtfcierrecaja, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jtfcobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)))
                         .addComponent(jbtnegreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jtfnumero, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(panelNice1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -661,11 +687,14 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                         .addComponent(panelNice2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jtfcierrecaja, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfcobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbtnegreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jbtnventas)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jtfcierrecaja, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jtfcobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jbtnegreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelNice1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 15, Short.MAX_VALUE))))
         );
@@ -1028,6 +1057,13 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jbtnegresoActionPerformed
 
+    private void jbtnventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnventasActionPerformed
+        // TODO add your handling code here:
+        JDVentaencola ventacola = new JDVentaencola(new Frame(), isVisible(),this);
+        ventacola.setVisible(true);
+        
+    }//GEN-LAST:event_jbtnventasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -1059,6 +1095,7 @@ public class JIFCaja extends javax.swing.JInternalFrame {
     private org.edisoncor.gui.button.ButtonColoredAction jbtncoma;
     private org.edisoncor.gui.button.ButtonColoredAction jbtnegreso;
     private org.edisoncor.gui.button.ButtonColoredAction jbtnenter;
+    private javax.swing.JButton jbtnventas;
     private javax.swing.JComboBox jcbcomprobante;
     private javax.swing.JFormattedTextField jlblabono;
     private javax.swing.JLabel jlblcliente;

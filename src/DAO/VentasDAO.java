@@ -102,7 +102,7 @@ public long insertarnocliente(Ventas venta){
   return id;  
 }
     
-public Ventas buscarventa(javax.swing.JTable tab,String cod,JLabel nombre,JLabel rut
+public Ventas buscarventa(JTable tab,String cod,JLabel nombre,JLabel rut
             ){
         
      
@@ -158,6 +158,7 @@ public Ventas buscarventa(javax.swing.JTable tab,String cod,JLabel nombre,JLabel
              tabla.addRow(datosR);
 		
         }
+        total=total-venta.getDescuento();
         subtotal = total/1.19;
         iva = total-subtotal;
         venta.setTotal(total);
@@ -261,7 +262,7 @@ public List<Ventas> mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel ms
     return listvent;
     
     }
-public void mostrarenproceso(JTable tab,long idsucur,JLabel msj){
+public List<Ventas> mostrarenproceso(JTable tab,long idsucur,JLabel msj){
      
     Conexion conexion = new Conexion();
    
@@ -272,53 +273,67 @@ public void mostrarenproceso(JTable tab,long idsucur,JLabel msj){
     return false;
     }
     }; 
-    String titulos[]={"IDvent","COD. VENTA","EMPLEADO","R.U.T","SUCURSAL","DIRECCION","IMPORTE","DESCUENTO","TOTAL"};
+    String titulos[]={"COD. VENTA","EMPLEADO","IMPORTE","DESC.","TOTAL"};
     tabla.setColumnIdentifiers(titulos);
-    tab.setModel(tabla);
-    tab.getColumnModel().getColumn(0).setMaxWidth(0);
-    tab.getColumnModel().getColumn(0).setMinWidth(0);
-    tab.getColumnModel().getColumn(0).setPreferredWidth(0);
+   
+//    tab.getColumnModel().getColumn(0).setMaxWidth(0);
+//    tab.getColumnModel().getColumn(0).setMinWidth(0);
+//    tab.getColumnModel().getColumn(0).setPreferredWidth(0);
+    List<Ventas> listventa=new ArrayList<>();
     try{
 	
-
+        NumberFormat nf= NumberFormat.getInstance();
+        double total =0.0;
         String sql=("SELECT * from sp_mostrarventaenproceso(?)"); 
         PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
         ps.setLong(1, idsucur);
        
         ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[9];
+        Object datosR[] = new Object[5];
         msj.setText("");
         int cont=0;
         while (rs.next()){
-         
-                     datosR[0] = rs.getObject("vidventa");
-                 
-                     datosR[1]=rs.getObject("vcodigo");
-                     datosR[2] = rs.getObject("vnombre");
-                   
-                     datosR[3] = rs.getObject("vrut");
-                   
-                     datosR[4] = rs.getObject("vsucursal");
-                    
-                     datosR[5] = rs.getObject("vsucurdirec");
-                  
-                      datosR[6] = rs.getObject("vimporte");
-                  
-                      datosR[7] = rs.getObject("vdescuento");
-                 
-                     datosR[8] = rs.getObject("vtotal");
-                   
-                    
-                    tabla.addRow(datosR);
+            Ventas venta = new Ventas();
+            venta.setIdventa(rs.getLong("vidventa"));
+            venta.setCodigo(rs.getString("vcodigo"));
+            venta.setTotal(rs.getDouble("vtotal"));
+             datosR[0]=venta.getCodigo();
+             datosR[1] = rs.getObject("vnombre");
+
+//             datosR[2] = rs.getObject("vrut");
+//
+//             datosR[3] = rs.getObject("vsucursal");
+//
+//             datosR[4] = rs.getObject("vsucurdirec");
+
+             datosR[2] = nf.format(rs.getDouble("vimporte"));
+
+             datosR[3] = nf.format(rs.getDouble("vdescuento"));
+             
+             datosR[4] =nf.format(venta.getTotal());
+             total= total + venta.getTotal();
+             
+
+            tabla.addRow(datosR);
+            listventa.add(venta);
 		
             cont++;
         }
+        tab.setModel(tabla);
+        TableColumnModel columnModel = tab.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(100);
+        columnModel.getColumn(1).setPreferredWidth(500);
+        columnModel.getColumn(2).setPreferredWidth(50);
+        columnModel.getColumn(3).setPreferredWidth(50);
+        columnModel.getColumn(4).setPreferredWidth(50);
+        
+        
         rs.close();
         ps.close();
         if(cont == 0){
-            msj.setText("NO SE ENCONTRARON VENTAS SIN CONCRETAR");
+            msj.setText("NO SE ENCONTRARON VENTAS EN COLA");
         }else {
-            msj.setText("REGISTROS ENCONTRADOS "+cont);
+            msj.setText("VENTAS EN COLA "+cont+ " - TOTAL: " +nf.format(total));
         }
 	
         } catch(Exception e)
@@ -329,7 +344,7 @@ public void mostrarenproceso(JTable tab,long idsucur,JLabel msj){
                        
             }    
 
-    
+    return listventa;
     }
 
 public void extornar(long idvent){

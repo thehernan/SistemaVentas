@@ -7,6 +7,9 @@ package Formularios;
 
 import DAO.VentasDAO;
 import Pojos.SucursalSingleton;
+import Pojos.Ventas;
+import java.awt.Frame;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,10 +23,11 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
      */
     VentasDAO daoventas= new VentasDAO();
     SucursalSingleton sucursalsingleton = SucursalSingleton.getinstancia();
-            
+    List<Ventas> listventa;
+    Ventas venta= new Ventas();
     public JIFEnProceso() {
         initComponents();
-        daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
+        listventa=daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
         jbtnextornar.setEnabled(false);
     }
 
@@ -42,10 +46,11 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         jbtnextornar = new javax.swing.JButton();
         jbtnrefresh = new javax.swing.JButton();
         jlblmsj = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
-        setTitle("VENTAS EN PROCESO");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -61,6 +66,7 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jtabla.setToolTipText("Doble clic para ver detalle");
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtabla.getTableHeader().setReorderingAllowed(false);
         jtabla.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -71,7 +77,7 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(jtabla);
 
         jbtnextornar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnextornar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/borrar.png"))); // NOI18N
+        jbtnextornar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete.png"))); // NOI18N
         jbtnextornar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnextornarActionPerformed(evt);
@@ -79,7 +85,7 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         });
 
         jbtnrefresh.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnrefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/refresh.png"))); // NOI18N
+        jbtnrefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Refresh_25px.png"))); // NOI18N
         jbtnrefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnrefreshActionPerformed(evt);
@@ -89,33 +95,60 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         jlblmsj.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jlblmsj.setForeground(new java.awt.Color(255, 51, 51));
 
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
+
+        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("VENTAS EN COLA");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel11)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel11)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jlblmsj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jlblmsj, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+                        .addGap(126, 126, 126)
                         .addComponent(jbtnrefresh)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jbtnextornar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 798, Short.MAX_VALUE))
-                .addGap(15, 15, 15))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jbtnextornar)
-                    .addComponent(jbtnrefresh)
-                    .addComponent(jlblmsj, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
-                .addGap(15, 15, 15))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jbtnrefresh)
+                        .addComponent(jbtnextornar))
+                    .addComponent(jlblmsj, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -134,12 +167,17 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
 
     private void jbtnrefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnrefreshActionPerformed
         // TODO add your handling code here:
-        daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
+       listventa= daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
     }//GEN-LAST:event_jbtnrefreshActionPerformed
 
     private void jtablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMouseReleased
         // TODO add your handling code here:
         jbtnextornar.setEnabled(true);
+        if(evt.getClickCount()==2){
+        venta = listventa.get(jtabla.getSelectedRow());
+        JDMostrarVenta mostrarventa= new JDMostrarVenta(new Frame(),isVisible(),venta);
+        mostrarventa.setVisible(true);
+        }
     }//GEN-LAST:event_jtablaMouseReleased
 
     private void jbtnextornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnextornarActionPerformed
@@ -147,21 +185,24 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         int index = jtabla.getSelectedRow();
         if(index >= 0){
             if(JOptionPane.showConfirmDialog(null, "SEGURO QUE DESEA EXTORNAR LA VENTA","EXTORNAR",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){                        
-                long idventa= Long.parseLong(jtabla.getValueAt(index, 0).toString());
-                daoventas.extornar(idventa);
+                venta = listventa.get(jtabla.getSelectedRow());
+//                long idventa= Long.parseLong(jtabla.getValueAt(index, 0).toString());
+                daoventas.extornar(venta.getIdventa());
                 daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
                 jbtnextornar.setEnabled(false);
                 
             }
             
         }else {
-            JOptionPane.showMessageDialog(null, "SELECCIONE VENTA A EXTORNAR DE LA TABLA");
+            JOptionPane.showMessageDialog(null, "SELECCIONE VENTA");
         }
     }//GEN-LAST:event_jbtnextornarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnextornar;
     private javax.swing.JButton jbtnrefresh;
