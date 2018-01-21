@@ -10,6 +10,7 @@ import DAO.DetalleCajaDAO;
 import Pojos.Caja;
 import Pojos.SucursalSingleton;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  *
@@ -23,6 +24,8 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
     CajaDAO daocaja= new CajaDAO();
     DetalleCajaDAO daodetcaja = new DetalleCajaDAO();
     SucursalSingleton sucursalsingleton = SucursalSingleton.getinstancia();
+    List<Caja> listcaja;
+    Caja caja= new Caja();
     public JIFMovimientoCaja() {
         initComponents();
         java.util.Date fecha= new java.util.Date();
@@ -76,6 +79,9 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jtablaMousePressed(evt);
             }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jtablaMouseReleased(evt);
+            }
         });
         jtabla.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -114,7 +120,7 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jdatapickerhasta, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 370, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 679, Short.MAX_VALUE)
                 .addComponent(jbtnbuscar)
                 .addContainerGap())
         );
@@ -130,7 +136,7 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2)
                     .addComponent(jdatapickerdesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jlblmensaje.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
@@ -150,7 +156,7 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel11)
-                .addContainerGap(923, Short.MAX_VALUE))
+                .addContainerGap(1001, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,28 +172,25 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 689, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(235, 235, 235))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -214,10 +217,10 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
 //            DateFormat sysDate = new SimpleDateFormat("dd-MM-yyyy");
 //            String desde = sysDate.format(jdatapickerdesde.getDate()).toString();
 //            String hasta = sysDate.format(jdatapickerhasta.getDate()).toString();
-              Timestamp desde = new java.sql.Timestamp(jdatapickerdesde.getDate().getTime());
-              Timestamp hasta= new java.sql.Timestamp(jdatapickerhasta.getDate().getTime());
-            System.out.println("dede"+jdatapickerdesde.getDate());
-            daocaja.buscar(jtabla, desde, hasta,jlblmensaje,sucursalsingleton.getId());
+          Timestamp desde = new java.sql.Timestamp(jdatapickerdesde.getDate().getTime());
+          Timestamp hasta= new java.sql.Timestamp(jdatapickerhasta.getDate().getTime());
+        System.out.println("dede"+jdatapickerdesde.getDate());
+        listcaja=daocaja.buscar(jtabla, desde, hasta,jlblmensaje,sucursalsingleton.getId());
             
         } catch (NullPointerException e) {
             jlblmensaje.setText("INGRESE UNA FECHA VALIDA");
@@ -234,21 +237,26 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
     private void jtablaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMousePressed
         // TODO add your handling code here:
         
-            if (evt.getClickCount()==2){
+           
+    }//GEN-LAST:event_jtablaMousePressed
+
+    private void jtablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMouseReleased
+        // TODO add your handling code here:
+         if (evt.getClickCount()==2){
                 int index = jtabla.getSelectedRow();
                 if(index>=0){
-                    Caja caja= new Caja();
-                    caja.setId_caja(Long.parseLong(jtabla.getValueAt(index, 0).toString()));
-                    caja.setAperturadinero(Double.parseDouble(jtabla.getValueAt(index, 6).toString()));
-//                    caja.setFechahora_apertura(Timestamp.valueOf(jtabla.getValueAt(index, 6).toString()));
-                    try {
-                        caja.setCierradinero(Double.parseDouble(jtabla.getValueAt(index, 7).toString()));
-                        
-                    } catch (NullPointerException e) {
-                    }
+//                    Caja caja= new Caja();
+//                    caja.setId_caja(Long.parseLong(jtabla.getValueAt(index, 0).toString()));
+//                    caja.setAperturadinero(Double.parseDouble(jtabla.getValueAt(index, 6).toString()));
+////                    caja.setFechahora_apertura(Timestamp.valueOf(jtabla.getValueAt(index, 6).toString()));
+//                    try {
+//                        caja.setCierradinero(Double.parseDouble(jtabla.getValueAt(index, 7).toString()));
+//                        
+//                    } catch (NullPointerException e) {
+//                    }
                     
                     
-                    
+                    caja = listcaja.get(index);
                     JDDetalleMovimientoCaja detmovcaja= new JDDetalleMovimientoCaja(new java.awt.Frame(),isVisible(),
                     caja);
                     detmovcaja.setVisible(true);
@@ -256,7 +264,7 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
             }
         
         }
-    }//GEN-LAST:event_jtablaMousePressed
+    }//GEN-LAST:event_jtablaMouseReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

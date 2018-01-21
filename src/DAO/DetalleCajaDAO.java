@@ -11,10 +11,12 @@ import java.math.BigDecimal;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.NumberFormat;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -129,8 +131,8 @@ public class DetalleCajaDAO {
             };
         tabla.setModel(modelo);
         
-         Conexion conexion = new Conexion();
-        
+        Conexion conexion = new Conexion();
+        NumberFormat nf = NumberFormat.getInstance();
          
          try{
              
@@ -157,7 +159,7 @@ public class DetalleCajaDAO {
                   
                      datosR[3] = rs.getObject("vrut");
                   
-                     datosR[4] = rs.getObject("vimporte");
+                     datosR[4] = nf.format(rs.getDouble("vimporte"));
                  
                      datosR[5] = rs.getObject("vtipo");
                      datosR[6] = rs.getObject("vmotivo");
@@ -173,6 +175,16 @@ public class DetalleCajaDAO {
                 cierre.setValue(rs1.getDouble("vcierra"));
                 aperturo.setValue(rs1.getDouble("vapertura"));
              }
+             
+             TableColumnModel columnModel = tabla.getColumnModel();
+            columnModel.getColumn(0).setPreferredWidth(80);
+            columnModel.getColumn(1).setPreferredWidth(80);
+            columnModel.getColumn(2).setPreferredWidth(480);
+            columnModel.getColumn(3).setPreferredWidth(80);
+            columnModel.getColumn(4).setPreferredWidth(80);
+            columnModel.getColumn(5).setPreferredWidth(80);
+            columnModel.getColumn(6).setPreferredWidth(80);
+            columnModel.getColumn(7).setPreferredWidth(80);
              
              ps.close();
              rs.close();            

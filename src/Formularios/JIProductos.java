@@ -208,7 +208,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         });
         jScrollPane4.setViewportView(jtablaproducto);
 
-        jPanel4.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 487, 370));
+        jPanel4.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 740, 370));
 
         jbtnnuevo.setBackground(new java.awt.Color(255, 255, 255));
         jbtnnuevo.setText("Nuevo");
@@ -218,7 +218,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jbtnnuevoActionPerformed(evt);
             }
         });
-        jPanel4.add(jbtnnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 10, 90, -1));
+        jPanel4.add(jbtnnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 10, 90, -1));
 
         jbtneditar.setBackground(new java.awt.Color(255, 255, 255));
         jbtneditar.setText("Editar");
@@ -228,7 +228,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jbtneditarActionPerformed(evt);
             }
         });
-        jPanel4.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, 90, -1));
+        jPanel4.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 10, 90, -1));
 
         jbtnguardar.setBackground(new java.awt.Color(255, 255, 255));
         jbtnguardar.setText("Guardar");
@@ -238,7 +238,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jbtnguardarActionPerformed(evt);
             }
         });
-        jPanel4.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 10, 90, 20));
+        jPanel4.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 10, 90, 20));
 
         jbtneliminar.setBackground(new java.awt.Color(255, 255, 255));
         jbtneliminar.setText("Eliminar");
@@ -248,7 +248,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jbtneliminarActionPerformed(evt);
             }
         });
-        jPanel4.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 10, 90, -1));
+        jPanel4.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 10, 90, -1));
 
         jbtncancelar.setBackground(new java.awt.Color(255, 255, 255));
         jbtncancelar.setText("Cancelar");
@@ -258,7 +258,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jbtncancelarActionPerformed(evt);
             }
         });
-        jPanel4.add(jbtncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 10, 90, -1));
+        jPanel4.add(jbtncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 10, 90, -1));
 
         jtfcodigo.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jtfcodigo.setText("CODIGO");
@@ -279,7 +279,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jtfcodigoKeyTyped(evt);
             }
         });
-        jPanel4.add(jtfcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 220, 210, -1));
+        jPanel4.add(jtfcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 220, 210, -1));
 
         jtfdescripcion.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jtfdescripcion.setText("DESCRIPCION");
@@ -300,7 +300,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jtfdescripcionKeyTyped(evt);
             }
         });
-        jPanel4.add(jtfdescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 280, 300, -1));
+        jPanel4.add(jtfdescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 280, 300, -1));
 
         jtaobservacion.setColumns(20);
         jtaobservacion.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
@@ -324,7 +324,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         });
         jScrollPane5.setViewportView(jtaobservacion);
 
-        jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 310, 480, 110));
+        jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 310, 460, 110));
 
         jbtngenerarcodigo.setBackground(new java.awt.Color(255, 255, 255));
         jbtngenerarcodigo.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
@@ -334,12 +334,12 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jbtngenerarcodigoActionPerformed(evt);
             }
         });
-        jPanel4.add(jbtngenerarcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 220, -1, 20));
+        jPanel4.add(jbtngenerarcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 220, -1, 20));
 
         jtffamilia.setFont(new java.awt.Font("Segoe UI Light", 1, 10)); // NOI18N
         jtffamilia.setText("FAMILIA");
         jtffamilia.setEnabled(false);
-        jPanel4.add(jtffamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 250, 150, -1));
+        jPanel4.add(jtffamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 250, 150, -1));
 
         jbtnbuscarfamilia.setBackground(new java.awt.Color(255, 255, 255));
         jbtnbuscarfamilia.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -349,11 +349,11 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jbtnbuscarfamiliaActionPerformed(evt);
             }
         });
-        jPanel4.add(jbtnbuscarfamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 250, 50, -1));
+        jPanel4.add(jbtnbuscarfamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 250, 50, -1));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Precio Venta:");
-        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 250, -1, 20));
+        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 250, -1, 20));
 
         panelNice1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -396,10 +396,10 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jlblmensajeimpresion.setForeground(new java.awt.Color(255, 51, 51));
         panelNice1.add(jlblmensajeimpresion, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 110, 210, 20));
 
-        jPanel4.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, 460, 150));
+        jPanel4.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 60, 460, 150));
 
         jtfprecioventa.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
-        jPanel4.add(jtfprecioventa, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 250, 130, -1));
+        jPanel4.add(jtfprecioventa, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 250, 130, -1));
 
         jcbfamilia.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jcbfamilia.addActionListener(new java.awt.event.ActionListener() {
@@ -436,17 +436,16 @@ public class JIProductos extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 1026, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 1243, Short.MAX_VALUE)
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();

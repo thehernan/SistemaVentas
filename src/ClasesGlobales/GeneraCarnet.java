@@ -18,7 +18,6 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileOutputStream;
-import java.text.NumberFormat;
 
 
 /**
@@ -34,7 +33,7 @@ public class GeneraCarnet {
             byte [] img,String Salida,String codigo){
        
         try {
-            Document document= new Document(PageSize.A7,36,36,10,10);
+            Document document= new Document(PageSize.A7,30,30,8,8);
             PdfWriter pw = PdfWriter.getInstance(document,new FileOutputStream(Salida));
             document.open();
             document.add(getheader(header));
@@ -44,7 +43,7 @@ public class GeneraCarnet {
             document.add(imagen);
             document.add(getInfo(info));
             document.add(getBarcode(document, pw, codigo));
-            document.add(getFooter(footer));
+//            document.add(getFooter(footer));
             document.close();
         } catch (Exception e) {
         }
@@ -111,7 +110,7 @@ public class GeneraCarnet {
    verificador=rutv.substring(9,10);
    rut = formatrut+verificador;
    }else {
-   rut=null;
+   rut=rutv;
    }
    
    return rut;

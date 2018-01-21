@@ -179,6 +179,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         jlbltotal = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
+        jbtnbuscar = new javax.swing.JButton();
         jlblcargarventa = new javax.swing.JLabel();
         jlblmensajeproceso = new javax.swing.JLabel();
         panelNice2 = new org.edisoncor.gui.panel.PanelNice();
@@ -312,9 +313,18 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 
         panelNice1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 700, 380));
 
+        jbtnbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Searchx32.png"))); // NOI18N
+        jbtnbuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jbtnbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnbuscarActionPerformed(evt);
+            }
+        });
+        panelNice1.add(jbtnbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 20, 40, 50));
+
         jlblcargarventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading_cart.gif"))); // NOI18N
         jlblcargarventa.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        panelNice1.add(jlblcargarventa, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 0, 230, 190));
+        panelNice1.add(jlblcargarventa, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 230, 190));
 
         jlblmensajeproceso.setBackground(new java.awt.Color(51, 51, 51));
         jlblmensajeproceso.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
@@ -673,7 +683,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
                     .addComponent(panelNice3, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(170, 170, 170)
-                        .addComponent(jlblstock, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)))
+                        .addComponent(jlblstock, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelNice1, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1185,6 +1195,13 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jtfcantidadKeyTyped
 
+    private void jbtnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarActionPerformed
+        // TODO add your handling code here:
+         JDBuscarProductoVenta buscarproducto = new JDBuscarProductoVenta(new java.awt.Frame(),
+                    isVisible(),this);
+            buscarproducto.setVisible(true);
+    }//GEN-LAST:event_jbtnbuscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -1210,6 +1227,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
     private org.edisoncor.gui.button.ButtonColoredAction jbtn9;
     private org.edisoncor.gui.button.ButtonColoredAction jbtnborrar;
     private org.edisoncor.gui.button.ButtonColoredAction jbtnborrartodo;
+    private javax.swing.JButton jbtnbuscar;
     private org.edisoncor.gui.button.ButtonColoredAction jbtncoma;
     private org.edisoncor.gui.button.ButtonColoredAction jbtnenter;
     private javax.swing.JLabel jlblcargarventa;

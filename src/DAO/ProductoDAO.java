@@ -35,6 +35,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -88,7 +89,11 @@ public class ProductoDAO {
             }
             
             tabla.setModel(modelo);
-            
+            TableColumnModel columnModel = tabla.getColumnModel();
+            columnModel.getColumn(0).setPreferredWidth(120);
+            columnModel.getColumn(1).setPreferredWidth(550);
+            columnModel.getColumn(2).setPreferredWidth(300);
+          
              rs.close();
              ps.close();
 
@@ -146,7 +151,11 @@ public class ProductoDAO {
             listprod.add(prod);
         }
         tabla.setModel(modelo);
-
+        TableColumnModel columnModel = tabla.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(120);
+        columnModel.getColumn(1).setPreferredWidth(550);
+        columnModel.getColumn(2).setPreferredWidth(300);
+          
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -461,6 +470,14 @@ public List<Producto> inventario(JTable tabla,long idsucursal,double stockmin,St
                     modelo.addRow(datosR);
 		listprod.add(prod);
              }
+             TableColumnModel columnModel = tabla.getColumnModel();
+            columnModel.getColumn(0).setPreferredWidth(100);
+            columnModel.getColumn(1).setPreferredWidth(550);
+            columnModel.getColumn(2).setPreferredWidth(80);
+            columnModel.getColumn(3).setPreferredWidth(80);
+            columnModel.getColumn(4).setPreferredWidth(200);
+            columnModel.getColumn(5).setPreferredWidth(200);
+          
 
            //  tabla.changeSelection(0,0,false,true);
             if (tabla.getRowCount()>0){
@@ -538,6 +555,13 @@ public List<Producto> busquedasensitivainventario(JTable tabla,String tipob,Stri
                     modelo.addRow(datosR);
                     listprod.add(prod);
              }
+             TableColumnModel columnModel = tabla.getColumnModel();
+            columnModel.getColumn(0).setPreferredWidth(100);
+            columnModel.getColumn(1).setPreferredWidth(550);
+            columnModel.getColumn(2).setPreferredWidth(80);
+            columnModel.getColumn(3).setPreferredWidth(80);
+            columnModel.getColumn(4).setPreferredWidth(200);
+            columnModel.getColumn(5).setPreferredWidth(200);
              if(tabla.getRowCount()>0){
               tabla.setRowSelectionInterval (0,0); 
              tabla.setRowSelectionInterval(0, 0);

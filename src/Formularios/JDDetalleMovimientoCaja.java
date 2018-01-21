@@ -8,7 +8,6 @@ package Formularios;
 import DAO.DetalleCajaDAO;
 import Pojos.Caja;
 import Pojos.EmpleadoSingleton;
-import java.math.BigDecimal;
 
 /**
  *

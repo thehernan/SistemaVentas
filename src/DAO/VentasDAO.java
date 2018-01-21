@@ -244,6 +244,18 @@ public List<Ventas> mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel ms
 		
             cont++;
         }
+        
+        tab.setModel(tabla); 
+        TableColumnModel columnModel = tab.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(380);
+        columnModel.getColumn(1).setPreferredWidth(80);
+        columnModel.getColumn(2).setPreferredWidth(250);
+        columnModel.getColumn(3).setPreferredWidth(250);
+        columnModel.getColumn(4).setPreferredWidth(80);
+        columnModel.getColumn(5).setPreferredWidth(80);
+        columnModel.getColumn(6).setPreferredWidth(80);
+        columnModel.getColumn(7).setPreferredWidth(80);
+        columnModel.getColumn(8).setPreferredWidth(80);
         rs.close();
         ps.close();
         if(cont == 0){
@@ -426,7 +438,7 @@ public List<Ventas> mostrarporempleado(JTable tab,Ventas ventaa,JLabel emple,JLa
     Conexion conexion = new Conexion();
  
      DefaultTableModel tabla= new DefaultTableModel(
-                new String[]{"CODIGO","DOCUMENTO","NUMERO","CLIENTE","FECHA","IMPORTE","DESCUENTO","MOT.DESC","TOTAL","ANULADA","MOT. ANU","FECHA. ANU"}, 0) {
+                new String[]{"CODIGO","DOCUMENTO","NUMERO","CLIENTE","FECHA","IMPORTE","DESC.","MOT.DESC","TOTAL","ANULADA","MOT. ANU","FECHA. ANU"}, 0) {
  
             Class[] types = new Class[]{
                  java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,java.lang.Object.class,
@@ -491,7 +503,7 @@ public List<Ventas> mostrarporempleado(JTable tab,Ventas ventaa,JLabel emple,JLa
 
 
              datosR[6] =nf.format(rs.getObject("vdescuento"));
-              datosR[7] =(rs.getObject("vmotivodes"));
+             datosR[7] =(rs.getObject("vmotivodes"));
 
              datosR[8] =nf.format(importe);
              
@@ -504,6 +516,19 @@ public List<Ventas> mostrarporempleado(JTable tab,Ventas ventaa,JLabel emple,JLa
            
         }
         jtotal.setText("Total Vendido: "+nf.format(total));
+        TableColumnModel columnModel = tab.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(80);
+        columnModel.getColumn(1).setPreferredWidth(80);
+        columnModel.getColumn(2).setPreferredWidth(80);
+        columnModel.getColumn(3).setPreferredWidth(350);
+        columnModel.getColumn(4).setPreferredWidth(80);
+        columnModel.getColumn(5).setPreferredWidth(80);
+        columnModel.getColumn(6).setPreferredWidth(80);
+        columnModel.getColumn(7).setPreferredWidth(200);
+        columnModel.getColumn(8).setPreferredWidth(80);
+        columnModel.getColumn(9).setPreferredWidth(80);
+        columnModel.getColumn(10).setPreferredWidth(200);
+         columnModel.getColumn(10).setPreferredWidth(80);
 	rs.close();
         ps.close();
         } catch(Exception e)
@@ -589,6 +614,16 @@ public List<Ventas> mostrarporcliente(JTable tab,long idcliente,JLabel msj){
            
         }
         msj.setText("REGISTROS ENCONTRADOS "+cont.toString());
+        TableColumnModel columnModel = tab.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(80);
+        columnModel.getColumn(1).setPreferredWidth(80);
+        columnModel.getColumn(2).setPreferredWidth(80);
+        columnModel.getColumn(3).setPreferredWidth(350);
+        columnModel.getColumn(4).setPreferredWidth(80);
+        columnModel.getColumn(5).setPreferredWidth(80);
+        columnModel.getColumn(6).setPreferredWidth(80);
+        columnModel.getColumn(7).setPreferredWidth(80);
+        columnModel.getColumn(8).setPreferredWidth(80);
 	rs.close();
         ps.close();
         } catch(Exception e)
@@ -602,7 +637,7 @@ public List<Ventas> mostrarporcliente(JTable tab,long idcliente,JLabel msj){
     return listvent;
     }
 
-public void mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,JLabel msj){
+public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,JLabel msj){
    Conexion conexion = new Conexion();
  
    
@@ -614,12 +649,10 @@ public void mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,JLabel m
     }
   };     
     
-    String titulos[]={"ID","CODIGO","DOCUMENTO","NUMERO","CLIENTE","FECHA","IMPORTE","DESCUENTO","TOTAL","MOTIVO"};
+    String titulos[]={"CODIGO","DOCUMENTO","NUMERO","CLIENTE","FECHA","IMPORTE","DESCUENTO","TOTAL","MOTIVO"};
     tabla.setColumnIdentifiers(titulos);
     tab.setModel(tabla);
-    tab.getColumnModel().getColumn(0).setMaxWidth(0);
-    tab.getColumnModel().getColumn(0).setMinWidth(0);
-    tab.getColumnModel().getColumn(0).setPreferredWidth(0);
+    List<Ventas> listventa= new ArrayList<>();
     try{
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
@@ -629,41 +662,53 @@ public void mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,JLabel m
         ps.setDate(2, hasta);
       
         ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[10];
+        Object datosR[] = new Object[9];
         
-        Integer cont = 0;
+        int cont = 0;
         while (rs.next()){
-         
-            for(int i =0; i<=1; i++){
-                cont++;
-                      datosR[i] = rs.getObject("vidventa");
-                     i++;  
-//                     datosR[i] = rs.getObject("vsucursal");
-//                     i++;  
-                     datosR[i] = rs.getObject("vcodigo");
-                     i++;
-                     datosR[i] = rs.getObject("vdocumento");
-                     i++;
-                     datosR[i] = rs.getObject("vnumero");
-                     i++;
-                     datosR[i] = rs.getObject("vcliente");
-                     i++;
-                     datosR[i] = rs.getObject("vfecha");
-                     i++;
-                     datosR[i] = rs.getObject("vimporte");
-                     i++;
-                     datosR[i] = rs.getObject("vdescuento"); 
-                     i++;
-                     datosR[i] = rs.getObject("vtotal");
-                     i++;
-                     datosR[i] = rs.getObject("vmotivo");
-                     i++;
-                                  
-                    tabla.addRow(datosR);
-		}
+            Ventas venta = new Ventas();
            
+            cont++;
+              //   datosR[0] = rs.getObject("vidventa");
+
+//                     datosR[i] = rs.getObject("vsucursal");
+//                     i++; 
+            venta.setIdventa(rs.getLong("vidventa"));
+             datosR[0] = rs.getObject("vcodigo");
+
+             datosR[1] = rs.getObject("vdocumento");
+
+             datosR[2] = rs.getObject("vnumero");
+
+             datosR[3] = rs.getObject("vcliente");
+
+             datosR[4] = rs.getObject("vfecha");
+
+             datosR[5] = rs.getObject("vimporte");
+
+             datosR[6] = rs.getObject("vdescuento"); 
+
+             datosR[7] = rs.getObject("vtotal");
+
+             datosR[8] = rs.getObject("vmotivo");
+                    
+                                  
+             tabla.addRow(datosR);
+             listventa.add(venta);       
         }
-        msj.setText("REGISTROS ENCONTRADOS "+cont.toString());
+        msj.setText("REGISTROS ENCONTRADOS "+cont);
+        tab.setModel(tabla); 
+        TableColumnModel columnModel = tab.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(80);
+        columnModel.getColumn(1).setPreferredWidth(80);
+        columnModel.getColumn(2).setPreferredWidth(80);
+        columnModel.getColumn(3).setPreferredWidth(380);
+        columnModel.getColumn(4).setPreferredWidth(80);
+        columnModel.getColumn(5).setPreferredWidth(80);
+        columnModel.getColumn(6).setPreferredWidth(80);
+        columnModel.getColumn(7).setPreferredWidth(80);
+        columnModel.getColumn(8).setPreferredWidth(80);
+        
 	rs.close();
         ps.close();
         } catch(Exception e)
@@ -674,7 +719,7 @@ public void mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,JLabel m
                        
             }    
 
-    
+    return listventa;
     }
 
  public void imprimirticketcaja(long id){

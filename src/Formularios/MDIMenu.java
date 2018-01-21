@@ -32,7 +32,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
  
@@ -81,7 +80,8 @@ final class MDIMenu extends javax.swing.JFrame {
 //        super.setUndecorated(true);
 //        super.setVisible(true);
         //////////////////////////////////////
-       // this.setExtendedState(MAXIMIZED_BOTH);
+        this.setExtendedState(MAXIMIZED_BOTH);
+        this.setExtendedState(EXIT_ON_CLOSE);
         jlbluser.setText(empleadosingleton.getNombre());
         jlblrut.setText(empleadosingleton.getRut());
         jlblsucursal.setText(sucursalsingleton.getNombre());
@@ -169,10 +169,10 @@ final class MDIMenu extends javax.swing.JFrame {
                    JIFUsuarios user = new JIFUsuarios();
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = user.getSize();
-//                int x=(jDesktop.getWidth()/2)-user.getWidth()/2;
-//                int y=(jDesktop.getHeight()/2)-user.getHeight()/2;
-//                user.setLocation(x,y);
-//                user.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                int x=(jDesktop.getWidth()/2)-user.getWidth()/2;
+                int y=(jDesktop.getHeight()/2)-user.getHeight()/2;
+                user.setLocation(x,y);
+                user.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(user);
                 user.show();
                 
@@ -206,7 +206,7 @@ final class MDIMenu extends javax.swing.JFrame {
                    if(JOptionPane.showConfirmDialog(null, "SEGURO QUE DESEA CERRAR SESIÓN","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
             int componentes=jDesktop.getComponentCount();
             System.out.println("ventanas "+componentes);
-            if(componentes==3){
+            if(componentes==5){
                 user.getdestruir();
                 empleadosingleton.getdestruir();
                 sucursalsingleton.getdestruir();
@@ -251,7 +251,7 @@ final class MDIMenu extends javax.swing.JFrame {
                   JIFCliente cliente = new JIFCliente();
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = cliente.getSize();
-//                cliente.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                cliente.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(cliente);
                 cliente.show();
                  panelconmin();
@@ -285,7 +285,7 @@ final class MDIMenu extends javax.swing.JFrame {
                    JIFProveedor proveedor = new JIFProveedor();
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = proveedor.getSize();
-//                proveedor.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                proveedor.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(proveedor);
                 proveedor.show();
                  panelconmin();
@@ -319,7 +319,7 @@ final class MDIMenu extends javax.swing.JFrame {
                 JIFEmpleados empleado= new JIFEmpleados();
               Dimension desktopSize = jDesktop.getSize();
               Dimension FrameSize = empleado.getSize();
-//              empleado.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+              empleado.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
               jDesktop.add(empleado);
               empleado.show();
                panelconmin();
@@ -363,7 +363,7 @@ final class MDIMenu extends javax.swing.JFrame {
                    JIFIngresoProducto Ingreprod= new JIFIngresoProducto();
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = Ingreprod.getSize();
-//                Ingreprod.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                Ingreprod.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(Ingreprod);
                 Ingreprod.show();
                  panelconmin();
@@ -396,7 +396,7 @@ final class MDIMenu extends javax.swing.JFrame {
                   JIProductos producto= new JIProductos();
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = producto.getSize();
-//                producto.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                producto.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(producto);
                 producto.show();
                  panelconmin();
@@ -429,7 +429,7 @@ final class MDIMenu extends javax.swing.JFrame {
                JIFrmInventario inventario= new JIFrmInventario();
               Dimension desktopSize = jDesktop.getSize();
               Dimension FrameSize = inventario.getSize();
-//              inventario.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+              inventario.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
               jDesktop.add(inventario);
               inventario.show();
                panelconmin();
@@ -463,7 +463,7 @@ final class MDIMenu extends javax.swing.JFrame {
                    JIFFAmilia familia= new JIFFAmilia();
                  Dimension desktopSize = jDesktop.getSize();
                  Dimension FrameSize = familia.getSize();
-//                 familia.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                 familia.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                  jDesktop.add(familia);
                  familia.show();
                   panelconmin();
@@ -496,7 +496,7 @@ final class MDIMenu extends javax.swing.JFrame {
                    JIFIngresoProdPendiente ingresopend= new JIFIngresoProdPendiente();
                  Dimension desktopSize = jDesktop.getSize();
                  Dimension FrameSize = ingresopend.getSize();
-//                 ingresopend.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                 ingresopend.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                  jDesktop.add(ingresopend);
                  ingresopend.show();
                   panelconmin();
@@ -529,7 +529,7 @@ final class MDIMenu extends javax.swing.JFrame {
                     JIFMerma merma= new JIFMerma();
                  Dimension desktopSize = jDesktop.getSize();
                  Dimension FrameSize = merma.getSize();
-//                 merma.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                 merma.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                  jDesktop.add(merma);
                  merma.show();
                   panelconmin();
@@ -562,7 +562,7 @@ final class MDIMenu extends javax.swing.JFrame {
                   JIFConsultarMerma consulmerma= new JIFConsultarMerma();
                  Dimension desktopSize = jDesktop.getSize();
                  Dimension FrameSize = consulmerma.getSize();
-//                 consulmerma.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                 consulmerma.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                  jDesktop.add(consulmerma);
                  consulmerma.show();
                   panelconmin();
@@ -607,7 +607,7 @@ final class MDIMenu extends javax.swing.JFrame {
                  JIFVenta Nventa = new JIFVenta();
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = Nventa.getSize();
-//                Nventa.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                Nventa.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(Nventa);
                 Nventa.show();
                  panelconmin();
@@ -640,7 +640,7 @@ final class MDIMenu extends javax.swing.JFrame {
                    JIFEnProceso enproceso = new JIFEnProceso();
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = enproceso.getSize();
-//                enproceso.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                enproceso.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(enproceso);
                 enproceso.show();
                  panelconmin();
@@ -673,7 +673,7 @@ final class MDIMenu extends javax.swing.JFrame {
                 JIFVentaConsultar ventaconsultar= new JIFVentaConsultar();
               Dimension desktopSize = jDesktop.getSize();
               Dimension FrameSize = ventaconsultar.getSize();
-//              ventaconsultar.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+              ventaconsultar.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
               jDesktop.add(ventaconsultar);
               ventaconsultar.show();
                panelconmin();
@@ -728,7 +728,7 @@ final class MDIMenu extends javax.swing.JFrame {
                         
                         Dimension desktopSize = jDesktop.getSize();
                         Dimension FrameSize = ncaja.getSize();
-//                        ncaja.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                        ncaja.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                         jDesktop.add(ncaja);
                         ncaja.show();
                     }
@@ -766,7 +766,7 @@ final class MDIMenu extends javax.swing.JFrame {
                 JIFMovimientoCaja movimientoc = new JIFMovimientoCaja();
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = movimientoc.getSize();
-//                movimientoc.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                movimientoc.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(movimientoc);
                 movimientoc.show();
                  panelconmin();
@@ -813,7 +813,7 @@ final class MDIMenu extends javax.swing.JFrame {
                  JIFReparaciones reparacion= new JIFReparaciones();
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = reparacion.getSize();
-//                reparacion.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                reparacion.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(reparacion);
                 reparacion.show();
                  panelconmin();
@@ -847,7 +847,7 @@ final class MDIMenu extends javax.swing.JFrame {
                       JIFrmReparacionConsultar consultar= new JIFrmReparacionConsultar();
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = consultar.getSize();
-//                consultar.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                consultar.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(consultar);
                 consultar.show();
                  panelconmin();
@@ -880,7 +880,7 @@ final class MDIMenu extends javax.swing.JFrame {
                  JIFReparacionesPendientes reparacionPendiente= new JIFReparacionesPendientes();
               Dimension desktopSize = jDesktop.getSize();
               Dimension FrameSize = reparacionPendiente.getSize();
-//              reparacionPendiente.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+              reparacionPendiente.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
               jDesktop.add(reparacionPendiente);
               reparacionPendiente.show();
                panelconmin();
@@ -928,7 +928,7 @@ final class MDIMenu extends javax.swing.JFrame {
                         
                         Dimension desktopSize = jDesktop.getSize();
                         Dimension FrameSize = estadodebe.getSize();
-//                        estadodebe.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                        estadodebe.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                         jDesktop.add(estadodebe);
                         estadodebe.show();
                   
@@ -966,7 +966,7 @@ final class MDIMenu extends javax.swing.JFrame {
                  JIFEstadocuentaHaber estadohaber = new JIFEstadocuentaHaber();
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = estadohaber.getSize();
-//                estadohaber.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                estadohaber.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(estadohaber);
                 estadohaber.show();
                  panelconmin();
@@ -1011,9 +1011,9 @@ final class MDIMenu extends javax.swing.JFrame {
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                   JIFOrdenSalida ordensalida = new JIFOrdenSalida();
-//                Dimension desktopSize = jDesktop.getSize();
-//                Dimension FrameSize = ordensalida.getSize();
-//                ordensalida.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                Dimension desktopSize = jDesktop.getSize();
+                Dimension FrameSize = ordensalida.getSize();
+                ordensalida.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(ordensalida);
                 ordensalida.show();
                  panelconmin();
@@ -1044,9 +1044,9 @@ final class MDIMenu extends javax.swing.JFrame {
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                  JIFOrdenEntrada ordenentrada = new JIFOrdenEntrada();
-//                Dimension desktopSize = jDesktop.getSize();
-//                Dimension FrameSize = ordenentrada.getSize();
-//                ordenentrada.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                Dimension desktopSize = jDesktop.getSize();
+                Dimension FrameSize = ordenentrada.getSize();
+                ordenentrada.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                 jDesktop.add(ordenentrada);
                 ordenentrada.show();
                  panelconmin();
@@ -1077,9 +1077,9 @@ final class MDIMenu extends javax.swing.JFrame {
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 JIFConsultarMovimientosSucursal movsucursal = new JIFConsultarMovimientosSucursal();
-//              Dimension desktopSize = jDesktop.getSize();
-//              Dimension FrameSize = movsucursal.getSize();
-//              movsucursal.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+              Dimension desktopSize = jDesktop.getSize();
+              Dimension FrameSize = movsucursal.getSize();
+              movsucursal.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
               jDesktop.add(movsucursal);
               movsucursal.show();
                panelconmin();
@@ -1214,19 +1214,8 @@ final class MDIMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel6 = new javax.swing.JPanel();
-        jlblmenuuser = new javax.swing.JLabel();
-        jlblmenuproducto = new javax.swing.JLabel();
-        jlblmenuventa = new javax.swing.JLabel();
-        jlblmenucaja = new javax.swing.JLabel();
-        jlblmenurepara = new javax.swing.JLabel();
-        jlblmenuestado = new javax.swing.JLabel();
-        jlblmenusucursal = new javax.swing.JLabel();
-        jlblmenuregistro = new javax.swing.JLabel();
-        jlblhora = new javax.swing.JLabel();
         jDesktop = new javax.swing.JDesktopPane();
         jpanelcontenedor = new javax.swing.JPanel();
-        jlblmensajeinfo = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jlbluser = new javax.swing.JLabel();
         jlblrut = new javax.swing.JLabel();
@@ -1248,109 +1237,30 @@ final class MDIMenu extends javax.swing.JFrame {
         jbtnactualizar = new javax.swing.JButton();
         jbtnimprimir = new javax.swing.JButton();
         jlblmensajeprint = new javax.swing.JLabel();
-        jlblminimizar = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jlblfondo = new javax.swing.JLabel();
+        jlblmensajeinfo = new javax.swing.JLabel();
+        jlblhora = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jlblmenuproducto = new javax.swing.JLabel();
+        jlblmenuuser = new javax.swing.JLabel();
+        jlblmenuventa = new javax.swing.JLabel();
+        jlblmenucaja = new javax.swing.JLabel();
+        jlblmenurepara = new javax.swing.JLabel();
+        jlblmenuestado = new javax.swing.JLabel();
+        jlblmenusucursal = new javax.swing.JLabel();
+        jlblmenuregistro = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("SISTEMA DE VENTAS");
-        setUndecorated(true);
+        setTitle("GSMSTORE");
+        setBackground(new java.awt.Color(0, 0, 0));
+        setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         setPreferredSize(super.getToolkit().getScreenSize());
-        setResizable(false);
 
-        jPanel6.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel6.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jPanel6MouseReleased(evt);
-            }
-        });
-
-        jlblmenuuser.setBackground(new java.awt.Color(255, 255, 255));
-        jlblmenuuser.setForeground(new java.awt.Color(255, 255, 255));
-        jlblmenuuser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Key.png"))); // NOI18N
-        jlblmenuuser.setToolTipText("Usuario");
-        jlblmenuuser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblmenuuser.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jlblmenuuserMouseEntered(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblmenuuserMouseReleased(evt);
-            }
-        });
-
-        jlblmenuproducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Product2.png"))); // NOI18N
-        jlblmenuproducto.setToolTipText("Productos");
-        jlblmenuproducto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblmenuproducto.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblmenuproductoMouseReleased(evt);
-            }
-        });
-
-        jlblmenuventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ventaaa.png"))); // NOI18N
-        jlblmenuventa.setToolTipText("Venta");
-        jlblmenuventa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblmenuventa.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblmenuventaMouseReleased(evt);
-            }
-        });
-
-        jlblmenucaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ATM.png"))); // NOI18N
-        jlblmenucaja.setToolTipText("Caja");
-        jlblmenucaja.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblmenucaja.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblmenucajaMouseReleased(evt);
-            }
-        });
-
-        jlblmenurepara.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/repair.png"))); // NOI18N
-        jlblmenurepara.setToolTipText("Reparaciones");
-        jlblmenurepara.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblmenurepara.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblmenureparaMouseReleased(evt);
-            }
-        });
-
-        jlblmenuestado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/money.png"))); // NOI18N
-        jlblmenuestado.setToolTipText("Estado Cuenta");
-        jlblmenuestado.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblmenuestado.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblmenuestadoMouseReleased(evt);
-            }
-        });
-
-        jlblmenusucursal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Office.png"))); // NOI18N
-        jlblmenusucursal.setToolTipText("Sucursal");
-        jlblmenusucursal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblmenusucursal.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblmenusucursalMouseReleased(evt);
-            }
-        });
-
-        jlblmenuregistro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/user+.png"))); // NOI18N
-        jlblmenuregistro.setToolTipText("Mantenimiento Registro");
-        jlblmenuregistro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblmenuregistro.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblmenuregistroMouseReleased(evt);
-            }
-        });
-
-        jlblhora.setBackground(new java.awt.Color(255, 255, 255));
-        jlblhora.setFont(new java.awt.Font("Segoe UI Light", 1, 18)); // NOI18N
-        jlblhora.setForeground(new java.awt.Color(255, 255, 255));
-        jlblhora.setText("* * *");
-
-        jDesktop.setBackground(new java.awt.Color(37, 52, 62));
-        jDesktop.setForeground(new java.awt.Color(204, 255, 255));
+        jDesktop.setBackground(new java.awt.Color(0, 0, 0));
+        jDesktop.setForeground(new java.awt.Color(0, 0, 0));
+        jDesktop.setOpaque(false);
         jDesktop.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jDesktopMouseReleased(evt);
@@ -1373,10 +1283,7 @@ final class MDIMenu extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jlblmensajeinfo.setFont(new java.awt.Font("Segoe UI Light", 1, 13)); // NOI18N
-        jlblmensajeinfo.setForeground(new java.awt.Color(0, 102, 255));
-
-        jPanel1.setBackground(new java.awt.Color(37, 52, 62));
+        jPanel1.setBackground(new java.awt.Color(238, 238, 238));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jlbluser.setBackground(new java.awt.Color(255, 255, 255));
@@ -1515,15 +1422,6 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblmensajeprint.setForeground(new java.awt.Color(255, 51, 51));
         jPanel1.add(jlblmensajeprint, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 470, 170, 20));
 
-        jlblminimizar.setToolTipText("Minimizar");
-        jlblminimizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblminimizar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblminimizarMouseReleased(evt);
-            }
-        });
-        jPanel1.add(jlblminimizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 10, 60, 20));
-
         jLabel1.setFont(new java.awt.Font("Segoe Script", 0, 12)); // NOI18N
         jLabel1.setText("Bienvenido");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 40, -1, -1));
@@ -1532,93 +1430,189 @@ final class MDIMenu extends javax.swing.JFrame {
         jLabel3.setText("R.U.T.:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, -1, -1));
 
+        jlblfondo.setBackground(new java.awt.Color(0, 0, 0));
         jlblfondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/panel2.jpg"))); // NOI18N
         jlblfondo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jlblfondoMouseReleased(evt);
             }
         });
-        jPanel1.add(jlblfondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 460, 510));
+        jPanel1.add(jlblfondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 460, 510));
 
-        javax.swing.GroupLayout jDesktopLayout = new javax.swing.GroupLayout(jDesktop);
-        jDesktop.setLayout(jDesktopLayout);
-        jDesktopLayout.setHorizontalGroup(
-            jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDesktopLayout.createSequentialGroup()
-                .addComponent(jpanelcontenedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlblmensajeinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(2039, Short.MAX_VALUE))
-        );
-        jDesktopLayout.setVerticalGroup(
-            jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDesktopLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
-                .addComponent(jlblmensajeinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addComponent(jpanelcontenedor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
-        );
-        jDesktop.setLayer(jpanelcontenedor, javax.swing.JLayeredPane.MODAL_LAYER);
-        jDesktop.setLayer(jlblmensajeinfo, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jlblmensajeinfo.setFont(new java.awt.Font("Segoe UI Light", 1, 13)); // NOI18N
+        jlblmensajeinfo.setForeground(new java.awt.Color(0, 102, 255));
+
+        jlblhora.setBackground(new java.awt.Color(0, 0, 0));
+        jlblhora.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
+        jlblhora.setForeground(new java.awt.Color(0, 0, 0));
+        jlblhora.setText("* * *");
+
+        jPanel6.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel6.setForeground(new java.awt.Color(238, 238, 238));
+        jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jPanel6MouseReleased(evt);
+            }
+        });
+
+        jlblmenuproducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Product2.png"))); // NOI18N
+        jlblmenuproducto.setToolTipText("Productos");
+        jlblmenuproducto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblmenuproducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlblmenuproductoMouseReleased(evt);
+            }
+        });
+
+        jlblmenuuser.setBackground(new java.awt.Color(255, 255, 255));
+        jlblmenuuser.setForeground(new java.awt.Color(255, 255, 255));
+        jlblmenuuser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Key.png"))); // NOI18N
+        jlblmenuuser.setToolTipText("Usuario");
+        jlblmenuuser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblmenuuser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jlblmenuuserMouseEntered(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlblmenuuserMouseReleased(evt);
+            }
+        });
+
+        jlblmenuventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ventaaa.png"))); // NOI18N
+        jlblmenuventa.setToolTipText("Venta");
+        jlblmenuventa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblmenuventa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlblmenuventaMouseReleased(evt);
+            }
+        });
+
+        jlblmenucaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ATM.png"))); // NOI18N
+        jlblmenucaja.setToolTipText("Caja");
+        jlblmenucaja.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblmenucaja.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlblmenucajaMouseReleased(evt);
+            }
+        });
+
+        jlblmenurepara.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/repair.png"))); // NOI18N
+        jlblmenurepara.setToolTipText("Reparaciones");
+        jlblmenurepara.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblmenurepara.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlblmenureparaMouseReleased(evt);
+            }
+        });
+
+        jlblmenuestado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/money.png"))); // NOI18N
+        jlblmenuestado.setToolTipText("Estado Cuenta");
+        jlblmenuestado.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblmenuestado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlblmenuestadoMouseReleased(evt);
+            }
+        });
+
+        jlblmenusucursal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Office.png"))); // NOI18N
+        jlblmenusucursal.setToolTipText("Sucursal");
+        jlblmenusucursal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblmenusucursal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlblmenusucursalMouseReleased(evt);
+            }
+        });
+
+        jlblmenuregistro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/user+.png"))); // NOI18N
+        jlblmenuregistro.setToolTipText("Mantenimiento Registro");
+        jlblmenuregistro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblmenuregistro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlblmenuregistroMouseReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jlblhora, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(203, 203, 203)
-                .addComponent(jlblmenuuser)
-                .addGap(52, 52, 52)
-                .addComponent(jlblmenuregistro, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
-                .addComponent(jlblmenuproducto)
-                .addGap(44, 44, 44)
-                .addComponent(jlblmenuventa)
-                .addGap(61, 61, 61)
-                .addComponent(jlblmenucaja)
-                .addGap(35, 35, 35)
-                .addComponent(jlblmenurepara)
-                .addGap(36, 36, 36)
-                .addComponent(jlblmenuestado)
-                .addGap(43, 43, 43)
-                .addComponent(jlblmenusucursal)
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlblmenusucursal)
+                    .addComponent(jlblmenuestado)
+                    .addComponent(jlblmenurepara)
+                    .addComponent(jlblmenucaja)
+                    .addComponent(jlblmenuventa)
+                    .addComponent(jlblmenuproducto)
+                    .addComponent(jlblmenuregistro, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblmenuuser))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jDesktop)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jDesktop)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jlblmenuuser, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-                        .addComponent(jlblmenuproducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jlblmenuventa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jlblmenucaja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jlblmenurepara, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jlblmenuestado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jlblmenusucursal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jlblmenuregistro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jlblhora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(jlblmenuuser)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlblmenuregistro)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlblmenuproducto)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlblmenuventa)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlblmenucaja)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlblmenurepara)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlblmenuestado)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlblmenusucursal)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        javax.swing.GroupLayout jDesktopLayout = new javax.swing.GroupLayout(jDesktop);
+        jDesktop.setLayout(jDesktopLayout);
+        jDesktopLayout.setHorizontalGroup(
+            jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDesktopLayout.createSequentialGroup()
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jpanelcontenedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlblhora, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblmensajeinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(1135, Short.MAX_VALUE))
+        );
+        jDesktopLayout.setVerticalGroup(
+            jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDesktopLayout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 604, Short.MAX_VALUE)
+                .addComponent(jlblmensajeinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlblhora, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jpanelcontenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 1213, Short.MAX_VALUE)
+        );
+        jDesktop.setLayer(jpanelcontenedor, javax.swing.JLayeredPane.MODAL_LAYER);
+        jDesktop.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jlblmensajeinfo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jlblhora, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jPanel6, javax.swing.JLayeredPane.MODAL_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jDesktop, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jDesktop)
         );
 
         pack();
@@ -1782,11 +1776,6 @@ final class MDIMenu extends javax.swing.JFrame {
          jlblmensajeprint.setText("");
     }//GEN-LAST:event_jbtnimprimirMouseExited
 
-    private void jlblminimizarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblminimizarMouseReleased
-        // TODO add your handling code here:
-         setExtendedState(JFrame.CROSSHAIR_CURSOR);
-    }//GEN-LAST:event_jlblminimizarMouseReleased
-
     /**
      * @param args the command line arguments
      */
@@ -1848,7 +1837,6 @@ final class MDIMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jlblmenusucursal;
     private javax.swing.JLabel jlblmenuuser;
     private javax.swing.JLabel jlblmenuventa;
-    private javax.swing.JLabel jlblminimizar;
     private javax.swing.JLabel jlblprodbajo;
     private javax.swing.JLabel jlblprodreg;
     private javax.swing.JLabel jlblprovreg;

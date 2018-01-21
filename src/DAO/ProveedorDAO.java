@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -63,7 +64,11 @@ public class ProveedorDAO {
 		
         }
         tabla.setModel(modelo);
-
+        TableColumnModel columnModel = tabla.getColumnModel();
+     
+        columnModel.getColumn(0).setPreferredWidth(90);
+        columnModel.getColumn(1).setPreferredWidth(400);
+        columnModel.getColumn(2).setPreferredWidth(90);
         rs.close();
         ps.close();
 	
@@ -120,6 +125,11 @@ public  List<Proveedor> busquedasensitivaproveedor(String tipoB,String cadena,JT
 		
         }
         tabla.setModel(modelo);
+        TableColumnModel columnModel = tabla.getColumnModel();
+     
+        columnModel.getColumn(1).setPreferredWidth(90);
+        columnModel.getColumn(2).setPreferredWidth(400);
+        columnModel.getColumn(3).setPreferredWidth(90);
       
 	rs.close();
         ps.close();

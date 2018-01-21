@@ -22,12 +22,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -181,7 +185,7 @@ public void cierre(Caja caja){
             }        
  
 }
- public void buscar(JTable tabla,Timestamp fdesde,Timestamp fhasta,JLabel jmensaje,long idsucur){
+ public List<Caja> buscar(JTable tabla,Timestamp fdesde,Timestamp fhasta,JLabel jmensaje,long idsucur){
         
     DefaultTableModel modelo= new DefaultTableModel(){
     public boolean isCellEditable(int row, int column) {
@@ -190,15 +194,17 @@ public void cierre(Caja caja){
     return false;
     }
     };      
-    String titulos[]={"ID","CAJERO","FECHA APER.","HORA APER.","FECHA CIE.","HORA CIE.","APER. CON","CIERRA CON","ESTADO","MAQUINA"};
+    String titulos[]={"CAJERO","FECHA APER.","FECHA CIE.","APER. CON","TOTAL COBRADO","CIERRA CON","ESTADO","MAQUINA"};
     modelo.setColumnIdentifiers(titulos);
     tabla.setModel(modelo);
-    tabla.getColumnModel().getColumn(0).setMaxWidth(0);
-    tabla.getColumnModel().getColumn(0).setMinWidth(0);
-    tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+//    tabla.getColumnModel().getColumn(0).setMaxWidth(0);
+//    tabla.getColumnModel().getColumn(0).setMinWidth(0);
+//    tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
     Conexion conexion = new Conexion();
      DateFormat df = DateFormat.getDateInstance();
-     
+     List<Caja> listcaja= new ArrayList<>();
+     Double total=0.0;
+     NumberFormat nf= NumberFormat.getInstance();
     try{
 	
         System.out.println("SELECT * from sp_busquedacaja('"+fdesde+"','"+fhasta+"')");
@@ -208,42 +214,54 @@ public void cierre(Caja caja){
         ps.setTimestamp(2, fhasta);
         ps.setLong(3, idsucur);
         ResultSet rs = ps.executeQuery();
-        Object datosR[] = new Object[10];
+        Object datosR[] = new Object[8];
        long  cont= 0;
         while (rs.next()){
                 cont++;
-                     for(int i =0; i<=1; i++){
+                Caja caja = new Caja();
                          
-                     datosR[i] = rs.getObject("vidcaja");
-                     i++;
-                     datosR[i] = rs.getObject("vnombre");
-                     i++;
-                     datosR[i] = rs.getObject("vfechaaper");
-                     i++;
-                     datosR[i] = rs.getObject("vhoraaper");
-                     i++;
-                     datosR[i] = rs.getObject("vfechacierr");
-                     i++;
-                     datosR[i] = rs.getObject("vhoracierr");
-                     i++;
-                     datosR[i] = rs.getObject("vaperturadinero");
-                     i++;
-                     datosR[i] = rs.getObject("vcierradinero");
-                     i++;
-                     datosR[i] = rs.getObject("vestado");
-                     i++;
-                      datosR[i] = rs.getObject("vdescripcion");
-                     i++;
-                    modelo.addRow(datosR);
-		}
-                     
+                 caja.setId_caja(rs.getLong("vidcaja"));
+                 caja.setAperturadinero(rs.getDouble("vaperturadinero"));
+                 caja.setCierradinero(rs.getDouble("vcierradinero"));
+                 total= total+ caja.getCierradinero();
+                 datosR[0] = rs.getObject("vnombre");
+
+                 datosR[1] = rs.getObject("vfechaaper");
+
+              //   datosR[2] = rs.getObject("vhoraaper");
+
+                 datosR[2] = rs.getObject("vfechacierr");
+
+              //   datosR[4] = rs.getObject("vhoracierr");
+
+                 datosR[3] = nf.format(caja.getAperturadinero());
+                 datosR[4] = nf.format(rs.getDouble("vtotalcobra"));
+                 datosR[5] = nf.format(caja.getCierradinero());
+
+                 datosR[6] = rs.getObject("vestado");
+
+                 datosR[7] = rs.getObject("vdescripcion");
+
+                modelo.addRow(datosR);
+                listcaja.add(caja);
+		  
         }
+        
+        TableColumnModel columnModel = tabla.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(400);
+        columnModel.getColumn(1).setPreferredWidth(90);
+        columnModel.getColumn(2).setPreferredWidth(80);
+        columnModel.getColumn(3).setPreferredWidth(80);
+        columnModel.getColumn(4).setPreferredWidth(80);
+        columnModel.getColumn(5).setPreferredWidth(80);
+        columnModel.getColumn(6).setPreferredWidth(80);
+        columnModel.getColumn(7).setPreferredWidth(150);
         rs.close();
         ps.close();
         if(cont==0){
             jmensaje.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO "+df.format(fdesde)+" AL "+df.format(fhasta));
         }else{
-            jmensaje.setText("");
+            jmensaje.setText("TOTAL: "+nf.format(total));
         }
 	
         } catch(Exception e)
@@ -252,7 +270,7 @@ public void cierre(Caja caja){
             }finally{
                 conexion.devolverConexionPool();
             }    
-    
+    return listcaja;
     }
 
 }

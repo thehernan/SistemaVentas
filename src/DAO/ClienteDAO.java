@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import org.edisoncor.gui.textField.TextFieldRoundIcon;
 
 /**
@@ -49,24 +50,31 @@ public class ClienteDAO {
         rs=st.executeQuery("SELECT * from sp_mostrarcliente()"); 
         Object datosR[] = new Object[4];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
+                   
                          
-                     datosR[i] = rs.getObject("id");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vnombre");
-                     i++;
-                     datosR[i] = rs.getObject("vcelular");
-                     i++;
+                     datosR[0] = rs.getObject("id");
+                    
+                     datosR[1] = rs.getObject("vrut");
+                    
+                     datosR[2] = rs.getObject("vnombre");
+                   
+                     datosR[3] = rs.getObject("vcelular");
+                    
                     
                     modelo.addRow(datosR);
-		}
+		
         }
         tabla.setModel(modelo);
         tabla.getColumnModel().getColumn(0).setMaxWidth(0);
         tabla.getColumnModel().getColumn(0).setMinWidth(0);
         tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+        
+        TableColumnModel columnModel = tabla.getColumnModel();
+     
+        columnModel.getColumn(1).setPreferredWidth(90);
+        columnModel.getColumn(2).setPreferredWidth(400);
+        columnModel.getColumn(3).setPreferredWidth(90);
+       
         rs.close();
         st.close();
 	
@@ -103,25 +111,31 @@ public class ClienteDAO {
         rs=st.executeQuery("SELECT * from sp_busquedasensitivacliente('"+tipoB+"','"+cadena+"')"); 
         Object datosR[] = new Object[4];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
+                    
                          
-                     datosR[i] = rs.getObject("id");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vnombre");
-                     i++;
-                     datosR[i] = rs.getObject("vcelular");
-                     i++;
+                     datosR[0] = rs.getObject("id");
+                     
+                     datosR[1] = rs.getObject("vrut");
+                    
+                     datosR[2] = rs.getObject("vnombre");
+                    
+                     datosR[3] = rs.getObject("vcelular");
+                    
                     
                     modelo.addRow(datosR);
-		}
+		
                      
         }
         tabla.setModel(modelo);
         tabla.getColumnModel().getColumn(0).setMaxWidth(0);
         tabla.getColumnModel().getColumn(0).setMinWidth(0);
         tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+        
+        TableColumnModel columnModel = tabla.getColumnModel();
+     
+        columnModel.getColumn(1).setPreferredWidth(90);
+        columnModel.getColumn(2).setPreferredWidth(400);
+        columnModel.getColumn(3).setPreferredWidth(90);
 	rs.close();
         st.close();
         } catch(Exception e)
