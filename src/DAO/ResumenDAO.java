@@ -5,18 +5,16 @@
  */
 package DAO;
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import Pojos.Resumen;
-import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
@@ -26,21 +24,25 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author info2017
  */
 public class ResumenDAO {
+    
+    
+      DecimalFormat nf = new DecimalFormat("#.00");
      
-      public Resumen mostrar(long id){
       
-     Conexion conexion= new Conexion();
+    public Resumen mostrar(long id){
+      
+        ConexionBD Cbd = new ConexionBD();
 
         Statement st=null;
         ResultSet rs=null;
         Resumen res = new Resumen();
-          NumberFormat nf = NumberFormat.getInstance();
+         
     try{
         String sql="SELECT * from sp_mostrarresumen(?)";
-        PreparedStatement ps = conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps =Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, id);
       
-        rs=ps.executeQuery(); 
+        rs=Cbd.RealizarConsulta(ps); 
         
         if (rs.next()){
             res.setProdreg(("Productos Registrados: "+rs.getLong("prodreg")));
@@ -56,14 +58,13 @@ public class ResumenDAO {
         }
         
      
-        rs.close();
-        ps.close();
+     
 	
         } catch(SQLException e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+               Cbd.desconectar();
             }    
 
 return res;
@@ -71,15 +72,15 @@ return res;
       }
       
       public void imprimir(long id,String sucursal){
-          Conexion conexion = new Conexion();
-try{
-    ///////////////////////// formato fecha ////////////////////////////
-//            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//           datepicker.setFormats(dateFormat);   
-//           java.util.Date fecha =((datepicker.getDate())); 
-           
-    ////////////////////////////////////////////////////////////+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333////////       
-            //Connection miconexion = conectar.Connect();
+          ConexionBD Cbd = new ConexionBD();
+        try{
+            ///////////////////////// formato fecha ////////////////////////////
+        //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        //           datepicker.setFormats(dateFormat);   
+        //           java.util.Date fecha =((datepicker.getDate())); 
+
+            ////////////////////////////////////////////////////////////+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333////////       
+                    //Connection miconexion = conectar.Connect();
            
                       
             String  rutaInforme  = "src/Reportes/Resumen.jasper";
@@ -90,7 +91,7 @@ try{
              parametros.put("sucursal",  sucursal);
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -100,7 +101,7 @@ try{
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
         }finally{
-    conexion.devolverConexionPool();
+    Cbd.desconectar();
 
 }
       }

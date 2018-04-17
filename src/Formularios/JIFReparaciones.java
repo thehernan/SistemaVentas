@@ -17,6 +17,8 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +49,8 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
     List<PrecioReparacion> listprecio = new ArrayList<>();
     PrecioReparacion precio = new PrecioReparacion();
     Mayusculas mayus = new Mayusculas();
+     int posx;
+    int posy;
     public JIFReparaciones() {
         
         initComponents();
@@ -55,7 +59,13 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         reparacion.setFoto(fotoB);//LE ENVIO 0 BYTES POR DEFAULT
 //        daoreparacion.llenarcombobox(jcbdispositivo);
         listprecio=daoreparacion.llenarcombobox(jcbdispositivo);
-        jXDate.setDate(new Date());
+        jdpfecha.setDate(new Date());
+        
+        
+         ///// hora actual
+        Date fecha = new Date();
+        DateFormat df = new SimpleDateFormat("HH:mm:ss");
+        jtfhora.setValue(df.format(fecha));
     }
     public void setempleado(Empleado empleado){
         this.empleado= empleado;
@@ -108,18 +118,19 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
     reparacion= new Reparacion();
     cliente=new Cliente();
     idreparacion=0;
-    jtfmarca.setText("MARCA");
-    jtfmodelo.setText("MODELO");
+    jtfmarca.setText("");
+    jtfmodelo.setText("");
     jlblfoto.setIcon(null);
-    jlblnombre.setText("---");
-    jlblcliente.setText("---");
-    jtafallas.setText("FALLAS");
-    jtacausas.setText("CAUSAS");
-    jtaobservacion.setText("OBSERVACIÓN");
+    jlblnombre.setText("* * *");
+    jlblcliente.setText("* * *");
+    jtafallas.setText("");
+    jtacausas.setText("");
+    jtaobservacion.setText("");
 //    jtadiagnostico.setText("DIAGNOSTICO");
     jbtnaceptar.setEnabled(false);
+    jtfpreciorevision.setText("");
+//    jtfdescuento.setText("");
    
-    jXDate.setDate(null);
     jtfprecio.setText("");
     reparacion.setFoto(fotoB);
     }
@@ -146,6 +157,7 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jtaobservacion = new javax.swing.JTextArea();
         panelNice1 = new org.edisoncor.gui.panel.PanelNice();
@@ -158,33 +170,32 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         jlblcliente = new javax.swing.JLabel();
         jbtncliente = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jXDate = new org.jdesktop.swingx.JXDatePicker();
-        jLabel4 = new javax.swing.JLabel();
-        jsphora = new javax.swing.JSpinner();
+        jdpfecha = new org.jdesktop.swingx.JXDatePicker();
+        jtfhora = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
-        jspmin = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jcbdispositivo = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jtfprecio = new javax.swing.JTextField();
         jtfpreciorevision = new javax.swing.JTextField();
-        jtfdescuento = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
 
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
-        setTitle("NUEVA REPARACIÓN");
+        setToolTipText("");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("Técnico:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 136, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "DATOS DEL PRODUCTO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jtfmarca.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfmarca.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -272,55 +283,7 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
 
         jLabel12.setText("Causas:");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtfmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtfmodelo, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel12))
-                        .addGap(0, 33, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jtfmodelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jtfmarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel11)
-                .addGap(3, 3, 3)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
-                .addGap(2, 2, 2)
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
-        );
-
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 184, -1, 240));
+        jLabel13.setText("Observación:");
 
         jtaobservacion.setColumns(20);
         jtaobservacion.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
@@ -343,40 +306,98 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         });
         jScrollPane3.setViewportView(jtaobservacion);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 452, 590, 100));
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtfmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtfmodelo, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13))
+                        .addGap(0, 33, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jtfmodelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jtfmarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel11)
+                .addGap(3, 3, 3)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, 360));
 
         panelNice1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jlblfoto.setBackground(new java.awt.Color(255, 255, 255));
-        panelNice1.add(jlblfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 210, 170));
+        panelNice1.add(jlblfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 210, 170));
 
-        jPanel1.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(663, 10, 322, 190));
+        jPanel1.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 80, 230, 190));
 
         jbtnfoto.setBackground(new java.awt.Color(255, 255, 255));
         jbtnfoto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jbtnfoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/FOTO.png"))); // NOI18N
-        jbtnfoto.setText("Foto");
+        jbtnfoto.setBorderPainted(false);
+        jbtnfoto.setContentAreaFilled(false);
         jbtnfoto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnfotoActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 200, 160, 50));
+        jPanel1.add(jbtnfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 90, 40, 40));
 
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
         jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 500, -1, 40));
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 560, -1, 40));
 
         jlblnombre.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jlblnombre.setText("---");
-        jPanel1.add(jlblnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 136, 350, -1));
+        jlblnombre.setText("* * *");
+        jPanel1.add(jlblnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, 450, -1));
 
         jbtnbuscartecnico.setBackground(new java.awt.Color(255, 255, 255));
         jbtnbuscartecnico.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -386,15 +407,15 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
                 jbtnbuscartecnicoActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnbuscartecnico, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 136, -1, -1));
+        jPanel1.add(jbtnbuscartecnico, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 200, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel2.setText("Cliente:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 98, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
 
         jlblcliente.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jlblcliente.setText("---");
-        jPanel1.add(jlblcliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 98, 400, -1));
+        jlblcliente.setText("* * *");
+        jPanel1.add(jlblcliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 450, -1));
 
         jbtncliente.setBackground(new java.awt.Color(255, 255, 255));
         jbtncliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -404,38 +425,32 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
                 jbtnclienteActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtncliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 98, -1, -1));
+        jPanel1.add(jbtncliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 160, -1, -1));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "FECHA Y HORA DE ENTREGA", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Fecha y Hora de Entrega", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Light", 0, 12))); // NOI18N
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel3.add(jXDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 180, -1));
+        jPanel3.add(jdpfecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 120, 20));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel4.setText("HORA:");
-        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, -1, 20));
+        try {
+            jtfhora.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##:##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jPanel3.add(jtfhora, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 90, -1));
 
-        jsphora.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jsphora.setModel(new javax.swing.SpinnerListModel(new String[] {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}));
-        jPanel3.add(jsphora, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 50, -1));
+        jLabel3.setText("H24:MM:SS");
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 30, -1, 20));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel3.setText("MIN:");
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 20, -1, 20));
-
-        jspmin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jspmin.setModel(new javax.swing.SpinnerListModel(new String[] {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"}));
-        jPanel3.add(jspmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 50, -1));
-
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 600, 68));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 490, 60));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel5.setText("Precio:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(643, 314, -1, 20));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 330, -1, 20));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel6.setText("Precio Revisión:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 370, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 330, 110, -1));
 
         jcbdispositivo.setEditable(true);
         jcbdispositivo.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
@@ -445,15 +460,11 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
                 jcbdispositivoActionPerformed(evt);
             }
         });
-        jPanel1.add(jcbdispositivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(643, 280, 270, -1));
+        jPanel1.add(jcbdispositivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 300, 270, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel7.setText("Dispositivo");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(643, 260, -1, -1));
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel8.setText("Descuento:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 420, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 280, -1, -1));
 
         jtfprecio.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfprecio.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -466,7 +477,7 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
                 jtfprecioKeyReleased(evt);
             }
         });
-        jPanel1.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 340, 270, -1));
+        jPanel1.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 350, 200, -1));
 
         jtfpreciorevision.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfpreciorevision.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -479,30 +490,70 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
                 jtfpreciorevisionKeyReleased(evt);
             }
         });
-        jPanel1.add(jtfpreciorevision, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 390, 270, -1));
+        jPanel1.add(jtfpreciorevision, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 350, 220, -1));
 
-        jtfdescuento.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfdescuento.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfdescuentoKeyReleased(evt);
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel7MouseDragged(evt);
             }
         });
-        jPanel1.add(jtfdescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 440, 270, -1));
+        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel7MousePressed(evt);
+            }
+        });
 
-        jLabel13.setText("Observación:");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, -1, -1));
+        jLabel14.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel14.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("NUEVA REPARACION");
+
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jLabel15.setToolTipText("Cerrar");
+        jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel15MouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 840, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel14))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -603,12 +654,12 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
       
             reparacion.setIdempleado(empleado.getId_empleado());
             reparacion.setIdcliente(cliente.getId_cliente());
-            reparacion.setAtendido(empleadosingleton.getNombre());
-            reparacion.setMarca(jtfmarca.getText());
-            reparacion.setModelo(jtfmodelo.getText());
-            reparacion.setFallas(jtafallas.getText());
-            reparacion.setCausas(jtacausas.getText());
-            reparacion.setObservacion(jtaobservacion.getText());
+            reparacion.setAtendido(empleadosingleton.getNombre().trim().toUpperCase());
+            reparacion.setMarca(jtfmarca.getText().trim().toUpperCase());
+            reparacion.setModelo(jtfmodelo.getText().trim().toUpperCase());
+            reparacion.setFallas(jtafallas.getText().trim().toUpperCase());
+            reparacion.setCausas(jtacausas.getText().trim().toUpperCase());
+            reparacion.setObservacion(jtaobservacion.getText().trim().toUpperCase());
            // reparacion.setDiagnostico(jtadiagnostico.getText());
             System.out.println(jtfprecio.getText());
             reparacion.setPrecio(Double.parseDouble(jtfprecio.getText()));
@@ -624,15 +675,16 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
 //            System.err.println("año"+año);
 //            System.err.println("mes"+mes);
 //            System.err.println("dia"+dia);
-            reparacion.setFechaE(new java.sql.Timestamp(jXDate.getDate().getTime()));
-            reparacion.setHora(jsphora.getValue()+":"+jspmin.getValue());
+            reparacion.setFechaE(new SimpleDateFormat("yyyy-MM-dd").format(jdpfecha.getDate())+" "+jtfhora.getValue());
+//            reparacion.setFechaE(new java.sql.Timestamp(jdpfecha.getDate().getTime()));
+//            reparacion.setHora(jtfhora.getValue().toString());
             reparacion.setId_sucural(sucursalsingleton.getId());
             reparacion.setPrecio(Double.parseDouble(jtfprecio.getText().toString()));
             reparacion.setPreciorevision(Double.parseDouble(jtfpreciorevision.getText()));
-            reparacion.setDescuento(Double.parseDouble(jtfdescuento.getText()));
+            reparacion.setDescuento(0.0);
             idreparacion=daoreparacion.insertar(reparacion);
 //            JOptionPane.showMessageDialog(null, codigo,"TOME NOTA DEL CODIGO DE REPARACION",JOptionPane.INFORMATION_MESSAGE);
-            daoreparacion.imprimirticketcaja(idreparacion);
+            daoreparacion.imprimir(idreparacion);
             nuevo();                                                                         
             
        
@@ -683,27 +735,27 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
 
     private void jtfmarcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfmarcaKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfmarca);
+//        mayus.convertirmayus(jtfmarca);
     }//GEN-LAST:event_jtfmarcaKeyTyped
 
     private void jtfmodeloKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfmodeloKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfmodelo);
+//        mayus.convertirmayus(jtfmodelo);
     }//GEN-LAST:event_jtfmodeloKeyTyped
 
     private void jtafallasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtafallasKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayusTA(jtafallas);
+//        mayus.convertirmayusTA(jtafallas);
     }//GEN-LAST:event_jtafallasKeyTyped
 
     private void jtacausasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtacausasKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayusTA(jtacausas);
+//        mayus.convertirmayusTA(jtacausas);
     }//GEN-LAST:event_jtacausasKeyTyped
 
     private void jtaobservacionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtaobservacionKeyTyped
         // TODO add your handling code here:
-         mayus.convertirmayusTA( jtaobservacion);
+//         mayus.convertirmayusTA( jtaobservacion);
     }//GEN-LAST:event_jtaobservacionKeyTyped
 
     private void jtfprecioMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfprecioMouseReleased
@@ -716,11 +768,6 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
        
     }//GEN-LAST:event_jtfpreciorevisionMousePressed
 
-    private void jtfdescuentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescuentoKeyReleased
-        // TODO add your handling code here:
-        validaaceptar();
-    }//GEN-LAST:event_jtfdescuentoKeyReleased
-
     private void jtfprecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecioKeyReleased
         // TODO add your handling code here:
          validaaceptar();
@@ -731,6 +778,24 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
          validaaceptar();
     }//GEN-LAST:event_jtfpreciorevisionKeyReleased
 
+    private void jLabel15MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseReleased
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jLabel15MouseReleased
+
+    private void jPanel7MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MousePressed
+        // TODO add your handling code here:
+          posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel7MousePressed
+
+    private void jPanel7MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseDragged
+        // TODO add your handling code here:
+         int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel7MouseDragged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -738,35 +803,34 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private org.jdesktop.swingx.JXDatePicker jXDate;
     private javax.swing.JButton jbtnaceptar;
     private javax.swing.JButton jbtnbuscartecnico;
     private javax.swing.JButton jbtncliente;
     private javax.swing.JButton jbtnfoto;
     private javax.swing.JComboBox jcbdispositivo;
+    private org.jdesktop.swingx.JXDatePicker jdpfecha;
     private javax.swing.JLabel jlblcliente;
     private javax.swing.JLabel jlblfoto;
     private javax.swing.JLabel jlblnombre;
-    private javax.swing.JSpinner jsphora;
-    private javax.swing.JSpinner jspmin;
     private javax.swing.JTextArea jtacausas;
     private javax.swing.JTextArea jtafallas;
     private javax.swing.JTextArea jtaobservacion;
-    private javax.swing.JTextField jtfdescuento;
+    private javax.swing.JFormattedTextField jtfhora;
     private javax.swing.JTextField jtfmarca;
     private javax.swing.JTextField jtfmodelo;
     private javax.swing.JTextField jtfprecio;

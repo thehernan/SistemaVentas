@@ -34,7 +34,7 @@ public class JDCerrarCaja extends javax.swing.JDialog {
         jlblfecha.setValue(caja.getFechahora_apertura());
         jlblaperturo.setValue(caja.getAperturadinero());
         
-        daodetcaja.mostrar(jtabla, caja.getId_caja(),jlbltotal,jlblaperturo,jlblcierra);
+        daodetcaja.mostrar(jtabla, caja.getId_caja(),jlbltotal,jlblaperturo,jlblcierra,jlblcajero);
 //        calculatotal(caja.getAperturadinero());
         this.caja=caja;
         this.frmcaja=frmcaja;
@@ -86,7 +86,8 @@ public class JDCerrarCaja extends javax.swing.JDialog {
         jlbltotal = new javax.swing.JFormattedTextField();
         jlblcierra = new javax.swing.JFormattedTextField();
         jPanel7 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
+        jlblcajero = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -135,24 +136,29 @@ public class JDCerrarCaja extends javax.swing.JDialog {
         jlblfecha.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.LONG))));
         jlblfecha.setEnabled(false);
 
-        jlblaperturo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlblaperturo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jlblaperturo.setEnabled(false);
 
-        jlbltotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlbltotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jlbltotal.setEnabled(false);
 
-        jlblcierra.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlblcierra.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jlblcierra.setCaretColor(new java.awt.Color(255, 51, 51));
         jlblcierra.setDisabledTextColor(new java.awt.Color(255, 51, 51));
         jlblcierra.setEnabled(false);
         jlblcierra.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
 
-        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel11.setText("CORTE DE CAJA");
+        jlblcajero.setBackground(new java.awt.Color(0, 0, 0));
+        jlblcajero.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jlblcajero.setForeground(new java.awt.Color(255, 255, 255));
+        jlblcajero.setText("* * *");
+
+        jLabel12.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel12.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("CORTE DE CAJA");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -160,15 +166,19 @@ public class JDCerrarCaja extends javax.swing.JDialog {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel11)
+                .addComponent(jLabel12)
+                .addGap(18, 18, 18)
+                .addComponent(jlblcajero)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel11)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlblcajero)
+                    .addComponent(jLabel12))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -200,11 +210,11 @@ public class JDCerrarCaja extends javax.swing.JDialog {
                         .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jlblcierra, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jlblcierra))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(14, 14, 14)
@@ -313,7 +323,7 @@ public class JDCerrarCaja extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -323,6 +333,7 @@ public class JDCerrarCaja extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtncerrar;
     private javax.swing.JFormattedTextField jlblaperturo;
+    private javax.swing.JLabel jlblcajero;
     private javax.swing.JFormattedTextField jlblcierra;
     private javax.swing.JFormattedTextField jlblfecha;
     private javax.swing.JFormattedTextField jlbltotal;

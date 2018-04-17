@@ -6,6 +6,11 @@
 package Formularios;
 
 import DAO.MermaDAO;
+import DAO.SucursalDAO;
+import Pojos.Sucursal;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -17,8 +22,50 @@ public class JIFConsultarMerma extends javax.swing.JInternalFrame {
      * Creates new form JIFConsultarMerma
      */
     MermaDAO daomerma = new MermaDAO();
+    SucursalDAO sucursaldao = new SucursalDAO();
+    Sucursal sucursal;
+    List<Sucursal> listsucursal;
+     int posx;
+    int posy;
     public JIFConsultarMerma() {
         initComponents();
+        jdpdesde.setDate(new Date());
+        jdphasta.setDate(new Date());
+//        daomerma.mostrar(jtabla, new Timestamp(new Date().getTime()), new Timestamp(new Date().getTime()));
+        
+        busqueda();
+    }
+    public void busqueda(){
+    Runnable runnable = new Runnable() {
+
+        @Override
+        public void run() {
+//            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       jlblimagencarga.setVisible(true);
+       jlblletracarga.setVisible(true);
+       if(listsucursal==null){
+            listsucursal=sucursaldao.llenarcombo(jcbsucursal);
+       }
+      
+      if(jdpdesde.getDate()!=null && jdphasta.getDate()!=null){
+         if(jcbsucursal.getSelectedIndex()==0){
+                 daomerma.busquedasensitiva(jtabla,  new Timestamp(jdpdesde.getDate().getTime()), new Timestamp(jdphasta.getDate().getTime())
+                         ,0,"todo",jtfbuscar.getText().toUpperCase());
+
+            }else {
+                 sucursal=listsucursal.get(jcbsucursal.getSelectedIndex());
+                  daomerma.busquedasensitiva(jtabla,  new Timestamp(jdpdesde.getDate().getTime()),new Timestamp(jdphasta.getDate().getTime())
+                         ,sucursal.getId(),"sucursal",jtfbuscar.getText().toUpperCase());
+
+            }
+    }
+      jlblimagencarga.setVisible(false);
+       jlblletracarga.setVisible(false);
+        }
+    };
+    Thread T = new Thread(runnable);
+    T.start();
+  
     }
 
     /**
@@ -32,85 +79,241 @@ public class JIFConsultarMerma extends javax.swing.JInternalFrame {
 
         jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
         jPanel1 = new javax.swing.JPanel();
-        jbtnimprimir = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jdpdesde = new org.jdesktop.swingx.JXDatePicker();
         jdphasta = new org.jdesktop.swingx.JXDatePicker();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jlblmensaje = new javax.swing.JLabel();
+        jlblletracarga = new javax.swing.JLabel();
+        jlblimagencarga = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtabla = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        jtfbuscar = new javax.swing.JTextField();
+        jcbsucursal = new javax.swing.JComboBox();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
-        setIconifiable(true);
-        setTitle("CONSULTA DE MERMAS");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jbtnimprimir.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print_46933.png"))); // NOI18N
-        jbtnimprimir.addActionListener(new java.awt.event.ActionListener() {
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ingrese Fecha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Light", 0, 12))); // NOI18N
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jdpdesde.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnimprimirActionPerformed(evt);
+                jdpdesdeActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 20, -1, -1));
+        jPanel2.add(jdpdesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 120, -1));
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "INGRESE FECHA", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel2.add(jdpdesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 120, -1));
-        jPanel2.add(jdphasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 30, 140, -1));
+        jdphasta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jdphastaActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jdphasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, 120, -1));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("DESDE:");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, -1, 20));
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel1.setText("Desde:");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, 20));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("HASTA:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, -1, 20));
+        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel2.setText("Hasta:");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, -1, 20));
 
         jlblmensaje.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jlblmensaje.setForeground(new java.awt.Color(255, 51, 51));
         jPanel2.add(jlblmensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 490, 20));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 570, 80));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 570, 60));
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 430, -1, -1));
+
+        jlblimagencarga.setBackground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setForeground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 1140, 310));
+
+        jtabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(jtabla);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 1150, 350));
+
+        jLabel4.setText("Cod.:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+
+        jtfbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfbuscarActionPerformed(evt);
+            }
+        });
+        jtfbuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfbuscarKeyReleased(evt);
+            }
+        });
+        jPanel1.add(jtfbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 440, -1));
+
+        jcbsucursal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbsucursalActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 160, 310, -1));
+
+        jLabel5.setText("Sucursal:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 160, -1, 20));
+
+        jPanel3.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel3MouseDragged(evt);
+            }
+        });
+        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel3MousePressed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("CONSULTAR MERMAS");
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jLabel6.setToolTipText("Cerrar");
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel6MouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 894, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1171, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 733, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbtnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirActionPerformed
+    private void jtfbuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscarKeyReleased
         // TODO add your handling code here:
-        if(jdpdesde.getDate()!=null && jdphasta.getDate()!=null){
-        daomerma.imprimir(new java.util.Date(jdpdesde.getDate().getTime()),new java.util.Date(jdphasta.getDate().getTime()));
-        jlblmensaje.setText("");
-        }else {
-        jlblmensaje.setText("INGRESE FECHA");
-               
-        }
-    }//GEN-LAST:event_jbtnimprimirActionPerformed
+        
+        
+        
+    }//GEN-LAST:event_jtfbuscarKeyReleased
+
+    private void jcbsucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbsucursalActionPerformed
+        // TODO add your handling code here:
+         busqueda();
+    }//GEN-LAST:event_jcbsucursalActionPerformed
+
+    private void jdpdesdeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jdpdesdeActionPerformed
+        // TODO add your handling code here:
+       busqueda();
+    }//GEN-LAST:event_jdpdesdeActionPerformed
+
+    private void jdphastaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jdphastaActionPerformed
+        // TODO add your handling code here:
+        busqueda();
+        
+    }//GEN-LAST:event_jdphastaActionPerformed
+
+    private void jtfbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfbuscarActionPerformed
+        // TODO add your handling code here:
+        busqueda();
+    }//GEN-LAST:event_jtfbuscarActionPerformed
+
+    private void jPanel3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MousePressed
+        // TODO add your handling code here:
+         posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel3MousePressed
+
+    private void jPanel3MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseDragged
+        // TODO add your handling code here:
+         int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel3MouseDragged
+
+    private void jLabel6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseReleased
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jLabel6MouseReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
-    private javax.swing.JButton jbtnimprimir;
+    private javax.swing.JComboBox jcbsucursal;
     private org.jdesktop.swingx.JXDatePicker jdpdesde;
     private org.jdesktop.swingx.JXDatePicker jdphasta;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
     private javax.swing.JLabel jlblmensaje;
+    private javax.swing.JTable jtabla;
+    private javax.swing.JTextField jtfbuscar;
     // End of variables declaration//GEN-END:variables
 }

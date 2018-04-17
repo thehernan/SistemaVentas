@@ -93,7 +93,7 @@ public class JDAperturaCaja extends javax.swing.JDialog {
 
         jlblhora.setText("-----");
 
-        jtfapertura.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfapertura.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jtfapertura.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtfapertura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

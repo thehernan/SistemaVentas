@@ -5,7 +5,7 @@
  */
 package DAO;
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,72 +25,74 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class EstadoCuentaDAO {
     
+     
+     
     public void mostrardebe(JTable tabla,long idsucur){
-        
+    ConexionBD Cbd = new ConexionBD();    
     DefaultTableModel modelo= new DefaultTableModel(){
     public boolean isCellEditable(int row, int column) {
   //      if (column == 5) return true;
   //else
-   return false;
-  }
-  };      
- String titulos[]={"ID","NOMBRE RAZON S.","RUT","TOTAL","ABONO","SALDO"};
- modelo.setColumnIdentifiers(titulos);
- tabla.setModel(modelo);
- tabla.getColumnModel().getColumn(0).setMaxWidth(0);
- tabla.getColumnModel().getColumn(0).setMinWidth(0);
- tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-  Conexion conexion = new Conexion();
+        return false;
+       }
+       };      
+      String titulos[]={"ID","NOMBRE RAZON S.","RUT","TOTAL","ABONO","SALDO"};
+      modelo.setColumnIdentifiers(titulos);
+      tabla.setModel(modelo);
+      tabla.getColumnModel().getColumn(0).setMaxWidth(0);
+      tabla.getColumnModel().getColumn(0).setMinWidth(0);
+      tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+  
           
      
     try{
 	
       
         String sql=("SELECT * from sp_estadocuentadebe(?)"); 
-        PreparedStatement ps = conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps = Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idsucur);
-        ResultSet rs = ps.executeQuery();
+        ResultSet rs =Cbd.RealizarConsulta(ps);
         Object datosR[] = new Object[6];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
-                         
-                     datosR[i] = rs.getObject("vidproveedor");
-                     i++;
-                     datosR[i] = rs.getObject("vnombre");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vtotal");
-                     i++;
-                     datosR[i] = rs.getObject("vabono");
-                     i++;
-                     datosR[i] = rs.getObject("vsaldo");
-                     i++;
                     
-                    modelo.addRow(datosR);
-		}
+                         
+             datosR[0] = rs.getObject("vidproveedor");
+
+             datosR[1] = rs.getObject("vnombre");
+
+             datosR[2] = rs.getObject("vrut");
+
+             datosR[3] = rs.getObject("vtotal");
+
+             datosR[4] = rs.getObject("vabono");
+
+             datosR[5] = rs.getObject("vsaldo");
+                     
+                    
+            modelo.addRow(datosR);
+		
         }
-	ps.close();
-        rs.close();
+	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
             }    
 
     
     }
     public void imprimirdebe(long idprove,long idsucur){
-try{
-    ///////////////////////// formato fecha ////////////////////////////
-//            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//           datepicker.setFormats(dateFormat);   
-//           java.util.Date fecha =((datepicker.getDate())); 
-           
-    ////////////////////////////////////////////////////////////////////       
-            //Connection miconexion = conectar.Connect();
-            Conexion conexion = new Conexion();
+        ConexionBD Cbd = new ConexionBD();
+    try{
+        ///////////////////////// formato fecha ////////////////////////////
+    //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    //           datepicker.setFormats(dateFormat);   
+    //           java.util.Date fecha =((datepicker.getDate())); 
+
+        ////////////////////////////////////////////////////////////////////       
+                //Connection miconexion = conectar.Connect();
+
                       
             String  rutaInforme  = "src/Reportes/EstadoCuentaDebe.jasper";
             
@@ -100,7 +102,7 @@ try{
             parametros.put("idproveedor",  idprove);
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -109,20 +111,23 @@ try{
         }catch (HeadlessException | JRException ex) {
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
-        }
+        }finally{
+        Cbd.desconectar();
+}
      
 
 }
     public void imprimirhaber(long idsucur,long idcliente ){
-try{
-    ///////////////////////// formato fecha ////////////////////////////
-//            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//           datepicker.setFormats(dateFormat);   
-//           java.util.Date fecha =((datepicker.getDate())); 
+        ConexionBD Cbd = new ConexionBD();
+    try{
+        ///////////////////////// formato fecha ////////////////////////////
+    //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    //           datepicker.setFormats(dateFormat);   
+    //           java.util.Date fecha =((datepicker.getDate())); 
+
+        ////////////////////////////////////////////////////////////+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333////////       
+                //Connection miconexion = conectar.Connect();
            
-    ////////////////////////////////////////////////////////////+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333////////       
-            //Connection miconexion = conectar.Connect();
-            Conexion conexion = new Conexion();
                       
             String  rutaInforme  = "src/Reportes/EstadoCuentaHaber.jasper";
             
@@ -132,7 +137,7 @@ try{
             parametros.put("idcliente",  idcliente);
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -141,64 +146,65 @@ try{
         }catch (HeadlessException | JRException ex) {
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
-        }
+        }finally{
+        Cbd.desconectar();
+}
      
 
 }
     public void mostrarhaber(JTable tabla,long idsucur){
-        
-    DefaultTableModel modelo= new DefaultTableModel(){
-    public boolean isCellEditable(int row, int column) {
-  //      if (column == 5) return true;
-  //else
-   return false;
-  }
-  };      
- String titulos[]={"ID","NOMBRE RAZON S.","RUT","CELULAR","IMPORTE","ABONO","SALDO"};
- modelo.setColumnIdentifiers(titulos);
- tabla.setModel(modelo);
- tabla.getColumnModel().getColumn(0).setMaxWidth(0);
- tabla.getColumnModel().getColumn(0).setMinWidth(0);
- tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-  Conexion conexion = new Conexion();
+        ConexionBD Cbd = new ConexionBD();
+        DefaultTableModel modelo= new DefaultTableModel(){
+        public boolean isCellEditable(int row, int column) {
+      //      if (column == 5) return true;
+      //else
+       return false;
+      }
+      };      
+     String titulos[]={"ID","NOMBRE RAZON S.","RUT","CELULAR","IMPORTE","ABONO","SALDO"};
+     modelo.setColumnIdentifiers(titulos);
+     tabla.setModel(modelo);
+     tabla.getColumnModel().getColumn(0).setMaxWidth(0);
+     tabla.getColumnModel().getColumn(0).setMinWidth(0);
+     tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+ 
           
      
     try{
 	
       
         String sql=("SELECT * from sp_estadocuentahaber(?)"); 
-        PreparedStatement ps = conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps = Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idsucur);
-        ResultSet rs = ps.executeQuery();
+        ResultSet rs = Cbd.RealizarConsulta(ps);
         Object datosR[] = new Object[7];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
+                   
                          
-                     datosR[i] = rs.getObject("vidcliente");
-                     i++;
-                     datosR[i] = rs.getObject("vnombre");
-                     i++;
-                     datosR[i] = rs.getObject("vrut");
-                     i++;
-                     datosR[i] = rs.getObject("vcelular");
-                     i++;
-                     datosR[i] = rs.getObject("vimporte");
-                     i++;
-                     datosR[i] = rs.getObject("vabono");
-                     i++;
-                     datosR[i] = rs.getObject("vsaldo");
-                     i++;
-                    
-                    modelo.addRow(datosR);
-		}
+             datosR[0] = rs.getObject("vidcliente");
+           
+             datosR[1] = rs.getObject("vnombre");
+            
+             datosR[2] = rs.getObject("vrut");
+             
+             datosR[3] = rs.getObject("vcelular");
+           
+             datosR[4] = rs.getObject("vimporte");
+            
+             datosR[5] = rs.getObject("vabono");
+            
+             datosR[6] = rs.getObject("vsaldo");
+            
+
+            modelo.addRow(datosR);
+
         }
-	ps.close();
-        rs.close();
+	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
             }    
 
     

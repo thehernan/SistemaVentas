@@ -28,11 +28,11 @@ public class JDDetalleMovimientoCaja extends javax.swing.JDialog {
      public JDDetalleMovimientoCaja(java.awt.Frame parent, boolean modal,Caja caja) {
         super(parent, modal);
         initComponents();
-        detcaja.mostrar(jtabla, caja.getId_caja(),jlbltotal,jlblaperturo,jlblcierra);
+        detcaja.mostrar(jtabla, caja.getId_caja(),jlbltotal,jlblaperturo,jlblcierra,jlblcajero);
 //        jlblaperturo.setValue(caja.getAperturadinero());
 //        jlblfecha.setText(caja.getFechahora_apertura().toString());
 //        jlblcierra.setValue(caja.getCierradinero());
-        jlblcajero.setText(empleadosingleton.getNombre());
+//        jlblcajero.setText(empleadosingleton.getNombre());
 //        calculatotal();
         this.setLocationRelativeTo(null);
 //        this.idcaja=idcaja;
@@ -111,13 +111,13 @@ public class JDDetalleMovimientoCaja extends javax.swing.JDialog {
         jlblcajero.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jlblcajero.setText("jLabel5");
 
-        jlblaperturo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlblaperturo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jlblaperturo.setEnabled(false);
 
-        jlbltotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlbltotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jlbltotal.setEnabled(false);
 
-        jlblcierra.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlblcierra.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jlblcierra.setCaretColor(new java.awt.Color(255, 51, 51));
         jlblcierra.setDisabledTextColor(new java.awt.Color(255, 51, 51));
         jlblcierra.setEnabled(false);

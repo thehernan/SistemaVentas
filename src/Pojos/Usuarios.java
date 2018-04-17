@@ -14,6 +14,8 @@ public class Usuarios {
     private long id_usuario;
     private String usuario;
     private String clave;
+    private String nombreempleado;
+    private String rutempleado;
     private long idempleado;
     private boolean cliente;
     private boolean proveedor;
@@ -41,7 +43,7 @@ public class Usuarios {
     private boolean sucursalida;
     private boolean sucurentrada;
     private boolean consultasucur;
-    
+    private boolean web;
     public Usuarios() {
     }
 
@@ -76,6 +78,32 @@ public class Usuarios {
         this.sucurentrada = sucurentrada;
         this.consultasucur = consultasucur;
     }
+
+    public boolean isWeb() {
+        return web;
+    }
+
+    public void setWeb(boolean web) {
+        this.web = web;
+    }
+
+    public String getNombreempleado() {
+        return nombreempleado;
+    }
+
+    public void setNombreempleado(String nombreempleado) {
+        this.nombreempleado = nombreempleado;
+    }
+
+    public String getRutempleado() {
+        return rutempleado;
+    }
+
+    public void setRutempleado(String rutempleado) {
+        this.rutempleado = rutempleado;
+    }
+
+   
 
     public boolean isProdpendientes() {
         return prodpendientes;

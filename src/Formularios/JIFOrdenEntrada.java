@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -48,12 +49,19 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
     Mayusculas mayus = new Mayusculas();
     List<DetalleOrdeSalidaEntrada> listadet = new ArrayList<DetalleOrdeSalidaEntrada>();
     long idordensalida; 
-   
+     int posx;
+    int posy;
     public JIFOrdenEntrada() {
         initComponents();
         String titulos[]={"CODIGO","DESCRIPCION","CANTIDAD"};
         modelo.setColumnIdentifiers(titulos);
         jtabla.setModel(modelo);
+        //////////
+         TableColumnModel columnModel = jtabla.getColumnModel();
+     
+        columnModel.getColumn(0).setPreferredWidth(90);
+        columnModel.getColumn(1).setPreferredWidth(600);
+        columnModel.getColumn(2).setPreferredWidth(50);
 //        daosucursal.llenarcombo(jcbsucursal);
 //        jlblsucursalrecep.setText(sucursalsingleton.getNombre());
 //        jbtnagregar.setEnabled(false);
@@ -107,24 +115,20 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
 //        jlblimagen.setIcon(null);
         jdfechaentrega.setDate(null);
         jdfechapedido.setDate(null);
-        jlblsucursalrecep.setText(". . .");
-        jlblsurcursalenvia.setText(". . .");
+        jlblsucursalrecep.setText("* * *");
+        jlblsurcursalenvia.setText("* * *");
         producto = new Producto();
         orden = new OrdenSalidaEntrada();
         jtfautorizado.setText("");
         jtfrecibido.setText("");
 //         enableencabezado(true);
-        ////////////// NUEVA MODELO /////////////// 
-        modelo= new DefaultTableModel(){
-            public boolean isCellEditable(int row, int column) {
-            //      if (column == 5) return true;
-            //else
-            return false;
-        }
-        }; 
-        String titulos[]={"CODIGO","DESCRIPCION","CANTIDAD"};
-        modelo.setColumnIdentifiers(titulos);
-        jtabla.setModel(modelo);
+        ////////////// /////////////// 
+         for (int i = 0; i < jtabla.getRowCount(); i++) {
+            modelo.removeRow(i);
+            i-=1;
+            }
+        
+        /////////////////76
         listadet = new ArrayList<>();
         jbtnaceptar.setEnabled(false);
         ////////////////////////////////////////////   
@@ -155,18 +159,29 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
         jLabel9 = new javax.swing.JLabel();
         jtfrecibido = new javax.swing.JTextField();
         jbtnaceptar = new javax.swing.JButton();
-        jbtnsalir = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jtfnumeroorden = new javax.swing.JFormattedTextField();
         jlblsurcursalenvia = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtamensaje = new javax.swing.JTextArea();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jbtnsalir = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        setResizable(true);
-        setTitle("ORDEN DE ENTRADA");
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel1MouseDragged(evt);
+            }
+        });
+        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel1MousePressed(evt);
+            }
+        });
 
         jdfechapedido.setEnabled(false);
         jdfechapedido.addActionListener(new java.awt.event.ActionListener() {
@@ -186,13 +201,13 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("SUCURSAL QUE ENVIA:");
 
         jlblsucursalrecep.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jlblsucursalrecep.setText(". . .");
+        jlblsucursalrecep.setText("* * *");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel2.setText("SUCURSAL QUE RECEPCIONA:");
 
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
@@ -245,20 +260,14 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
         });
 
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
+        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
         jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
-            }
-        });
-
-        jbtnsalir.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnsalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel.png"))); // NOI18N
-        jbtnsalir.setText("Salir");
-        jbtnsalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnsalirActionPerformed(evt);
             }
         });
 
@@ -282,13 +291,62 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
         });
 
         jlblsurcursalenvia.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jlblsurcursalenvia.setText(". . .");
+        jlblsurcursalenvia.setText("* * *");
 
         jtamensaje.setEditable(false);
         jtamensaje.setColumns(20);
         jtamensaje.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jtamensaje.setRows(5);
         jScrollPane2.setViewportView(jtamensaje);
+
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel7MouseDragged(evt);
+            }
+        });
+        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel7MousePressed(evt);
+            }
+        });
+
+        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("ORDEN DE ENTRADA");
+
+        jbtnsalir.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnsalir.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
+        jbtnsalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jbtnsalir.setBorderPainted(false);
+        jbtnsalir.setContentAreaFilled(false);
+        jbtnsalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnsalirActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jbtnsalir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jbtnsalir)
+                    .addComponent(jLabel11))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -310,9 +368,7 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
                         .addComponent(jtfrecibido, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jbtnaceptar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jbtnsalir)
-                        .addGap(39, 39, 39))))
+                        .addGap(125, 125, 125))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -344,14 +400,16 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(10, 10, 10)
                                 .addComponent(jlblsucursalrecep, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -373,17 +431,15 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
                             .addComponent(jlblsucursalrecep, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
-                .addGap(20, 20, 20)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jbtnaceptar)
-                            .addComponent(jbtnsalir))
+                        .addComponent(jbtnaceptar)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jtfautorizado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(20, 20, 20)
@@ -501,7 +557,7 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
     private void jtfnumeroordenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnumeroordenActionPerformed
         // TODO add your handling code here:
         long idorden = Long.parseLong(jtfnumeroorden.getValue().toString());
-        orden= daoordensalida.buscar(idorden, sucursalsingleton.getNombre(), jtabla,listadet,jbtnaceptar);
+        orden= daoordensalida.buscar(idorden,sucursalsingleton.getId(), jtabla,listadet,jbtnaceptar);
         jdfechaentrega.setDate(orden.getFecha_entrega());
         jdfechapedido.setDate(orden.getFecha_pedido());
         jtfautorizado.setText(orden.getAutorizado());
@@ -512,16 +568,44 @@ public class JIFOrdenEntrada extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jtfnumeroordenActionPerformed
 
+    private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
+        // TODO add your handling code here:
+         posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel1MousePressed
+
+    private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
+        // TODO add your handling code here:
+         int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel1MouseDragged
+
+    private void jPanel7MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseDragged
+        // TODO add your handling code here:
+        int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel7MouseDragged
+
+    private void jPanel7MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MousePressed
+        // TODO add your handling code here:
+        posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel7MousePressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbtnaceptar;

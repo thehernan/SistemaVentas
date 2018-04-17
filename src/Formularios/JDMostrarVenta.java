@@ -7,7 +7,7 @@ package Formularios;
 
 import DAO.VentasDAO;
 import Pojos.Ventas;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -20,16 +20,16 @@ public class JDMostrarVenta extends java.awt.Dialog {
      */
     VentasDAO daoventa = new VentasDAO();
     Ventas ventaB;
-    NumberFormat nf= NumberFormat.getInstance();
+    DecimalFormat nf= new DecimalFormat("#.00");
     public JDMostrarVenta(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
-    public JDMostrarVenta(java.awt.Frame parent, boolean modal,Ventas venta) {
+    public JDMostrarVenta(java.awt.Frame parent, boolean modal,long idventa) {
         super(parent, modal);
         initComponents();
-        jlbltitulo.setText("VENTA COD. "+venta.getCodigo());
-        ventaB=daoventa.buscarventa(jTable1, venta.getCodigo(), jlblcliente, jlblrut);
+        jlbltitulo.setText("VENTA COD. "+"v"+idventa);
+        ventaB=daoventa.buscarventa(jTable1, "v"+idventa, jlblcliente, jlblrut,"todo");
         jdpfecha.setDate(ventaB.getFecha());
         jlbldescuento.setText("Descuento: "+nf.format(ventaB.getDescuento()));
         jlbltotal.setText("Total: "+nf.format(ventaB.getTotal()));
@@ -55,17 +55,18 @@ public class JDMostrarVenta extends java.awt.Dialog {
         jLabel1 = new javax.swing.JLabel();
         jlbldescuento = new javax.swing.JLabel();
 
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
             }
         });
 
-        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
 
         jlbltitulo.setBackground(new java.awt.Color(0, 0, 0));
         jlbltitulo.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jlbltitulo.setForeground(new java.awt.Color(0, 0, 0));
+        jlbltitulo.setForeground(new java.awt.Color(255, 255, 255));
         jlbltitulo.setText("VENTA");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -130,12 +131,12 @@ public class JDMostrarVenta extends java.awt.Dialog {
                         .addComponent(jdpfecha, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlblrut)
-                            .addComponent(jlblcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jlbldescuento)
                                 .addGap(175, 175, 175)
-                                .addComponent(jlbltotal)))
+                                .addComponent(jlbltotal))
+                            .addComponent(jlblcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblrut, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );

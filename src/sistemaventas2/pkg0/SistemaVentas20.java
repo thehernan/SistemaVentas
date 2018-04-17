@@ -5,17 +5,14 @@
  */
 package sistemaventas2.pkg0;
 
-import Conexion.Conexion;
 import Formularios.Login;
 import Formularios.SplashScreen;
 import com.sun.awt.AWTUtilities;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -29,14 +26,16 @@ public class SistemaVentas20 {
     public static void main(String[] args) {
        
           try{
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 //             UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 //             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 //              UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
 //              UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");// 1
 //              UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 //               UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
-//              UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+              UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//              UIManager.setLookAndFeel("net.sourceforge.napkinlaf.NapkinLookAndFeel");
+//              UIManager.setLookAndFeel(" UIManager.getInstalledLookAndFeels");
         }catch(Exception e){
             System.err.println("Error Look GUI: "+e.getMessage());
         }
@@ -45,14 +44,14 @@ public class SistemaVentas20 {
         SplashScreen s=new SplashScreen();
         AWTUtilities.setWindowOpaque(s, false);
         s.setVisible(true);
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(SistemaVentas20.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-      
-        s.dispose();
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(SistemaVentas20.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//      
+//        s.dispose();
         
         
         SwingUtilities.invokeLater(new Runnable(){
@@ -60,9 +59,9 @@ public class SistemaVentas20 {
             public void run(){
                 /*Aquí crean el objeto hacía su aplicación, para hacer visible*/
                  
-                Login nuevaSesion = new Login();
-                AWTUtilities.setWindowOpaque(nuevaSesion, false);
-                nuevaSesion.setVisible(true);
+//                Login nuevaSesion = new Login();
+//                AWTUtilities.setWindowOpaque(nuevaSesion, false);
+//                nuevaSesion.setVisible(true);
             }
         });
         

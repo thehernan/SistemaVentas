@@ -5,12 +5,17 @@
  */
 package Formularios;
 
+import DAO.SucursalDAO;
 import DAO.VentasDAO;
 import Pojos.Cliente;
+import Pojos.Sucursal;
 import Pojos.Ventas;
 import java.awt.Frame;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,27 +28,84 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
      */
     VentasDAO daoventa = new VentasDAO();
     Cliente cliente = new Cliente();
-    List<Ventas> listventcli;
-    List<Ventas> listventemp;
-    List<Ventas> listventanula;
+   
     Ventas venta;
+    Sucursal sucursal;
+    SucursalDAO sucursaldao = new SucursalDAO();
+    List<Sucursal> listsucursal;
+    List<Ventas> listventa;
+     int posx;
+    int posy;
     public JIFVentaConsultar() {
         initComponents();
-        jbtnimprimirporventa.setEnabled(false);
-        jbtnimprimirtodo.setEnabled(false);
+//        jbtnimprimirporventa.setEnabled(false);
+//        jbtnimprimirtodo.setEnabled(false);
+        jdpdesdeV.setDate(new Date());
+        jdphastaV.setDate(new Date());
+        jlblmensajever.setVisible(false);
+        busqueda();
     }
     
-    public void setcliente(Cliente cliente){
-        this.cliente=cliente;
-        jlblcliente.setText(cliente.getNombre_razons());
-        jlblrut.setText(cliente.getRut());
-        listventcli=daoventa.mostrarporcliente(jtablacliente,  cliente.getId_cliente(),jlblmsjcliente);
-        jbtnimprimirtodo.setEnabled(true);
-    }
+//    public void setcliente(Cliente cliente){
+//        this.cliente=cliente;
+//        jlblcliente.setText(cliente.getNombre_razons());
+//        jlblrut.setText(cliente.getRut());
+//        listventcli=daoventa.mostrarporcliente(jtablacliente,  cliente.getId_cliente(),jlblmsjcliente);
+//        jbtnimprimirtodo.setEnabled(true);
+//    }
     
-    public void refrecar(){
-     listventcli=daoventa.mostrarporcliente(jtablacliente,  cliente.getId_cliente(),jlblmsjcliente);
-     jbtnimprimirtodo.setEnabled(true);
+//    public void refrecar(){
+//     listventcli=daoventa.mostrarporcliente(jtablacliente,  cliente.getId_cliente(),jlblmsjcliente);
+//     jbtnimprimirtodo.setEnabled(true);
+//    }
+    
+    public void busqueda(){
+    Runnable runnable = new Runnable() {
+
+        @Override
+        public void run() {
+//            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       jlblimagencarga.setVisible(true);
+       jlblletracarga.setVisible(true);
+       if(listsucursal==null){
+        listsucursal=sucursaldao.llenarcombo(jcbsucursal);
+       }
+       
+    if(jdpdesdeV.getDate()!=null && jdphastaV.getDate()!=null){
+     if(jcbsucursal.getSelectedIndex()==0){
+             listventa=daoventa.busquedasensitiva(jtabla,  new Timestamp(jdpdesdeV.getDate().getTime()), new Timestamp(jdphastaV.getDate().getTime())
+                     ,  jlbltotal,0,"todo",jtfbuscar.getText().toUpperCase());
+        
+        }else {
+             sucursal=listsucursal.get(jcbsucursal.getSelectedIndex());
+               listventa=daoventa.busquedasensitiva(jtabla,  new Timestamp(jdpdesdeV.getDate().getTime()), new Timestamp(jdphastaV.getDate().getTime())
+                     ,  jlbltotal,sucursal.getId(),"sucursal",jtfbuscar.getText().toUpperCase());
+        
+        }
+    }
+     jlblimagencarga.setVisible(false);
+     jlblletracarga.setVisible(false);
+     }
+    };
+    Thread T = new Thread(runnable);
+    T.start();
+  
+    }
+    public void ver(){
+    int index= jtabla.getSelectedRow();
+        if(index>=0){
+            jlblmensajever.setVisible(true);
+            venta= listventa.get(index);
+            JDMostrarVenta mostraV = new JDMostrarVenta(new Frame(), isVisible(),venta.getIdventa());
+            jlblmensajever.setVisible(false);
+            mostraV.setVisible(true);
+        
+        }else{
+            JOptionPane.showMessageDialog(null, "Seleccione Venta");
+        
+        }
+    
+    
     }
 
     /**
@@ -56,400 +118,63 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jLabel3 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jdpdesde = new org.jdesktop.swingx.JXDatePicker();
-        jdphasta = new org.jdesktop.swingx.JXDatePicker();
-        jbtnbuscar = new javax.swing.JButton();
-        jlblmensaje = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtablaempleado = new javax.swing.JTable();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jlblcliente = new javax.swing.JLabel();
-        jlblrut = new javax.swing.JLabel();
-        jlblmsjcliente = new javax.swing.JLabel();
-        jbtnbuscarcliente = new javax.swing.JButton();
-        jbtnimprimirtodo = new javax.swing.JButton();
-        jbtnimprimirporventa = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jtablacliente = new javax.swing.JTable();
-        jLabel8 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        jbtnbuscarextornadas = new javax.swing.JButton();
-        jdpextornadodesde = new org.jdesktop.swingx.JXDatePicker();
-        jdpextornadohasta = new org.jdesktop.swingx.JXDatePicker();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jlblmensajeextorno = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jtablaanulada = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jdpdesdeV = new org.jdesktop.swingx.JXDatePicker();
+        jdphastaV = new org.jdesktop.swingx.JXDatePicker();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jcbsucursal = new javax.swing.JComboBox();
+        jlblletracarga = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jtfbuscar = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
+        jlblimagencarga = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jtabla = new javax.swing.JTable();
+        jlbltotal = new javax.swing.JLabel();
+        jbtnver = new javax.swing.JButton();
+        jlblmensajever = new javax.swing.JLabel();
 
         jLabel3.setText("jLabel3");
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
+        setPreferredSize(new java.awt.Dimension(1254, 588));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTabbedPane1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel1.setText("DESDE:");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel2.setText("HASTA:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, -1, 20));
-        jPanel2.add(jdpdesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 133, -1));
-        jPanel2.add(jdphasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 30, 126, -1));
-
-        jbtnbuscar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Searchx32.png"))); // NOI18N
-        jbtnbuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnbuscarActionPerformed(evt);
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel7MouseDragged(evt);
             }
         });
-        jPanel2.add(jbtnbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 20, -1, -1));
-
-        jlblmensaje.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jlblmensaje.setForeground(new java.awt.Color(255, 51, 102));
-        jPanel2.add(jlblmensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 80, 790, 20));
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel4.setText("CONCRETADAS");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 60, -1, -1));
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel5.setText("LA BUSQUEDA  SE  REALIZA ");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 20, -1, -1));
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel6.setText("DE ACUERDO A LAS VENTAS ");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 40, -1, -1));
-
-        jLabel12.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel12.setText("INGRESE FECHA:");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
-
-        jtablaempleado.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jtablaempleado.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jtablaempleado.getTableHeader().setReorderingAllowed(false);
-        jtablaempleado.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jtablaempleadoMouseReleased(evt);
+        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel7MousePressed(evt);
             }
         });
-        jScrollPane1.setViewportView(jtablaempleado);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1157, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                .addGap(16, 16, 16))
-        );
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("POR EMPLEADO", jPanel3);
-
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel7.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel7.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel7.setText("CLIENTE:");
-
-        jlblcliente.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jlblcliente.setText("* * *");
-
-        jlblrut.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jlblrut.setText("* * *");
-
-        jlblmsjcliente.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jlblmsjcliente.setForeground(new java.awt.Color(255, 51, 51));
-
-        jbtnbuscarcliente.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnbuscarcliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnbuscarcliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Searchx32.png"))); // NOI18N
-        jbtnbuscarcliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnbuscarclienteActionPerformed(evt);
-            }
-        });
-
-        jbtnimprimirtodo.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnimprimirtodo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnimprimirtodo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
-        jbtnimprimirtodo.setText("TODO");
-        jbtnimprimirtodo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnimprimirtodoActionPerformed(evt);
-            }
-        });
-
-        jbtnimprimirporventa.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnimprimirporventa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnimprimirporventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
-        jbtnimprimirporventa.setText("POR VENTA");
-        jbtnimprimirporventa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnimprimirporventaActionPerformed(evt);
-            }
-        });
-
-        jtablacliente.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtablacliente.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jtablacliente.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jtablacliente.getTableHeader().setReorderingAllowed(false);
-        jtablacliente.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jtablaclienteMouseReleased(evt);
-            }
-        });
-        jScrollPane2.setViewportView(jtablacliente);
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel8.setText("DOBLE DOBLIC PARA ANULAR VENTA.");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jlblmsjcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(jLabel7)
-                                        .addGap(17, 17, 17)
-                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jlblrut, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jlblcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(10, 10, 10)
-                                .addComponent(jbtnbuscarcliente)
-                                .addGap(30, 30, 30)
-                                .addComponent(jbtnimprimirtodo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbtnimprimirporventa)))
-                        .addGap(0, 261, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jlblcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jlblrut, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(8, 8, 8)
-                        .addComponent(jlblmsjcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jbtnbuscarcliente)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jbtnimprimirporventa)
-                        .addComponent(jbtnimprimirtodo)))
-                .addGap(3, 3, 3)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                .addGap(35, 35, 35))
-        );
-
-        jTabbedPane1.addTab("POR CLIENTE", jPanel4);
-
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-
-        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-
-        jbtnbuscarextornadas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Searchx32.png"))); // NOI18N
-        jbtnbuscarextornadas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnbuscarextornadasActionPerformed(evt);
-            }
-        });
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel9.setText("DESDE:");
-
-        jLabel10.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel10.setText("HASTA:");
-
-        jlblmensajeextorno.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jlblmensajeextorno.setForeground(new java.awt.Color(255, 51, 51));
-
-        jLabel13.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel13.setText("INGRESE FECHA:");
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jdpextornadodesde, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(79, 79, 79)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jdpextornadohasta, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jlblmensajeextorno, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
-                .addComponent(jbtnbuscarextornadas)
-                .addGap(25, 25, 25))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jdpextornadodesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jdpextornadohasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)))
-                    .addComponent(jbtnbuscarextornadas))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlblmensajeextorno, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
-        );
-
-        jtablaanulada.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jtablaanulada.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jtablaanulada.getTableHeader().setReorderingAllowed(false);
-        jScrollPane3.setViewportView(jtablaanulada);
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1181, Short.MAX_VALUE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("ANULADAS", jPanel5);
-
-        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("CONSULTAR VENTAS CONCRETADAS");
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Doble clic para Anular");
+
+        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jLabel18.setToolTipText("Cerrar");
+        jLabel18.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel18.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel18MouseReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -457,160 +182,253 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel11)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 815, Short.MAX_VALUE)
+                        .addComponent(jLabel18))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel11)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        getContentPane().add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1250, -1));
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ingresar Fecha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Light", 0, 11))); // NOI18N
+
+        jdpdesdeV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jdpdesdeVActionPerformed(evt);
+            }
+        });
+
+        jdphastaV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jdphastaVActionPerformed(evt);
+            }
+        });
+
+        jLabel14.setText("Desde:");
+
+        jLabel15.setText("Hasta:");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jdpdesdeV, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jdphastaV, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE))
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jdphastaV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel15))
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jdpdesdeV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel14)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
+
+        getContentPane().add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 71, -1, -1));
+
+        jcbsucursal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbsucursalActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(586, 122, 405, -1));
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
+        jlblletracarga.setText("Cargando Registros ...");
+        getContentPane().add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 390, 220, -1));
+
+        jLabel16.setText("Sucursal:");
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 127, -1, -1));
+
+        jtfbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfbuscarActionPerformed(evt);
+            }
+        });
+        jtfbuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfbuscarKeyReleased(evt);
+            }
+        });
+        getContentPane().add(jtfbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(147, 122, 357, -1));
+
+        jLabel17.setText("Cod. / Cliente / Vendedor:");
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 124, -1, -1));
+
+        jlblimagencarga.setBackground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        getContentPane().add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, 870, 210));
+
+        jtabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jtabla.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        jtabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jtablaMouseReleased(evt);
+            }
+        });
+        jScrollPane4.setViewportView(jtabla);
+
+        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 1230, 382));
+
+        jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jlbltotal.setForeground(new java.awt.Color(255, 51, 51));
+        jlbltotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlbltotal.setText("* * *");
+        getContentPane().add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 530, 329, -1));
+
+        jbtnver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/view25px.png"))); // NOI18N
+        jbtnver.setText("Ver");
+        jbtnver.setToolTipText("Ver detalle");
+        jbtnver.setBorderPainted(false);
+        jbtnver.setContentAreaFilled(false);
+        jbtnver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnverActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jbtnver, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 120, 90, 22));
+
+        jlblmensajever.setForeground(new java.awt.Color(0, 0, 0));
+        jlblmensajever.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
+        jlblmensajever.setText("Cargando detalle ...");
+        getContentPane().add(jlblmensajever, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 90, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbtnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarActionPerformed
+    private void jdpdesdeVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jdpdesdeVActionPerformed
         // TODO add your handling code here:
-        if(jdpdesde.getDate()!=null && jdphasta.getDate()!=null){
-            jlblmensaje.setText("");
-            listventemp=daoventa.mostrar(jtablaempleado,new java.sql.Timestamp(jdpdesde.getDate().getTime()), 
-                    new java.sql.Timestamp(jdphasta.getDate().getTime()), jlblmensaje);
-            
-        }else {
-            jlblmensaje.setText("INGRESE FECHA");
-        }
-    }//GEN-LAST:event_jbtnbuscarActionPerformed
+        busqueda();
+    }//GEN-LAST:event_jdpdesdeVActionPerformed
 
-    private void jtablaempleadoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaempleadoMouseReleased
+    private void jdphastaVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jdphastaVActionPerformed
         // TODO add your handling code here:
-        int index = jtablaempleado.getSelectedRow();
-        if(index>=0){
-            
-        if(evt.getClickCount()==2){
-           venta=listventemp.get(index);
-            JDVentasEmpleado ventasempleado= new JDVentasEmpleado(new java.awt.Frame(), isVisible(),venta,new java.sql.Timestamp(jdpdesde.getDate().getTime()),new java.sql.Timestamp(
-            jdphasta.getDate().getTime()));
-            ventasempleado.setVisible(true);
-        }
-        
-        }
-        
-    }//GEN-LAST:event_jtablaempleadoMouseReleased
+        busqueda();
+    }//GEN-LAST:event_jdphastaVActionPerformed
 
-    private void jbtnbuscarclienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarclienteActionPerformed
+    private void jtfbuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscarKeyReleased
         // TODO add your handling code here:
-        JDBuscarCliente buscarcliente = new JDBuscarCliente(new Frame(),isVisible(),this);
-        buscarcliente.setVisible(true);
-    }//GEN-LAST:event_jbtnbuscarclienteActionPerformed
+    
+    }//GEN-LAST:event_jtfbuscarKeyReleased
 
-    private void jbtnimprimirtodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirtodoActionPerformed
+    private void jcbsucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbsucursalActionPerformed
         // TODO add your handling code here:
-//        daoreparacion.imprimirreparaciontodo(cliente.getId_cliente());
-        if(cliente.getId_cliente()!=0){
-            daoventa.imprimirtodocliente(cliente.getId_cliente());
-        
-        }
-        
-    }//GEN-LAST:event_jbtnimprimirtodoActionPerformed
+        busqueda();
+    }//GEN-LAST:event_jcbsucursalActionPerformed
 
-    private void jtablaclienteMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaclienteMouseReleased
+    private void jtablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMouseReleased
         // TODO add your handling code here:
-        int index= jtablacliente.getSelectedRow();
+         int index= jtabla.getSelectedRow();
         
-        if(index>=0){
-            venta= listventcli.get(index);
+//        if(index>=0){
+           
           
             if(evt.getClickCount()==2){
-            
+                
+             venta= listventa.get(index);
              JDMotivoExtorno motextorno =new JDMotivoExtorno(new JFrame(),isVisible(),venta,this);
              motextorno.setVisible(true);
             }
-            jbtnimprimirporventa.setEnabled(true);
-        }
         
-        
-    }//GEN-LAST:event_jtablaclienteMouseReleased
+    }//GEN-LAST:event_jtablaMouseReleased
 
-    private void jbtnimprimirporventaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirporventaActionPerformed
+    private void jbtnverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnverActionPerformed
         // TODO add your handling code here:
-        int index= jtablacliente.getSelectedRow();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                ver();
+            }
+        };
+        Thread T =new Thread(runnable);
+        T.start();
         
-        if(index>=0){
-           venta= listventcli.get(index);
-            daoventa.imprimirunacliente(cliente.getId_cliente(), venta.getIdventa());
-        }
-    }//GEN-LAST:event_jbtnimprimirporventaActionPerformed
+        
+    }//GEN-LAST:event_jbtnverActionPerformed
 
-    private void jbtnbuscarextornadasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarextornadasActionPerformed
+    private void jtfbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfbuscarActionPerformed
         // TODO add your handling code here:
-        if(jdpextornadodesde.getDate()!=null && jdpextornadohasta.getDate()!=null){
-            
-            listventanula=daoventa.mostrarconcretadasanuladas(jtablaanulada,new java.sql.Date( jdpextornadodesde.getDate().getTime())
-                    ,new java.sql.Date(jdpextornadohasta.getDate().getTime()), jlblmensajeextorno);
-        }else {
-            jlblmensajeextorno.setText("INGRESE FECHA");
-        }
-    }//GEN-LAST:event_jbtnbuscarextornadasActionPerformed
+            busqueda();
+    }//GEN-LAST:event_jtfbuscarActionPerformed
+
+    private void jLabel18MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseReleased
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jLabel18MouseReleased
+
+    private void jPanel7MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseDragged
+        // TODO add your handling code here:
+         int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel7MouseDragged
+
+    private void jPanel7MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MousePressed
+        // TODO add your handling code here:
+         posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel7MousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JButton jbtnbuscar;
-    private javax.swing.JButton jbtnbuscarcliente;
-    private javax.swing.JButton jbtnbuscarextornadas;
-    private javax.swing.JButton jbtnimprimirporventa;
-    private javax.swing.JButton jbtnimprimirtodo;
-    private org.jdesktop.swingx.JXDatePicker jdpdesde;
-    private org.jdesktop.swingx.JXDatePicker jdpextornadodesde;
-    private org.jdesktop.swingx.JXDatePicker jdpextornadohasta;
-    private org.jdesktop.swingx.JXDatePicker jdphasta;
-    private javax.swing.JLabel jlblcliente;
-    private javax.swing.JLabel jlblmensaje;
-    private javax.swing.JLabel jlblmensajeextorno;
-    private javax.swing.JLabel jlblmsjcliente;
-    private javax.swing.JLabel jlblrut;
-    private javax.swing.JTable jtablaanulada;
-    private javax.swing.JTable jtablacliente;
-    private javax.swing.JTable jtablaempleado;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JButton jbtnver;
+    private javax.swing.JComboBox jcbsucursal;
+    private org.jdesktop.swingx.JXDatePicker jdpdesdeV;
+    private org.jdesktop.swingx.JXDatePicker jdphastaV;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
+    private javax.swing.JLabel jlblmensajever;
+    private javax.swing.JLabel jlbltotal;
+    private javax.swing.JTable jtabla;
+    private javax.swing.JTextField jtfbuscar;
     // End of variables declaration//GEN-END:variables
 }

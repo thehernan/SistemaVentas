@@ -28,7 +28,9 @@ public class JDCobrarCaja extends javax.swing.JDialog {
     Reparacion reparacion  = new Reparacion();
     ReparacionDAO daoreparacion = new ReparacionDAO();
     double total;
-    NumberFormat nf = NumberFormat.getInstance();
+    DecimalFormat nf =new  DecimalFormat("#.00");
+    
+    
     public JDCobrarCaja(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -176,7 +178,7 @@ public class JDCobrarCaja extends javax.swing.JDialog {
         jLabel5.setText("PAGO CON:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 100, 70, 20));
 
-        jtfabono.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfabono.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jtfabono.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfabonoKeyReleased(evt);
@@ -185,12 +187,12 @@ public class JDCobrarCaja extends javax.swing.JDialog {
         jPanel1.add(jtfabono, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 230, -1));
 
         jlblsaldo.setEditable(false);
-        jlblsaldo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlblsaldo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jPanel1.add(jlblsaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 140, 230, -1));
 
         jlblvuelto.setEditable(false);
         jlblvuelto.setForeground(new java.awt.Color(255, 51, 51));
-        jlblvuelto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlblvuelto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jlblvuelto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jPanel1.add(jlblvuelto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 270, 40));
 

@@ -24,22 +24,46 @@ public class Producto {
     private double margenG;
     private long id_sucursal;
     private boolean select;
+    private double precio1;
+    private double precio2;
+    private double precio3;
+    private String moneda;
     public Producto() {
     }
 
-    public Producto(String codigo, String descripcion, String observacion, long idfamilia, double precio, double cantidad, byte[] foto, long idproducto, String descripfamilia, double margenG, long id_sucursal) {
-        this.codigo = codigo;
-        this.descripcion = descripcion;
-        this.observacion = observacion;
-        this.idfamilia = idfamilia;
-        this.precio = precio;
-        this.cantidad = cantidad;
-        this.foto = foto;
-        this.idproducto = idproducto;
-        this.descripfamilia = descripfamilia;
-        this.margenG = margenG;
-        this.id_sucursal = id_sucursal;
+    public String getMoneda() {
+        return moneda;
     }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
+    public double getPrecio1() {
+        return precio1;
+    }
+
+    public void setPrecio1(double precio1) {
+        this.precio1 = precio1;
+    }
+
+    public double getPrecio2() {
+        return precio2;
+    }
+
+    public void setPrecio2(double precio2) {
+        this.precio2 = precio2;
+    }
+
+    public double getPrecio3() {
+        return precio3;
+    }
+
+    public void setPrecio3(double precio3) {
+        this.precio3 = precio3;
+    }
+
+
 
     public long getId_sucursal() {
         return id_sucursal;

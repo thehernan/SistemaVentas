@@ -38,6 +38,8 @@ public class JIFCaja extends javax.swing.JInternalFrame {
    // DetalleCaja detcaja= new DetalleCaja();
     Reparacion repara= new Reparacion();
     ReparacionDAO daoreparacion= new ReparacionDAO();
+    int posx;
+    int posy;
     public JIFCaja() {
         initComponents();
     }
@@ -67,6 +69,43 @@ public class JIFCaja extends javax.swing.JInternalFrame {
      
    
    
+    
+    }
+    public void enter(){
+     try {
+            String cod= (jtfcodigo.getText());
+            if(!cod.equals("") && !cod.equals("CODIGO")){
+                System.out.println("codsub"+cod.substring(0, 1));
+                if(cod.substring(0, 1).equalsIgnoreCase("V")){
+                venta = daoventa.buscarventa(jtabla, cod,jlblcliente,jlblrut,"debe");
+                jlbltotal.setValue(venta.getTotal());
+                jlbliva.setValue(venta.getIva());
+                jlblsubtotal.setValue(venta.getSuvtotal());
+                jtfdescuento.setValue(venta.getDescuento());
+//                calculatotal();
+                
+                }else {if(cod.substring(0, 1).equalsIgnoreCase("R")){
+                repara= daoreparacion.buscarcaja(jtabla, cod, jlblcliente, jlblrut,jlbltotal,
+                        jlblsubtotal,jlbliva,jlblabono,jtfdescuento);
+//                calculatotal();
+                }else {
+                
+                    newcobro();
+                }
+                
+                
+                
+                }
+                
+                
+            }
+            
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Ingrese un condigo valido","",JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+    
+    
     
     }
 //    public double calculatotal(){
@@ -131,8 +170,8 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         i-=1;
         }
         //LIMPIAR JLBL
-        jlblcliente.setText("---");
-        jlblrut.setText("---");
+        jlblcliente.setText("* * *");
+        jlblrut.setText("* * *");
         jlbltotal.setValue(0);
         jlbliva.setValue(0);
         jlblsubtotal.setValue(0);
@@ -145,7 +184,7 @@ public class JIFCaja extends javax.swing.JInternalFrame {
     }
     public void setventa(Ventas venta){
         jtfcodigo.setText(venta.getCodigo());
-        jbtnenter.doClick();
+        enter();
     
     }
     /**
@@ -180,38 +219,21 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         jcbcomprobante = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         jtfcierrecaja = new org.edisoncor.gui.button.ButtonColoredAction();
-        panelNice2 = new org.edisoncor.gui.panel.PanelNice();
-        jtbtn7 = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtn8 = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtn9 = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtnborrar = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtnborrartodo = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtn6 = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtn5 = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtn4 = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtn1 = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtn2 = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtn3 = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtn0 = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtnenter = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtncoma = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtnV = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtnR = new org.edisoncor.gui.button.ButtonColoredAction();
         jtfcobrar = new org.edisoncor.gui.button.ButtonColoredAction();
         jbtnegreso = new org.edisoncor.gui.button.ButtonColoredAction();
         jtfnumero = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         jbtnventas = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        setClosable(true);
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jtfcodigo.setBackground(new java.awt.Color(204, 204, 204));
         jtfcodigo.setForeground(new java.awt.Color(255, 255, 255));
-        jtfcodigo.setText("COD. VENTA");
+        jtfcodigo.setText("CODIGO");
         jtfcodigo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtfcodigo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -227,6 +249,9 @@ public class JIFCaja extends javax.swing.JInternalFrame {
             }
         });
         jtfcodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtfcodigoKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfcodigoKeyReleased(evt);
             }
@@ -245,19 +270,21 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         jLabel5.setText("SUBTOTAL :");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
-        jLabel6.setText("I.V.A (19 %):");
+        jLabel6.setText("IGV 18%:");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel7.setText("TOTAL PAGAR:");
 
         jlblcliente.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jlblcliente.setForeground(new java.awt.Color(0, 0, 0));
         jlblcliente.setText("* * *");
 
         jlblrut.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jlblrut.setForeground(new java.awt.Color(0, 0, 0));
         jlblrut.setText("* * *");
 
         jlblsubtotal.setEditable(false);
-        jlblsubtotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlblsubtotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jlblsubtotal.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblsubtotal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -266,25 +293,25 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         });
 
         jlbliva.setEditable(false);
-        jlbliva.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlbliva.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jlbliva.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
 
         jlbltotal.setEditable(false);
         jlbltotal.setForeground(new java.awt.Color(255, 51, 51));
-        jlbltotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlbltotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel8.setText("ABONO:");
 
         jlblabono.setEditable(false);
-        jlblabono.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jlblabono.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jlblabono.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
 
         jLabel9.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel9.setText("DESCUENTO:");
 
-        jtfdescuento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfdescuento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jtfdescuento.setEnabled(false);
         jtfdescuento.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
 
@@ -308,44 +335,44 @@ public class JIFCaja extends javax.swing.JInternalFrame {
             panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelNice1Layout.createSequentialGroup()
                 .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelNice1Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel9)
-                        .addGap(15, 15, 15)
-                        .addComponent(jtfdescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel5)
-                        .addGap(9, 9, 9)
-                        .addComponent(jlblsubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(panelNice1Layout.createSequentialGroup()
+                            .addGap(20, 20, 20)
+                            .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel8)
+                                .addComponent(jLabel7))
+                            .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(panelNice1Layout.createSequentialGroup()
+                                    .addGap(17, 17, 17)
+                                    .addComponent(jlblabono, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jLabel6)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jlbliva, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(panelNice1Layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jlbltotal))))
+                        .addGroup(panelNice1Layout.createSequentialGroup()
+                            .addGap(30, 30, 30)
+                            .addComponent(jLabel9)
+                            .addGap(15, 15, 15)
+                            .addComponent(jtfdescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(20, 20, 20)
+                            .addComponent(jLabel5)
+                            .addGap(9, 9, 9)
+                            .addComponent(jlblsubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(panelNice1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 989, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)))
-                    .addGroup(panelNice1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jlblrut, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
-                            .addComponent(jlblcliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(panelNice1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel7))
-                        .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
                             .addGroup(panelNice1Layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(jlblabono, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jlbliva, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelNice1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jlbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(22, Short.MAX_VALUE))
+                                .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jlblrut, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
+                                    .addComponent(jlblcliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         panelNice1Layout.setVerticalGroup(
             panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -405,168 +432,8 @@ public class JIFCaja extends javax.swing.JInternalFrame {
             }
         });
 
-        panelNice2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jtbtn7.setBackground(new java.awt.Color(255, 255, 255));
-        jtbtn7.setText("7");
-        jtbtn7.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jtbtn7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtbtn7ActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jtbtn7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 50, 40));
-
-        jbtn8.setBackground(new java.awt.Color(255, 255, 255));
-        jbtn8.setText("8");
-        jbtn8.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtn8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtn8ActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtn8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 50, 40));
-
-        jbtn9.setBackground(new java.awt.Color(255, 255, 255));
-        jbtn9.setText("9");
-        jbtn9.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtn9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtn9ActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtn9, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, 50, 40));
-
-        jbtnborrar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnborrar.setText("<");
-        jbtnborrar.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtnborrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnborrarActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtnborrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 50, 40));
-
-        jbtnborrartodo.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnborrartodo.setText("C");
-        jbtnborrartodo.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtnborrartodo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnborrartodoActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtnborrartodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 50, 50, 40));
-
-        jbtn6.setBackground(new java.awt.Color(255, 255, 255));
-        jbtn6.setText("6");
-        jbtn6.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtn6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtn6ActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtn6, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 50, 40));
-
-        jbtn5.setBackground(new java.awt.Color(255, 255, 255));
-        jbtn5.setText("5");
-        jbtn5.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtn5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtn5ActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtn5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, 50, 40));
-
-        jbtn4.setBackground(new java.awt.Color(255, 255, 255));
-        jbtn4.setText("4");
-        jbtn4.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtn4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtn4ActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtn4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 50, 40));
-
-        jbtn1.setBackground(new java.awt.Color(255, 255, 255));
-        jbtn1.setText("1");
-        jbtn1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtn1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtn1ActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 50, 40));
-
-        jbtn2.setBackground(new java.awt.Color(255, 255, 255));
-        jbtn2.setText("2");
-        jbtn2.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtn2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtn2ActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 50, 40));
-
-        jbtn3.setBackground(new java.awt.Color(255, 255, 255));
-        jbtn3.setText("3");
-        jbtn3.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtn3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtn3ActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 50, 40));
-
-        jbtn0.setBackground(new java.awt.Color(255, 255, 255));
-        jbtn0.setText("0");
-        jbtn0.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtn0.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtn0ActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtn0, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 150, 40));
-
-        jbtnenter.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnenter.setText("ENTER");
-        jbtnenter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnenterActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtnenter, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 50, 120));
-
-        jbtncoma.setBackground(new java.awt.Color(255, 255, 255));
-        jbtncoma.setText(".");
-        jbtncoma.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtncoma.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtncomaActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtncoma, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 50, 40));
-
-        jbtnV.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnV.setText("v");
-        jbtnV.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtnV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnVActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtnV, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 50, 40));
-
-        jbtnR.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnR.setText("r");
-        jbtnR.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jbtnR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnRActionPerformed(evt);
-            }
-        });
-        panelNice2.add(jbtnR, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 50, 40));
-
         jtfcobrar.setBackground(new java.awt.Color(255, 255, 255));
+        jtfcobrar.setForeground(new java.awt.Color(255, 0, 0));
         jtfcobrar.setText("Cobrar (F2)");
         jtfcobrar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfcobrar.addActionListener(new java.awt.event.ActionListener() {
@@ -598,12 +465,31 @@ public class JIFCaja extends javax.swing.JInternalFrame {
             }
         });
 
-        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel7MouseDragged(evt);
+            }
+        });
+        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel7MousePressed(evt);
+            }
+        });
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("CAJA");
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jLabel10.setToolTipText("Cerrar");
+        jLabel10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel10MouseReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -612,18 +498,25 @@ public class JIFCaja extends javax.swing.JInternalFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel11)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel10)
+                .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel11)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jbtnventas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/compra.png"))); // NOI18N
         jbtnventas.setToolTipText("En cola");
+        jbtnventas.setBorder(null);
+        jbtnventas.setBorderPainted(false);
+        jbtnventas.setContentAreaFilled(false);
         jbtnventas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnventasActionPerformed(evt);
@@ -642,27 +535,24 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jcbcomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(959, 1065, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jtfnumero, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jtfnumero, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(jcbcomprobante, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(panelNice1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jbtnventas)
+                        .addComponent(jbtnventas, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jtfcierrecaja, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtfcobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbtnegreso, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelNice2, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jtfcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -682,16 +572,14 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                             .addComponent(jtfnumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(19, 19, 19)
                         .addComponent(jtfcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelNice2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jtfcierrecaja, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jbtnventas))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jtfcierrecaja, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                                    .addComponent(jbtnventas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(9, 9, 9))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -699,7 +587,7 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                                     .addComponent(jbtnegreso, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                         .addComponent(panelNice1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 14, Short.MAX_VALUE))))
+                        .addGap(0, 10, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -716,227 +604,9 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn1ActionPerformed
-        // TODO add your handling code here:
-      if(codfoco==true){
-        codigo.add(jbtn1.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtn1.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jbtn1ActionPerformed
-
-    private void jbtn5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn5ActionPerformed
-        // TODO add your handling code here:
-       if(codfoco==true){
-        codigo.add(jbtn5.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtn5.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jbtn5ActionPerformed
-
-    private void jbtn6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn6ActionPerformed
-        // TODO add your handling code here:
-        
-      if(codfoco==true){
-        codigo.add(jbtn6.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtn6.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jbtn6ActionPerformed
-
-    private void jbtn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn2ActionPerformed
-        // TODO add your handling code here:
-        if(codfoco==true){
-        codigo.add(jbtn2.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtn2.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jbtn2ActionPerformed
-
-    private void jbtn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn3ActionPerformed
-        // TODO add your handling code here:
-        if(codfoco==true){
-        codigo.add(jbtn3.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtn3.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jbtn3ActionPerformed
-
-    private void jbtn8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn8ActionPerformed
-        // TODO add your handling code here:
-        if(codfoco==true){
-        codigo.add(jbtn8.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtn8.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jbtn8ActionPerformed
-
-    private void jbtn9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn9ActionPerformed
-        // TODO add your handling code here:
-      if(codfoco==true){
-        codigo.add(jbtn9.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtn9.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jbtn9ActionPerformed
-
-    private void jbtn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn4ActionPerformed
-        // TODO add your handling code here:
-       if(codfoco==true){
-        codigo.add(jbtn4.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtn4.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jbtn4ActionPerformed
-
-    private void jtbtn7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtbtn7ActionPerformed
-        // TODO add your handling code here:
-      if(codfoco==true){
-        codigo.add(jtbtn7.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jtbtn7.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jtbtn7ActionPerformed
-
-    private void jbtncomaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncomaActionPerformed
-        // TODO add your handling code here:
-       if(codfoco==true){
-        codigo.add(jbtncoma.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtncoma.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jbtncomaActionPerformed
-
-    private void jbtn0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn0ActionPerformed
-        // TODO add your handling code here:
-        if(codfoco==true){
-        codigo.add(jbtn0.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtn0.getText());
-        imprimircant();
-        }
-        
-    }//GEN-LAST:event_jbtn0ActionPerformed
-
-    private void jbtnborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnborrarActionPerformed
-        // TODO add your handling code here:
-        if(codfoco==true){
-        int digitos=codigo.size()-1;
-        System.out.println(digitos);
-        if(digitos >= 0){
-            codigo.remove(digitos);
-            
-            imprimircant();
-            jbtnenter.doClick();
-
-        }
-        jtfcodigo.requestFocus();
-        
-        }
-        if(numfoco==true){
-        int digitos=num.size()-1;
-        System.out.println(digitos);
-        if(digitos >= 0){
-            num.remove(digitos);
-            imprimircant();
-
-        }
-        jtfnumero.requestFocus();
-        
-        }
-        
-
-    }//GEN-LAST:event_jbtnborrarActionPerformed
-
-    private void jbtnborrartodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnborrartodoActionPerformed
-        // TODO add your handling code here:
-        if(codfoco==true){
-        codigo = new ArrayList<String>();
-        jbtnenter.doClick();
-        imprimircant();
-        jtfcodigo.requestFocus();
-        }
-        if(numfoco==true){
-        num = new ArrayList<String>();
-        imprimircant();
-        jtfnumero.requestFocus();
-        }
-        
-    }//GEN-LAST:event_jbtnborrartodoActionPerformed
-
-    private void jbtnenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnenterActionPerformed
-        // TODO add your handling code here:
-        try {
-            String cod= (jtfcodigo.getText());
-            if(!cod.equals("") && !cod.equals("COD. VENTA")){
-                System.out.println("codsub"+cod.substring(0, 1));
-                if(cod.substring(0, 1).equalsIgnoreCase("V")){
-                venta = daoventa.buscarventa(jtabla, cod,jlblcliente,jlblrut);
-                jlbltotal.setValue(venta.getTotal());
-                jlbliva.setValue(venta.getIva());
-                jlblsubtotal.setValue(venta.getSuvtotal());
-                jtfdescuento.setValue(venta.getDescuento());
-//                calculatotal();
-                
-                }else {if(cod.substring(0, 1).equalsIgnoreCase("R")){
-                repara= daoreparacion.buscar(jtabla, cod, jlblcliente, jlblrut,jlbltotal,
-                        jlblsubtotal,jlbliva,jlblabono);
-//                calculatotal();
-                }else {
-                
-                    newcobro();
-                }
-                
-                
-                
-                }
-                
-                
-            }
-            
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "INGRESE UN CODIGO VALIDO");
-        }
-        
-         
-        
-    }//GEN-LAST:event_jbtnenterActionPerformed
-
     private void jtfcodigoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcodigoFocusGained
         // TODO add your handling code here:
-        if(jtfcodigo.getText().equals("COD. VENTA")){
+        if(jtfcodigo.getText().equals("CODIGO")){
             jtfcodigo.setText("");
         }
         codfoco= true;
@@ -947,14 +617,14 @@ public class JIFCaja extends javax.swing.JInternalFrame {
     private void jtfcodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcodigoFocusLost
         // TODO add your handling code here:
         if(jtfcodigo.getText().equals("")){
-            jtfcodigo.setText("COD. VENTA");
+            jtfcodigo.setText("CODIGO");
         }
        
     }//GEN-LAST:event_jtfcodigoFocusLost
 
     private void jtfcodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfcodigoActionPerformed
         // TODO add your handling code here:
-        jbtnenter.doClick();
+      
     }//GEN-LAST:event_jtfcodigoActionPerformed
 
     private void jcbcomprobanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbcomprobanteActionPerformed
@@ -1008,30 +678,6 @@ public class JIFCaja extends javax.swing.JInternalFrame {
      
     }//GEN-LAST:event_jtfnumeroFocusLost
 
-    private void jbtnRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRActionPerformed
-        // TODO add your handling code here:
-          if(codfoco==true){
-        codigo.add(jbtnR.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtnR.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jbtnRActionPerformed
-
-    private void jbtnVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnVActionPerformed
-        // TODO add your handling code here:
-          if(codfoco==true){
-        codigo.add(jbtnV.getText());
-        imprimircant();
-        }
-          if(numfoco==true){
-        num.add(jbtnV.getText());
-        imprimircant();
-        }
-    }//GEN-LAST:event_jbtnVActionPerformed
-
     private void jlblsubtotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jlblsubtotalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jlblsubtotalActionPerformed
@@ -1067,9 +713,36 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jbtnventasActionPerformed
 
+    private void jPanel7MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MousePressed
+        // TODO add your handling code here:
+         posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel7MousePressed
+
+    private void jPanel7MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseDragged
+        // TODO add your handling code here:
+         int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel7MouseDragged
+
+    private void jLabel10MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseReleased
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jLabel10MouseReleased
+
+    private void jtfcodigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcodigoKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            enter();
+        
+        }
+    }//GEN-LAST:event_jtfcodigoKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1082,22 +755,7 @@ public class JIFCaja extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtn0;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtn1;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtn2;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtn3;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtn4;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtn5;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtn6;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtn8;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtn9;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtnR;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtnV;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtnborrar;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtnborrartodo;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtncoma;
     private org.edisoncor.gui.button.ButtonColoredAction jbtnegreso;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtnenter;
     private javax.swing.JButton jbtnventas;
     private javax.swing.JComboBox jcbcomprobante;
     private javax.swing.JFormattedTextField jlblabono;
@@ -1107,13 +765,11 @@ public class JIFCaja extends javax.swing.JInternalFrame {
     private javax.swing.JFormattedTextField jlblsubtotal;
     private javax.swing.JFormattedTextField jlbltotal;
     private javax.swing.JTable jtabla;
-    private org.edisoncor.gui.button.ButtonColoredAction jtbtn7;
     private org.edisoncor.gui.button.ButtonColoredAction jtfcierrecaja;
     private org.edisoncor.gui.button.ButtonColoredAction jtfcobrar;
     private org.edisoncor.gui.textField.TextFieldRoundIcon jtfcodigo;
     private javax.swing.JFormattedTextField jtfdescuento;
     private javax.swing.JTextField jtfnumero;
     private org.edisoncor.gui.panel.PanelNice panelNice1;
-    private org.edisoncor.gui.panel.PanelNice panelNice2;
     // End of variables declaration//GEN-END:variables
 }

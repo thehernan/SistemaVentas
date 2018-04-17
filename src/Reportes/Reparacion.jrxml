@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f3a0c06-3c41-4d0f-b463-821ad7bd37d2">
-	<property name="ireport.zoom" value="1.0000000000000009"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="204" pageHeight="439" columnWidth="194" leftMargin="5" rightMargin="5" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="1f3a0c06-3c41-4d0f-b463-821ad7bd37d2">
+	<property name="ireport.zoom" value="4.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="88"/>
-	<style name="table">
-		<box>
-			<pen lineWidth="1.0" lineColor="#6666FF"/>
-		</box>
-	</style>
-	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#6666FF"/>
-		</box>
-	</style>
+	<property name="ireport.y" value="864"/>
 	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#6666FF"/>
@@ -28,15 +18,23 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT  atendido,cliente.nombre_razons,cliente.celular, marca,modelo,fallas,causas, observacion,
- empleado.id_empleado, empleado.nombre,diagnostico,
-  fecha_recepcion, concat_ws(' ',to_char(fecha_entrega,'dd-mm-yyyy'),hora_entrega), precio+preciorevision as precio,descuento,abono, (precio+preciorevision)-(descuento+coalesce(abono,0)), codigo 
+		<![CDATA[SELECT  suscursal.nombre as Snombre,suscursal.direccion as Sdirec,suscursal.rut as Srut,suscursal.paginaweb as Sweb,suscursal.telefono as Stele,atendido,cliente.nombre_razons,cliente.celular,cliente.direccion,cliente.rut, marca,modelo,fallas,causas, observacion,
+ empleado.id_empleado, empleado.nombre,coalesce(diagnostico,' ') as diagnostico,
+ to_char(fecha_recepcion,'dd-mm-yyyy') as frecep, to_char(fecha_entrega,'dd-mm-yyyy') as fentreg, precio,preciorevision,descuento,abono, (precio+preciorevision)-(descuento+coalesce(abono,0)), codigo 
   FROM public.reparacion inner join cliente on cliente.id_cliente=reparacion.id_cliente 
-  inner join empleado on empleado.id_empleado=reparacion.id_empleado where id_reparacion=$P{id};]]>
+  inner join empleado on empleado.id_empleado=reparacion.id_empleado inner join 
+suscursal on suscursal.id_sucursal = reparacion.id_sucursal where id_reparacion=$P{id};]]>
 	</queryString>
+	<field name="snombre" class="java.lang.String"/>
+	<field name="sdirec" class="java.lang.String"/>
+	<field name="srut" class="java.lang.String"/>
+	<field name="sweb" class="java.lang.String"/>
+	<field name="stele" class="java.lang.String"/>
 	<field name="atendido" class="java.lang.String"/>
 	<field name="nombre_razons" class="java.lang.String"/>
 	<field name="celular" class="java.lang.String"/>
+	<field name="direccion" class="java.lang.String"/>
+	<field name="rut" class="java.lang.String"/>
 	<field name="marca" class="java.lang.String"/>
 	<field name="modelo" class="java.lang.String"/>
 	<field name="fallas" class="java.lang.String"/>
@@ -45,9 +43,10 @@
 	<field name="id_empleado" class="java.lang.Long"/>
 	<field name="nombre" class="java.lang.String"/>
 	<field name="diagnostico" class="java.lang.String"/>
-	<field name="fecha_recepcion" class="java.sql.Timestamp"/>
-	<field name="concat_ws" class="java.lang.String"/>
+	<field name="frecep" class="java.lang.String"/>
+	<field name="fentreg" class="java.lang.String"/>
 	<field name="precio" class="java.math.BigDecimal"/>
+	<field name="preciorevision" class="java.math.BigDecimal"/>
 	<field name="descuento" class="java.math.BigDecimal"/>
 	<field name="abono" class="java.math.BigDecimal"/>
 	<field name="?column?" class="java.math.BigDecimal"/>
@@ -56,427 +55,276 @@
 		<band/>
 	</background>
 	<title>
-		<band height="159">
-			<staticText>
-				<reportElement x="125" y="0" width="234" height="20" forecolor="#0066FF" backcolor="#FFFFFF" uuid="815fe9f7-b31e-4a8f-9813-f3f87b888a7b"/>
+		<band height="174">
+			<textField>
+				<reportElement x="0" y="0" width="194" height="10" uuid="07b74c33-d9cb-457d-a9b2-1d729d0edb58"/>
+				<textElement textAlignment="Center">
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{snombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="10" width="194" height="10" uuid="05b8d28d-70bb-4f62-92fe-89979473d00f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["R.U.C Nro  "+$F{srut}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="194" height="10" uuid="7fe821bf-83ea-4396-9482-4991a0b606f3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sdirec}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="30" width="194" height="10" uuid="7cba424a-c9e6-48ce-8b3c-d62f6466a7e8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cel.: "+$F{stele}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="40" width="194" height="10" uuid="ce525e0f-2e98-4eca-a1ae-77377f238027"/>
+				<textElement textAlignment="Center">
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sweb}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="79" width="194" height="11" uuid="0d2e3cbf-2adc-4da6-8506-209382ed9299"/>
 				<textElement>
-					<font fontName="DejaVu Sans" size="14" isBold="true"/>
+					<font fontName="Segoe UI Light" size="7"/>
 				</textElement>
-				<text><![CDATA[TECNOLOGIA MOVIL]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="68" width="395" height="16" forecolor="#0066FF" uuid="92864d5b-9c62-4991-8161-44b9d48e18a4"/>
-				<textElement textAlignment="Left">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[REPARACION   DE  CELULARES    -  NOTEBOOK    -   PC  -   TABLETS          		     ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="125" y="20" width="234" height="20" forecolor="#0066FF" backcolor="#FFFFFF" uuid="ba3b82c7-2f8a-4320-9add-55819ae948cd"/>
+				<textFieldExpression><![CDATA["Razon Social:   "+$F{nombre_razons}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="90" width="194" height="11" uuid="a9926bbd-5686-4790-b962-3fc446d8d214"/>
 				<textElement>
-					<font fontName="Arial Black" size="14" isBold="true"/>
+					<font fontName="Segoe UI Light" size="7"/>
 				</textElement>
-				<text><![CDATA[GSMSTORE]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA["Dirección:        "+$F{direccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="101" width="194" height="11" uuid="b5130751-1cd7-4c5e-b95a-dc0927da9874"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["RUC:                "+$F{rut}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="112" width="194" height="10" uuid="65a7d096-3ed9-4d94-8292-8f99545c162f"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Teléfono:         "+$F{celular}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="131" width="194" height="10" uuid="bbb4fbe7-5057-4d8c-902b-2bcb6b276ee0"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Vendedor:       "+$F{atendido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="121" width="194" height="10" uuid="fbb406de-effa-442a-81b3-e9105f666f38"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tienda:            "+$F{snombre}+" - "+$F{sdirec}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="141" width="194" height="10" uuid="98a268d5-93e5-4cce-8063-07e2f6b57e31"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fecha Emisión: "+$F{frecep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="151" width="194" height="10" uuid="879ee34e-4940-4d80-b685-10edaef69b1b"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fecha Entrega: "+$F{fentreg}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="58" width="194" height="1" uuid="16fe7499-0776-412f-a60c-8bf411611dc5"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="73" width="194" height="1" uuid="504dcdd6-3900-4b6c-9d2e-4c76f875e90e"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="0" y="61" width="194" height="12" uuid="5458d314-549a-4a3f-8f50-c185b76a47db"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REPARACIÓN COD.: "+$F{codigo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="217">
 			<staticText>
-				<reportElement x="0" y="103" width="395" height="16" forecolor="#0066FF" uuid="60298a61-5c11-4cb9-b3c2-a28bbc7bec96"/>
-				<textElement textAlignment="Left">
-					<font size="12" isBold="false"/>
+				<reportElement mode="Opaque" x="0" y="5" width="194" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="395891c6-5378-4a7a-b9a6-6fe68dc2def9"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Y     DESBLOQUEO      DE      TODAS    LAS    MARCAS    VENTA     DE]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="84" width="395" height="16" forecolor="#0066FF" uuid="d9e0b18c-0558-4549-8f84-0f3915eb2c1f"/>
-				<textElement textAlignment="Left">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[REPARACION    ELECTRONICA    EN   GENERAL    DECODIFICACION]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="119" width="395" height="16" forecolor="#0066FF" uuid="edff9c0d-4ac9-48ae-8766-ea4900ead9b9"/>
-				<textElement textAlignment="Left">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[ACCESORIOS Y REPUESTOS EN GENERAL]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="413" y="0" width="131" height="12" forecolor="#0066FF" uuid="7fc60f73-5db4-4224-884d-138922d2b04e"/>
-				<textElement textAlignment="Left">
-					<font size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[CASA MATRIZ: ABAROA N° 1919]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="413" y="24" width="131" height="12" forecolor="#0066FF" uuid="c5a1e7d5-ff73-4f7b-b98e-22fdbd50e235"/>
-				<textElement textAlignment="Left">
-					<font size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[SUCURSAL 2: ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="413" y="12" width="131" height="12" forecolor="#0066FF" uuid="900f5b81-30bb-456e-bd41-3642a2fac746"/>
-				<textElement textAlignment="Left">
-					<font size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[SUCURSAL 1: RAMIREZ N° 1998]]></text>
+				<text><![CDATA[DISPOSITIVO]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="460" y="117" width="96" height="20" forecolor="#FF3333" uuid="b6bf250f-1323-4201-8ec8-d1a0641472f9"/>
+				<reportElement x="0" y="19" width="194" height="10" uuid="e7ee7abd-bec0-45da-8244-46df45544508"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Segoe UI Light" size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Marca:           "+$F{marca}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="419" y="117" width="36" height="20" forecolor="#FF3333" uuid="d6558c91-4a5d-424c-af53-1af61fd71ed3"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="29" width="194" height="11" uuid="46d3c0fb-99ac-4f17-b882-e7d799b702ed"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Segoe UI Light" size="7"/>
 				</textElement>
-				<text><![CDATA[COD:]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA["Modelo:         "+$F{modelo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="40" width="194" height="10" uuid="e2ace782-5671-44e6-9983-914349504660"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fallas:            "+$F{fallas}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="50" width="194" height="10" uuid="80769058-87bd-4f3a-a9b1-0676cb36c870"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Causas:          "+$F{causas}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="60" width="194" height="11" uuid="2cef73e0-ec94-4ea0-abc4-0932450b3a04"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Observación: "+$F{observacion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="71" width="194" height="12" uuid="28679123-658e-4b1c-87a7-00ea41b71995"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Diagnostico:  "+$F{diagnostico}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement x="70" y="90" width="124" height="10" forecolor="#000000" backcolor="#000000" uuid="fea1ccdc-6d57-44b9-8493-64b6480d36f0"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="70" y="111" width="124" height="10" forecolor="#000000" backcolor="#000000" uuid="e3034979-86e3-41bc-a149-823e123911f4"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="70" y="121" width="124" height="10" forecolor="#000000" backcolor="#000000" uuid="7fdf4674-057b-4529-ae87-6ba4af966dec"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abono}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="70" y="100" width="124" height="10" backcolor="#000000" uuid="db315cee-1140-4d76-a035-83e524963903"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{preciorevision}]]></textFieldExpression>
+			</textField>
 			<componentElement>
-				<reportElement x="406" y="64" width="149" height="50" uuid="ebbec630-f579-4fd4-940d-ee5b9a197596"/>
+				<reportElement x="0" y="141" width="194" height="40" uuid="ebbec630-f579-4fd4-940d-ee5b9a197596"/>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
 					<jr:codeExpression><![CDATA[$F{codigo}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
 			<line>
-				<reportElement x="0" y="147" width="553" height="1" uuid="6e7b007c-7e5a-493d-a32a-66f39f264e63"/>
-			</line>
-			<image>
-				<reportElement x="0" y="4" width="100" height="64" uuid="3c13c765-fdc4-46ed-9ef3-18f69cafe48d"/>
-				<imageExpression><![CDATA["..\\imagenes\\logo.png"]]></imageExpression>
-			</image>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="347">
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="7" width="81" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="7c827742-4343-4b39-a74a-94b9ee51b15a"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[ATENDIDO POR:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="28" width="81" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="f2d3a4e9-51a9-4d2c-bb64-1c1f9c8037cc"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[CLIENTE:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="48" width="81" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="d53c724f-10de-431f-8027-7c2d73629470"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[FONO/CEL:]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="108" y="48" width="442" height="20" uuid="65a7d096-3ed9-4d94-8292-8f99545c162f"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{celular}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="68" width="81" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="395891c6-5378-4a7a-b9a6-6fe68dc2def9"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[MARCA:]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="108" y="68" width="442" height="20" uuid="e7ee7abd-bec0-45da-8244-46df45544508"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="88" width="81" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="8cf97e52-a41a-4528-8b16-8c98d7f2a630"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[MODELO:]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="108" y="88" width="442" height="20" uuid="46d3c0fb-99ac-4f17-b882-e7d799b702ed"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{modelo}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="108" width="81" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e2a73388-9987-43ae-bcb5-5d35f989d517"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[FALLAS:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="128" width="81" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="da8dfbc4-06f6-4360-9283-bf6d53c0d6b3"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[CAUSAS:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="148" width="81" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="c170a373-19be-438c-bdce-1300a2ec488f"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[OBSERVACION:]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="108" y="108" width="442" height="20" uuid="e2ace782-5671-44e6-9983-914349504660"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{fallas}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="108" y="128" width="442" height="20" uuid="80769058-87bd-4f3a-a9b1-0676cb36c870"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{causas}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="108" y="148" width="442" height="20" uuid="2cef73e0-ec94-4ea0-abc4-0932450b3a04"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{observacion}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="168" width="81" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="fa3f8009-60ce-4ac0-b207-df59046b001d"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[TECNICO :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="188" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="b7c2f98a-c78d-4e9a-9c98-45caaf7d48ff"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[DIAGNOSTICO:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="208" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e911ca5f-7dba-4e97-a1f0-103329248fc9"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[FECHA RECEP.:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="228" width="108" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="350614d7-39f1-4f16-842c-e87d59e6e08c"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[FECHA ENTREGA:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="248" width="108" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="39f1ec66-09a4-43d7-ad5a-b3c3bd913bfd"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[VALOR:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="287" width="108" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="69d4be74-902c-4975-bd30-e8f59c3cef00"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[ABONO:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="307" width="108" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e3340bf9-0857-474a-8818-686b42b0aaa2"/>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SALDO:]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="108" y="168" width="442" height="20" uuid="7b0ce8b5-8ad9-4e6b-8c6d-a93549c7a6f0"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="108" y="188" width="442" height="20" uuid="28679123-658e-4b1c-87a7-00ea41b71995"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{diagnostico}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy hh.mm ">
-				<reportElement x="108" y="208" width="442" height="20" uuid="168d270b-9ba3-46ba-898c-76356f115589"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{fecha_recepcion}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0">
-				<reportElement x="108" y="248" width="209" height="20" forecolor="#FF3333" uuid="fea1ccdc-6d57-44b9-8493-64b6480d36f0"/>
-				<textElement>
-					<font size="10" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
-				<reportElement x="108" y="287" width="389" height="20" forecolor="#FF3333" uuid="7fdf4674-057b-4529-ae87-6ba4af966dec"/>
-				<textElement>
-					<font size="10" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{abono}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0">
-				<reportElement x="108" y="307" width="375" height="20" forecolor="#FF3333" uuid="22698713-574b-4852-80a6-86faf5a9ee2d"/>
-				<textElement>
-					<font size="10" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{?column?}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="108" y="8" width="442" height="20" uuid="bbb4fbe7-5057-4d8c-902b-2bcb6b276ee0"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{atendido}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="108" y="28" width="442" height="20" uuid="0d2e3cbf-2adc-4da6-8506-209382ed9299"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{nombre_razons}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="108" y="28" width="442" height="1" forecolor="#000000" uuid="e53df015-fdbc-4c17-84fc-d3d7b0ebacab"/>
+				<reportElement x="0" y="2" width="194" height="1" uuid="f83aab06-cf28-4f99-9bf8-1fe2a5927ccf"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="108" y="67" width="442" height="1" forecolor="#000000" uuid="627f56ba-0053-4ae7-b1bf-b01093e5e18b"/>
+				<reportElement x="0" y="15" width="194" height="1" uuid="4640ca9f-3e62-4c17-99c4-702f69a53946"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="108" y="48" width="442" height="1" forecolor="#000000" uuid="662f6537-b57d-4887-af82-1180fc2bf6bb"/>
+				<reportElement x="0" y="85" width="194" height="1" uuid="8e8f672a-34c0-449f-a8d6-a5b4ec78967a"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
-			<line>
-				<reportElement x="108" y="108" width="442" height="1" forecolor="#000000" uuid="0ea12e54-f4d7-4a71-be2d-e2c455811e56"/>
-			</line>
-			<line>
-				<reportElement x="108" y="87" width="442" height="1" forecolor="#000000" uuid="868c80bb-d54a-40c6-b7ee-e0ceb0fa03be"/>
-			</line>
-			<line>
-				<reportElement x="108" y="127" width="442" height="1" forecolor="#000000" uuid="62fbd74b-fa99-4aac-82a1-4ca73d0624a6"/>
-			</line>
-			<line>
-				<reportElement x="108" y="147" width="442" height="1" forecolor="#000000" uuid="021d5484-80e8-4a2e-b94b-e601ebb62bc5"/>
-			</line>
-			<line>
-				<reportElement x="108" y="167" width="442" height="1" forecolor="#000000" uuid="1e04117a-b95e-4219-b4c7-33ae7d596b7b"/>
-			</line>
-			<line>
-				<reportElement x="108" y="187" width="442" height="1" forecolor="#000000" uuid="e6cfec8b-68c2-40e4-8c65-8eb650fa6e4f"/>
-			</line>
-			<line>
-				<reportElement x="108" y="207" width="442" height="1" forecolor="#000000" uuid="f37e3aee-f580-4629-b2d2-bc9ce5253e19"/>
-			</line>
-			<line>
-				<reportElement x="108" y="227" width="442" height="1" forecolor="#000000" uuid="1809785b-ea7d-4faf-9bf8-899ecd58527e"/>
-			</line>
-			<line>
-				<reportElement x="108" y="247" width="442" height="1" forecolor="#000000" uuid="fd49967a-5124-450d-b503-f5c183fed79b"/>
-			</line>
-			<line>
-				<reportElement x="108" y="267" width="442" height="1" forecolor="#000000" uuid="73456cee-9649-404f-b3cf-6344407e34e9"/>
-			</line>
-			<line>
-				<reportElement x="108" y="287" width="442" height="1" forecolor="#000000" uuid="327c08e6-6d6b-48eb-9db0-14c275293c36"/>
-			</line>
-			<line>
-				<reportElement x="111" y="307" width="442" height="1" forecolor="#000000" uuid="c400e969-038a-4fe7-8361-d4d74e9f671d"/>
-			</line>
-			<textField>
-				<reportElement x="108" y="227" width="352" height="20" uuid="40787879-c8fe-4e30-82a8-08d0b9326e85"/>
-				<textFieldExpression><![CDATA[$F{concat_ws}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="0" y="267" width="100" height="20" uuid="0a4b7963-121c-4c37-86e5-fa01b029cec1"/>
-				<textElement>
-					<font isBold="true"/>
+				<reportElement x="0" y="185" width="194" height="10" forecolor="#FF6666" uuid="76c64ebf-91e9-464f-b99a-3716585d0d01"/>
+				<textElement textAlignment="Left">
+					<font fontName="Segoe UI Light" size="7" isBold="false"/>
 				</textElement>
-				<text><![CDATA[DESCUENTO:]]></text>
+				<text><![CDATA[NOTA IMPORTANTE:  LOS EQUIPOS  DEBEN SER RETIRADOS ]]></text>
 			</staticText>
-			<textField pattern="#,##0" isBlankWhenNull="true">
-				<reportElement x="108" y="267" width="389" height="20" forecolor="#FF3333" uuid="e3034979-86e3-41bc-a149-823e123911f4"/>
-				<textElement>
-					<font isBold="true"/>
+			<staticText>
+				<reportElement x="0" y="195" width="194" height="10" forecolor="#FF6666" uuid="e907595c-3083-4ac1-802e-842854de4539"/>
+				<textElement textAlignment="Left">
+					<font fontName="Segoe UI Light" size="7" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[RETIRADOS DENTRO DE LOS PROXIMOS 30 DIAS, LA EMPRESA ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="205" width="194" height="10" forecolor="#FF6666" uuid="9460d349-13e8-4def-a4f5-a65d379f4431"/>
+				<textElement textAlignment="Left">
+					<font fontName="Segoe UI Light" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[NO    SE    HACE    RESPONSABLE DESPUES DE ESTE  PERIODO.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="90" width="70" height="10" uuid="7e352bf3-49e2-412b-b840-bf49065f1931"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Precio normal: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="101" width="70" height="10" uuid="8b3841a3-9fad-49cd-8ccf-3da2d558e894"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Precio revisión: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="111" width="70" height="10" uuid="c3f73eee-5a14-4985-a3c6-a38c50bb3afd"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Descuento: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="121" width="70" height="10" uuid="3fac8f71-a3cc-46ad-b0d7-123e82b204c3"/>
+				<textElement>
+					<font fontName="Segoe UI Light" size="7"/>
+				</textElement>
+				<text><![CDATA[Abono: ]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnFooter>
 		<band/>
 	</columnFooter>
-	<pageFooter>
-		<band height="125">
-			<textField>
-				<reportElement mode="Opaque" x="0" y="83" width="515" height="13" backcolor="#E6E6E6" uuid="107d7005-76ab-4779-b74f-b8c6f21bcf79"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement mode="Opaque" x="515" y="83" width="40" height="13" backcolor="#E6E6E6" uuid="50b70e75-efed-420a-8c4a-e553ac526251"/>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="0" y="83" width="100" height="13" uuid="f762eb53-cf28-4e81-98da-48c629b9c6d8"/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="0" width="298" height="16" forecolor="#FF6666" uuid="76c64ebf-91e9-464f-b99a-3716585d0d01"/>
-				<textElement textAlignment="Left">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[NOTA IMPORTANTE:  LOS EQUIPOS  DEBEN SER]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="16" width="298" height="16" forecolor="#FF6666" uuid="e907595c-3083-4ac1-802e-842854de4539"/>
-				<textElement textAlignment="Left">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[RETIRADOS DENTRO DE LOS PROXIMOS 30 DIAS,]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="32" width="298" height="16" forecolor="#FF6666" uuid="9460d349-13e8-4def-a4f5-a65d379f4431"/>
-				<textElement textAlignment="Left">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[LA    EMPRESA    NO    SE    HACE    RESPONSABLE ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="50" width="298" height="16" forecolor="#FF6666" uuid="34c33284-cc8b-4eab-a7c1-9493e9731e5c"/>
-				<textElement textAlignment="Left">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[DESPUES DE ESTE PERIODO.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="317" y="65" width="238" height="16" forecolor="#0066FF" uuid="4296d33a-91dd-4830-b536-4800faa47b78"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[FIRMA]]></text>
-			</staticText>
-			<line>
-				<reportElement x="317" y="64" width="238" height="1" uuid="6883f44a-e5c2-4bd5-a44f-c9bff39442da"/>
-			</line>
-		</band>
-	</pageFooter>
 	<summary>
 		<band/>
 	</summary>

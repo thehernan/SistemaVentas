@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -30,15 +31,47 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
      */
     EmpleadoDAO daoempleado = new EmpleadoDAO();
    Boolean editar;
-   long id;
+//   long id;
     String rutaimagen=null;
-     byte[]  fotoB=new  byte[0];
+//     byte[]  fotoB=new  byte[0];
      Mayusculas mayus= new Mayusculas();
+     List<Empleado> listempleado;
+     Empleado empleado=new Empleado();
+      int posx;
+    int posy;
     public JIFEmpleados() {
         initComponents();
+        jlblimagencarga.setVisible(false);
+        jlblletracarga.setVisible(false);
+        jlblcargaimagen.setVisible(false);
+        
         bloquearjtf(false, false, false, false, false);
         bloquearjbtn(true, false, false, false, false, true,false,false);
-        daoempleado.mostrarempleado(jtablaempleado);
+        mostrar();
+    }
+    
+    public void mostrar(){
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                jlblimagencarga.setVisible(true);
+                jlblletracarga.setVisible(true);
+                jtfbuscarnombre.setEnabled(false);
+                jtfbuscarrut.setEnabled(false);
+                listempleado=daoempleado.mostrarempleado(jtablaempleado);
+                jlblimagencarga.setVisible(false);
+                jlblletracarga.setVisible(false);
+                jtfbuscarnombre.setEnabled(true);
+                jtfbuscarrut.setEnabled(true);
+            }
+        };
+        
+        Thread T = new Thread(runnable);
+        T.start();
+    
+    
     }
     
 
@@ -64,25 +97,81 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
     
     }
      public void limpiarjtf(){
-    jtfrut.setText("R.U.T");
-    jtfnombre.setText("NOMBRES Y APELLIDOS");
-    jtfemail.setText("EMAIL");
-    jtfdireccion.setText("DIRECCION");
-    jtfcelular.setText("CELULAR");
+    jtfrut.setText("");
+    jtfnombre.setText("");
+    jtfemail.setText("");
+    jtfdireccion.setText("");
+    jtfcelular.setText("");
     jlblImageUser.setIcon(null);
-    fotoB= new  byte[0];
+//    fotoB= new  byte[0];
+    empleado=new Empleado();
     }
     public void validaguardar(){
         String nombre= jtfnombre.getText().replaceAll("\\s","");
         String rut=jtfrut.getText().replaceAll("\\s","");
+        String direc=jtfdireccion.getText().replaceAll("\\s","");
+        String cel=jtfcelular.getText().replaceAll("\\s","");
+        String email=jtfemail.getText().replaceAll("\\s","");
                 
-    if(!jtfnombre.getText().trim().equals("NOMBRES Y APELLIDOS") && !nombre.equals("") && !jtfrut.getText().equals("R.U.T") && 
-            rut.length()>0 ){
+    if(nombre.length()>0 && rut.length()>0  && direc.length()>0 && cel.length()>0 && email.length()>0){
         bloquearjbtn(false, false, true,false ,true, true,true,false);
     }else {
         bloquearjbtn(true, false, false, false, true, true,false,false);
     }
     
+    }
+    public synchronized void ver(){
+        jlblcargaimagen.setVisible(true);
+        
+       Empleado empleado=listempleado.get(jtablaempleado.getSelectedRow());
+        
+        this.empleado = daoempleado.buscarempleado("ID", empleado.getId_empleado());    
+        jtfnombre.setText(this.empleado.getNombre());
+        jtfrut.setText(this.empleado.getRut());
+        jtfcelular.setText(this.empleado.getCelular());
+        jtfdireccion.setText(this.empleado.getDireccion());
+        jtfemail.setText(this.empleado.getEmail());
+//        fotoB= empleado.getFoto();
+        bloquearjbtn(true, true, false, true, false, true,false,true);
+        
+      
+
+        //////////////  mostrar imagen ////////////////
+        ImageIcon imageUser = new ImageIcon(this.empleado.getFoto());
+        Image img = imageUser.getImage();
+        Image newimg = img.getScaledInstance(jlblImageUser.getWidth(), jlblImageUser.getHeight(), java.awt.Image.SCALE_AREA_AVERAGING);
+        imageUser = new ImageIcon(newimg);
+        jlblImageUser.setIcon(imageUser);
+        
+        /////////////////////////////////7
+        jlblcargaimagen.setVisible(false);
+    }
+    
+    public synchronized void sensitiva(String op){
+         jlblimagencarga.setVisible(true);
+         jlblletracarga.setVisible(true);
+        if(op.equals("nombre")){
+        String nombre=jtfbuscarnombre.getText().trim().toUpperCase();
+        listempleado=daoempleado.busquedasensitivaempleado(jtablaempleado,"NOMBRE", nombre);    
+        
+        }
+        if(op.equals("rut")){
+        String rut= jtfbuscarrut.getText().trim();
+        listempleado=daoempleado.busquedasensitivaempleado(jtablaempleado,"RUT",rut);
+        
+        }
+        if(jtablaempleado.getSelectedRow()>=0){
+            ver();
+
+        }else {
+            limpiarjtf();
+
+            bloquearjtf(false, false,false, false,false);
+            bloquearjbtn(true, false, false, false, false, true,false,false);
+
+        }
+         jlblimagencarga.setVisible(false);
+         jlblletracarga.setVisible(false);
     }
 
     /**
@@ -95,6 +184,8 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jlblletracarga = new javax.swing.JLabel();
+        jlblimagencarga = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtablaempleado = new javax.swing.JTable();
         jbtncancelar = new javax.swing.JButton();
@@ -107,32 +198,50 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jtfcelular = new javax.swing.JTextField();
         jtfemail = new javax.swing.JTextField();
         jtfnombre = new javax.swing.JTextField();
+        jbtnfoto = new javax.swing.JButton();
+        jbtngeneracarnet = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jtfbuscarrut = new javax.swing.JTextField();
         jtfbuscarnombre = new javax.swing.JTextField();
         jbtneditar = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        jlblcargaimagen = new javax.swing.JLabel();
         jlblImageUser = new javax.swing.JLabel();
-        jbtnfoto = new javax.swing.JButton();
-        jbtngeneracarnet = new javax.swing.JButton();
+        jlblmensaje = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
+        setPreferredSize(new java.awt.Dimension(1239, 533));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 390, -1, -1));
+
+        jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 150, 500, 310));
 
         jtablaempleado.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtablaempleado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jtablaempleado.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -149,48 +258,73 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtablaempleado);
 
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 492, 357));
+
         jbtncancelar.setBackground(new java.awt.Color(255, 255, 255));
+        jbtncancelar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtncancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel20x20.png"))); // NOI18N
         jbtncancelar.setText("Cancelar");
         jbtncancelar.setToolTipText("Cancelar");
+        jbtncancelar.setBorder(null);
+        jbtncancelar.setBorderPainted(false);
+        jbtncancelar.setContentAreaFilled(false);
         jbtncancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtncancelarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 90, 80, -1));
 
         jbtneliminar.setBackground(new java.awt.Color(255, 255, 255));
+        jbtneliminar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtneliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete20x20.png"))); // NOI18N
         jbtneliminar.setText("Eliminar");
         jbtneliminar.setToolTipText("Eliminar");
+        jbtneliminar.setBorder(null);
+        jbtneliminar.setBorderPainted(false);
+        jbtneliminar.setContentAreaFilled(false);
         jbtneliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtneliminarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 90, 70, -1));
 
         jbtnguardar.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
         jbtnguardar.setText("Guardar");
         jbtnguardar.setToolTipText("Guardar");
+        jbtnguardar.setBorder(null);
+        jbtnguardar.setBorderPainted(false);
+        jbtnguardar.setContentAreaFilled(false);
         jbtnguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnguardarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 90, 70, -1));
 
         jbtnnew.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnnew.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnnew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add20X20.png"))); // NOI18N
         jbtnnew.setText("Nuevo");
         jbtnnew.setToolTipText("Nuevo");
+        jbtnnew.setBorder(null);
+        jbtnnew.setBorderPainted(false);
+        jbtnnew.setContentAreaFilled(false);
         jbtnnew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnnewActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnnew, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 90, 70, -1));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jtfrut.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfrut.setText("R.U.T");
         jtfrut.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfrutFocusGained(evt);
@@ -207,10 +341,9 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                 jtfrutKeyTyped(evt);
             }
         });
-        jPanel2.add(jtfrut, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 139, -1));
+        jPanel2.add(jtfrut, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 139, -1));
 
         jtfdireccion.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfdireccion.setText("DIRECCION");
         jtfdireccion.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfdireccionFocusGained(evt);
@@ -227,10 +360,9 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                 jtfdireccionKeyTyped(evt);
             }
         });
-        jPanel2.add(jtfdireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 420, -1));
+        jPanel2.add(jtfdireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 340, -1));
 
         jtfcelular.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfcelular.setText("CELULAR");
         jtfcelular.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfcelularFocusGained(evt);
@@ -249,10 +381,9 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                 jtfcelularKeyReleased(evt);
             }
         });
-        jPanel2.add(jtfcelular, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 50, 140, -1));
+        jPanel2.add(jtfcelular, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, 140, -1));
 
         jtfemail.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfemail.setText("EMAIL");
         jtfemail.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfemailFocusGained(evt);
@@ -269,10 +400,9 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                 jtfemailKeyTyped(evt);
             }
         });
-        jPanel2.add(jtfemail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 420, -1));
+        jPanel2.add(jtfemail, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 340, -1));
 
         jtfnombre.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfnombre.setText("NOMBRE Y APELLIDOS");
         jtfnombre.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfnombreFocusGained(evt);
@@ -289,10 +419,57 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                 jtfnombreKeyTyped(evt);
             }
         });
-        jPanel2.add(jtfnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 420, -1));
+        jPanel2.add(jtfnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 340, -1));
+
+        jbtnfoto.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnfoto.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtnfoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/FOTO.png"))); // NOI18N
+        jbtnfoto.setText("Foto");
+        jbtnfoto.setBorder(null);
+        jbtnfoto.setBorderPainted(false);
+        jbtnfoto.setContentAreaFilled(false);
+        jbtnfoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnfotoActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jbtnfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 120, 40));
+
+        jbtngeneracarnet.setBackground(new java.awt.Color(255, 255, 255));
+        jbtngeneracarnet.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
+        jbtngeneracarnet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/carnet.png"))); // NOI18N
+        jbtngeneracarnet.setText("Generar Carné");
+        jbtngeneracarnet.setBorder(null);
+        jbtngeneracarnet.setBorderPainted(false);
+        jbtngeneracarnet.setContentAreaFilled(false);
+        jbtngeneracarnet.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jbtngeneracarnet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtngeneracarnetActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jbtngeneracarnet, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 160, 40));
+
+        jLabel3.setText("Nombre y Apellidos:");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
+
+        jLabel4.setText("R.U.T.:");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        jLabel5.setText("Celular:");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 120, -1, -1));
+
+        jLabel6.setText("Dirección:");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
+
+        jLabel7.setText("E-mail:");
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, -1, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 150, 373, 311));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("Buscar por:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
         jtfbuscarrut.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfbuscarrut.setText("R.U.T");
@@ -304,11 +481,17 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                 jtfbuscarrutFocusLost(evt);
             }
         });
+        jtfbuscarrut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfbuscarrutActionPerformed(evt);
+            }
+        });
         jtfbuscarrut.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfbuscarrutKeyReleased(evt);
             }
         });
+        jPanel1.add(jtfbuscarrut, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 110, -1));
 
         jtfbuscarnombre.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfbuscarnombre.setText("NOMBRE Y APELLIDOS");
@@ -320,6 +503,11 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                 jtfbuscarnombreFocusLost(evt);
             }
         });
+        jtfbuscarnombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfbuscarnombreActionPerformed(evt);
+            }
+        });
         jtfbuscarnombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfbuscarnombreKeyReleased(evt);
@@ -328,116 +516,59 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                 jtfbuscarnombreKeyTyped(evt);
             }
         });
+        jPanel1.add(jtfbuscarnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 560, -1));
 
         jbtneditar.setBackground(new java.awt.Color(255, 255, 255));
+        jbtneditar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtneditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/edit20x20.png"))); // NOI18N
         jbtneditar.setText("Editar");
         jbtneditar.setToolTipText("Editar");
+        jbtneditar.setBorder(null);
+        jbtneditar.setBorderPainted(false);
+        jbtneditar.setContentAreaFilled(false);
         jbtneditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtneditarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 90, 70, -1));
 
-        jPanel3.setBackground(new java.awt.Color(238, 238, 238));
-        jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jlblcargaimagen.setFont(new java.awt.Font("Segoe Script", 0, 10)); // NOI18N
+        jlblcargaimagen.setForeground(new java.awt.Color(238, 238, 238));
+        jlblcargaimagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
+        jlblcargaimagen.setText("Cargando vista previa ...");
+        jPanel1.add(jlblcargaimagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, -1, -1));
 
         jlblImageUser.setBackground(new java.awt.Color(255, 255, 255));
         jlblImageUser.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel3.add(jlblImageUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 170, 160));
+        jPanel1.add(jlblImageUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 324, 357));
+        jPanel1.add(jlblmensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 170, 20));
 
-        jbtnfoto.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnfoto.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jbtnfoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/FOTO.png"))); // NOI18N
-        jbtnfoto.setText("Foto");
-        jbtnfoto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnfotoActionPerformed(evt);
+        jPanel4.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel4.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel4MouseDragged(evt);
             }
         });
-        jPanel3.add(jbtnfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 120, 50));
-
-        jbtngeneracarnet.setBackground(new java.awt.Color(255, 255, 255));
-        jbtngeneracarnet.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jbtngeneracarnet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/carnet.png"))); // NOI18N
-        jbtngeneracarnet.setText("Generar Carné");
-        jbtngeneracarnet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtngeneracarnetActionPerformed(evt);
+        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel4MousePressed(evt);
             }
         });
-        jPanel3.add(jbtngeneracarnet, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 170, -1));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 492, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jtfbuscarrut, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addComponent(jtfbuscarnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jbtnnew, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtneditar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtncancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(5, 5, 5)
-                        .addComponent(jtfbuscarrut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtfbuscarnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jbtneditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jbtnnew))
-                                .addComponent(jbtnguardar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jbtneliminar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jbtncancelar, javax.swing.GroupLayout.Alignment.LEADING)))))
-                .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGap(20, 20, 20))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE))
-                        .addContainerGap())))
-        );
-
-        jPanel4.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 0));
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("REGISTRO EMPLEADOS");
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jLabel8.setToolTipText("Cerrar");
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel8MouseReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -446,29 +577,35 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 954, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(-7, 0, 1240, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -478,7 +615,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
              int index = jtablaempleado.getSelectedRow();
         if(index>=0){
-            jtablaempleadoMouseReleased(null);
+            ver();
         } else {
         limpiarjtf();
         }
@@ -521,13 +658,13 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
             //
             //        }
         int index= jtablaempleado.getSelectedRow();
-        long id = Long.parseLong(jtablaempleado.getValueAt(index, 0).toString());
+        empleado=listempleado.get(index);
         if (index<0){
             JOptionPane.showMessageDialog(this, "SELECCIONE EMPLEADO A ELIMINAR EN LA TABLA");
         }else {
             if (JOptionPane.showConfirmDialog(null, "ESTA SEGURO DE ELIMINAR EL EMPLEADO","ELIMINAR",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-                daoempleado.eliminarempleado(id);
-                daoempleado.mostrarempleado(jtablaempleado);
+                daoempleado.eliminarempleado(empleado.getId_empleado());
+                listempleado=daoempleado.mostrarempleado(jtablaempleado);
                 bloquearjtf(false, false, false, false, false);
                 bloquearjbtn(true, false, false, false, false, true,false,false);
                 limpiarjtf();
@@ -541,12 +678,12 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         
         
-        Empleado empleado= new Empleado();
-        String nombre=jtfnombre.getText().trim();
-        String rut=jtfrut.getText().trim();
-        String direccion=jtfdireccion.getText().trim();
-        String celular=jtfcelular.getText().trim();
-        String email=jtfemail.getText().trim();
+//        Empleado empleado= new Empleado();
+        String nombre=jtfnombre.getText().trim().toUpperCase();
+        String rut=jtfrut.getText().trim().toUpperCase();
+        String direccion=jtfdireccion.getText().trim().toUpperCase();
+        String celular=jtfcelular.getText().trim().toUpperCase();
+        String email=jtfemail.getText().trim().toUpperCase();
         
         
         empleado.setNombre(nombre);
@@ -554,11 +691,11 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         empleado.setDireccion(direccion);
         empleado.setCelular(celular);
         empleado.setEmail(email);
-        empleado.setFoto(fotoB);
+//        empleado.setFoto(fotoB);
         
         if (nombre.length()>0 && rut.length()>0 && direccion.length()>0
                 && celular.length()>0 && email.length()>0){
-            if(!nombre.equals("NOMBRES Y APELLIDOS")){
+//            if(!nombre.equals("NOMBRES Y APELLIDOS")){
                 if(editar==false){
                  boolean valida=daoempleado.duplicado(0, rut,"GUARDAR");
                 if(valida==true){
@@ -571,9 +708,10 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                
                 else{
                     
-                    long id=Long.parseLong(jtablaempleado.getValueAt(jtablaempleado.getSelectedRow(), 0).toString());   
-                    empleado.setId_empleado(id);
-                    boolean Vvalida=daoempleado.duplicado(id, rut,"EDITAR");
+//                    long id=Long.parseLong(jtablaempleado.getValueAt(jtablaempleado.getSelectedRow(), 0).toString());   
+//                    empleado.setId_empleado(id);
+//                    this.empleado= listempleado.get(jtablaempleado.getSelectedRow());
+                    boolean Vvalida=daoempleado.duplicado(empleado.getId_empleado(), rut,"EDITAR");
                     if(Vvalida==true){
                       daoempleado.editarempleado(empleado);
                     }else {
@@ -582,22 +720,23 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                    
                         } 
                 
-                       
+                     mostrar();
+                    bloquearjtf(false, false, false, false, false);
+                    bloquearjbtn(true, false, false, false, false, true,false,false);
+                    limpiarjtf();  
                     
                 
                 
-            }else {
-                JOptionPane.showMessageDialog(null, "RELLENE LOS CAMPOS","ERROR",JOptionPane.ERROR_MESSAGE);
-            } 
+//            }else {
+//                JOptionPane.showMessageDialog(null, "RELLENE LOS CAMPOS","ERROR",JOptionPane.ERROR_MESSAGE);
+//            } 
            
         }else {
             JOptionPane.showMessageDialog(null, "INGRESE TODOS LOS DATOS","ERROR",JOptionPane.ERROR_MESSAGE);
         
         }
-        daoempleado.mostrarempleado(jtablaempleado);
-        bloquearjtf(false, false, false, false, false);
-        bloquearjbtn(true, false, false, false, false, true,false,false);
-        limpiarjtf();
+        
+        
         
         //        String RUT = jtfrut.getText();
         //        Integer index= jtablaalumno.getSelectedRow();
@@ -657,7 +796,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         bloquearjtf(true, true, true, true, true);
         bloquearjbtn(true, false, false, false, true, true,true,false);
         limpiarjtf();
-
+        empleado.setFoto(new byte[0]);
         editar=false;
         //        jbtncancelar.setEnabled(true);
         //
@@ -667,72 +806,72 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
 
     private void jtfrutFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfrutFocusGained
         // TODO add your handling code here:
-        if (jtfrut.getText().equals("R.U.T")){
-            jtfrut.setText("");
-        }
+//        if (jtfrut.getText().equals("R.U.T")){
+//            jtfrut.setText("");
+//        }
     }//GEN-LAST:event_jtfrutFocusGained
 
     private void jtfrutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfrutFocusLost
         // TODO add your handling code here:
-        if (jtfrut.getText().equals("")){
-            jtfrut.setText("R.U.T");
-        }
+//        if (jtfrut.getText().equals("")){
+//            jtfrut.setText("R.U.T");
+//        }
     }//GEN-LAST:event_jtfrutFocusLost
 
     private void jtfdireccionFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfdireccionFocusGained
         // TODO add your handling code here:
-        if (jtfdireccion.getText().equals("DIRECCION")){
-            jtfdireccion.setText("");
-        }
+//        if (jtfdireccion.getText().equals("DIRECCION")){
+//            jtfdireccion.setText("");
+//        }
     }//GEN-LAST:event_jtfdireccionFocusGained
 
     private void jtfdireccionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfdireccionFocusLost
         // TODO add your handling code here:
-        if (jtfdireccion.getText().equals("")){
-            jtfdireccion.setText("DIRECCION");
-        }
+//        if (jtfdireccion.getText().equals("")){
+//            jtfdireccion.setText("DIRECCION");
+//        }
     }//GEN-LAST:event_jtfdireccionFocusLost
 
     private void jtfcelularFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcelularFocusGained
         // TODO add your handling code here:
-        if (jtfcelular.getText().equals("CELULAR")){
-            jtfcelular.setText("");
-        }
+//        if (jtfcelular.getText().equals("CELULAR")){
+//            jtfcelular.setText("");
+//        }
     }//GEN-LAST:event_jtfcelularFocusGained
 
     private void jtfcelularFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcelularFocusLost
         // TODO add your handling code here:
-        if (jtfcelular.getText().equals("")){
-            jtfcelular.setText("CELULAR");
-        }
+//        if (jtfcelular.getText().equals("")){
+//            jtfcelular.setText("CELULAR");
+//        }
     }//GEN-LAST:event_jtfcelularFocusLost
 
     private void jtfemailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfemailFocusGained
         // TODO add your handling code here:
-        if (jtfemail.getText().equals("EMAIL")){
-            jtfemail.setText("");
-        }
+//        if (jtfemail.getText().equals("EMAIL")){
+//            jtfemail.setText("");
+//        }
     }//GEN-LAST:event_jtfemailFocusGained
 
     private void jtfemailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfemailFocusLost
         // TODO add your handling code here:
-        if (jtfemail.getText().equals("")){
-            jtfemail.setText("EMAIL");
-        }
+//        if (jtfemail.getText().equals("")){
+//            jtfemail.setText("EMAIL");
+//        }
     }//GEN-LAST:event_jtfemailFocusLost
 
     private void jtfnombreFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnombreFocusGained
         // TODO add your handling code here:
-        if (jtfnombre.getText().equals("NOMBRES Y APELLIDOS")){
-            jtfnombre.setText("");
-        }
+//        if (jtfnombre.getText().equals("NOMBRES Y APELLIDOS")){
+//            jtfnombre.setText("");
+//        }
     }//GEN-LAST:event_jtfnombreFocusGained
 
     private void jtfnombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnombreFocusLost
         // TODO add your handling code here:
-        if (jtfnombre.getText().equals("")){
-            jtfnombre.setText("NOMBRES Y APELLIDOS");
-        }
+//        if (jtfnombre.getText().equals("")){
+//            jtfnombre.setText("NOMBRES Y APELLIDOS");
+//        }
     }//GEN-LAST:event_jtfnombreFocusLost
 
     private void jtfbuscarrutFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfbuscarrutFocusGained
@@ -773,9 +912,9 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
     private void jbtnfotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnfotoActionPerformed
         // TODO add your handling code here:
 //         falumno falum = new falumno();
-        Empleado empleado = new Empleado();
-        System.out.println("idfoto"+id);
-        empleado.setId_empleado(id);
+//        Empleado empleado = new Empleado();
+//        System.out.println("idfoto"+id);
+//        empleado.setId_empleado(id);
     JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
             "Archivos png & jpg", "png", "jpg");
@@ -789,7 +928,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                     rutaimagen = chooser.getSelectedFile().getAbsolutePath();
                     File file = new File(rutaimagen);
                     byte[]  fotobys= Files.readAllBytes(file.toPath());
-                    fotoB=fotobys;
+                    empleado.setFoto(fotobys);
                     
                     
                     Image icono=ImageIO.read(chooser.getSelectedFile()).getScaledInstance
@@ -867,7 +1006,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         String rutconguion = jtfrut.getText();
         String nombre= jtfnombre.getText();
         System.out.println("ruta"+System.getProperty("user.home"));
-        carnet.generarcarnet("CARNÉ DE IDENTIFICACIÓN", nombre, "----", fotoB, System.getProperty("user.home")+System.getProperty("file.separator")
+        carnet.generarcarnet("CARNÉ DE IDENTIFICACIÓN", nombre, "----", empleado.getFoto(), System.getProperty("user.home")+System.getProperty("file.separator")
                 +"Pictures"+System.getProperty("file.separator")+nombre+"-"+rutsinguion+".pdf",rutsinguion );
             JOptionPane.showMessageDialog(this,"CARNÉ GENERADO EN: "+System.getProperty("user.home")+System.getProperty("file.separator")
                 +"Pictures"+System.getProperty("file.separator")+nombre+"-"+rutsinguion+".pdf");
@@ -875,28 +1014,45 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
 
     private void jtfbuscarrutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscarrutKeyReleased
         // TODO add your handling code here:
-        String rut= jtfbuscarrut.getText().trim();
-        daoempleado.busquedasensitivaempleado(jtablaempleado,"RUT",rut);
+      
+        
+        
+        
+        
     }//GEN-LAST:event_jtfbuscarrutKeyReleased
 
     private void jtfbuscarnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscarnombreKeyReleased
         // TODO add your handling code here:
-          String nombre=jtfbuscarnombre.getText().trim().toUpperCase();
-        daoempleado.busquedasensitivaempleado(jtablaempleado,"NOMBRE", nombre);
+        
+        
+//         if(jtablaempleado.getSelectedRow()>=0){
+//            ver();
+//        
+//        }else {
+//            limpiarjtf();
+//
+//            bloquearjtf(false, false,false, false,false);
+//            bloquearjbtn(true, false, false, false, false, true,false,false);
+//        
+//        }
     }//GEN-LAST:event_jtfbuscarnombreKeyReleased
 
     private void jtablaempleadoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaempleadoMouseReleased
         // TODO add your handling code here:
-         Empleado empleado = null;
-        id = Long.parseLong(jtablaempleado.getValueAt(jtablaempleado.getSelectedRow(), 0).toString());
-        empleado = daoempleado.buscarempleado("ID", id,jlblImageUser);    
-        jtfnombre.setText(empleado.getNombre());
-        jtfrut.setText(empleado.getRut());
-        jtfcelular.setText(empleado.getCelular());
-        jtfdireccion.setText(empleado.getDireccion());
-        jtfemail.setText(empleado.getEmail());
-        fotoB= empleado.getFoto();
-        bloquearjbtn(true, true, false, true, false, true,false,true);
+         Runnable runnable=new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//                jlblcargafoto.setVisible(true);
+                ver();
+//                jlblcargafoto.setVisible(false);
+            }
+        };
+        Thread T= new Thread(runnable);
+        T.start();
+       
+        
     }//GEN-LAST:event_jtablaempleadoMouseReleased
 
     private void jtfnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnombreKeyReleased
@@ -931,41 +1087,105 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
 
     private void jtablaempleadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablaempleadoKeyReleased
         // TODO add your handling code here:
-        jtablaempleadoMouseReleased(null);
+         Runnable runnable=new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//                jlblcargafoto.setVisible(true);
+                ver();
+//                jlblcargafoto.setVisible(false);
+            }
+        };
+        Thread T= new Thread(runnable);
+        T.start();
     }//GEN-LAST:event_jtablaempleadoKeyReleased
 
     private void jtfnombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnombreKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfnombre);
+//        mayus.convertirmayus(jtfnombre);
     }//GEN-LAST:event_jtfnombreKeyTyped
 
     private void jtfrutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrutKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfrut);
+//        mayus.convertirmayus(jtfrut);
     }//GEN-LAST:event_jtfrutKeyTyped
 
     private void jtfdireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdireccionKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfdireccion);
+//        mayus.convertirmayus(jtfdireccion);
     }//GEN-LAST:event_jtfdireccionKeyTyped
 
     private void jtfemailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfemailKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfemail);
+//        mayus.convertirmayus(jtfemail);
     }//GEN-LAST:event_jtfemailKeyTyped
 
     private void jtfbuscarnombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscarnombreKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfbuscarnombre);
+//        mayus.convertirmayus(jtfbuscarnombre);
     }//GEN-LAST:event_jtfbuscarnombreKeyTyped
+
+    private void jtfbuscarrutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfbuscarrutActionPerformed
+        // TODO add your handling code here:
+          Runnable runnable= new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+               sensitiva("rut");
+                
+            }
+        };
+        Thread FT = new Thread(runnable);
+        FT.start();
+    }//GEN-LAST:event_jtfbuscarrutActionPerformed
+
+    private void jtfbuscarnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfbuscarnombreActionPerformed
+        // TODO add your handling code here:
+         Runnable runnable= new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+               sensitiva("nombre");
+                
+            }
+        };
+        Thread FT = new Thread(runnable);
+        FT.start();
+    }//GEN-LAST:event_jtfbuscarnombreActionPerformed
+
+    private void jLabel8MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseReleased
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jLabel8MouseReleased
+
+    private void jPanel4MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MousePressed
+        // TODO add your handling code here:
+          posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel4MousePressed
+
+    private void jPanel4MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseDragged
+        // TODO add your handling code here:
+         int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel4MouseDragged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtncancelar;
@@ -976,6 +1196,10 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbtnguardar;
     private javax.swing.JButton jbtnnew;
     private javax.swing.JLabel jlblImageUser;
+    private javax.swing.JLabel jlblcargaimagen;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
+    private javax.swing.JLabel jlblmensaje;
     private javax.swing.JTable jtablaempleado;
     private javax.swing.JTextField jtfbuscarnombre;
     private javax.swing.JTextField jtfbuscarrut;

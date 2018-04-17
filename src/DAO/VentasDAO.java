@@ -6,7 +6,7 @@
 package DAO;
 
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import Pojos.Ventas;
 import java.awt.HeadlessException;
 import java.math.BigDecimal;
@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,22 +39,25 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author info2017
  */
 public class VentasDAO {
+    
+     
+      DecimalFormat nf=new DecimalFormat("#.00");
     public long insertar(Ventas venta){
-
-       Conexion conexion = new Conexion();
+        ConexionBD Cbd = new ConexionBD();
+      
        long id=0;
    
      try{
             
             System.out.println("SELECT * from sp_insertarventa("+venta.getIdcliente()+","+venta.getIdempleado()+")");
             String sql=("SELECT * from sp_insertarventa(?,?,?,?,?)");         
-            PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+            PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
             ps.setLong(1, venta.getIdcliente());
             ps.setLong(2, venta.getIdempleado());
             ps.setLong(3, venta.getId_sucursal());
             ps.setBigDecimal(4,new BigDecimal(venta.getDescuento()));
             ps.setString(5, venta.getMotivodescuento());
-            ResultSet rs= ps.executeQuery();
+            ResultSet rs= Cbd.RealizarConsulta(ps);
        if  (rs.next()){
          id=(rs.getLong("vidventa"));
      
@@ -64,7 +68,7 @@ public class VentasDAO {
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+               Cbd.desconectar();
 
 }
   return id;  
@@ -72,20 +76,20 @@ public class VentasDAO {
     
 public long insertarnocliente(Ventas venta){
 
-       Conexion conexion = new Conexion();
-        
+     
+     ConexionBD Cbd = new ConexionBD();   
       long id=0;
      try{
             
             System.out.println("SELECT * from sp_insertarventanocliente("+venta.getIdcliente()+","+venta.getIdempleado()+")");
             String sql=("SELECT * from sp_insertarventanocliente(?,?,?,?)");         
-            PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+            PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
           
             ps.setLong(1, venta.getIdempleado());
             ps.setLong(2, venta.getId_sucursal());
             ps.setBigDecimal(3,new BigDecimal(venta.getDescuento()));
             ps.setString(4, venta.getMotivodescuento());
-            ResultSet rs= ps.executeQuery();
+            ResultSet rs=Cbd.RealizarConsulta(ps);
        if  (rs.next()){
            id=(rs.getLong("vidventa"));
          
@@ -96,18 +100,18 @@ public long insertarnocliente(Ventas venta){
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+               Cbd.desconectar();
 
 }
   return id;  
 }
     
-public Ventas buscarventa(JTable tab,String cod,JLabel nombre,JLabel rut
-            ){
+public Ventas buscarventa(JTable tab,String cod,JLabel nombre,JLabel rut,
+            String op){
         
      
-    Conexion conexion = new Conexion();
     
+    ConexionBD Cbd = new ConexionBD();
     Ventas venta= new Ventas();
     DefaultTableModel tabla=new DefaultTableModel(){
     public boolean isCellEditable(int row, int column) {
@@ -120,15 +124,17 @@ public Ventas buscarventa(JTable tab,String cod,JLabel nombre,JLabel rut
     tabla.setColumnIdentifiers(titulos);
   
 
-    NumberFormat nf= NumberFormat.getInstance();
+   
             
     try{
 	
         System.out.println("SELECT * from sp_busquedaventa('"+cod+"')");
-        String sql=("SELECT * from sp_busquedaventa(?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
-        ps.setString(1, cod);
-        ResultSet rs= ps.executeQuery();
+        String sql=("SELECT * from sp_busquedaventa(?,?)"); 
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+        ps.setString(1, op);
+        ps.setString(2, cod);
+       
+        ResultSet rs= Cbd.RealizarConsulta(ps);
         
      
         
@@ -181,7 +187,7 @@ public Ventas buscarventa(JTable tab,String cod,JLabel nombre,JLabel rut
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-               conexion.devolverConexionPool();
+               Cbd.desconectar();
             }    
 return venta;
     
@@ -189,8 +195,7 @@ return venta;
 
 public List<Ventas> mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel msj){
      
-    Conexion conexion = new Conexion();
-   
+    ConexionBD Cbd = new ConexionBD();
     DefaultTableModel tabla=new DefaultTableModel(){
     public boolean isCellEditable(int row, int column) {
        //      if (column == 5) return true;
@@ -208,10 +213,10 @@ public List<Ventas> mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel ms
 	
         System.out.println("SELECT * from sp_mostrarventa('"+desde+"','"+hasta+"')");
         String sql=("SELECT * from sp_mostrarventa(?,?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
         ps.setTimestamp(1, desde);
         ps.setTimestamp(2, hasta);
-        ResultSet rs= ps.executeQuery();
+        ResultSet rs= Cbd.RealizarConsulta(ps);
         Object datosR[] = new Object[9];
         msj.setText("");
         int cont=0;
@@ -268,7 +273,7 @@ public List<Ventas> mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel ms
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+               Cbd.desconectar();
                        
             }    
     return listvent;
@@ -276,8 +281,8 @@ public List<Ventas> mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel ms
     }
 public List<Ventas> mostrarenproceso(JTable tab,long idsucur,JLabel msj){
      
-    Conexion conexion = new Conexion();
    
+    ConexionBD Cbd = new ConexionBD();
     DefaultTableModel tabla=new DefaultTableModel(){
     public boolean isCellEditable(int row, int column) {
        //      if (column == 5) return true;
@@ -294,13 +299,13 @@ public List<Ventas> mostrarenproceso(JTable tab,long idsucur,JLabel msj){
     List<Ventas> listventa=new ArrayList<>();
     try{
 	
-        NumberFormat nf= NumberFormat.getInstance();
+       
         double total =0.0;
         String sql=("SELECT * from sp_mostrarventaenproceso(?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idsucur);
        
-        ResultSet rs= ps.executeQuery();
+        ResultSet rs= Cbd.RealizarConsulta(ps);
         Object datosR[] = new Object[5];
         msj.setText("");
         int cont=0;
@@ -352,7 +357,7 @@ public List<Ventas> mostrarenproceso(JTable tab,long idsucur,JLabel msj){
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
                        
             }    
 
@@ -361,18 +366,17 @@ public List<Ventas> mostrarenproceso(JTable tab,long idsucur,JLabel msj){
 
 public void extornar(long idvent){
      
-    Conexion conexion = new Conexion();
+   
   
- 
+    ConexionBD Cbd = new ConexionBD();
     try{
 	
 
         String sql=("SELECT * from sp_extornarventa(?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idvent);
        
-        ResultSet rs = ps.executeQuery();
-        
+        ResultSet rs =Cbd.RealizarConsulta(ps);
         if(rs.next()){
             JOptionPane.showMessageDialog(null,"VENTA EXTORNADA CON EXITO");
         }else {
@@ -388,7 +392,7 @@ public void extornar(long idvent){
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
                        
             }    
 
@@ -396,18 +400,17 @@ public void extornar(long idvent){
     }
 public void extornarconcretada(long idvent,String motivo){
      
-    Conexion conexion = new Conexion();
-  
  
+    ConexionBD Cbd = new ConexionBD();
     try{
 	
 
         String sql=("SELECT * from sp_extornarventaconcretada(?,?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idvent);
         ps.setString(2, motivo);
        
-        ResultSet rs = ps.executeQuery();
+        ResultSet rs =Cbd.RealizarConsulta(ps);
         
         if(rs.next()){
             JOptionPane.showMessageDialog(null,"VENTA EXTORNADA CON EXITO");
@@ -424,26 +427,26 @@ public void extornarconcretada(long idvent,String motivo){
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+               Cbd.desconectar();
                        
             }    
 
     
     }
 
-public List<Ventas> mostrarporempleado(JTable tab,Ventas ventaa,JLabel emple,JLabel sucur,
-     Timestamp desde, Timestamp hasta,JLabel jtotal){
+public List<Ventas> busquedasensitiva(JTable tab,Timestamp desde, Timestamp hasta,JLabel jtotal,long idsucursal,
+        String op,String cadena){
         
      
-    Conexion conexion = new Conexion();
- 
+   
+    ConexionBD Cbd = new ConexionBD();
      DefaultTableModel tabla= new DefaultTableModel(
-                new String[]{"CODIGO","DOCUMENTO","NUMERO","CLIENTE","FECHA","IMPORTE","DESC.","MOT.DESC","TOTAL","ANULADA","MOT. ANU","FECHA. ANU"}, 0) {
+                new String[]{"COD.","DOCUMENTO","VENDEDOR","CLIENTE","FECHA","IMPORTE","DESC.","MOT.DESC","TOTAL","ANULADA","MOT. ANU","FECHA. ANU","SUCURSAL"}, 0) {
  
             Class[] types = new Class[]{
                  java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,java.lang.Object.class,
                 java.lang.Object.class,java.lang.Object.class,java.lang.Object.class,java.lang.Object.class,java.lang.Object.class
-                    ,java.lang.Boolean.class,java.lang.Object.class,java.lang.Object.class
+                    ,java.lang.Boolean.class,java.lang.Object.class,java.lang.Object.class,java.lang.Object.class
             };
  
             public Class getColumnClass(int columnIndex) {
@@ -463,26 +466,27 @@ public List<Ventas> mostrarporempleado(JTable tab,Ventas ventaa,JLabel emple,JLa
         boolean extor;
         double total=0.0;
         double importe=0.0;
-        NumberFormat nf = NumberFormat.getInstance();
+        
        
     try{
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
-        String sql=("SELECT * from sp_mostrarventaempleado(?,?,?,?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
-        ps.setLong(1, ventaa.getIdempleado());
-        ps.setLong(2,ventaa.getId_sucursal());
+        String sql=("SELECT * from sp_busquedasensitivaventa(?,?,?,?,?)"); 
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
+        ps.setString(1, cadena);
+        ps.setLong(2,idsucursal);
         ps.setTimestamp(3, desde);
         ps.setTimestamp(4, hasta);
-        ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[12];
+        ps.setString(5, op);
+        ResultSet rs= Cbd.RealizarConsulta(ps);
+        Object datosR[] = new Object[13];
         
         
         while (rs.next()){
-            emple.setText(rs.getString("vempleado"));
-            sucur.setText(rs.getString("vsucursal"));
+           
              Ventas venta = new Ventas();
-             venta.setIdventa(rs.getLong("vidventa"));     
+             venta.setIdventa(rs.getLong("vidventa"));   
+             
              extor= rs.getBoolean("vextornado"); 
              importe=rs.getDouble("vtotal");
              if(extor==false){
@@ -492,8 +496,7 @@ public List<Ventas> mostrarporempleado(JTable tab,Ventas ventaa,JLabel emple,JLa
              datosR[0] = rs.getObject("vcodigo");
 
              datosR[1] = rs.getObject("vdocumento");
-
-             datosR[2] = rs.getObject("vnumero");
+             datosR[2] = rs.getObject("vempleado");
 
              datosR[3] = rs.getObject("vcliente");
 
@@ -510,32 +513,33 @@ public List<Ventas> mostrarporempleado(JTable tab,Ventas ventaa,JLabel emple,JLa
              datosR[9] =extor;
              datosR[10] =(rs.getObject("vmotivo"));
              datosR[11] =(rs.getObject("vfechaext"));
-
+             datosR[12] =(rs.getObject("vsucursal"));
             tabla.addRow(datosR);
 	    listventa.add(venta);
            
         }
-        jtotal.setText("Total Vendido: "+nf.format(total));
+        jtotal.setText("Total: "+nf.format(total));
         TableColumnModel columnModel = tab.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(80);
+        columnModel.getColumn(0).setPreferredWidth(50);
         columnModel.getColumn(1).setPreferredWidth(80);
-        columnModel.getColumn(2).setPreferredWidth(80);
-        columnModel.getColumn(3).setPreferredWidth(350);
+        columnModel.getColumn(2).setPreferredWidth(300);
+        columnModel.getColumn(3).setPreferredWidth(300);
         columnModel.getColumn(4).setPreferredWidth(80);
-        columnModel.getColumn(5).setPreferredWidth(80);
-        columnModel.getColumn(6).setPreferredWidth(80);
-        columnModel.getColumn(7).setPreferredWidth(200);
-        columnModel.getColumn(8).setPreferredWidth(80);
-        columnModel.getColumn(9).setPreferredWidth(80);
-        columnModel.getColumn(10).setPreferredWidth(200);
-         columnModel.getColumn(10).setPreferredWidth(80);
+        columnModel.getColumn(5).setPreferredWidth(70);
+        columnModel.getColumn(6).setPreferredWidth(70);
+        columnModel.getColumn(7).setPreferredWidth(250);
+        columnModel.getColumn(8).setPreferredWidth(70);
+        columnModel.getColumn(9).setPreferredWidth(70);
+        columnModel.getColumn(10).setPreferredWidth(250);
+        columnModel.getColumn(11).setPreferredWidth(70);
+          columnModel.getColumn(12).setPreferredWidth(300);
 	rs.close();
         ps.close();
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
                        
             }    
 
@@ -543,8 +547,8 @@ public List<Ventas> mostrarporempleado(JTable tab,Ventas ventaa,JLabel emple,JLa
     }
 
 public List<Ventas> mostrarporcliente(JTable tab,long idcliente,JLabel msj){
-   Conexion conexion = new Conexion();
  
+    ConexionBD Cbd = new ConexionBD();
    
     DefaultTableModel tabla= new DefaultTableModel(
                 new String[]{"CODIGO","DOCUMENTO","NUMERO","CLIENTE","FECHA","IMPORTE","DESCUENTO","TOTAL","ANULADA"}, 0) {
@@ -573,10 +577,10 @@ public List<Ventas> mostrarporcliente(JTable tab,long idcliente,JLabel msj){
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
         String sql=("SELECT * from sp_mostrarventacliente(?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idcliente);
       
-        ResultSet rs= ps.executeQuery();
+        ResultSet rs=Cbd.RealizarConsulta(ps);
         Object datosR[] = new Object[9];
         
         Integer cont = 0;
@@ -630,7 +634,7 @@ public List<Ventas> mostrarporcliente(JTable tab,long idcliente,JLabel msj){
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+               Cbd.desconectar();
                        
             }    
 
@@ -638,9 +642,9 @@ public List<Ventas> mostrarporcliente(JTable tab,long idcliente,JLabel msj){
     }
 
 public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,JLabel msj){
-   Conexion conexion = new Conexion();
  
-   
+ 
+    ConexionBD Cbd = new ConexionBD();
     DefaultTableModel tabla=new DefaultTableModel(){
     public boolean isCellEditable(int row, int column) {
     //      if (column == 5) return true;
@@ -657,11 +661,11 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
         String sql=("SELECT * from sp_mostrarventaanulada(?,?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
         ps.setDate(1, desde);
         ps.setDate(2, hasta);
       
-        ResultSet rs= ps.executeQuery();
+        ResultSet rs= Cbd.RealizarConsulta(ps);
         Object datosR[] = new Object[9];
         
         int cont = 0;
@@ -715,7 +719,7 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
                        
             }    
 
@@ -728,7 +732,7 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
      
         JasperReport jasperReport;
         JasperPrint jasperPrint;
-        Conexion conexion = new Conexion(); 
+        ConexionBD Cbd = new ConexionBD();
         try
         {
           //se carga el reporte
@@ -740,7 +744,7 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
             System.out.println("idticket"+id);
             parametros.put("id",id);
            //se procesa el archivo jasper
-           JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+           JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
            //impresion de reporte
            // TRUE: muestra la ventana de dialogo "preferencias de impresion"
            JasperPrintManager.printReport(informe, true);          
@@ -748,7 +752,9 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
          catch (JRException ex)
          {
            System.err.println( "Error iReport: " + ex.getMessage() );
-         }
+         }finally{
+            Cbd.desconectar();
+        }
  
      
      
@@ -777,7 +783,7 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
 }
  
  public void imprimirtodocliente(long idcliente){
-      Conexion conexion = new Conexion();
+    ConexionBD Cbd = new ConexionBD();
     try{
     ///////////////////////// formato fecha ////////////////////////////
 //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -794,7 +800,7 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
             Map parametros = new HashMap();
             System.out.println("idticket"+idcliente);
             parametros.put("idcliente",idcliente);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -804,11 +810,11 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
         }finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
         }
  }
     public void imprimirunacliente(long idcliente,long idventa){
-      Conexion conexion = new Conexion();
+     ConexionBD Cbd = new ConexionBD();
     try{
     ///////////////////////// formato fecha ////////////////////////////
 //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -826,7 +832,7 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
             System.out.println("idticket"+idcliente);
             parametros.put("idcliente",idcliente);
             parametros.put("idventa",idventa);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -836,7 +842,7 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
         }finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
         }
      
      
@@ -844,26 +850,26 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
 }
     public void eliminar(long  idventa){
     
-    Conexion conexion= new Conexion();
-     
-        ResultSet rs=null;
+   
+     ConexionBD Cbd = new ConexionBD();
+//        ResultSet rs=null;
 //        boolean valida=false;
      try{
         
         String sql=("SELECT * from sp_eliminarventa(?)"); 
         
-        PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idventa);
       
-        rs = ps.executeQuery();
+        Cbd.actualizarDatos(ps);
       
-        if  (rs.next()){
-            //JOptionPane.showMessageDialog(null,"PRODUCTO RETIRADO DE LA VENTA CORRECTAMENTE");
-
- 
-        }
+//        if  (rs.next()){
+//            //JOptionPane.showMessageDialog(null,"PRODUCTO RETIRADO DE LA VENTA CORRECTAMENTE");
+//
+// 
+//        }
         ps.close();
-        rs.close();
+      
 
         }
      
@@ -871,7 +877,7 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-         conexion.devolverConexionPool();
+        Cbd.desconectar();
      }
     
     }

@@ -16,30 +16,30 @@ import javax.swing.JTextField;
  */
 public class Mayusculas {
     
-    public void convertirmayus(final JTextField text){
-    text.addKeyListener(new KeyAdapter() {
-            public void keyReleased(final KeyEvent e) {
-                String cadena = (text.getText()).toUpperCase();
-                text.setText(cadena);
-//                repaint();
-
-            }
-        });
-    
-    
-    }
-    public void convertirmayusTA(final JTextArea text){
-    text.addKeyListener(new KeyAdapter() {
-            public void keyReleased(final KeyEvent e) {
-                String cadena = (text.getText()).toUpperCase();
-                text.setText(cadena);
-//                repaint();
-
-            }
-        });
-    
-    
-    }
-      
+//    public void convertirmayus(final JTextField text){
+//    text.addKeyListener(new KeyAdapter() {
+//            public void keyReleased(final KeyEvent e) {
+//                String cadena = (text.getText()).toUpperCase();
+//                text.setText(cadena);
+////                repaint();
+//
+//            }
+//        });
+//    
+//    
+//    }
+//    public void convertirmayusTA(final JTextArea text){
+//    text.addKeyListener(new KeyAdapter() {
+//            public void keyReleased(final KeyEvent e) {
+//                String cadena = (text.getText()).toUpperCase();
+//                text.setText(cadena);
+////                repaint();
+//
+//            }
+//        });
+//    
+//    
+//    }
+//      
     
 }

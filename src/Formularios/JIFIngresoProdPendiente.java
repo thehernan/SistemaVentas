@@ -6,9 +6,14 @@
 package Formularios;
 
 import DAO.ComprasDAO;
+import Pojos.Compras;
 import Pojos.Proveedor;
 import Pojos.SucursalSingleton;
+import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,17 +27,59 @@ public class JIFIngresoProdPendiente extends javax.swing.JInternalFrame {
     Proveedor proveedor= new Proveedor();
     ComprasDAO daocompras = new ComprasDAO(); 
     SucursalSingleton sucursal= SucursalSingleton.getinstancia();
-    public JIFIngresoProdPendiente() {
+    List<Compras> listcompra= new ArrayList<>();
+    Compras compra;
+     int posx;
+    int posy;
+     public JIFIngresoProdPendiente() {
         initComponents();
-        daocompras.pendientes(jtablatodo, sucursal.getId());
+//        listcompra=daocompras.pendientes(jtablatodo, sucursal.getId());
+        jlblmensajecarga.setVisible(false);
+        buscar();
     }
-    public void setproveedor(Proveedor proveedor){
-    this.proveedor= proveedor;
-    jlblproveedor.setText(proveedor.getNombrerazons());
-    jlblrut.setText(proveedor.getRut());
-    daocompras.pendientesporproveedor(jtablaproveedor, sucursal.getId(), proveedor.getIdproveedor());
-    jbtnimprimir.setEnabled(true);
-    }
+     
+     public void buscar(){
+      Runnable runnable = new Runnable() {
+
+        @Override
+        public void run() {
+//            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       jlblimagencarga.setVisible(true);
+       jlblletracarga.setVisible(true);
+      listcompra=daocompras.busquedasensitivapendientes(jtablatodo, sucursal.getId(), jtfbuscar.getText().toUpperCase());
+      jlblimagencarga.setVisible(false);
+      jlblletracarga.setVisible(false);
+     }
+       
+         
+        };
+        Thread T = new Thread(runnable);
+        T.start();
+     }
+     public synchronized void  verdet(){
+     
+        if(jtablatodo.getSelectedRow()>=0){
+                jlblmensajecarga.setVisible(true);
+                jlblmensajecarga.setText("Cargando detalle ...");
+                System.out.println("size"+ listcompra.size());
+                compra=listcompra.get(jtablatodo.getSelectedRow());
+                JDDetalleCompra detalle = new JDDetalleCompra(new Frame(), isVisible(),compra);
+                 jlblmensajecarga.setVisible(false);
+                detalle.setVisible(true);
+            
+            }else {
+                
+                JOptionPane.showMessageDialog(null, "Seleccione Comprobante");
+            }
+           
+        }
+//    public void setproveedor(Proveedor proveedor){
+//    this.proveedor= proveedor;
+//    jlblproveedor.setText(proveedor.getNombrerazons());
+//    jlblrut.setText(proveedor.getRut());
+//    daocompras.pendientesporproveedor(jtablaproveedor, sucursal.getId(), proveedor.getIdproveedor());
+//    jbtnimprimir.setEnabled(true);
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,29 +90,83 @@ public class JIFIngresoProdPendiente extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jlblletracarga = new javax.swing.JLabel();
+        jlblimagencarga = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtablatodo = new javax.swing.JTable();
         jbtnimprirtodo = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        jbtnbuscar = new javax.swing.JButton();
-        jbtnimprimir = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jlblproveedor = new javax.swing.JLabel();
-        jlblrut = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jtablaproveedor = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        jtfbuscar = new javax.swing.JTextField();
+        jlblmensajecarga = new javax.swing.JLabel();
+        jbtnver = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
-        setTitle("PRODUCTOS PENDIENTES");
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTabbedPane1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jPanel4.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel4.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel4MouseDragged(evt);
+            }
+        });
+        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel4MousePressed(evt);
+            }
+        });
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("DOCUMENTOS CON PRODUCTOS PENDIENTES POR ENTREGAR");
 
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jLabel8.setToolTipText("Cerrar");
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel8MouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 757, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 324, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1130, -1));
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
+        jlblletracarga.setText("Cargando Registros ...");
+        getContentPane().add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 350, -1, -1));
+
+        jlblimagencarga.setBackground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setForeground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        getContentPane().add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 970, 290));
+
+        jtablatodo.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jtablatodo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -77,185 +178,150 @@ public class JIFIngresoProdPendiente extends javax.swing.JInternalFrame {
 
             }
         ));
+        jtablatodo.setToolTipText("");
         jtablatodo.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtablatodo.getTableHeader().setReorderingAllowed(false);
+        jtablatodo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jtablatodoMouseReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtablatodo);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 114, 1110, 330));
+
         jbtnimprirtodo.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnimprirtodo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print_46933.png"))); // NOI18N
+        jbtnimprirtodo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
+        jbtnimprirtodo.setText("Imprimir");
         jbtnimprirtodo.setToolTipText("Imprimir");
+        jbtnimprirtodo.setBorder(null);
+        jbtnimprirtodo.setBorderPainted(false);
+        jbtnimprirtodo.setContentAreaFilled(false);
         jbtnimprirtodo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnimprirtodoActionPerformed(evt);
             }
         });
+        getContentPane().add(jbtnimprirtodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 70, -1, -1));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 904, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jbtnimprirtodo)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jbtnimprirtodo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        jLabel4.setText("Doc. Numero / Proveedor:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 82, -1, -1));
 
-        jTabbedPane1.addTab("TODO", jPanel2);
-
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-
-        jbtnbuscar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Search-.png"))); // NOI18N
-        jbtnbuscar.setToolTipText("Buscar");
-        jbtnbuscar.addActionListener(new java.awt.event.ActionListener() {
+        jtfbuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnbuscarActionPerformed(evt);
+                jtfbuscarActionPerformed(evt);
             }
         });
-
-        jbtnimprimir.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print_46933.png"))); // NOI18N
-        jbtnimprimir.setToolTipText("Imprimir");
-        jbtnimprimir.setEnabled(false);
-        jbtnimprimir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnimprimirActionPerformed(evt);
+        jtfbuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfbuscarKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 80, 580, -1));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("NOMBRE:");
+        jlblmensajecarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
+        jlblmensajecarga.setText("jLabel1");
+        getContentPane().add(jlblmensajecarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 60, 200, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("R.U.T.:");
-
-        jlblproveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jlblproveedor.setText(". . . ");
-
-        jlblrut.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jlblrut.setText(". . .");
-
-        jtablaproveedor.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
+        jbtnver.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/view25px.png"))); // NOI18N
+        jbtnver.setText("Ver");
+        jbtnver.setToolTipText("Ver detalle");
+        jbtnver.setBorder(null);
+        jbtnver.setBorderPainted(false);
+        jbtnver.setContentAreaFilled(false);
+        jbtnver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnverActionPerformed(evt);
             }
-        ));
-        jtablaproveedor.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jtablaproveedor.getTableHeader().setReorderingAllowed(false);
-        jScrollPane2.setViewportView(jtablaproveedor);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(34, 34, 34)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlblproveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jlblrut, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(30, 30, 30)
-                        .addComponent(jbtnbuscar)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtnimprimir))
-                    .addComponent(jScrollPane2))
-                .addGap(26, 26, 26))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel1)
-                        .addGap(15, 15, 15)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jlblproveedor)
-                        .addGap(15, 15, 15)
-                        .addComponent(jlblrut))
-                    .addComponent(jbtnbuscar)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jbtnimprimir)))
-                .addGap(8, 8, 8)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
-                .addGap(45, 45, 45))
-        );
-
-        jTabbedPane1.addTab("POR PROVEEDOR", jPanel3);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
-        );
+        });
+        getContentPane().add(jbtnver, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 70, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbtnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarActionPerformed
-        // TODO add your handling code here:}
-        JDBuscarProveedor Bproveedor= new JDBuscarProveedor(new JFrame(),isVisible(),this);
-        Bproveedor.setVisible(true);
-    }//GEN-LAST:event_jbtnbuscarActionPerformed
-
     private void jbtnimprirtodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprirtodoActionPerformed
         // TODO add your handling code here:
-        daocompras.imprimir(sucursal.getId());
+        
+        
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                jlblmensajecarga.setVisible(true);
+                jlblmensajecarga.setText("Imprimiendo ...");
+                daocompras.imprimir(sucursal.getId());
+                jlblmensajecarga.setVisible(false);
+            }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
     }//GEN-LAST:event_jbtnimprirtodoActionPerformed
 
-    private void jbtnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirActionPerformed
+    private void jtfbuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscarKeyReleased
         // TODO add your handling code here:
-        daocompras.imprimirporproveedor(sucursal.getId(),proveedor.getIdproveedor());
-    }//GEN-LAST:event_jbtnimprimirActionPerformed
+//        listcompra=daocompras.busquedasensitivapendientes(jtablatodo, sucursal.getId(), jtfbuscar.getText().toUpperCase());
+    }//GEN-LAST:event_jtfbuscarKeyReleased
+
+    private void jtablatodoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablatodoMouseReleased
+        // TODO add your handling code here:
+        
+       
+    }//GEN-LAST:event_jtablatodoMouseReleased
+
+    private void jtfbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfbuscarActionPerformed
+        // TODO add your handling code here:
+         buscar();
+    }//GEN-LAST:event_jtfbuscarActionPerformed
+
+    private void jbtnverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnverActionPerformed
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                verdet();
+            }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
+            
+        
+              // TODO add your handling code here:
+    }//GEN-LAST:event_jbtnverActionPerformed
+
+    private void jLabel8MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseReleased
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jLabel8MouseReleased
+
+    private void jPanel4MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MousePressed
+        // TODO add your handling code here:
+          posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel4MousePressed
+
+    private void jPanel4MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseDragged
+        // TODO add your handling code here:
+         int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel4MouseDragged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JButton jbtnbuscar;
-    private javax.swing.JButton jbtnimprimir;
     private javax.swing.JButton jbtnimprirtodo;
-    private javax.swing.JLabel jlblproveedor;
-    private javax.swing.JLabel jlblrut;
-    private javax.swing.JTable jtablaproveedor;
+    private javax.swing.JButton jbtnver;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
+    private javax.swing.JLabel jlblmensajecarga;
     private javax.swing.JTable jtablatodo;
+    private javax.swing.JTextField jtfbuscar;
     // End of variables declaration//GEN-END:variables
 }

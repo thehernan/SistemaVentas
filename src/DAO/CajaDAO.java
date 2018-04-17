@@ -5,10 +5,12 @@
  */
 package DAO;
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 
 import Pojos.Caja;
+import Pojos.DetalleCaja;
 import Pojos.SucursalSingleton;
+import java.awt.HeadlessException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,8 +22,10 @@ import java.net.UnknownHostException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +44,9 @@ import javax.swing.table.TableColumnModel;
 public class CajaDAO {
     SucursalSingleton sucursal = SucursalSingleton.getinstancia();   
     
+    DecimalFormat nf = new DecimalFormat("#.00");
 public Caja insertar(Caja caja){
+    ConexionBD Cbd = new ConexionBD();
      try{
          InetAddress IP;
          String ippublica=null;
@@ -73,19 +79,19 @@ public Caja insertar(Caja caja){
 
     
          Caja cajan= caja;
-         Conexion conexion = new Conexion();
+        
          ResultSet rs=null;
-         
+         PreparedStatement ps=null;
          try{
              
-             System.out.println("SELECT * from sp_insertarcaja("+cajan.getId_empleado()+","+cajan.getAperturadinero()+",'"+IP.getHostName()+" "+IP.getHostAddress()+"')");
+            
              String sql="SELECT * from sp_insertarcaja(?,?,?,?)";
-             PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+             ps=Cbd.conectar().prepareStatement(sql);
              ps.setLong(1, cajan.getId_empleado());
              ps.setBigDecimal(2, new BigDecimal(cajan.getAperturadinero()));
              ps.setString(3, IP.getHostName()+" "+IP.getHostAddress()+", "+ippublica);
              ps.setLong(4, cajan.getId_sucursal());
-             rs = ps.executeQuery();
+             rs = Cbd.RealizarConsulta(ps);
              
              
              if (rs.next()){
@@ -94,16 +100,13 @@ public Caja insertar(Caja caja){
                  cajan.setFechahora_apertura(rs.getTimestamp("vfecha"));
              }
              
-             ps.close();
-             rs.close();
-             
-             
+          
          }
-         catch(Exception e)
+         catch(SQLException e)
          {
              JOptionPane.showMessageDialog(null, e.getMessage());
          }finally{
-             conexion.devolverConexionPool();
+             Cbd.desconectar();
              
          }
        
@@ -115,21 +118,20 @@ public Caja insertar(Caja caja){
       return caja;
 }
 public Caja validapertura(long idempledado){
-    
-    Caja caja= new Caja();
+        ConexionBD Cbd = new ConexionBD();
+        Caja caja= new Caja();
    
         
-         Conexion conexion = new Conexion();
+      
          ResultSet rs=null;
-         
+         PreparedStatement ps=null;
          try{
-             
-             System.out.println("SELECT * from sp_validaperturacaja("+idempledado+")");
+           
              String sql=("SELECT * from sp_validaperturacaja(?,?)");
-             PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+             ps=Cbd.conectar().prepareStatement(sql);
              ps.setLong(1, idempledado);
              ps.setLong(2, sucursal.getId());
-             rs = ps.executeQuery();
+             rs = Cbd.RealizarConsulta(ps);
              
              
              if (rs.next()){
@@ -144,49 +146,43 @@ public Caja validapertura(long idempledado){
                  caja.setDescripcion("vdescripcion");
                  
              }
-             
-             ps.close();
-             rs.close();            
-             
+          
          }
          catch(Exception e)
          {
              JOptionPane.showMessageDialog(null, e.getMessage());
          }finally{
-             conexion.devolverConexionPool();
+             Cbd.desconectar();
              
          }
  return caja;    
 }
-public void cierre(Caja caja){
- 
-    
-      Conexion conexion = new Conexion();
-
+public void cierre(Caja caja){  
+    ConexionBD Cbd = new ConexionBD();
+    PreparedStatement ps=null;
      try{
        
-      // System.out.println("SELECT * from sp_editaralumno('"+RUT+"','"+NOMBRE+"','"+APELLIDO+"','"+CURSO+"','"+SECCION+"','"+PRIORITARIO+"','"+FOTO+"')");
-     String sql=("SELECT * from sp_cierrecaja(?,?)");         
-       PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+        String sql=("SELECT * from sp_cierrecaja(?,?)");         
+        ps=Cbd.conectar().prepareStatement(sql);
        
-            ps.setLong(1,caja.getId_caja());
-            ps.setBigDecimal(2,new BigDecimal(caja.getCierradinero()));
-          
-            ps.execute();
-            JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
-            ps.close();
+        ps.setLong(1,caja.getId_caja());
+        ps.setBigDecimal(2,new BigDecimal(caja.getCierradinero()));
 
-           
-
+        if(Cbd.actualizarDatos(ps)==true){
+            JOptionPane.showMessageDialog(null,"Cierre de caja exitoso","",JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        
 	
-        } catch(Exception e)
+        } catch(SQLException | HeadlessException e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }        
  
 }
- public List<Caja> buscar(JTable tabla,Timestamp fdesde,Timestamp fhasta,JLabel jmensaje,long idsucur){
-        
+ public List<Caja> busquedasensitiva(JTable tabla,Timestamp fdesde,Timestamp fhasta,JLabel jmensaje,long idsucur,String cadena
+ ,String op){
+    ConexionBD Cbdd = new ConexionBD();
     DefaultTableModel modelo= new DefaultTableModel(){
     public boolean isCellEditable(int row, int column) {
     //      if (column == 5) return true;
@@ -194,83 +190,179 @@ public void cierre(Caja caja){
     return false;
     }
     };      
-    String titulos[]={"CAJERO","FECHA APER.","FECHA CIE.","APER. CON","TOTAL COBRADO","CIERRA CON","ESTADO","MAQUINA"};
+    String titulos[]={"CAJERO","FECHA APER.","FECHA CIE.","APER. CON","TOTAL COBRADO","CIERRA CON","ESTADO","MAQUINA","SUCURSAL"};
     modelo.setColumnIdentifiers(titulos);
     tabla.setModel(modelo);
-//    tabla.getColumnModel().getColumn(0).setMaxWidth(0);
-//    tabla.getColumnModel().getColumn(0).setMinWidth(0);
-//    tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-    Conexion conexion = new Conexion();
+
+    
      DateFormat df = DateFormat.getDateInstance();
      List<Caja> listcaja= new ArrayList<>();
      Double total=0.0;
-     NumberFormat nf= NumberFormat.getInstance();
+    
+     PreparedStatement ps=null;
+     ResultSet rs=null;
     try{
 	
-        System.out.println("SELECT * from sp_busquedacaja('"+fdesde+"','"+fhasta+"')");
-        String sql=("SELECT * from sp_busquedacaja(?,?,?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        String sql=("SELECT * from sp_busquedasensitivacajero(?,?,?,?,?)"); 
+        ps= Cbdd.conectar().prepareStatement(sql);
         ps.setTimestamp(1,fdesde) ;
         ps.setTimestamp(2, fhasta);
         ps.setLong(3, idsucur);
-        ResultSet rs = ps.executeQuery();
-        Object datosR[] = new Object[8];
-       long  cont= 0;
+        ps.setString(4, cadena);
+        ps.setString(5, op);
+        rs = Cbdd.RealizarConsulta(ps);
+        Object datosR[] = new Object[9];
+       
         while (rs.next()){
-                cont++;
-                Caja caja = new Caja();
-                         
-                 caja.setId_caja(rs.getLong("vidcaja"));
-                 caja.setAperturadinero(rs.getDouble("vaperturadinero"));
-                 caja.setCierradinero(rs.getDouble("vcierradinero"));
-                 total= total+ caja.getCierradinero();
-                 datosR[0] = rs.getObject("vnombre");
+                
+            Caja caja = new Caja();
 
-                 datosR[1] = rs.getObject("vfechaaper");
+             caja.setId_caja(rs.getLong("vidcaja"));
+             caja.setAperturadinero(rs.getDouble("vaperturadinero"));
+             caja.setCierradinero(rs.getDouble("vcierradinero"));
+             total= total+ caja.getCierradinero();
+             datosR[0] = rs.getObject("vnombre");
 
-              //   datosR[2] = rs.getObject("vhoraaper");
+             datosR[1] = rs.getObject("vfechaaper");
 
-                 datosR[2] = rs.getObject("vfechacierr");
+          //   datosR[2] = rs.getObject("vhoraaper");
 
-              //   datosR[4] = rs.getObject("vhoracierr");
+             datosR[2] = rs.getObject("vfechacierr");
 
-                 datosR[3] = nf.format(caja.getAperturadinero());
-                 datosR[4] = nf.format(rs.getDouble("vtotalcobra"));
-                 datosR[5] = nf.format(caja.getCierradinero());
+          //   datosR[4] = rs.getObject("vhoracierr");
 
-                 datosR[6] = rs.getObject("vestado");
+             datosR[3] = nf.format(caja.getAperturadinero());
+             datosR[4] = nf.format(rs.getDouble("vtotalcobra"));
+             datosR[5] = nf.format(caja.getCierradinero());
 
-                 datosR[7] = rs.getObject("vdescripcion");
+             datosR[6] = rs.getObject("vestado");
 
-                modelo.addRow(datosR);
-                listcaja.add(caja);
+             datosR[7] = rs.getObject("vdescripcion");
+             datosR[8] = rs.getObject("vsucursal");
+            modelo.addRow(datosR);
+            listcaja.add(caja);
 		  
         }
         
         TableColumnModel columnModel = tabla.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(400);
-        columnModel.getColumn(1).setPreferredWidth(90);
-        columnModel.getColumn(2).setPreferredWidth(80);
-        columnModel.getColumn(3).setPreferredWidth(80);
-        columnModel.getColumn(4).setPreferredWidth(80);
-        columnModel.getColumn(5).setPreferredWidth(80);
-        columnModel.getColumn(6).setPreferredWidth(80);
-        columnModel.getColumn(7).setPreferredWidth(150);
-        rs.close();
-        ps.close();
-        if(cont==0){
-            jmensaje.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO "+df.format(fdesde)+" AL "+df.format(fhasta));
-        }else{
-            jmensaje.setText("TOTAL: "+nf.format(total));
-        }
+        columnModel.getColumn(0).setPreferredWidth(300);
+        columnModel.getColumn(1).setPreferredWidth(150);
+        columnModel.getColumn(2).setPreferredWidth(150);
+        columnModel.getColumn(3).setPreferredWidth(100);
+        columnModel.getColumn(4).setPreferredWidth(100);
+        columnModel.getColumn(5).setPreferredWidth(100);
+        columnModel.getColumn(6).setPreferredWidth(50);
+        columnModel.getColumn(7).setPreferredWidth(250);
+        columnModel.getColumn(8).setPreferredWidth(300);
+      
+        
+        jmensaje.setText("Total: "+nf.format(total));
+       
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbdd.desconectar();
             }    
     return listcaja;
     }
+ 
+  public List<DetalleCaja> movimiento(JTable tabla,JLabel total,
+            Timestamp desde, Timestamp hasta, String cadena, long idsucur,String op){
+        ConexionBD Cbd = new ConexionBD();
+        DefaultTableModel modelo= new DefaultTableModel(
+                new String[]{"DOC.","CAJERO","CLIENTE","TIPO OP.","IMPORTE","FECHA","MOTIVO","ANULADA","SUCURSAL"}, 0) {
+ 
+        Class[] types = new Class[]{
+             java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,java.lang.Object.class,
+            java.lang.Object.class,java.lang.Object.class,java.lang.Object.class,java.lang.Boolean.class,java.lang.Object.class
+        };
+ 
+        public Class getColumnClass(int columnIndex) {
+            return types[columnIndex];
+        }
+         public boolean isCellEditable(int row, int column) {
+//        //      if (column == 5) return true;
+//        //else
+        return false;
+        }            };
+        tabla.setModel(modelo);
+        
+        
+        
+        List<DetalleCaja> listdet = new ArrayList<>();
+        PreparedStatement ps=null;        
+        ResultSet rs=null; 
+         try{
+             
+//             System.out.println("SELECT * from sp_mostrardetallecaja("+idcaja+")");
+             String sql=("SELECT * from sp_busquedasensitivamovimientocaja(?,?,?,?,?)");
+             ps=Cbd.conectar().prepareStatement(sql);
+             ps.setLong(1, idsucur);
+             ps.setString(2, op);
+             ps.setString(3, cadena);
+             ps.setTimestamp(4, desde);
+             ps.setTimestamp(5, hasta);
+             
+             rs = Cbd.RealizarConsulta(ps);
+             
+             Object datosR[]= new Object[9];
+             double vtotal=0.0;
+             while (rs.next()){
+                 
+                 DetalleCaja detcaja= new DetalleCaja();
+                 detcaja.setIdreparacion(rs.getLong("vidrepara"));
+                 detcaja.setIdventa(rs.getLong("vidventa"));
+                 detcaja.setAbono(rs.getDouble("vimporte"));
+                 vtotal = vtotal + detcaja.getAbono();
+
+                 datosR[0] = rs.getObject("vdocumento");
+
+                 datosR[1] = rs.getObject("vcajero");
+
+                 datosR[2] = rs.getObject("vrazons");
+
+                 datosR[4] = nf.format(detcaja.getAbono());
+
+                 datosR[3] = rs.getObject("vtipo");
+
+
+
+                 datosR[5] = rs.getObject("vfecha");
+                 datosR[6] = rs.getObject("vmotivo");
+
+                 datosR[7] = rs.getBoolean("vanulada");
+                 datosR[8] = rs.getObject("vsucursal");
+                modelo.addRow(datosR);
+                listdet.add(detcaja);
+                  
+             }
+             total.setText("Total: "+nf.format(vtotal));
+         
+             
+             TableColumnModel columnModel = tabla.getColumnModel();
+            columnModel.getColumn(0).setPreferredWidth(80);
+            columnModel.getColumn(1).setPreferredWidth(300);
+            columnModel.getColumn(2).setPreferredWidth(300);
+            columnModel.getColumn(3).setPreferredWidth(80);
+            columnModel.getColumn(4).setPreferredWidth(80);
+            columnModel.getColumn(5).setPreferredWidth(150);
+            columnModel.getColumn(6).setPreferredWidth(250);
+            columnModel.getColumn(7).setPreferredWidth(60);
+            columnModel.getColumn(8).setPreferredWidth(300);
+             
+        
+        
+         }
+         catch(SQLException e)
+         {
+             JOptionPane.showMessageDialog(null, e.getMessage());
+         }finally{
+            Cbd.desconectar();
+             
+         }
+         return listdet;
+}
 
 }

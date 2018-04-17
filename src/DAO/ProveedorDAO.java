@@ -6,7 +6,8 @@
 package DAO;
 
 
-import Conexion.Conexion;
+
+import Conexion.ConexionBD;
 import Pojos.Proveedor;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,9 +24,11 @@ import javax.swing.table.TableColumnModel;
  * @author info2017
  */
 public class ProveedorDAO {
+    
+    
       public List<Proveedor> mostrarproveedor(JTable tabla){
-        
-            DefaultTableModel modelo= new DefaultTableModel(){
+        ConexionBD Cbd = new ConexionBD();
+        DefaultTableModel modelo= new DefaultTableModel(){
        public boolean isCellEditable(int row, int column) {
      //      if (column == 5) return true;
      //else
@@ -34,16 +37,21 @@ public class ProveedorDAO {
        };      
       String titulos[]={"RUT","NOMBRES","CELULAR"};
       modelo.setColumnIdentifiers(titulos);
+      tabla.setModel(modelo);
+    TableColumnModel columnModel = tabla.getColumnModel();
 
-       Conexion conexion = new Conexion();
+    columnModel.getColumn(0).setPreferredWidth(90);
+    columnModel.getColumn(1).setPreferredWidth(400);
+    columnModel.getColumn(2).setPreferredWidth(90);
+       
          Statement st=null;
          List<Proveedor> listprov= new ArrayList<>();
     
      
     try{
 	String sql=("SELECT * from sp_mostrarproveedor()");
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
-       ResultSet rs=ps.executeQuery(); 
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
+       ResultSet rs=Cbd.RealizarConsulta(ps); 
         Object datosR[] = new Object[3];
         while (rs.next()){
                     
@@ -52,6 +60,8 @@ public class ProveedorDAO {
             prove.setRut(rs.getString("vrut"));
             prove.setNombrerazons( rs.getString("vnombre"));
             prove.setCelular( rs.getString("vcelular"));
+            prove.setDireccion(rs.getString("vdireccion"));
+            prove.setEmail(rs.getString("vemail"));
            
              datosR[0] =prove.getRut();
            
@@ -63,55 +73,63 @@ public class ProveedorDAO {
             modelo.addRow(datosR);
 		
         }
-        tabla.setModel(modelo);
-        TableColumnModel columnModel = tabla.getColumnModel();
-     
-        columnModel.getColumn(0).setPreferredWidth(90);
-        columnModel.getColumn(1).setPreferredWidth(400);
-        columnModel.getColumn(2).setPreferredWidth(90);
-        rs.close();
-        ps.close();
+        
+        
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
             }    
 
     return listprov;
     }
     
 public  List<Proveedor> busquedasensitivaproveedor(String tipoB,String cadena,JTable tabla){
-        
-       DefaultTableModel modelo= new DefaultTableModel(){
-  public boolean isCellEditable(int row, int column) {
-//      if (column == 5) return true;
-//else
- return false;
-}
-  };      
- String titulos[]={"RUT","NOMBRES","CELULAR"};
- modelo.setColumnIdentifiers(titulos);
- 
- Conexion conexion= new Conexion();
-   List<Proveedor> listprov= new ArrayList<>();
+    ConexionBD Cbd = new ConexionBD();    
+    DefaultTableModel modelo= new DefaultTableModel(){
+      public boolean isCellEditable(int row, int column) {
+        //      if (column == 5) return true;
+    //else
+     return false;
+    }
+      };      
+     String titulos[]={"RUT","NOMBRES","CELULAR"};
+     modelo.setColumnIdentifiers(titulos);
+     tabla.setModel(modelo);
+     
+      TableColumnModel columnModel = tabla.getColumnModel();
+     
+    columnModel.getColumn(0).setPreferredWidth(90);
+    columnModel.getColumn(1).setPreferredWidth(400);
+    columnModel.getColumn(2).setPreferredWidth(90);
+     
+     
+     
+    List<Proveedor> listprov= new ArrayList<>();
+    Object datosR[] = new Object[3];
+
+      
      
     try{
+        
 	String sql = ("SELECT * from sp_busquedasensitivaproveedor(?,?)");
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
         System.out.println("tipo"+tipoB);
         System.out.println("cadena"+cadena);
         ps.setString(1, tipoB);
         ps.setString(2, cadena);
-        ResultSet rs=ps.executeQuery();
-        Object datosR[] = new Object[3];
+        ResultSet rs=Cbd.RealizarConsulta(ps);
+       
         while (rs.next()){
             Proveedor prove = new Proveedor();
             prove.setIdproveedor(rs.getLong("id"));
             prove.setRut(rs.getString("vrut"));
             prove.setNombrerazons( rs.getString("vnombre"));
             prove.setCelular( rs.getString("vcelular"));
+            prove.setDireccion(rs.getString("vdireccion"));
+            prove.setEmail(rs.getString("vemail"));
            
              datosR[0] =prove.getRut();
            
@@ -121,23 +139,23 @@ public  List<Proveedor> busquedasensitivaproveedor(String tipoB,String cadena,JT
             
              listprov.add(prove);
                     
-                    modelo.addRow(datosR);
+            modelo.addRow(datosR);
 		
         }
-        tabla.setModel(modelo);
-        TableColumnModel columnModel = tabla.getColumnModel();
-     
-        columnModel.getColumn(1).setPreferredWidth(90);
-        columnModel.getColumn(2).setPreferredWidth(400);
-        columnModel.getColumn(3).setPreferredWidth(90);
+       
+       
+        
+        if (tabla.getRowCount()>0){
+            tabla.setRowSelectionInterval (0,0); 
+               
+        }
       
-	rs.close();
-        ps.close();
+	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-              conexion.devolverConexionPool();
+              Cbd.desconectar();
             }    
     return listprov;
     
@@ -146,15 +164,15 @@ public  List<Proveedor> busquedasensitivaproveedor(String tipoB,String cadena,JT
 public Proveedor buscarproveedor(String tipoB,long id){
 
     Proveedor proveedor= new Proveedor();
-    Conexion conexion = new Conexion();
+    ConexionBD Cbd = new ConexionBD();
      try{
 //	st= (Statement)miconexion.createStatement();
          System.out.println("SELECT * from sp_busquedaproveedor('"+tipoB+"',"+id+")");
       String sql=("SELECT * from sp_busquedaproveedor(?,?)"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+      PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
       ps.setString(1, tipoB);
       ps.setLong(2, id);
-      ResultSet rs = ps.executeQuery();
+      ResultSet rs =Cbd.RealizarConsulta(ps);
 //      FileInputStream fis ;
 //      byte[] vacio= new byte[0];
         if (rs.next()){
@@ -168,13 +186,14 @@ public Proveedor buscarproveedor(String tipoB,long id){
  
         
         }
-        rs.close();
-        ps.close();
+        
 //	
         } catch(Exception e)
             {
-//            JOptionPane.showMessageDialog(null, e.getMessage());
-            }
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            }finally{
+            Cbd.desconectar();
+     }
      return proveedor;
 
 }
@@ -184,13 +203,13 @@ public void insertarproveedor(Proveedor proveedor){
   
 //    System.out.println("fotoinsert"+FOTO);
         PreparedStatement preparedStatement = null;
-       Conexion conexion= new Conexion();
+       ConexionBD Cbd = new ConexionBD();
      try{
            
           
             String insertImageSql = "SELECT * from sp_insertarproveedor(?,?,?,?,?)";
 //            String insertImageSql = "UPDATE alumno SET foto=? where id_alumno=?;";
-            preparedStatement = conexion.getConnection().prepareStatement(insertImageSql);
+            preparedStatement = Cbd.conectar().prepareStatement(insertImageSql);
             
 ////            System.out.println("rutainsert"+ruta);
 ////            File file = new File(ruta);
@@ -207,25 +226,27 @@ public void insertarproveedor(Proveedor proveedor){
             
             
             
-            preparedStatement.execute();
-            preparedStatement.close();
+           Cbd.actualizarDatos(preparedStatement);
+            
         }
      catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
-            }
+            }finally{
+         Cbd.desconectar();
+     
+     }
 
 }
 public void editarproveedor(Proveedor proveedor){
 
-    Conexion conexion = new Conexion();
-
+    ConexionBD Cbd = new ConexionBD();
      try{
 //	InputStream fis = new ByteArrayInputStream(FOTO); 
        
       // System.out.println("SELECT * from sp_editaralumno('"+RUT+"','"+NOMBRE+"','"+APELLIDO+"','"+CURSO+"','"+SECCION+"','"+PRIORITARIO+"','"+FOTO+"')");
      String sql=("SELECT * from sp_editarproveedor(?,?,?,?,?,?)");         
-       PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+       PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
        
             ps.setLong(1,proveedor.getIdproveedor());
              ps.setString(2,proveedor.getNombrerazons());
@@ -235,17 +256,17 @@ public void editarproveedor(Proveedor proveedor){
             ps.setString(6,proveedor.getEmail());
 //            ps.setString(7,PRIORITARIO);
 //            ps.setBinaryStream(8, fis);
-            ps.execute();
-            ps.close();
+            Cbd.RealizarConsulta(ps);
+            
 //       if  (rs.next()){
-            JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
+            JOptionPane.showMessageDialog(null,"Proveedor editado exitosamente");
 //        }
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      }        
             
            
@@ -259,15 +280,15 @@ public void eliminarproveedor(long idproveedor){
 
  
  
-    Conexion conexion = new Conexion();
+    ConexionBD Cbd = new ConexionBD();
 
      try{
 	
         System.out.println("SELECT * from sp_eliminarproveedor("+idproveedor+")");
       String sql=("SELECT * from sp_eliminarproveedor(?)");       
-      PreparedStatement ps = conexion.getConnection().prepareStatement(sql);
+      PreparedStatement ps = Cbd.conectar().prepareStatement(sql);
       ps.setLong(1, idproveedor);
-      ResultSet rs= ps.executeQuery();
+      ResultSet rs=Cbd.RealizarConsulta(ps);
       
        if  (rs.next()){
             JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
@@ -277,7 +298,7 @@ public void eliminarproveedor(long idproveedor){
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
             }    
  
     
@@ -287,32 +308,31 @@ public void eliminarproveedor(long idproveedor){
 }
 public boolean duplicado(long id,String cadena,String tipoop){
 
-    Conexion conexion = new Conexion();
+    ConexionBD Cbd = new ConexionBD();
     ResultSet rs=null;
     boolean valida=false;
      try{
 //	st= (Statement)miconexion.createStatement();
       
       String sql=("SELECT * from sp_duplicadoproveedor(?,?,?)"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+      PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
       ps.setString(1, cadena);
       ps.setLong(2, id);
       ps.setString(3, tipoop);
-      rs = ps.executeQuery();
+      rs = Cbd.RealizarConsulta(ps);
 //      FileInputStream fis ;
 //      byte[] vacio= new byte[0];
         if (rs.next()){
             valida= rs.getBoolean("vvalida");
         }
 
-        ps.close();
-        rs.close();
+    
 //	
         } catch(Exception e)
             {
 //            JOptionPane.showMessageDialog(null, e.getMessage());
             } finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      
      }
      return valida;

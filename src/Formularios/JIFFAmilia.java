@@ -8,6 +8,7 @@ package Formularios;
 import ClasesGlobales.Mayusculas;
 import DAO.FamiliaDAO;
 import Pojos.Familia;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,12 +23,45 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
     FamiliaDAO daofamilia = new FamiliaDAO();
    Boolean editar;
    Mayusculas mayus= new Mayusculas();
+   Familia familia = new Familia();
+    List<Familia> listfamilia;
+    int posx;
+    int posy;
     public JIFFAmilia() {
         initComponents();
          bloquearjtf(false, false);
         bloquearjbtn(true, false, false, false, false, true);
-        daofamilia.mostrarfamilia(jtablafamilia);
+       
+        jtaobservacion.setLineWrap(true);
+        mostrar();
     }
+    
+    public void mostrar(){
+        
+    Runnable runnable = new Runnable() {
+
+        @Override
+        public void run() {
+//            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            jlblimagencarga.setVisible(true);
+            jlblletracarga.setVisible(true);
+            jtfbuscardescripcion.setEnabled(false);
+           
+              listfamilia=daofamilia.mostrarfamilia(jtablafamilia);
+             jlblimagencarga.setVisible(false);
+            jlblletracarga.setVisible(false);
+            jtfbuscardescripcion.setEnabled(true);
+           
+        }
+    };
+    
+    Thread T = new Thread(runnable);
+    T.start();
+    
+    
+    }
+    
+    
     public void bloquearjtf(boolean descripcion, boolean observacion){
     jtfdescripcion.setEnabled(descripcion);
     jtaobservacion.setEnabled(observacion);
@@ -46,18 +80,47 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
     
     }
      public void limpiarjtf(){
-    jtfdescripcion.setText("DESCRIPCION");
-    jtaobservacion.setText("OBSERVACION");
+    jtfdescripcion.setText("");
+    jtaobservacion.setText("");
    
     }
     public void validaguardar(){
         String desc= jtfdescripcion.getText().replaceAll("\\s","");
-    if(!desc.equals("DESCRIPCION") && !desc.equals("")){
+    if(desc.length()>0){
         bloquearjbtn(false, false, true,false ,true, true);
     }else {
         bloquearjbtn(true, false, false, false, true, true);
     
     }
+    
+    }
+    
+    public void ver(){
+        familia = listfamilia.get(jtablafamilia.getSelectedRow());
+        jtfdescripcion.setText(familia.getDescripcion());
+        jtaobservacion.setText(familia.getObservacion());
+       
+        bloquearjbtn(true, true, false, true, false, true);
+    
+    }
+    
+    public synchronized void sensitiva(){
+        jlblimagencarga.setVisible(true);
+        jlblletracarga.setVisible(true);
+         String descrip=jtfbuscardescripcion.getText().trim().toUpperCase();
+        listfamilia=daofamilia.busquedasensitivafamilia("DESCRIPCION", descrip,jtablafamilia);
+        
+        if(jtablafamilia.getSelectedRow()>=0){
+            ver();
+        }else {
+            limpiarjtf();
+      
+            bloquearjtf(false, false);
+            bloquearjbtn(true, false, false, false, false, true);
+            
+        }
+      jlblimagencarga.setVisible(false);
+      jlblletracarga.setVisible(false);
     
     }
 
@@ -71,6 +134,8 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jlblletracarga = new javax.swing.JLabel();
+        jlblimagencarga = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtablafamilia = new javax.swing.JTable();
         jbtncancelar = new javax.swing.JButton();
@@ -81,27 +146,40 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
         jtfdescripcion = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtaobservacion = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jtfbuscardescripcion = new javax.swing.JTextField();
         jbtneditar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 350, -1, -1));
+
+        jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 430, 260));
 
         jtablafamilia.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtablafamilia.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jtablafamilia.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -118,51 +196,72 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtablafamilia);
 
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 450, 310));
+
         jbtncancelar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtncancelar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtncancelar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtncancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel20x20.png"))); // NOI18N
         jbtncancelar.setText("Cancelar");
         jbtncancelar.setToolTipText("Cancelar");
+        jbtncancelar.setBorder(null);
+        jbtncancelar.setBorderPainted(false);
+        jbtncancelar.setContentAreaFilled(false);
         jbtncancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtncancelarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 90, 70, -1));
 
         jbtneliminar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtneliminar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtneliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete20x20.png"))); // NOI18N
         jbtneliminar.setText("Eliminar");
         jbtneliminar.setToolTipText("Eliminar");
+        jbtneliminar.setBorder(null);
+        jbtneliminar.setBorderPainted(false);
+        jbtneliminar.setContentAreaFilled(false);
         jbtneliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtneliminarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 90, 70, -1));
 
         jbtnguardar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnguardar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
         jbtnguardar.setText("Guardar");
         jbtnguardar.setToolTipText("Guardar");
+        jbtnguardar.setBorder(null);
+        jbtnguardar.setBorderPainted(false);
+        jbtnguardar.setContentAreaFilled(false);
         jbtnguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnguardarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 90, 80, -1));
 
         jbtnnew.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnnew.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnnew.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtnnew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add20X20.png"))); // NOI18N
         jbtnnew.setText("Nuevo");
         jbtnnew.setToolTipText("Nuevo");
+        jbtnnew.setBorder(null);
+        jbtnnew.setBorderPainted(false);
+        jbtnnew.setContentAreaFilled(false);
         jbtnnew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnnewActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnnew, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 90, 70, -1));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jtfdescripcion.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfdescripcion.setText("DESCRIPCION");
         jtfdescripcion.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfdescripcionFocusGained(evt);
@@ -182,7 +281,7 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
 
         jtaobservacion.setColumns(20);
         jtaobservacion.setRows(5);
-        jtaobservacion.setText("OBSERVACION");
+        jtaobservacion.setText("\n");
         jtaobservacion.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtaobservacionFocusGained(evt);
@@ -201,6 +300,10 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(jtaobservacion);
 
+        jLabel3.setText("Descripción:");
+
+        jLabel4.setText("Observación:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -208,22 +311,37 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtfdescripcion)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE))
-                .addGap(145, 145, 145))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(0, 396, Short.MAX_VALUE))
+                            .addComponent(jtfdescripcion, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addGap(6, 6, 6)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtfdescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
                 .addGap(53, 53, 53))
         );
 
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 130, 490, 310));
+
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("Buscar:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
         jtfbuscardescripcion.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfbuscardescripcion.setText("DESCRIPCION");
@@ -235,6 +353,11 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
                 jtfbuscardescripcionFocusLost(evt);
             }
         });
+        jtfbuscardescripcion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfbuscardescripcionActionPerformed(evt);
+            }
+        });
         jtfbuscardescripcion.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfbuscardescripcionKeyReleased(evt);
@@ -243,73 +366,48 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
                 jtfbuscardescripcionKeyTyped(evt);
             }
         });
+        jPanel1.add(jtfbuscardescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 440, -1));
 
         jbtneditar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneditar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtneditar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtneditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/edit20x20.png"))); // NOI18N
         jbtneditar.setText("Editar");
         jbtneditar.setToolTipText("Editar");
+        jbtneditar.setBorder(null);
+        jbtneditar.setBorderPainted(false);
+        jbtneditar.setContentAreaFilled(false);
         jbtneditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtneditarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 70, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jtfbuscardescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbtnnew, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtneditar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtncancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(81, 81, 81))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(6, 6, 6)
-                        .addComponent(jtfbuscardescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jbtnnew, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbtneditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbtnguardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbtneliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbtncancelar)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(39, 39, 39))
-        );
-
-        jPanel3.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel3.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel3MouseDragged(evt);
+            }
+        });
+        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel3MousePressed(evt);
+            }
+        });
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 0));
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("REGISTRO DE FAMILIAS");
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jLabel8.setToolTipText("Cerrar");
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel8MouseReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -318,31 +416,35 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 684, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 4, Short.MAX_VALUE))
         );
 
         pack();
@@ -350,13 +452,9 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
 
     private void jtablafamiliaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablafamiliaMouseReleased
         // TODO add your handling code here:
-        Familia familia = null;
-        long id = Long.parseLong(jtablafamilia.getValueAt(jtablafamilia.getSelectedRow(), 0).toString());
-        familia = daofamilia.buscarfamilia("ID", id);
-        jtfdescripcion.setText(familia.getDescripcion());
-        jtaobservacion.setText(familia.getObservacion());
-       
-        bloquearjbtn(true, true, false, true, false, true);
+        
+        ver();
+        
 
     }//GEN-LAST:event_jtablafamiliaMouseReleased
 
@@ -364,7 +462,7 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         int index = jtablafamilia.getSelectedRow();
         if(index>=0){
-            jtablafamiliaMouseReleased(null);
+            ver();
         } else {
             limpiarjtf();
         }
@@ -406,13 +504,13 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
             //
             //        }
         int index= jtablafamilia.getSelectedRow();
-        long id = Long.parseLong(jtablafamilia.getValueAt(index, 0).toString());
+        familia=listfamilia.get(index);
         if (index<0){
             JOptionPane.showMessageDialog(this, "SELECCIONE FAMILIA A ELIMINAR EN LA TABLA");
         }else {
             if (JOptionPane.showConfirmDialog(null, "ESTA SEGURO DE ELIMINAR EL FAMILIA","ELIMINAR",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-                daofamilia.eliminarfamilia(id);
-                daofamilia.mostrarfamilia(jtablafamilia);
+                daofamilia.eliminarfamilia(familia.getIdfamilia());
+                listfamilia=daofamilia.mostrarfamilia(jtablafamilia);
                 bloquearjtf(false, false);
                 bloquearjbtn(true, false, false, false, false, true);
                 limpiarjtf();
@@ -423,10 +521,10 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
 
     private void jbtnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnguardarActionPerformed
         // TODO add your handling code here:
-        Familia familia= new Familia();
+       
 
-        String descrip=jtfdescripcion.getText().trim();
-        String observacion=jtaobservacion.getText().trim();
+        String descrip=jtfdescripcion.getText().trim().toUpperCase();
+        String observacion=jtaobservacion.getText().trim().toUpperCase();
        
 
         familia.setDescripcion(descrip);
@@ -435,7 +533,7 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
        
 
         if (descrip.length()>0 ){
-            if(!descrip.equals("DESCRIPCION")){
+//            if(!descrip.equals("DESCRIPCION")){
                 if(editar==false){
                     boolean valida=daofamilia.duplicado(0, descrip,"GUARDAR");
                     if(valida==true){
@@ -447,9 +545,9 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
                 }
 
                 else{
-                    long id= Long.parseLong(jtablafamilia.getValueAt(jtablafamilia.getSelectedRow(), 0).toString());
-                    familia.setIdfamilia(id);
-                     boolean Vvalida=daofamilia.duplicado(id, descrip,"EDITAR");
+//                    long id= Long.parseLong(jtablafamilia.getValueAt(jtablafamilia.getSelectedRow(), 0).toString());
+//                    familia.setIdfamilia(id);
+                     boolean Vvalida=daofamilia.duplicado(familia.getIdfamilia(), descrip,"EDITAR");
                  if(Vvalida==true){
                      daofamilia.editarfamilia(familia);
                  }else {
@@ -460,15 +558,15 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
 
 //                jtablafamilia.setModel(daofamilia.mostrarfamilia());
 
-            }else {
-                JOptionPane.showMessageDialog(null, "RELLENE LOS CAMPOS","ERROR",JOptionPane.ERROR_MESSAGE);
-            }
+//            }else {
+//                JOptionPane.showMessageDialog(null, "RELLENE LOS CAMPOS","ERROR",JOptionPane.ERROR_MESSAGE);
+//            }
 
         }else {
             JOptionPane.showMessageDialog(null, "INGRESE TODOS LOS DATOS","ERROR",JOptionPane.ERROR_MESSAGE);
 
         }
-        daofamilia.mostrarfamilia(jtablafamilia);
+        listfamilia=daofamilia.mostrarfamilia(jtablafamilia);
         bloquearjtf(false, false);
         bloquearjbtn(true, false, false, false, false, true);
         limpiarjtf();
@@ -540,16 +638,16 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
 
     private void jtfdescripcionFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfdescripcionFocusGained
         // TODO add your handling code here:
-        if (jtfdescripcion.getText().equals("DESCRIPCION")){
-            jtfdescripcion.setText("");
-        }
+//        if (jtfdescripcion.getText().equals("DESCRIPCION")){
+//            jtfdescripcion.setText("");
+//        }
     }//GEN-LAST:event_jtfdescripcionFocusGained
 
     private void jtfdescripcionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfdescripcionFocusLost
         // TODO add your handling code here:
-        if (jtfdescripcion.getText().equals("")){
-            jtfdescripcion.setText("DESCRIPCION");
-        }
+//        if (jtfdescripcion.getText().equals("")){
+//            jtfdescripcion.setText("DESCRIPCION");
+//        }
     }//GEN-LAST:event_jtfdescripcionFocusLost
 
     private void jtfdescripcionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescripcionKeyReleased
@@ -573,8 +671,7 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
 
     private void jtfbuscardescripcionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscardescripcionKeyReleased
         // TODO add your handling code here:
-        String descrip=jtfbuscardescripcion.getText().trim().toUpperCase();
-        daofamilia.busquedasensitivafamilia("DESCRIPCION", descrip,jtablafamilia);
+       
     }//GEN-LAST:event_jtfbuscardescripcionKeyReleased
 
     private void jbtneditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtneditarActionPerformed
@@ -586,31 +683,31 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
 
     private void jtaobservacionFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtaobservacionFocusGained
         // TODO add your handling code here:
-          if (jtaobservacion.getText().equals("OBSERVACION")){
-            jtaobservacion.setText("");
-        }
+//          if (jtaobservacion.getText().equals("OBSERVACION")){
+//            jtaobservacion.setText("");
+//        }
     }//GEN-LAST:event_jtaobservacionFocusGained
 
     private void jtaobservacionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtaobservacionFocusLost
         // TODO add your handling code here:
-        if (jtaobservacion.getText().equals("")){
-            jtaobservacion.setText("OBSERVACION");
-        }
+//        if (jtaobservacion.getText().equals("")){
+//            jtaobservacion.setText("OBSERVACION");
+//        }
     }//GEN-LAST:event_jtaobservacionFocusLost
 
     private void jtfdescripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescripcionKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfdescripcion);
+//        mayus.convertirmayus(jtfdescripcion);
     }//GEN-LAST:event_jtfdescripcionKeyTyped
 
     private void jtaobservacionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtaobservacionKeyTyped
         // TODO add your handling code here:
-         mayus.convertirmayusTA(jtaobservacion);
+//         mayus.convertirmayusTA(jtaobservacion);
     }//GEN-LAST:event_jtaobservacionKeyTyped
 
     private void jtfbuscardescripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscardescripcionKeyTyped
         // TODO add your handling code here:
-         mayus.convertirmayus(jtfbuscardescripcion);
+//         mayus.convertirmayus(jtfbuscardescripcion);
     }//GEN-LAST:event_jtfbuscardescripcionKeyTyped
 
     private void jtaobservacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtaobservacionKeyReleased
@@ -620,19 +717,49 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
 
     private void jtablafamiliaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablafamiliaKeyReleased
         // TODO add your handling code here:
-        Familia familia = null;
-        long id = Long.parseLong(jtablafamilia.getValueAt(jtablafamilia.getSelectedRow(), 0).toString());
-        familia = daofamilia.buscarfamilia("ID", id);
-        jtfdescripcion.setText(familia.getDescripcion());
-        jtaobservacion.setText(familia.getObservacion());
-       
-        bloquearjbtn(true, true, false, true, false, true);
+        ver();
     }//GEN-LAST:event_jtablafamiliaKeyReleased
+
+    private void jtfbuscardescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfbuscardescripcionActionPerformed
+        // TODO add your handling code here:
+         Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                sensitiva();
+            }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
+    }//GEN-LAST:event_jtfbuscardescripcionActionPerformed
+
+    private void jLabel8MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseReleased
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jLabel8MouseReleased
+
+    private void jPanel3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MousePressed
+        // TODO add your handling code here:
+          posy=evt.getY();
+        posx=evt.getX();
+ 
+    }//GEN-LAST:event_jPanel3MousePressed
+
+    private void jPanel3MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseDragged
+        // TODO add your handling code here:
+         int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel3MouseDragged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -643,6 +770,8 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbtneliminar;
     private javax.swing.JButton jbtnguardar;
     private javax.swing.JButton jbtnnew;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
     private javax.swing.JTable jtablafamilia;
     private javax.swing.JTextArea jtaobservacion;
     private javax.swing.JTextField jtfbuscardescripcion;

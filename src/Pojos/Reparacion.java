@@ -14,6 +14,8 @@ import java.sql.Timestamp;
 public class Reparacion {
     private long idreparacion;
     private long idcliente;
+    private String cliente;
+    private String empleado;
     private long idempleado;
     private String atendido;
     private String marca;
@@ -24,7 +26,7 @@ public class Reparacion {
     private String diagnostico;
     private Timestamp fechaR;
 //    private Date fechaA;
-    private Timestamp fechaE;
+    private String fechaE;
     private String estado;
     private byte[] foto;
     private String entregado;
@@ -36,7 +38,36 @@ public class Reparacion {
     private double descuento;
     private String motivo;
     private double total;
+    private double abono;
+  
+    
     public Reparacion() {
+    }
+
+    
+
+    public double getAbono() {
+        return abono;
+    }
+
+    public void setAbono(double abono) {
+        this.abono = abono;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(String empleado) {
+        this.empleado = empleado;
     }
 
     public String getMotivo() {
@@ -55,29 +86,7 @@ public class Reparacion {
         this.total = total;
     }
 
-    public Reparacion(long idreparacion, long idcliente, long idempleado, String atendido, String marca, String modelo, String fallas, String causas, String observacion, String diagnostico, Timestamp fechaR, Timestamp fechaE, String estado, byte[] foto, String entregado, Double precio, String codigo, String hora, long id_sucural, double preciorevision, double descuento) {
-        this.idreparacion = idreparacion;
-        this.idcliente = idcliente;
-        this.idempleado = idempleado;
-        this.atendido = atendido;
-        this.marca = marca;
-        this.modelo = modelo;
-        this.fallas = fallas;
-        this.causas = causas;
-        this.observacion = observacion;
-        this.diagnostico = diagnostico;
-        this.fechaR = fechaR;
-        this.fechaE = fechaE;
-        this.estado = estado;
-        this.foto = foto;
-        this.entregado = entregado;
-        this.precio = precio;
-        this.codigo = codigo;
-        this.hora = hora;
-        this.id_sucural = id_sucural;
-        this.preciorevision = preciorevision;
-        this.descuento = descuento;
-    }
+   
 
     public double getPreciorevision() {
         return preciorevision;
@@ -231,14 +240,16 @@ public class Reparacion {
         this.fechaR = fechaR;
     }
 
-    
-    public Timestamp getFechaE() {
+    public String getFechaE() {
         return fechaE;
     }
 
-    public void setFechaE(Timestamp fechaE) {
+    public void setFechaE(String fechaE) {
         this.fechaE = fechaE;
     }
+
+    
+   
 
     public String getEstado() {
         return estado;

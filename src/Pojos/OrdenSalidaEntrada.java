@@ -24,6 +24,7 @@ public class OrdenSalidaEntrada {
     private String tipoop;
     private Long idsucurenvia;
     private Long idsucurrecep;
+   
 
     public OrdenSalidaEntrada(long idordensalidaentrada, String sucurenvia, String sucursolicita, Timestamp fecha_pedido, Timestamp fecha_entrega, String numero, String autorizado, String recibido, String tipoop) {
         this.idordensalidaentrada = idordensalidaentrada;
@@ -36,6 +37,8 @@ public class OrdenSalidaEntrada {
         this.recibido = recibido;
         this.tipoop = tipoop;
     }
+
+   
 
     public String getTipoop() {
         return tipoop;

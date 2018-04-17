@@ -5,7 +5,7 @@
  */
 package DAO;
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import Pojos.DetalleOrdeSalidaEntrada;
 import Pojos.OrdenSalidaEntrada;
 import java.awt.HeadlessException;
@@ -17,10 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -31,14 +31,16 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author info2017
  */
 public class OrdenSalidaDAO {
+     
+    
   public long insertar(OrdenSalidaEntrada orden){ 
-       Conexion conexion = new Conexion();
-        
+     
+      ConexionBD Cbd = new ConexionBD();  
        long id=0;
      try{
          System.out.println("SELECT * from sp_insertarordensalidaentrada('"+orden.getSucurenvia()+"','"+orden.getSucursolicita()+"','"+orden.getFecha_pedido()+"','"+orden.getFecha_entrega()+"','"+orden.getAutorizado()+"','"+orden.getRecibido()+"','"+orden.getTipoop()+"')");
-            String sql=("SELECT * from sp_insertarordensalidaentrada(?,?,?,?,?,?,?,?)");         
-            PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+            String sql=("SELECT * from sp_insertarordensalidaentrada(?,?,?,?,?,?,?,?,?)");         
+            PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
             ps.setString(1, orden.getSucurenvia());
             ps.setString(2, orden.getSucursolicita());
             ps.setTimestamp(3, orden.getFecha_pedido());
@@ -47,29 +49,29 @@ public class OrdenSalidaDAO {
             ps.setString(6,orden.getRecibido());
             ps.setString(7,orden.getTipoop());
             ps.setLong(8, 0);
-            ResultSet rs= ps.executeQuery();
+            System.out.println("idsucursalrecepinsert"+orden.getIdsucurrecep());
+            ps.setLong(9, orden.getIdsucurrecep());
+            ResultSet rs= Cbd.RealizarConsulta(ps);
        if  (rs.next()){
            id=(rs.getLong("id"));
            
            //JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
         }
-	rs.close();
-        ps.close();
+	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
-
+               Cbd.desconectar();
 }
   return id;  
 
   }
-  public OrdenSalidaEntrada buscar(long  idorden,String sucur,JTable tabla,
+  public OrdenSalidaEntrada buscar(long  idorden,Long sucur,JTable tabla,
           List<DetalleOrdeSalidaEntrada> listadet,JButton aceptar){
     
-    Conexion conexion= new Conexion();
-     
+   
+        ConexionBD Cbd = new ConexionBD();  
         ResultSet rs=null;
 //        boolean valida=false;
         OrdenSalidaEntrada orden = new OrdenSalidaEntrada();
@@ -87,10 +89,10 @@ public class OrdenSalidaDAO {
         
         String sql=("SELECT * from sp_busquedaordensalidaentrada(?,?)"); 
         
-        PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idorden);
-        ps.setString(2, sucur);
-        rs = ps.executeQuery();
+        ps.setLong(2, sucur);
+        rs = Cbd.RealizarConsulta(ps);
           Object datosR[]= new Object[3];
           long idprod;
           double cantidad;
@@ -138,10 +140,13 @@ public class OrdenSalidaDAO {
         }else {
              aceptar.setEnabled(false);
              }
-         tabla.setModel(modelo);
+            tabla.setModel(modelo);
+            TableColumnModel columnModel = tabla.getColumnModel();
+     
+            columnModel.getColumn(0).setPreferredWidth(90);
+            columnModel.getColumn(1).setPreferredWidth(600);
+            columnModel.getColumn(2).setPreferredWidth(50);    
              
-             ps.close();
-             rs.close();  
             //JOptionPane.showMessageDialog(null,"PRODUCTO RETIRADO DE LA VENTA CORRECTAMENTE");
 
  
@@ -152,7 +157,7 @@ public class OrdenSalidaDAO {
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-         conexion.devolverConexionPool();
+            Cbd.desconectar();
      }
      return orden;
     
@@ -161,47 +166,45 @@ public class OrdenSalidaDAO {
   
   public void eliminar(long  idorden){
     
-    Conexion conexion= new Conexion();
-     
-        ResultSet rs=null;
+  
+     ConexionBD Cbd = new ConexionBD();
+//        ResultSet rs=null;
 //        boolean valida=false;
      try{
         
         String sql=("SELECT * from sp_eliminarordensalidaentrada(?)"); 
         
-        PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idorden);
       
-        rs = ps.executeQuery();
+        Cbd.actualizarDatos(ps);
       
-        if  (rs.next()){
-            //JOptionPane.showMessageDialog(null,"PRODUCTO RETIRADO DE LA VENTA CORRECTAMENTE");
-
- 
-        }
-        rs.close();
-        ps.close();
-
+//        if  (rs.next()){
+//            //JOptionPane.showMessageDialog(null,"PRODUCTO RETIRADO DE LA VENTA CORRECTAMENTE");
+//
+// 
+//        }
+        
         }
      catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-         conexion.devolverConexionPool();
+         Cbd.desconectar();
      }
     
     }
   
   public void imprimir(long id){
-      Conexion conexion = new Conexion();
-try{
-    ///////////////////////// formato fecha ////////////////////////////
-//            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//           datepicker.setFormats(dateFormat);   
-//           java.util.Date fecha =((datepicker.getDate())); 
-           
-    ////////////////////////////////////////////////////////////+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333////////       
-            //Connection miconexion = conectar.Connect();
+    ConexionBD Cbd = new ConexionBD();
+    try{
+        ///////////////////////// formato fecha ////////////////////////////
+    //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    //           datepicker.setFormats(dateFormat);   
+    //           java.util.Date fecha =((datepicker.getDate())); 
+
+        ////////////////////////////////////////////////////////////+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333////////       
+                //Connection miconexion = conectar.Connect();
             
                       
             String  rutaInforme  = "src/Reportes/OrdenSalida.jasper";
@@ -211,7 +214,7 @@ try{
             parametros.put("id",  id);
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -221,22 +224,22 @@ try{
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
         }finally{
-        conexion.devolverConexionPool();
+        Cbd.desconectar();
 }
      
 
 }
   ///////////////IMPRIMIRR TODAS LAS ORDENES SEGUN RANGO DE FECHAS /////////////
   public void imprimirtodo(Timestamp desde, Timestamp hasta){
-    Conexion conexion = new Conexion(); 
-try{
-    ///////////////////////// formato fecha ////////////////////////////
-//            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//           datepicker.setFormats(dateFormat);   
-//           java.util.Date fecha =((datepicker.getDate())); 
-           
-    ////////////////////////////////////////////////////////////+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333////////       
-            //Connection miconexion = conectar.Connect();
+   ConexionBD Cbd = new ConexionBD();
+    try{
+        ///////////////////////// formato fecha ////////////////////////////
+    //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    //           datepicker.setFormats(dateFormat);   
+    //           java.util.Date fecha =((datepicker.getDate())); 
+
+        ////////////////////////////////////////////////////////////+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333////////       
+                //Connection miconexion = conectar.Connect();
             
                       
             String  rutaInforme  = "src/Reportes/OrdenSalidaEntrada.jasper";
@@ -247,7 +250,7 @@ try{
             parametros.put("hasta",  hasta);
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -257,7 +260,7 @@ try{
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
         } finally{
-       conexion.devolverConexionPool();
+       Cbd.desconectar();
     }
      
 
@@ -266,14 +269,14 @@ try{
   
   /////////////// BUSCA TODO ENTRE ORDENES DE SALIDA Y ENTRADA //////////////////
   
-  public void mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel msj){
+  public List<OrdenSalidaEntrada> mostrar(JTable tab,Timestamp desde,Timestamp hasta){
         
-     
-    Conexion conexion = new Conexion();
+     ConexionBD Cbd = new ConexionBD();
+   
  
    
     DefaultTableModel modelo= new DefaultTableModel(
-                new String[]{"N°","SUCUR. ENVIA","SUCUR. SOLIC","FECHA PEDIDO","FECHA ENTR","AUTORIZADO","RECIBIDO","TIPO OP","RECEPCIONADO"}, 0) {
+                new String[]{"N°","SUCUR. ENVIA","SUCUR. SOLIC","FECHA PEDIDO","FECHA ENTR","AUTORIZADO","RECIBIDO","TIPO OP","RECEP."}, 0) {
  
             Class[] types = new Class[]{
                  java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,java.lang.Object.class,
@@ -290,59 +293,65 @@ try{
             }
             };
     tab.setModel(modelo);
+    List<OrdenSalidaEntrada> listorden= new ArrayList<>();
     try{
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
         String sql=("SELECT * from sp_busquedaordensalidaentradaporfechas(?,?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
         ps.setTimestamp(1, desde);
         ps.setTimestamp(2, hasta);
-        ResultSet rs= ps.executeQuery();
+        ResultSet rs= Cbd.RealizarConsulta(ps);
         Object datosR[] = new Object[9];
-        msj.setText("");
-        int cont=0;
+//        msj.setText("");
+//        int cont=0;
         while (rs.next()){
+            OrdenSalidaEntrada orden = new OrdenSalidaEntrada();
+            orden.setIdordensalidaentrada(rs.getLong("vidorden"));
+             datosR[0] = orden.getIdordensalidaentrada();
+             
+             datosR[1] = rs.getObject("vsucurenvia");
+            
+             datosR[2] = rs.getObject("vsucursolici");
+            
+             datosR[3] = rs.getObject("vfecha_pedido");
+             
+             datosR[4] = rs.getObject("vfecha_entrega");
+            
+             datosR[5] = rs.getObject("vautorizadopor");
            
-            for(int i =0; i<=1; i++){
-                     datosR[i] = rs.getObject("vidorden");
-                     i++;
-                     datosR[i] = rs.getObject("vsucurenvia");
-                     i++;
-                     datosR[i] = rs.getObject("vsucursolici");
-                     i++;
-                     datosR[i] = rs.getObject("vfecha_pedido");
-                     i++;
-                     datosR[i] = rs.getObject("vfecha_entrega");
-                     i++;
-                     datosR[i] = rs.getObject("vfecha_entrega");
-                     i++;
-                     datosR[i] = rs.getObject("vrecibidopor");
-                     i++;
-                    datosR[i] = rs.getObject("vtipoop");
-                     i++;
-                     datosR[i] = rs.getBoolean("vrecepcionado");
-                     i++;
-                    modelo.addRow(datosR);
-		}
-            cont++;
+             datosR[6] = rs.getObject("vrecibidopor");
+            
+             datosR[7] = rs.getObject("vtipoop");
+            
+             datosR[8] = rs.getBoolean("vrecepcionado");
+            
+            modelo.addRow(datosR);
+            listorden.add(orden);
+          
         }
-        rs.close();
-        ps.close();
-        if(cont == 0){
-            msj.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO DE "+desde+" AL "+hasta);
-        }else {
-            msj.setText("REGISTROS ENCONTRADOS "+cont);
-        }
+        TableColumnModel columnModel = tab.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(20);
+        columnModel.getColumn(1).setPreferredWidth(150);
+        columnModel.getColumn(2).setPreferredWidth(150);
+        columnModel.getColumn(3).setPreferredWidth(60);
+        columnModel.getColumn(4).setPreferredWidth(60);
+        columnModel.getColumn(5).setPreferredWidth(200);
+        columnModel.getColumn(6).setPreferredWidth(200);
+        columnModel.getColumn(7).setPreferredWidth(80);
+        columnModel.getColumn(8).setPreferredWidth(60);
+       
+   
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+               Cbd.desconectar();
                        
             }    
 
-    
+            return listorden;
     }
   
 

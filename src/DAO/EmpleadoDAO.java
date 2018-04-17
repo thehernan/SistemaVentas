@@ -6,18 +6,17 @@
 package DAO;
 
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import Pojos.Empleado;
 import Pojos.EmpleadoSingleton;
-import java.awt.Image;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -29,191 +28,217 @@ import javax.swing.table.TableColumnModel;
  */
 public class EmpleadoDAO {
     
-    public void mostrarempleado(JTable tabla){
-        
-        DefaultTableModel modelo= new DefaultTableModel(){
-        public boolean isCellEditable(int row, int column) {
-      //      if (column == 5) return true;
-      //else
-           return false;
+    
+    public List<Empleado> mostrarempleado(JTable tabla){
+    ConexionBD Cbd = new ConexionBD();    
+    DefaultTableModel modelo= new DefaultTableModel(){
+    public boolean isCellEditable(int row, int column) {
+  //      if (column == 5) return true;
+  //else
+       return false;
       }
       };      
-     String titulos[]={"ID","RUT","NOMBRES","CELULAR"};
+     String titulos[]={"RUT","NOMBRES","CELULAR"};
      modelo.setColumnIdentifiers(titulos);
 
-      Conexion conexion = new Conexion();
-          
      
+          
+     List<Empleado> listempleado= new ArrayList<>();
     try{
 	
       
         String sql=("SELECT * from sp_mostrarempleado()"); 
-        PreparedStatement ps = conexion.getConnection().prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-        Object datosR[] = new Object[4];
+        PreparedStatement ps = Cbd.conectar().prepareStatement(sql);
+        ResultSet rs = Cbd.RealizarConsulta(ps);
+        Object datosR[] = new Object[3];
         while (rs.next()){
                     
-                         
-                     datosR[0] = rs.getObject("id");
+             Empleado empleado = new Empleado();
+             empleado.setId_empleado(rs.getLong("id"));
+             empleado.setNombre(rs.getString("vnombre"));
+             empleado.setRut(rs.getString("vrut"));
+             empleado.setDireccion(rs.getString("vdireccion"));
+             empleado.setCelular(rs.getString("vcelular"));
+             datosR[0] = empleado.getRut();
+
+             datosR[1] = empleado.getNombre();
+
+             datosR[2] = empleado.getCelular();
                     
-                     datosR[1] = rs.getObject("vrut");
                     
-                     datosR[2] = rs.getObject("vnombre");
-                    
-                     datosR[3] = rs.getObject("vcelular");
-                    
-                    
-                    modelo.addRow(datosR);
-		
+            modelo.addRow(datosR);
+            listempleado.add(empleado);
         }
         tabla.setModel(modelo);
-        tabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        tabla.getColumnModel().getColumn(0).setMinWidth(0);
-        tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-        
+       
         TableColumnModel columnModel = tabla.getColumnModel();
      
-        columnModel.getColumn(1).setPreferredWidth(90);
-        columnModel.getColumn(2).setPreferredWidth(400);
-        columnModel.getColumn(3).setPreferredWidth(90);
+        columnModel.getColumn(0).setPreferredWidth(90);
+        columnModel.getColumn(1).setPreferredWidth(400);
+        columnModel.getColumn(2).setPreferredWidth(90);
 	ps.close();
         rs.close();
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
             }    
 
-    
+    return listempleado;
     }
     
-    public void busquedasensitivaempleado(JTable tabla,String tipoB,String cadena){
-        
+    public List<Empleado> busquedasensitivaempleado(JTable tabla,String tipoB,String cadena){
+      ConexionBD Cbd = new ConexionBD();  
        DefaultTableModel modelo= new DefaultTableModel(){
-  public boolean isCellEditable(int row, int column) {
-//      if (column == 5) return true;
-//else
- return false;
-}
-  };      
- String titulos[]={"ID","RUT","NOMBRES","CELULAR"};
- modelo.setColumnIdentifiers(titulos);
- 
-  Conexion conexion = new Conexion();
+      public boolean isCellEditable(int row, int column) {
+    //      if (column == 5) return true;
+    //else
+     return false;
+    }
+      };      
+     String titulos[]={"RUT","NOMBRES","CELULAR"};
+     modelo.setColumnIdentifiers(titulos);
+
      
+     List<Empleado> listempleado= new ArrayList<>();
     try{
 	
-        System.out.println("SELECT * from sp_busquedasensitivaempleado('"+tipoB+"','"+cadena+"')");
+//        System.out.println("SELECT * from sp_busquedasensitivaempleado('"+tipoB+"','"+cadena+"')");
         String sql=("SELECT * from sp_busquedasensitivaempleado(?,?)"); 
-        PreparedStatement ps = conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps = Cbd.conectar().prepareStatement(sql);
         ps.setString(1, tipoB);
         ps.setString(2, cadena);
        
-        ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[4];
+        ResultSet rs= Cbd.RealizarConsulta(ps);
+        Object datosR[] = new Object[3];
+         
         while (rs.next()){
                      
                          
-             datosR[0] = rs.getObject("id");
-             
-             datosR[1] = rs.getObject("vrut");
-             
-             datosR[2] = rs.getObject("vnombre");
+            Empleado empleado = new Empleado();
             
-             datosR[3] = rs.getObject("vcelular");
-            
+             empleado.setId_empleado(rs.getLong("id"));
+             empleado.setNombre(rs.getString("vnombre"));
+             empleado.setRut(rs.getString("vrut"));
+             empleado.setDireccion(rs.getString("vdireccion"));
+             empleado.setCelular(rs.getString("vcelular"));
+             datosR[0] = empleado.getRut();
+
+             datosR[1] =empleado.getNombre();
+
+             datosR[2] = empleado.getCelular();
                     
-                    modelo.addRow(datosR);
+                    
+            modelo.addRow(datosR);
+            listempleado.add(empleado);
 		
         }
         tabla.setModel(modelo);
-        tabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        tabla.getColumnModel().getColumn(0).setMinWidth(0);
-        tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-        
+  
         TableColumnModel columnModel = tabla.getColumnModel();
      
-        columnModel.getColumn(1).setPreferredWidth(90);
-        columnModel.getColumn(2).setPreferredWidth(400);
-        columnModel.getColumn(3).setPreferredWidth(90);
-        rs.close();
-        ps.close();
+        columnModel.getColumn(0).setPreferredWidth(90);
+        columnModel.getColumn(1).setPreferredWidth(400);
+        columnModel.getColumn(2).setPreferredWidth(90);
+        
+        if(modelo.getRowCount()>0){
+            tabla.setRowSelectionInterval(0, 0);
+        
+        }
+      
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-               conexion.devolverConexionPool();
+              Cbd.desconectar();
             }    
 
-    
+    return listempleado;
     }
 
-public Empleado buscarempleado(String tipoB,long id,JLabel jlbl){
+public Empleado buscarempleado(String tipoB,long id){
 //Connection miconexion = conectar.Connect();
 //    Statement st=null;
+    ConexionBD Cbd = new ConexionBD();
     Empleado empleado= new Empleado();
-     ImageIcon imageIcon =null;
+    
+    
+//    Runnable miRunnable = new Runnable()
+//      {
+//         @Override
+//         public void run()
+//         {
+             
+    
+//     ImageIcon imageIcon =null;
 //    ImageIcon imageIcon = new ImageIcon(getClass().getResource("../imagenes/user-not-image.png"));
-    Conexion conexion = new Conexion();
+   
      try{
 //	st= (Statement)miconexion.createStatement();
          System.out.println("SELECT * from sp_busquedaempleado('"+tipoB+"',"+id+")");
       String sql=("SELECT * from sp_busquedaempleado(?,?)"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+      PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
       ps.setString(1, tipoB);
       ps.setLong(2, id);
       
-      ResultSet rs= ps.executeQuery();
+      ResultSet rs= Cbd.RealizarConsulta(ps);
       FileInputStream fis ;
 //      byte[] vacio= new byte[0];
         if (rs.next()){
-                     empleado.setId_empleado(rs.getLong("id"));
-                     empleado.setRut( rs.getString("vrut")) ;
-                     empleado.setNombre(rs.getString("vnombre"));
-                    
-                     empleado.setCelular(rs.getString("vcelular"));
-                     empleado.setDireccion(rs.getString("vdireccion"));
-                     empleado.setEmail(rs.getString("vemail"));
-                     empleado.setCargo(rs.getString("vcargo"));
-                     
+//         msj.setText("Cargando Imagen... ");
+         empleado.setId_empleado(rs.getLong("id"));
+         empleado.setRut( rs.getString("vrut")) ;
+         empleado.setNombre(rs.getString("vnombre"));
 
-                     
-                      byte[] imgBytes = rs.getBytes("vfoto");
-                   
+         empleado.setCelular(rs.getString("vcelular"));
+         empleado.setDireccion(rs.getString("vdireccion"));
+         empleado.setEmail(rs.getString("vemail"));
+         empleado.setCargo(rs.getString("vcargo"));
+
+
+
+          byte[] imgBytes = rs.getBytes("vfoto");
+
 //                      System.out.println("byte"+rs.getBytes("vfoto"));
+
+          empleado.setFoto(imgBytes);
+          System.out.println("imgbytes"+imgBytes);
+
+//                    imageIcon = new ImageIcon(imgBytes);
                       
-                      empleado.setFoto(imgBytes);
-                      System.out.println("imgbytes"+imgBytes);
-
-                    imageIcon = new ImageIcon(imgBytes);
-
         }
-        ImageIcon imageUser = imageIcon;
-        Image img = imageUser.getImage();
-        Image newimg = img.getScaledInstance(jlbl.getWidth(), jlbl.getHeight(), java.awt.Image.SCALE_AREA_AVERAGING);
-        imageUser = new ImageIcon(newimg);
-        jlbl.setIcon(imageUser);
-        ps.close();
-	rs.close();
+//        msj.setText("");
+//        ImageIcon imageUser = imageIcon;
+//        Image img = imageUser.getImage();
+//        Image newimg = img.getScaledInstance(jlbl.getWidth(), jlbl.getHeight(), java.awt.Image.SCALE_AREA_AVERAGING);
+//        imageUser = new ImageIcon(newimg);
+//        jlbl.setIcon(imageUser);
+       
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
-            }
-return empleado;
-}
-public EmpleadoSingleton cargarempleadosinfoto(String tipoB,long id){
+            }finally{
+            Cbd.desconectar();
+     }
 
+
+      return empleado;
+}
+
+
+public EmpleadoSingleton cargarempleadosinfoto(String tipoB,long id){
+    ConexionBD Cbd = new ConexionBD();
     EmpleadoSingleton empleado= EmpleadoSingleton.getinstancia();
 
-    Conexion conexion = new Conexion();
+   
      try{
 
          System.out.println("SELECT * from sp_busquedaempleado('"+tipoB+"',"+id+")");
       String sql=("SELECT * from sp_busquedaempleado('"+tipoB+"',"+id+")"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
-       ResultSet rs = ps.executeQuery();
+      PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+       ResultSet rs = Cbd.RealizarConsulta(ps);
       FileInputStream fis ;
 
         if (rs.next()){
@@ -228,28 +253,29 @@ public EmpleadoSingleton cargarempleadosinfoto(String tipoB,long id){
  
         }
       
-        ps.close();
-//	
+      
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
-            }
+            }finally{
+            Cbd.desconectar();
+     }
 return empleado;
 }
 
 public void insertarempleado(Empleado empleado){
 
- 
+ ConexionBD Cbd = new ConexionBD();
   byte[] FOTO= empleado.getFoto();
   
     System.out.println("fotoinsert"+FOTO);
-     Conexion conexion = new Conexion();
+   
      try{
            
           
             String insertImageSql = "SELECT * from sp_insertarempleado(?,?,?,?,?,?,?)";
 //            String insertImageSql = "UPDATE alumno SET foto=? where id_alumno=?;";
-            PreparedStatement ps = conexion.getConnection().prepareStatement(insertImageSql);
+            PreparedStatement ps =Cbd.conectar().prepareStatement(insertImageSql);
            
 
             InputStream fis = new ByteArrayInputStream(FOTO); 
@@ -263,29 +289,29 @@ public void insertarempleado(Empleado empleado){
             ps.setString(6,empleado.getCargo());
             ps.setBinaryStream(7,fis);
             
-            
-            
-          ps.executeQuery();
-          ps.close();
+          Cbd.actualizarDatos(ps);
+         
         }
      catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
-            }
+            }finally{
+         Cbd.desconectar();
+     }
 
 }
 public void editarempleado(Empleado empleado){
 
   byte[] FOTO= empleado.getFoto();
   
-    Conexion conexion = new Conexion();
+   ConexionBD Cbd = new ConexionBD();
 
      try{
 	InputStream fis = new ByteArrayInputStream(FOTO); 
        
       // System.out.println("SELECT * from sp_editaralumno('"+RUT+"','"+NOMBRE+"','"+APELLIDO+"','"+CURSO+"','"+SECCION+"','"+PRIORITARIO+"','"+FOTO+"')");
      String sql=("SELECT * from sp_editarempleado(?,?,?,?,?,?,?,?)");         
-       PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+       PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
        
             ps.setLong(1,empleado.getId_empleado());
             ps.setString(2,empleado.getNombre());
@@ -297,45 +323,40 @@ public void editarempleado(Empleado empleado){
             ps.setString(7,empleado.getCargo());      
             ps.setBinaryStream(8, fis);
             
-            ps.executeQuery();
-            ps.close();
+            Cbd.actualizarDatos(ps);
+        
 //       if  (rs.next()){
-            JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
+            JOptionPane.showMessageDialog(null,"Cliente editado exitosamente");
 //        }
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
-            }        
-            
-           
-        
- 
- 
-
+            }finally{
+            Cbd.desconectar();
+     }        
 }
 public void eliminarempleado(long idempleado){
-
- Conexion conexion = new Conexion();
-    Statement st=null;
+    ConexionBD Cbd = new ConexionBD();
+     Statement st=null;
     ResultSet rs=null;
      try{
-	st= conexion.getConnection().createStatement();
+	
         System.out.println("SELECT * from sp_eliminarempleado("+idempleado+")");
         
         String sql=("SELECT * from sp_eliminarempleado(?)");       
-        PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idempleado);
-        rs=ps.executeQuery();
-       if  (rs.next()){
-            JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
-        }
+        Cbd.actualizarDatos(ps);
+//       if  (rs.next()){
+            JOptionPane.showMessageDialog(null,"Cliente eliminado exitosamente");
+//        }
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                  conexion.devolverConexionPool();
+                  Cbd.desconectar();
             }    
  
     
@@ -344,32 +365,31 @@ public void eliminarempleado(long idempleado){
 }
 public boolean duplicado(long id,String cadena,String tipoop){
 
-    Conexion conexion = new Conexion();
+    ConexionBD Cbd = new ConexionBD();
     ResultSet rs=null;
     boolean valida=false;
      try{
 //	st= (Statement)miconexion.createStatement();
       
       String sql=("SELECT * from sp_duplicadoempleado(?,?,?)"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+      PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
       ps.setString(1, cadena);
       ps.setLong(2, id);
       ps.setString(3, tipoop);
-      rs = ps.executeQuery();
+      rs = Cbd.RealizarConsulta(ps);
 //      FileInputStream fis ;
 //      byte[] vacio= new byte[0];
         if (rs.next()){
             valida= rs.getBoolean("vvalida");
         }
 
-        ps.close();
-        rs.close();
+       
 //	
         } catch(Exception e)
             {
 //            JOptionPane.showMessageDialog(null, e.getMessage());
             } finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      
      }
      return valida;

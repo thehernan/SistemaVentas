@@ -33,7 +33,7 @@ public class JDDiagnosticoReparacion extends javax.swing.JDialog {
             JIFReparacionesPendientes frmreparaciones) {
         super(parent, modal);
         initComponents();
-        jlblmodelo.setText(reparacion.getMarca()+" "+reparacion.getModelo());
+        jlblmodelo.setText("Cod. "+"r"+reparacion.getIdreparacion());
         this.reparacion= reparacion;
         this.frmreparacionespen= frmreparaciones;
          jbtnaceptar.setEnabled(false);
@@ -71,7 +71,7 @@ public class JDDiagnosticoReparacion extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jtadiagnostico.setColumns(20);
@@ -86,21 +86,21 @@ public class JDDiagnosticoReparacion extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jtadiagnostico);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 460, 220));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 460, 220));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "REPARADO?", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Reparado?", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Light", 0, 12))); // NOI18N
 
         jrbtnno.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroup1.add(jrbtnno);
         jrbtnno.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jrbtnno.setText("NO");
+        jrbtnno.setText("No");
 
         jrbtnsi.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroup1.add(jrbtnsi);
         jrbtnsi.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jrbtnsi.setSelected(true);
-        jrbtnsi.setText("SI");
+        jrbtnsi.setText("Si");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -111,7 +111,7 @@ public class JDDiagnosticoReparacion extends javax.swing.JDialog {
                 .addComponent(jrbtnsi)
                 .addGap(18, 18, 18)
                 .addComponent(jrbtnno)
-                .addContainerGap(328, Short.MAX_VALUE))
+                .addContainerGap(335, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,40 +120,43 @@ public class JDDiagnosticoReparacion extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jrbtnno)
                     .addComponent(jrbtnsi))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 460, 70));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 460, 60));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("DIAGNOSTICO:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel1.setText("Diagnostico:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
 
-        jlblmodelo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblmodelo.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
+        jlblmodelo.setForeground(new java.awt.Color(255, 51, 51));
         jlblmodelo.setText("jLabel2");
         jPanel1.add(jlblmodelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 390, -1));
 
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
         jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
+        jbtnaceptar.setDefaultCapable(false);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 400, -1, -1));
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 370, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -170,9 +173,9 @@ public class JDDiagnosticoReparacion extends javax.swing.JDialog {
         
         }
         reparacion.setEstado(estado);
-        reparacion.setDiagnostico(jtadiagnostico.getText());       
+        reparacion.setDiagnostico(jtadiagnostico.getText().trim().toUpperCase());       
         daoreparacion.editar(reparacion);
-        frmreparacionespen.mostrar(usersingleton.getIdempleado());
+        frmreparacionespen.buscar();
         this.dispose();
         
         
@@ -185,7 +188,7 @@ public class JDDiagnosticoReparacion extends javax.swing.JDialog {
 
     private void jtadiagnosticoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtadiagnosticoKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayusTA(jtadiagnostico);
+//        mayus.convertirmayusTA(jtadiagnostico);
     }//GEN-LAST:event_jtadiagnosticoKeyTyped
 
     /**

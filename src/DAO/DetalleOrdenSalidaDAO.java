@@ -5,11 +5,11 @@
  */
 package DAO;
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import Pojos.DetalleOrdeSalidaEntrada;
+import Pojos.Producto;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 
 /**
  *
@@ -26,26 +26,16 @@ import javax.swing.JTextArea;
  */
 public class DetalleOrdenSalidaDAO{
     
+     
     
-    public void insertar(List<DetalleOrdeSalidaEntrada> listdet,long idorden,JTextArea mens,JButton salir){
-        
+    public void insertar(List<Producto> listdet,long idorden,JLabel mens,JButton salir){
+        ConexionBD Cbd = new ConexionBD();
          List<Object> retur= new ArrayList<>();
-        Conexion conexion= new Conexion();
+        
         Statement st=null;
 //        ResultSet rs;
 //        long id =0;
         OrdenSalidaDAO daoorden = new OrdenSalidaDAO();
-        
-        // imprimir OUTPUT en jtextarea    
-        
-//        PrintStream standardOut;
-//        PrintStream printStream = new PrintStream(new PrintOutput(mens));
-//         standardOut = System.out;
-//        System.setOut(printStream);
-//        System.setErr(printStream);
-        
-         
-
          Runnable miRunnable = new Runnable()
       {
          @Override
@@ -55,38 +45,38 @@ public class DetalleOrdenSalidaDAO{
             PreparedStatement ps = null;
             try
             {
-//               System.out.println("Me han pulsado");
-//               Thread.sleep(10000); //Tarea que consume diez segundos.
-//               System.out.println("Terminé");
                
                int i=1;
+               mens.setVisible(true);
                salir.setEnabled(false);
-               mens.append("Iniciando proceso ...");
-               mens.append(System.getProperty("line.separator"));
-                for(DetalleOrdeSalidaEntrada det:listdet){
+               mens.setText("Iniciando proceso ...");
+//               mens.append(System.getProperty("line.separator"));
+                for(Producto det:listdet){
                     String sql=("SELECT * from sp_insertardetalleordensalida(?,?,?)"); 
-                    ps=conexion.getConnection().prepareStatement(sql);
+                    ps=Cbd.conectar().prepareStatement(sql);
 //                    System.out.println("idprodinsert"+det.getIdproducto());
-                    mens.append("Insertando Item "+i);
-                    mens.append(System.getProperty("line.separator"));
+                    mens.setText("Insertando Item "+i);
+//                    mens.append(System.getProperty("line.separator"));
                     ps.setLong(1, det.getIdproducto());
 //                    System.out.println("cantinsert"+det.getCantidad());
                     ps.setBigDecimal(2,new BigDecimal(det.getCantidad()));
                     ps.setLong(3, idorden);
 
-                    ps.executeQuery();
+                    Cbd.actualizarDatos(ps);
 
                     i++;
-                    mens.setCaretPosition(mens.getDocument().getLength());
+//                    mens.setCaretPosition(mens.getDocument().getLength());
                     }
-                    ps.close();
-                    mens.append("Imprimiendo Orden de Salida ...");
-                    mens.append(System.getProperty("line.separator"));
+                  
+                    mens.setText("Imprimiendo Orden de Salida ...");
+//                    mens.append(System.getProperty("line.separator"));
                     Thread.sleep(500);
                     daoorden.imprimir(idorden);
-                    mens.append("Orden N° "+idorden+" Generada con exito");
-                    mens.append(System.getProperty("line.separator"));
-                    mens.setCaretPosition(mens.getDocument().getLength());
+                    mens.setText("Orden N° "+idorden+" Generada con exito");
+//                    mens.append(System.getProperty("line.separator"));
+//                    mens.setCaretPosition(mens.getDocument().getLength());
+                    Thread.sleep(500);
+                    mens.setVisible(false);
                     salir.setEnabled(true);
                
                
@@ -97,39 +87,20 @@ public class DetalleOrdenSalidaDAO{
             } catch (InterruptedException ex) {
                  Logger.getLogger(DetalleOrdenSalidaDAO.class.getName()).log(Level.SEVERE, null, ex);
              }finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      }
          }
       };
       Thread hilo = new Thread (miRunnable);
       hilo.start();
    
-     
-     
-         
-        
-      
-//        if  (rs.next()){
-//            
-//           
-//            id=(rs.getLong("iddet"));
-//            //JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSAAAA");
-//          
-//        }
-       
-       
-
-        
-          
-            
-//return id;    
+   
 }
      
 public void eliminar(DetalleOrdeSalidaEntrada det){
     
-    Conexion conexion= new Conexion();
-        Statement st=null;
-        ResultSet rs=null;
+        ConexionBD Cbd = new ConexionBD();
+        Statement st=null;       
         PreparedStatement ps=null;
 //        boolean valida=false;
      try{
@@ -138,28 +109,19 @@ public void eliminar(DetalleOrdeSalidaEntrada det){
             
           String sql=("SELECT * from sp_eliminardetorden(?,?,?)"); 
         
-            ps=conexion.getConnection().prepareStatement(sql);
+            ps=Cbd.conectar().prepareStatement(sql);
             ps.setLong(1, det.getId());
             ps.setBigDecimal(2,new BigDecimal(det.getCantidad()));
             ps.setLong(3, det.getIdproducto());
-            rs = ps.executeQuery();
-        
-      
-//      
-//        if  (rs.next()){
-//            JOptionPane.showMessageDialog(null,"PRODUCTO RETIRADO DE LA VENTA CORRECTAMENTE");
-//
-// 
-//        }
-        rs.close();
-        ps.close();
+            Cbd.actualizarDatos(ps);
+ 
 
         }
      catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
             
      }
     

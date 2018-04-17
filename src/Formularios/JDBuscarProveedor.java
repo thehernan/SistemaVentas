@@ -7,7 +7,6 @@ package Formularios;
 
 import ClasesGlobales.Mayusculas;
 import DAO.ProveedorDAO;
-import Pojos.Compras;
 import Pojos.Proveedor;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +33,13 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
     public JDBuscarProveedor(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        listprov=daoproveedor.mostrarproveedor(jtabla);
+        mostrar();
         this.setLocationRelativeTo(null);
     }
     public JDBuscarProveedor(java.awt.Frame parent, boolean modal,JIFIngresoProducto IngresoProd) {
         super(parent, modal);
         initComponents();
-        listprov=daoproveedor.mostrarproveedor(jtabla);
+        mostrar();
         this.IngresoProd=IngresoProd;
         this.setLocationRelativeTo(null);
       
@@ -49,11 +48,40 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
      public JDBuscarProveedor(java.awt.Frame parent, boolean modal,JIFIngresoProdPendiente frmprodpend) {
         super(parent, modal);
         initComponents();
-        listprov=daoproveedor.mostrarproveedor(jtabla);
+        mostrar();
         this.setLocationRelativeTo(null);
         this.frmprodpend=frmprodpend;
         op= "PENDIENTES";
     }
+     
+     public void mostrar(){
+     Runnable runnable = new Runnable() {
+
+         @Override
+         public void run() {
+//             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+             jlblimagencarga.setVisible(true);
+             jlblletracarga.setVisible(true);
+             listprov=daoproveedor.mostrarproveedor(jtabla);
+              jlblimagencarga.setVisible(false);
+             jlblletracarga.setVisible(false);
+             
+         }
+     };
+     Thread T = new Thread(runnable);
+     T.start();
+     }
+     
+      public synchronized void sensitiva(){
+         jlblimagencarga.setVisible(true);
+         jlblletracarga.setVisible(true);
+         String razonS= jtfrazonsocial.getText().trim().toUpperCase();
+        listprov=daoproveedor.busquedasensitivaproveedor("NOMBRE", razonS,jtabla);
+         jlblimagencarga.setVisible(false);
+         jlblletracarga.setVisible(false);
+     }
+     
+     
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,6 +93,8 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jlblimagencarga = new javax.swing.JLabel();
+        jlblletracarga = new javax.swing.JLabel();
         jtfrazonsocial = new javax.swing.JTextField();
         jbtnaceptar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -73,9 +103,17 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
         jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("BUSCAR PROVEEDOR");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 160, 190, 240));
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 370, -1, -1));
 
         jtfrazonsocial.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfrazonsocial.setText("NOMBRE O RAZON SOCIAL");
@@ -93,6 +131,9 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
             }
         });
         jtfrazonsocial.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtfrazonsocialKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfrazonsocialKeyReleased(evt);
             }
@@ -100,9 +141,10 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
                 jtfrazonsocialKeyTyped(evt);
             }
         });
+        jPanel1.add(jtfrazonsocial, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 69, 661, -1));
 
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
         jbtnaceptar.setText("Aceptar");
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -110,28 +152,31 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
                 jbtnaceptarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(797, 62, -1, -1));
 
         jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtabla.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jtabla);
 
-        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 106, 890, 432));
+
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("BUSCAR PROVEEDOR");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -151,35 +196,7 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jtfrazonsocial, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbtnaceptar))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)))
-                .addGap(18, 18, 18))
-            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfrazonsocial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnaceptar))
-                .addGap(9, 9, 9)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-                .addGap(24, 24, 24))
-        );
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 918, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -197,6 +214,7 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
 
     private void jtfrazonsocialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfrazonsocialActionPerformed
         // TODO add your handling code here:
+       
     }//GEN-LAST:event_jtfrazonsocialActionPerformed
 
     private void jtfrazonsocialFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfrazonsocialFocusGained
@@ -217,8 +235,7 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
 
     private void jtfrazonsocialKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrazonsocialKeyReleased
         // TODO add your handling code here:
-        String razonS= jtfrazonsocial.getText().trim().toUpperCase();
-        listprov=daoproveedor.busquedasensitivaproveedor("NOMBRE", razonS,jtabla);
+        
     }//GEN-LAST:event_jtfrazonsocialKeyReleased
 
     private void jbtnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnaceptarActionPerformed
@@ -236,14 +253,14 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
                 IngresoProd.validaguardar();
                 this.dispose(); 
             }
-            if(op.equals("PENDIENTES")){
-             
-               proveedor.setIdproveedor(proveedor.getIdproveedor());
-               proveedor.setNombrerazons(proveedor.getNombrerazons());
-               proveedor.setRut(proveedor.getRut());
-               frmprodpend.setproveedor(proveedor);
-               this.dispose(); 
-            }
+//            if(op.equals("PENDIENTES")){
+//             
+//               proveedor.setIdproveedor(proveedor.getIdproveedor());
+//               proveedor.setNombrerazons(proveedor.getNombrerazons());
+//               proveedor.setRut(proveedor.getRut());
+//               frmprodpend.setproveedor(proveedor);
+//               this.dispose(); 
+//            }
         
         
         
@@ -257,8 +274,28 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
 
     private void jtfrazonsocialKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrazonsocialKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfrazonsocial);
+//        mayus.convertirmayus(jtfrazonsocial);
     }//GEN-LAST:event_jtfrazonsocialKeyTyped
+
+    private void jtfrazonsocialKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrazonsocialKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+   //             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+               sensitiva();
+
+            }
+            };
+            Thread T = new Thread(runnable);
+            T.start();
+        
+        
+        }
+            
+    }//GEN-LAST:event_jtfrazonsocialKeyPressed
 
     /**
      * @param args the command line arguments
@@ -308,6 +345,8 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnaceptar;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
     private javax.swing.JTable jtabla;
     private javax.swing.JTextField jtfrazonsocial;
     // End of variables declaration//GEN-END:variables

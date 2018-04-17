@@ -6,13 +6,11 @@
 package DAO;
 
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import Pojos.Familia;
-import Pojos.Sucursal;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -27,144 +25,149 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FamiliaDAO {
     
-public void mostrarfamilia(JTable tabla){
-        
+    
+    
+public List<Familia> mostrarfamilia(JTable tabla){
+         ConexionBD Cbd = new ConexionBD();
        DefaultTableModel modelo= new DefaultTableModel(){
-  public boolean isCellEditable(int row, int column) {
-//      if (column == 5) return true;
-//else
- return false;
-}
-  };      
- String titulos[]={"ID","DESCRIPCION"};
- modelo.setColumnIdentifiers(titulos);
- 
- Conexion conexion = new Conexion();
+      public boolean isCellEditable(int row, int column) {
+    //      if (column == 5) return true;
+    //else
+     return false;
+    }
+      };      
+     String titulos[]={"DESCRIPCION"};
+     modelo.setColumnIdentifiers(titulos);
 
+     
+     List<Familia> listfamilia= new ArrayList<>();
     
      
     try{
 	     
         String sql=("SELECT * from sp_mostrarfamilia()"); 
-        PreparedStatement ps = conexion.getConnection().prepareStatement(sql);
-        ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[3];
+        PreparedStatement ps = Cbd.conectar().prepareStatement(sql);
+        ResultSet rs= Cbd.RealizarConsulta(ps);
+        Object datosR[] = new Object[1];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
-                         
-                     datosR[i] = rs.getObject("id");
-                     i++;
-                     datosR[i] = rs.getObject("vdescripcion");
-                     i++;
+                   
+            Familia familia= new Familia();
+            familia.setIdfamilia(rs.getLong("id"));
+            familia.setDescripcion(rs.getString("vdescripcion"));
+            familia.setObservacion(rs.getString("vobservacion"));
+                    
+           
+             datosR[0] = familia.getDescripcion();
+         
 //                     datosR[i] = rs.getObject("vobservacion");
 //                     i++;
-                     
-                    modelo.addRow(datosR);
-		}
+
+            modelo.addRow(datosR);
+            listfamilia.add(familia);
         }
         tabla.setModel(modelo);
-        tabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        tabla.getColumnModel().getColumn(0).setMinWidth(0);
-        tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-        ps.close();
-        rs.close();
+       
+      
 
                 
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-               conexion.devolverConexionPool();
+               Cbd.desconectar();
             }    
-    
+    return listfamilia;
     }
     
-    public void busquedasensitivafamilia(String tipoB,String cadena,JTable tabla){
-        
+public List<Familia> busquedasensitivafamilia(String tipoB,String cadena,JTable tabla){
+         ConexionBD Cbd = new ConexionBD();
        DefaultTableModel modelo= new DefaultTableModel(){
-    public boolean isCellEditable(int row, int column) {
-  //      if (column == 5) return true;
-  //else
-   return false;
-  }
-    };      
-   String titulos[]={"ID","DESCRIPCION"};
-   modelo.setColumnIdentifiers(titulos);
+        public boolean isCellEditable(int row, int column) {
+      //      if (column == 5) return true;
+      //else
+       return false;
+      }
+        };      
+       String titulos[]={"DESCRIPCION"};
+       modelo.setColumnIdentifiers(titulos);
 
-   Conexion conexion = new Conexion();
-  
+      
+       List<Familia> listfamilia= new ArrayList<>();
      
     try{
       
         String sql=("SELECT * from sp_busquedasensitivafamilia(?,?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
         ps.setString(1, tipoB);
         ps.setString(2, cadena);
-        ResultSet rs= ps.executeQuery();
+        ResultSet rs= Cbd.RealizarConsulta(ps);
         Object datosR[] = new Object[2];
         while (rs.next()){
-                     for(int i =0; i<=1; i++){
-                         
-                     datosR[i] = rs.getObject("id");
-                     i++;
-                     datosR[i] = rs.getObject("vdescripcion");
-                     i++;
+           
+
+            Familia familia= new Familia();
+            familia.setIdfamilia(rs.getLong("id"));
+            familia.setDescripcion(rs.getString("vdescripcion"));
+            familia.setObservacion(rs.getString("vobservacion"));
+                    
+           
+             datosR[0] = familia.getDescripcion();
+         
 //                     datosR[i] = rs.getObject("vobservacion");
 //                     i++;
-                    
-                    
-                    modelo.addRow(datosR);
-		}
+
+
+            modelo.addRow(datosR);
+            listfamilia.add(familia);
                      
         }
         tabla.setModel(modelo);
-        tabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        tabla.getColumnModel().getColumn(0).setMinWidth(0);
-        tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-        rs.close();
-        ps.close();
+        if(modelo.getRowCount()>0){
+            tabla.setRowSelectionInterval(0, 0);
+        
+        }
+       
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
             }    
 
-    
+        return listfamilia;
     }
 
 public Familia buscarfamilia(String tipoB,long id){
-
+     ConexionBD Cbd = new ConexionBD();
     Familia familia= new Familia();
-    Conexion conexion = new Conexion();
+   
      try{
          
 //	st= (Statement)miconexion.createStatement();
          System.out.println("SELECT * from sp_busquedafamilia('"+tipoB+"',"+id+")");
-      String sql=("SELECT * from sp_busquedafamilia(?,?)"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
-      ps.setString(1, tipoB);
-      ps.setLong(2, id);
-      ResultSet rs = ps.executeQuery();
-//      FileInputStream fis ;
-//      byte[] vacio= new byte[0];
-        if (rs.next()){
-                     familia.setIdfamilia(rs.getInt("id"));
-                     familia.setDescripcion(rs.getString("vdescripcion"));
-                     familia.setObservacion(rs.getString("vobservacion")) ;
-                
-        
-        }
+        String sql=("SELECT * from sp_busquedafamilia(?,?)"); 
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+        ps.setString(1, tipoB);
+        ps.setLong(2, id);
+        ResultSet rs = Cbd.RealizarConsulta(ps);
+  //      FileInputStream fis ;
+  //      byte[] vacio= new byte[0];
+          if (rs.next()){
+               familia.setIdfamilia(rs.getInt("id"));
+               familia.setDescripcion(rs.getString("vdescripcion"));
+               familia.setObservacion(rs.getString("vobservacion")) ;
 
-        ps.close();
-        rs.close();
+
+          }
+
+      
 //	
         } catch(Exception e)
             {
 //            JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      }
      return familia;
 
@@ -176,31 +179,27 @@ public void insertarfamilia(Familia familia){
 //  byte[] FOTO= cliente.getImg();
   
 //    System.out.println("fotoinsert"+FOTO);
-        PreparedStatement preparedStatement = null;
-        Conexion conexion= new Conexion();
+        PreparedStatement ps = null;
+         ConexionBD Cbd = new ConexionBD();
        
      try{
             
           
             String insertImageSql = "SELECT * from sp_insertarfamilia(?,?)";
 //            String insertImageSql = "UPDATE alumno SET foto=? where id_alumno=?;";
-            preparedStatement = conexion.getConnection().prepareStatement(insertImageSql);
+            ps= Cbd.conectar().prepareStatement(insertImageSql);
             
-////            System.out.println("rutainsert"+ruta);
-////            File file = new File(ruta);
-////            FileInputStream fis = new FileInputStream(file);
-//            InputStream fis = new ByteArrayInputStream(FOTO); 
-//            System.out.println("fisinset"+fis);
-            preparedStatement.setString(1,familia.getDescripcion());
-            preparedStatement.setString(2,familia.getObservacion());
+
+            ps.setString(1,familia.getDescripcion());
+            ps.setString(2,familia.getObservacion());
          
 //            preparedStatement.setString(6,PRIORITARIO);
 //            preparedStatement.setBinaryStream(7,fis);
             
             
             
-            preparedStatement.execute();
-            preparedStatement.close();
+            Cbd.actualizarDatos(ps);
+           
 
         }
      catch(Exception e)
@@ -208,40 +207,37 @@ public void insertarfamilia(Familia familia){
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
      
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      }
 
 }
 public void editarfamilia(Familia familia){
 
-  
-  Conexion conexion = new Conexion();
-
+     ConexionBD Cbd = new ConexionBD();
      try{
         
 //	InputStream fis = new ByteArrayInputStream(FOTO); 
        
       // System.out.println("SELECT * from sp_editaralumno('"+RUT+"','"+NOMBRE+"','"+APELLIDO+"','"+CURSO+"','"+SECCION+"','"+PRIORITARIO+"','"+FOTO+"')");
      String sql=("SELECT * from sp_editarfamilia(?,?,?)");         
-       PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+       PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
        
             ps.setLong(1,familia.getIdfamilia());
-             ps.setString(2,familia.getDescripcion());
+            ps.setString(2,familia.getDescripcion());
             ps.setString(3,familia.getObservacion());
           
 //            ps.setString(7,PRIORITARIO);
 //            ps.setBinaryStream(8, fis);
-            ps.execute();
-            ps.close();
-//       if  (rs.next()){
-            JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
+            Cbd.actualizarDatos(ps);
+        //       if  (rs.next()){
+            JOptionPane.showMessageDialog(null,"Familia editada exitosamente");
 //        }
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }   finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      }     
             
            
@@ -252,26 +248,24 @@ public void editarfamilia(Familia familia){
 }
 public void eliminarfamilia(long idfamilia){
  
-    Conexion conexion = new Conexion();
-
+     ConexionBD Cbd = new ConexionBD();
      try{
 	
         System.out.println("SELECT * from sp_eliminarfamilia("+idfamilia+")");
         String sql=("SELECT * from sp_eliminarfamilia(?)");
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idfamilia);
-        ResultSet rs= ps.executeQuery();
-       if  (rs.next()){
-            JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
-        }
-       rs.close();
-       ps.close();
+        Cbd.actualizarDatos(ps);
+//       if  (rs.next()){
+            JOptionPane.showMessageDialog(null,"Familia eliminada exitosamente");
+//        }
+     
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
             }    
  
     
@@ -282,32 +276,31 @@ public void eliminarfamilia(long idfamilia){
 
 public boolean duplicado(long id,String cadena,String tipoop){
 
-    Conexion conexion = new Conexion();
+     ConexionBD Cbd = new ConexionBD();
     ResultSet rs=null;
     boolean valida=false;
      try{
 //	st= (Statement)miconexion.createStatement();
          System.out.println("ID"+id+"cadena"+cadena+"op"+tipoop);
       String sql=("SELECT * from sp_duplicadofamilia(?,?,?)"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+      PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
       ps.setString(1, cadena);
       ps.setLong(2, id);
       ps.setString(3, tipoop);
-      rs = ps.executeQuery();
+      rs = Cbd.RealizarConsulta(ps);
 //      FileInputStream fis ;
 //      byte[] vacio= new byte[0];
         if (rs.next()){
             valida= rs.getBoolean("vvalida");
         }
 
-        ps.close();
-        rs.close();
+      
 //	
         } catch(Exception e)
             {
 //            JOptionPane.showMessageDialog(null, e.getMessage());
             } finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      
      }
      return valida;
@@ -317,17 +310,18 @@ public boolean duplicado(long id,String cadena,String tipoop){
  public List<Familia> llenarcombo(JComboBox combo){
         DefaultComboBoxModel modelo = new DefaultComboBoxModel();
         
-        Conexion conexion = new Conexion();
+         ConexionBD Cbd = new ConexionBD();
         List<Familia> listfamilia= new ArrayList<>();
-        Statement st=null;
+        PreparedStatement ps=null;
         ResultSet rs=null;
         
      
     try{
-	st= conexion.getConnection().createStatement();
+	
       
-        rs=st.executeQuery("SELECT * from sp_mostrarfamilia()"); 
+        ps=Cbd.conectar().prepareStatement("SELECT * from sp_mostrarfamilia()"); 
 //        Object datosR[] = new Object[1];
+        rs=Cbd.RealizarConsulta(ps);
         modelo.addElement("Todo");
         listfamilia.add(new Familia());
         while (rs.next()){
@@ -344,7 +338,7 @@ public boolean duplicado(long id,String cadena,String tipoop){
             {
 //            JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
             }    
     return listfamilia;
     }

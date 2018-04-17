@@ -9,6 +9,7 @@ import ClasesGlobales.Mayusculas;
 import DAO.FamiliaDAO;
 import Pojos.Familia;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
+import java.util.List;
 
 /**
  *
@@ -23,11 +24,12 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
     Familia familia ;
     JIProductos productos;
     Mayusculas mayus = new Mayusculas ();
+    List<Familia> listfamili;
     public JDBuscarFamilia(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.setLocationRelativeTo(null);
-        daofamilia.mostrarfamilia(jtablafamilia);
+//        this.setLocationRelativeTo(null);
+//        listfamili=daofamilia.mostrarfamilia(jtablafamilia);
 //         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 //        addWindowListener(new java.awt.event.WindowAdapter() {
 //            @Override
@@ -36,12 +38,13 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
 //            }
 //        });
     }
-     public JDBuscarFamilia(java.awt.Frame parent, boolean modal,Familia familia,JIProductos productos) {
+     public JDBuscarFamilia(java.awt.Frame parent, boolean modal,JIProductos productos) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        daofamilia.mostrarfamilia(jtablafamilia);
-        this.familia=familia;
+        
+       mostrar();
+//        this.familia=familia;
         this.productos=productos;
 //         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 //        addWindowListener(new java.awt.event.WindowAdapter() {
@@ -51,10 +54,36 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
 //            }
 //        });
     }
+     public void mostrar(){
+     Runnable runnable = new Runnable() {
+
+         @Override
+         public void run() {
+//             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+             jlblimagencarga.setVisible(true);
+             jlblletracarga.setVisible(true);
+              listfamili=daofamilia.mostrarfamilia(jtablafamilia);
+              jlblimagencarga.setVisible(false);
+             jlblletracarga.setVisible(false);
+             
+         }
+     };
+     Thread T = new Thread(runnable);
+     T.start();
+     
+     }
+     public synchronized void sensitiva(){
+         jlblimagencarga.setVisible(true);
+         jlblletracarga.setVisible(true);
+         String descrip=jtfdescripcion.getText().toUpperCase();
+         listfamili=daofamilia.busquedasensitivafamilia("DESCRIPCION",descrip,jtablafamilia);
+         jlblimagencarga.setVisible(false);
+         jlblletracarga.setVisible(false);
+     }
    
-    public void close(){
-        jbtnaceptar.doClick();
-    }
+//    public void close(){
+//        jbtnaceptar.doClick();
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -66,6 +95,8 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jlblimagencarga = new javax.swing.JLabel();
+        jlblletracarga = new javax.swing.JLabel();
         jtfdescripcion = new javax.swing.JTextField();
         jbtnaceptar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -74,12 +105,19 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
         jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("BUSCAR FAMILIA");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jtfdescripcion.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, 190, 240));
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 360, -1, -1));
+
+        jtfdescripcion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtfdescripcion.setText("DESCRIPCION");
         jtfdescripcion.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -87,6 +125,11 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jtfdescripcionFocusLost(evt);
+            }
+        });
+        jtfdescripcion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfdescripcionActionPerformed(evt);
             }
         });
         jtfdescripcion.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -97,9 +140,10 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
                 jtfdescripcionKeyTyped(evt);
             }
         });
+        jPanel1.add(jtfdescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 76, 309, -1));
 
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
         jbtnaceptar.setText("Aceptar");
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -107,28 +151,31 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
                 jbtnaceptarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(698, 68, -1, -1));
 
         jtablafamilia.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtablafamilia.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jtablafamilia.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtablafamilia.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jtablafamilia);
 
-        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 114, 781, 378));
+
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("BUSCAR FAMILIA DE PRODUCTOS");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -148,35 +195,7 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jtfdescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbtnaceptar)))
-                .addGap(21, 21, 21))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbtnaceptar)
-                    .addComponent(jtfdescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 822, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -208,8 +227,7 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
 
     private void jtfdescripcionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescripcionKeyReleased
         // TODO add your handling code here:
-        String descrip=jtfdescripcion.getText().trim().toUpperCase();
-       daofamilia.busquedasensitivafamilia("DESCRIPCION",descrip,jtablafamilia);
+        
         
     }//GEN-LAST:event_jtfdescripcionKeyReleased
 
@@ -217,10 +235,7 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
         // TODO add your handling code here:
         int index= jtablafamilia.getSelectedRow();
         if (index >=0 ){
-        long id = Long.parseLong(jtablafamilia.getValueAt(index, 0).toString());
-        String descripcion= jtablafamilia.getValueAt(index, 1).toString();
-        familia.setIdfamilia(id);
-        familia.setDescripcion(descripcion);
+        familia = listfamili.get(index);
         productos.setfamilia(familia);
         productos.validaguardar();
         this.dispose();
@@ -231,8 +246,23 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
 
     private void jtfdescripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescripcionKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfdescripcion);
+//        mayus.convertirmayus(jtfdescripcion);
     }//GEN-LAST:event_jtfdescripcionKeyTyped
+
+    private void jtfdescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfdescripcionActionPerformed
+        // TODO add your handling code here:
+       Runnable runnable = new Runnable() {
+
+         @Override
+         public void run() {
+//             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            sensitiva();
+             
+         }
+     };
+     Thread T = new Thread(runnable);
+     T.start();
+    }//GEN-LAST:event_jtfdescripcionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -282,6 +312,8 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnaceptar;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
     private javax.swing.JTable jtablafamilia;
     private javax.swing.JTextField jtfdescripcion;
     // End of variables declaration//GEN-END:variables

@@ -5,14 +5,15 @@
  */
 package DAO;
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import Pojos.DetalleCaja;
 import java.math.BigDecimal;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -24,10 +25,11 @@ import javax.swing.table.TableColumnModel;
  */
 public class DetalleCajaDAO {
     
+     ConexionBD Cbd = new ConexionBD();
+    DecimalFormat nf =new DecimalFormat("#.00");
+    
     public void insertar(DetalleCaja detallecaja,String tipo,String estado){
- 
-         
-        Conexion conexion = new Conexion();
+      
         Object idventa=null;
         Object idrepara=null;
      try{
@@ -45,12 +47,13 @@ public class DetalleCajaDAO {
             System.out.println("SELECT * from sp_insertardetallecaja("+idventa+","+idrepara+",'"+detallecaja.getDocumento()+"','"+detallecaja.getNumero()+"','"+ detallecaja.getIdcaja()+"',"+detallecaja.getPagocon()+",'"+estado+"',"+detallecaja.getAbono()+")");
             String insertImageSql = "SELECT * from sp_insertardetallecaja("+idventa+","+idrepara+",'"+detallecaja.getDocumento()+"','"+detallecaja.getNumero()+"','"+ detallecaja.getIdcaja()+"',"+detallecaja.getPagocon()+",'"+estado+"',"+detallecaja.getAbono()+")";
 
-           PreparedStatement ps = conexion.getConnection().prepareStatement(insertImageSql);                  
+           PreparedStatement ps =Cbd.conectar().prepareStatement(insertImageSql);                  
+        
+           
+           
+           
+           Cbd.RealizarConsulta(ps);
           
-           
-           
-            ps.execute();
-            ps.close();
             
 
         }
@@ -58,60 +61,43 @@ public class DetalleCajaDAO {
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-            conexion.devolverConexionPool();
+           Cbd.desconectar();
             
      }
     }
      
-      public void insertaregreso(DetalleCaja detallecaja){
- 
-         
-        Conexion conexion = new Conexion();
- 
+    public void insertaregreso(DetalleCaja detallecaja){    
+        ConexionBD Cbd = new ConexionBD();
      try{
                
             
             String insertImageSql = "SELECT * from sp_insertardetallecajaegreso(?,?,?)";
             
 
-           PreparedStatement ps = conexion.getConnection().prepareStatement(insertImageSql);                  
+           PreparedStatement ps = Cbd.conectar().prepareStatement(insertImageSql);                  
            ps.setLong(1, detallecaja.getIdcaja());
            ps.setString(2, detallecaja.getMotivoanulacion());
            ps.setBigDecimal(3,new BigDecimal(detallecaja.getAbono()));
           
            
            
-            ps.execute();
-            ps.close();
-            
+            Cbd.RealizarConsulta(ps);
+          
 
         }
      catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
             
      }
 
 }
     public void mostrar(JTable tabla,Long idcaja, JFormattedTextField total,
-            JFormattedTextField aperturo,JFormattedTextField cierre){
+            JFormattedTextField aperturo,JFormattedTextField cierre,JLabel cajero){
     
-//         DefaultTableModel modelo= new DefaultTableModel(){
-//             Class[] types = new Class[]{
-//                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,java.lang.Object.class
-//                     ,java.lang.Object.class,java.lang.Boolean.class
-//            };
-// 
-//        public boolean isCellEditable(int row, int column) {
-//        //      if (column == 5) return true;
-//        //else
-//        return false;
-//        }
-//        };      
-//        String titulos[]={"DOCUMENTO","NUMERO","NOMBRES","RUT","IMPORTE","TIPO OP.","ANULADA"};
-//        modelo.setColumnIdentifiers(titulos);
+        ConexionBD Cbd = new ConexionBD();
         DefaultTableModel modelo= new DefaultTableModel(
                 new String[]{"DOCUMENTO","NUMERO","NOMBRES","RUT","IMPORTE","TIPO OP.","MOTIVO","ANULADA"}, 0) {
  
@@ -131,19 +117,19 @@ public class DetalleCajaDAO {
             };
         tabla.setModel(modelo);
         
-        Conexion conexion = new Conexion();
-        NumberFormat nf = NumberFormat.getInstance();
+        
+        
          
          try{
              
              System.out.println("SELECT * from sp_mostrardetallecaja("+idcaja+")");
              String sql=("SELECT * from sp_mostrardetallecaja(?)");
-             PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+             PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
              ps.setLong(1, idcaja);
-             ResultSet rs = ps.executeQuery();
+             ResultSet rs = Cbd.RealizarConsulta(ps);
              
              String sql1=("SELECT * from sp_mostrardetallecajatotal(?)");
-             PreparedStatement ps1=conexion.getConnection().prepareStatement(sql1);
+             PreparedStatement ps1=Cbd.conectar().prepareStatement(sql1);
              ps1.setLong(1, idcaja);
              ResultSet rs1 = ps1.executeQuery();
              Object datosR[]= new Object[8];
@@ -174,6 +160,7 @@ public class DetalleCajaDAO {
                 total.setValue(rs1.getDouble("vtotal"));
                 cierre.setValue(rs1.getDouble("vcierra"));
                 aperturo.setValue(rs1.getDouble("vapertura"));
+                cajero.setText(rs1.getString("vcajero"));
              }
              
              TableColumnModel columnModel = tabla.getColumnModel();
@@ -195,7 +182,7 @@ public class DetalleCajaDAO {
          {
              JOptionPane.showMessageDialog(null, e.getMessage());
          }finally{
-             conexion.devolverConexionPool();
+            Cbd.desconectar();
              
          }
  

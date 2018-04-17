@@ -56,17 +56,21 @@ public class JDCambiarClave extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jbtncambiar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtncambiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Checked.png"))); // NOI18N
+        jbtncambiar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
+        jbtncambiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
+        jbtncambiar.setText("Aceptar");
+        jbtncambiar.setBorderPainted(false);
+        jbtncambiar.setContentAreaFilled(false);
         jbtncambiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtncambiarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtncambiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 130, -1, -1));
+        jPanel1.add(jbtncambiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, -1, -1));
 
         jtfantiguaclave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtfantiguaclave.addActionListener(new java.awt.event.ActionListener() {
@@ -74,25 +78,25 @@ public class JDCambiarClave extends javax.swing.JDialog {
                 jtfantiguaclaveActionPerformed(evt);
             }
         });
-        jPanel1.add(jtfantiguaclave, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, 240, -1));
+        jPanel1.add(jtfantiguaclave, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 280, -1));
 
         jtfnuevaclave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jPanel1.add(jtfnuevaclave, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 50, 240, -1));
+        jPanel1.add(jtfnuevaclave, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, 280, -1));
 
         jtfrepetirclave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jPanel1.add(jtfrepetirclave, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, 240, -1));
+        jPanel1.add(jtfrepetirclave, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 280, -1));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("ANTIGUA CLAVE:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 160, 20));
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel1.setText("Antigua Clave:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 100, 20));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("NUEVA CLAVE:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
+        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel2.setText("Nueva Clave:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setText("REPETIR NUEVA CLAVE:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel3.setText("Repetir Nueva Clave:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -104,9 +108,7 @@ public class JDCambiarClave extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -118,11 +120,11 @@ public class JDCambiarClave extends javax.swing.JDialog {
 
     private void jbtncambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncambiarActionPerformed
         // TODO add your handling code here:
-        if (CifradoMD5.Cifrado(new String (jtfantiguaclave.getPassword())).equals(user.getClave())){
+        if (CifradoMD5.encriptaEnMD5(new String (jtfantiguaclave.getPassword())).equals(user.getClave())){
             if(new String(jtfnuevaclave.getPassword()).length()>0 && new String(jtfrepetirclave.getPassword()).length()>0){
                 if (new String(jtfnuevaclave.getPassword()).trim().equals(new String(jtfrepetirclave.getPassword()).trim())){
                 
-                    user.setClave(CifradoMD5.Cifrado(new String(jtfnuevaclave.getPassword())));
+                    user.setClave(CifradoMD5.encriptaEnMD5(new String(jtfnuevaclave.getPassword())));
                     daouser.editar(user);
                     fromuser.setuser(user);
                     fromuser.validaguardar();

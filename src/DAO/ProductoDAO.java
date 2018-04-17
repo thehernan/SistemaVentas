@@ -6,13 +6,10 @@
 package DAO;
 
 import ClasesGlobales.ColorRowTabla;
-import Conexion.Conexion;
-import Formularios.JIFOrdenSalida;
-import Pojos.DetalleCaja;
-import Pojos.DetalleOrdeSalidaEntrada;
+
+import Conexion.ConexionBD;
 import Pojos.Producto;
 import java.awt.HeadlessException;
-import java.awt.Image;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -20,7 +17,7 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +26,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -47,9 +44,10 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author info2017
  */
 public class ProductoDAO {
-    
+   
+     DecimalFormat nf =new DecimalFormat("#.00");
     public List<Producto> mostrarproducto(JTable tabla,long idsucursal) {
-        
+         ConexionBD Cbd = new ConexionBD();
         DefaultTableModel modelo= new DefaultTableModel(){
         public boolean isCellEditable(int row, int column) {
         //      if (column == 5) return true;
@@ -60,7 +58,20 @@ public class ProductoDAO {
          String titulos[]={"CODIGO","DESCRIPCION","FAMILIA"};
          modelo.setColumnIdentifiers(titulos);
 //         tabla.setModel(modelo);
-         Conexion conexion = new Conexion();
+          tabla.setModel(modelo);
+          
+          TableColumnModel columnModel = tabla.getColumnModel();
+          System.out.println("councolumn"+columnModel.getColumnCount());
+//         if (columnModel.getColumnCount()>0){
+       
+        columnModel.getColumn(0).setPreferredWidth(120);
+        columnModel.getColumn(1).setPreferredWidth(550);
+        columnModel.getColumn(2).setPreferredWidth(300);
+    
+//        }
+        
+//         Conexion conexion = new Conexion();
+      
          ResultSet rs=null;
          PreparedStatement ps=null;
          List<Producto> listprod = new ArrayList<>();
@@ -69,10 +80,10 @@ public class ProductoDAO {
 
         try{
 
-            String sql=("SELECT * from sp_mostrarproducto(?)");
-            ps= conexion.getConnection().prepareStatement(sql);
+            
+            ps= Cbd.conectar().prepareStatement("SELECT * from sp_mostrarproducto(?)");
             ps.setLong(1, idsucursal);
-            rs= ps.executeQuery();
+            rs= Cbd.RealizarConsulta(ps);
             Object datosR[] = new Object[3];
             while (rs.next()){
                 Producto prod = new Producto();
@@ -83,26 +94,21 @@ public class ProductoDAO {
                  datosR[0] =prod.getCodigo() ;
                  datosR[1] = prod.getDescripcion();
                  datosR[2]=rs.getString("vfamilia");
-             modelo.addRow(datosR);
-             listprod.add(prod);
+                modelo.addRow(datosR);
+                listprod.add(prod);
                     
             }
             
-            tabla.setModel(modelo);
-            TableColumnModel columnModel = tabla.getColumnModel();
-            columnModel.getColumn(0).setPreferredWidth(120);
-            columnModel.getColumn(1).setPreferredWidth(550);
-            columnModel.getColumn(2).setPreferredWidth(300);
+           
           
-             rs.close();
-             ps.close();
+             
 
             } catch(Exception e )
                 {
                 JOptionPane.showMessageDialog(null, e.getMessage());
                 }finally{
                      
-                      conexion.devolverConexionPool();
+                      Cbd.desconectar();
                       
  
                       
@@ -112,7 +118,7 @@ public class ProductoDAO {
     }
     
     public List<Producto> busquedasensitivaproducto(JTable tabla,String tipoB,String cadena,long idsucur,long idfamilia){
-        
+         ConexionBD Cbd = new ConexionBD();
         DefaultTableModel modelo= new DefaultTableModel(){
         public boolean isCellEditable(int row, int column) {
       //      if (column == 5) return true;
@@ -123,20 +129,26 @@ public class ProductoDAO {
     String titulos[]={"CODIGO","DESCRIPCION","FAMILIA"};
     modelo.setColumnIdentifiers(titulos);
     tabla.setModel(modelo);
-  
-    Conexion conexion = new Conexion();
+    tabla.setModel(modelo);
+    TableColumnModel columnModel = tabla.getColumnModel();
+//     if (columnModel.getColumnCount()>0){
+    columnModel.getColumn(0).setPreferredWidth(120);
+    columnModel.getColumn(1).setPreferredWidth(550);
+    columnModel.getColumn(2).setPreferredWidth(300);
+//     }
+   
     ResultSet rs=null;
     PreparedStatement ps=null; 
      List<Producto> listprod = new ArrayList<>();
     try{
 	
         String sql=("SELECT * from sp_busquedasensitivaproducto(?,?,?,?)"); 
-        ps= conexion.getConnection().prepareStatement(sql);
+        ps= Cbd.conectar().prepareStatement(sql);
         ps.setString(1, tipoB);
         ps.setString(2, cadena);
         ps.setLong(3, idsucur);
         ps.setLong(4, idfamilia);
-        rs= ps.executeQuery();
+        rs= Cbd.RealizarConsulta(ps);
         Object datosR[] = new Object[3];
         while (rs.next()){
              Producto prod = new Producto();
@@ -150,45 +162,31 @@ public class ProductoDAO {
             modelo.addRow(datosR);
             listprod.add(prod);
         }
-        tabla.setModel(modelo);
-        TableColumnModel columnModel = tabla.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(120);
-        columnModel.getColumn(1).setPreferredWidth(550);
-        columnModel.getColumn(2).setPreferredWidth(300);
-          
+        
+        if(modelo.getRowCount()>0){
+            tabla.setRowSelectionInterval(0, 0);
+        
+        }
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
-                 if(rs!=null){
-                        try {
-                            rs.close();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                      }
-                      if(ps!=null){
-                        try {
-                            ps.close();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                   }   
+                Cbd.desconectar();
+                
             }    
     return listprod;
     }
  public void llenarcombobox(JComboBox combo,long idsucur){
  
-  Conexion conexion = new Conexion();
+  ConexionBD Cbd = new ConexionBD();
   ResultSet rs=null;  
   PreparedStatement ps=null;  
      
     try{
         
-	ps=conexion.getConnection().prepareStatement("SELECT * from sp_mostrarproducto(?)");
+	ps=Cbd.conectar().prepareStatement("SELECT * from sp_mostrarproducto(?)");
         ps.setLong(1, idsucur);
-         rs=ps.executeQuery();
+         rs=Cbd.RealizarConsulta(ps);
         
        // Object datosR[] = new Object[3];
         while (rs.next()){
@@ -209,108 +207,103 @@ public class ProductoDAO {
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
-                if(rs!=null){
-                    try {
-                        rs.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                      }
-                if(ps!=null){
-                    try {
-                        ps.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-               }   
+               Cbd.desconectar();
+                
             }    
 
     
     }
 
-public Producto buscarproducto(String tipoB,long id,long idsucur,JLabel jlbl,String cadena){
+public Producto buscarproducto(String tipoB,long id,long idsucur,String cadena) {
 //Connection miconexion = conectar.Connect();
 //    Statement st=null;
-     ImageIcon imageIcon= new ImageIcon( getClass().getResource("/imagenes/product.png"));
+     ConexionBD Cbd = new ConexionBD();
+    ImageIcon imageIcon= new ImageIcon( getClass().getResource("/imagenes/product.png"));
     Producto producto= new Producto();
-    Conexion conexion = new Conexion();
+  
     PreparedStatement ps=null;
     ResultSet rs=null;
     
      try{
 //	st= (Statement)miconexion.createStatement();
-        System.out.println("SELECT * from sp_busquedaproducto('"+tipoB+"',"+id+",'"+cadena+"')");
+      System.out.println("SELECT * from sp_busquedaproducto('"+tipoB+"',"+id+",'"+cadena+"')");
       String sql=("SELECT * from sp_busquedaproducto(?,?,?,?)"); 
-      ps=conexion.getConnection().prepareStatement(sql);
+      ps=Cbd.conectar().prepareStatement(sql);
       ps.setString(1, tipoB);
       ps.setLong(2, id);
       ps.setLong(3, idsucur);
       ps.setString(4, cadena);
     
-      rs = ps.executeQuery();
+      rs = Cbd.RealizarConsulta(ps);
       FileInputStream fis ;
 //      byte[] vacio= new byte[0];
         if (rs.next()){
            
-                     producto.setIdproducto(rs.getLong("id"));
-                     producto.setCodigo(rs.getString("vcodigo")) ;
-                     producto.setDescripcion(rs.getString("vdescripcion"));
-                    
-                     producto.setObservacion(rs.getString("vobservacion"));
-                     producto.setIdfamilia(rs.getLong("vidfamilia"));
-                     producto.setPrecio(rs.getDouble("vprecio"));
-                     producto.setCantidad(rs.getDouble("vcantidad"));                 
-                      byte[] imgBytes = rs.getBytes("vfoto");
-                     producto.setDescripfamilia(rs.getString("vfamilia"));
+         producto.setIdproducto(rs.getLong("id"));
+         producto.setCodigo(rs.getString("vcodigo")) ;
+         producto.setDescripcion(rs.getString("vdescripcion"));
+
+         producto.setObservacion(rs.getString("vobservacion"));
+         producto.setIdfamilia(rs.getLong("vidfamilia"));
+         producto.setPrecio(rs.getDouble("vprecio"));
+         producto.setPrecio1(rs.getDouble("vprecio1"));
+         producto.setPrecio2(rs.getDouble("vprecio2"));
+         producto.setPrecio3(rs.getDouble("vprecio3"));
+         producto.setMoneda(rs.getString("vmoneda"));
+         producto.setCantidad(rs.getDouble("vcantidad"));                 
+          byte[] imgBytes = rs.getBytes("vfoto");
+         producto.setDescripfamilia(rs.getString("vfamilia"));
 //                      System.out.println("byte"+rs.getBytes("vfoto"));
-                      producto.setMargenG(rs.getDouble("vmargen"));
-                      producto.setFoto(imgBytes);
-                      System.out.println("imgbytes"+imgBytes);
-                      imageIcon = new ImageIcon(imgBytes);
+          producto.setMargenG(rs.getDouble("vmargen"));
+          producto.setFoto(imgBytes);
+          System.out.println("imgbytes"+imgBytes);
+                      
+                      
+                      
+//                      imageIcon = new ImageIcon(imgBytes);
         }        
-                    ImageIcon imageUser = imageIcon;
-                    Image img = imageUser.getImage();
-                    Image newimg = img.getScaledInstance(jlbl.getWidth(), jlbl.getHeight(), java.awt.Image.SCALE_AREA_AVERAGING);
-                    imageUser = new ImageIcon(newimg);
-                    jlbl.setIcon(imageUser);       
+//                    ImageIcon imageUser = imageIcon;
+//                    Image img = imageUser.getImage();
+//                    Image newimg = img.getScaledInstance(jlbl.getWidth(), jlbl.getHeight(), java.awt.Image.SCALE_AREA_AVERAGING);
+//                    imageUser = new ImageIcon(newimg);
+//                    jlbl.setIcon(imageUser);       
 //	
         } catch(Exception e )
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
-                if(rs!=null){
-                    try {
-                        rs.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                  }
-                if(ps!=null){
-                    try {
-                        ps.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                   }   
+                Cbd.desconectar();
+//                if(rs!=null){
+//                    try {
+//                        rs.close();
+//                    } catch (SQLException ex) {
+//                        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                  }
+//                if(ps!=null){
+//                    try {
+//                        ps.close();
+//                    } catch (SQLException ex) {
+//                        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                   }   
             
      }
 return producto;
 }
 public void insertarproducto(Producto producto){
  
- 
+     ConexionBD Cbd = new ConexionBD();
     byte[] FOTO= producto.getFoto();  
    
-    Conexion conexion= new Conexion();
+   
     PreparedStatement  ps=null;       
      try{
             
           
-            String Sql = "SELECT * from sp_insertarproducto(?,?,?,?,?,?,?,?,?)";
+            String Sql = "SELECT * from sp_insertarproducto(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-            ps = conexion.getConnection().prepareStatement(Sql);
+            ps = Cbd.conectar().prepareStatement(Sql);
             
 
             InputStream fis = new ByteArrayInputStream(FOTO); 
@@ -321,14 +314,18 @@ public void insertarproducto(Producto producto){
             ps.setString(3,producto.getObservacion());
             ps.setLong(4,producto.getIdfamilia());
             ps.setBigDecimal(5,new BigDecimal(producto.getPrecio()));
-            ps.setBigDecimal(6,new BigDecimal(producto.getCantidad()));
-            ps.setBinaryStream(7,fis);
-            ps.setBigDecimal(8, new BigDecimal(producto.getMargenG()));
-            ps.setLong(9, producto.getId_sucursal());
+            ps.setBigDecimal(6,new BigDecimal(producto.getPrecio1()));
+            ps.setBigDecimal(7,new BigDecimal(producto.getPrecio2()));
+            ps.setBigDecimal(8,new BigDecimal(producto.getPrecio3()));
+            ps.setString(9,(producto.getMoneda()));
+            ps.setBigDecimal(10,new BigDecimal(producto.getCantidad()));
+            ps.setBinaryStream(11,fis);
+            ps.setBigDecimal(12, new BigDecimal(producto.getMargenG()));
+            ps.setLong(13, producto.getId_sucursal());
             
             
             
-            ps.execute();
+           Cbd.actualizarDatos(ps);
            
 
         }
@@ -336,14 +333,15 @@ public void insertarproducto(Producto producto){
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally {
-                conexion.devolverConexionPool();
-                if(ps!=null){
-                    try {
-                        ps.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        }
+               Cbd.desconectar();
+                  
+//                if(ps!=null){
+//                    try {
+//                        ps.close();
+//                    } catch (SQLException ex) {
+//                        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                        }
                            
      }
 
@@ -352,18 +350,18 @@ public void editarproducto(Producto producto){
 
 // precio=new BigDecimal(producto.getPrecio());
 // cantidad=new BigDecimal(producto.getCantidad());
- byte[] FOTO= producto.getFoto();  
+     ConexionBD Cbd = new ConexionBD();
+    byte[] FOTO= producto.getFoto();  
   
        
-        Conexion conexion = new Conexion();
- 
+      
 
      try{
 	InputStream fis = new ByteArrayInputStream(FOTO); 
        
       // System.out.println("SELECT * from sp_editaralumno('"+RUT+"','"+NOMBRE+"','"+APELLIDO+"','"+CURSO+"','"+SECCION+"','"+PRIORITARIO+"','"+FOTO+"')");
-        String sql=("SELECT * from sp_editarproducto(?,?,?,?,?,?,?,?)");         
-        PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+        String sql=("SELECT * from sp_editarproducto(?,?,?,?,?,?,?,?,?,?,?,?)");         
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
         
             ps.setLong(1,producto.getIdproducto());
             ps.setString(2,producto.getCodigo());
@@ -376,10 +374,14 @@ public void editarproducto(Producto producto){
             ps.setBinaryStream(6, fis);
             ps.setBigDecimal(7, new BigDecimal(producto.getMargenG()));
             ps.setBigDecimal(8, new BigDecimal(producto.getPrecio()));
-            ps.execute();
-            ps.close();
+            ps.setBigDecimal(9, new BigDecimal(producto.getPrecio1()));
+            ps.setBigDecimal(10, new BigDecimal(producto.getPrecio2()));
+            ps.setBigDecimal(11, new BigDecimal(producto.getPrecio3()));
+             ps.setString(12,producto.getMoneda());
+            Cbd.actualizarDatos(ps);
+           
 //       if  (rs.next()){
-            JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
+            JOptionPane.showMessageDialog(null,"Producto editado con exitosamente");
 //        }
 	
         } catch(Exception e)
@@ -387,30 +389,30 @@ public void editarproducto(Producto producto){
             JOptionPane.showMessageDialog(null, e.getMessage());
             } finally{
      
-            conexion.devolverConexionPool();
+           Cbd.desconectar();
      }       
             
 
 }
 public void eliminarproducto(long idproducto){
 
-    Conexion conexion = new Conexion();
+     ConexionBD Cbd = new ConexionBD();
      try{
 	String sql=("SELECT * from sp_eliminarproducto(?)");
       
-         PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+         PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
          ps.setLong(1, idproducto);
-         ResultSet rs= ps.executeQuery();
+         Cbd.actualizarDatos(ps);
       
-       if  (rs.next()){
-            JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
-        }
+//       if  (rs.next()){
+            JOptionPane.showMessageDialog(null,"Producto eliminado exitosamente");
+//        }
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
             }    
  
     
@@ -419,34 +421,49 @@ public void eliminarproducto(long idproducto){
 }
 public List<Producto> inventario(JTable tabla,long idsucursal,double stockmin,String tipob){
          DefaultTableModel modelo= new DefaultTableModel(){
+             
             public boolean isCellEditable(int row, int column) {
             //      if (column == 5) return true;
             //else
             return false;
             }
             };      
-            String titulos[]={"CODIGO","DESCRIPCION PROD.","PRECIO VENTA","INVENTARIO","FAMILIA","SUCURSAL"};
+            String titulos[]={"Codigo","Desc. Producto","Moneda","Precio","Precio1","Precio2","Precio3","Inventario","Familia","Sucursal"};
             modelo.setColumnIdentifiers(titulos);
-            tabla.setModel(modelo);
+            
         
         
       
-        ColorRowTabla colorrow= new ColorRowTabla(3, stockmin);
+        ColorRowTabla colorrow= new ColorRowTabla(7, stockmin);
         tabla.setDefaultRenderer (Object.class, colorrow );
-        tabla.setDefaultRenderer (Object.class, colorrow );
+////        tabla.setDefaultRenderer (Object.class, colorrow );
 //        tabla.requestFocus();
+          tabla.setModel(modelo);
+        
+         TableColumnModel columnModel = tabla.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(100);
+        columnModel.getColumn(1).setPreferredWidth(600);
+        columnModel.getColumn(2).setPreferredWidth(50);
+        columnModel.getColumn(3).setPreferredWidth(80);
+        columnModel.getColumn(4).setPreferredWidth(80);
+        columnModel.getColumn(5).setPreferredWidth(80);
+        columnModel.getColumn(6).setPreferredWidth(80);
+        columnModel.getColumn(7).setPreferredWidth(80);
+        columnModel.getColumn(8).setPreferredWidth(350);
+        columnModel.getColumn(9).setPreferredWidth(350);
         List<Producto> listprod= new ArrayList<>();
-         Conexion conexion = new Conexion();
+          ConexionBD Cbd = new ConexionBD();
          ResultSet rs=null;
-         NumberFormat nf =NumberFormat.getInstance();
+         
+        
          try{
                          
              String sql=("SELECT * from sp_mostrarinventario(?,?)");
-             PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+             PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
              ps.setLong(1, idsucursal);
              ps.setString(2, tipob);
-             rs = ps.executeQuery();
-             Object datosR[]= new Object[6];
+             rs = Cbd.RealizarConsulta(ps);
+             Object datosR[]= new Object[10];
              
              while (rs.next()){
                  
@@ -455,83 +472,97 @@ public List<Producto> inventario(JTable tabla,long idsucursal,double stockmin,St
                     prod.setCodigo(rs.getString("vcodigo"));
                     prod.setDescripcion( rs.getString("vdescripcion"));
                     prod.setPrecio(rs.getDouble("vprecio"));
+                    prod.setPrecio1(rs.getDouble("vprecio1"));
+                    prod.setPrecio2(rs.getDouble("vprecio2"));
+                    prod.setPrecio3(rs.getDouble("vprecio3"));
+                    prod.setMoneda(rs.getString("vmoneda"));
                     prod.setCantidad(rs.getDouble("vcantidad"));
                    
                      datosR[0] = prod.getCodigo();
                                 
                      datosR[1] = prod.getDescripcion();
-                   
-                     datosR[2] =nf.format( prod.getPrecio());
-                  
-                     datosR[3] = nf.format(prod.getCantidad());
-                     datosR[4] = rs.getObject("vfamilia");
-                     datosR[5] = rs.getObject("vsucusal");
+                     datosR[2] =prod.getMoneda();
+                     datosR[3] =nf.format(prod.getPrecio());
+                     datosR[4] =nf.format(prod.getPrecio1());
+                     datosR[5] =nf.format(prod.getPrecio2());
+                     datosR[6] =nf.format(prod.getPrecio3());
+                     datosR[7] =(prod.getCantidad());
+                     datosR[8] = rs.getObject("vfamilia");
+                     datosR[9] = rs.getObject("vsucusal");
                  
                     modelo.addRow(datosR);
 		listprod.add(prod);
              }
-             TableColumnModel columnModel = tabla.getColumnModel();
-            columnModel.getColumn(0).setPreferredWidth(100);
-            columnModel.getColumn(1).setPreferredWidth(550);
-            columnModel.getColumn(2).setPreferredWidth(80);
-            columnModel.getColumn(3).setPreferredWidth(80);
-            columnModel.getColumn(4).setPreferredWidth(200);
-            columnModel.getColumn(5).setPreferredWidth(200);
+           
           
 
            //  tabla.changeSelection(0,0,false,true);
             if (tabla.getRowCount()>0){
                 tabla.setRowSelectionInterval (0,0); 
-                tabla.setRowSelectionInterval(0, 0);
+               
             }
              
              //tabla.requestFocus();
        
              
-             ps.close();
-             rs.close(); 
-             conexion.devolverConexionPool();
+            
+            
              
          }
          catch(Exception e)
          {
              JOptionPane.showMessageDialog(null, e.getMessage());
          }finally{
-
+             Cbd.desconectar();
          }
          return listprod;
  
 }
  
-public List<Producto> busquedasensitivainventario(JTable tabla,String tipob,String cadena,long idsucur,long idfamilia){
-    
-       DefaultTableModel    modelo= new DefaultTableModel(){
-            public boolean isCellEditable(int row, int column) {
-            //      if (column == 5) return true;
-            //else
-            return false;
-            }
-            };      
-            String titulos[]={"CODIGO","DESCRIPCION PROD.","PRECIO VENTA","INVENTARIO","FAMILIA","SUCURSAL"};
-            modelo.setColumnIdentifiers(titulos);
-            tabla.setModel(modelo);
+public List<Producto> busquedasensitivainventario(JTable tabla,String tipob,String cadena,long idsucur,long idfamilia,double stockmin){
+         ConexionBD Cbd = new ConexionBD();
+        DefaultTableModel    modelo= new DefaultTableModel(){
+        public boolean isCellEditable(int row, int column) {
+        //      if (column == 5) return true;
+        //else
+        return false;
+        }
+        };      
+        String titulos[]={"Codigo","Desc. Producto","Moneda","Precio","Precio1","Precio2","Precio3","Inventario","Familia","Sucursal"};
+        modelo.setColumnIdentifiers(titulos);
+        tabla.setModel(modelo);
+        TableColumnModel columnModel = tabla.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(100);
+        columnModel.getColumn(1).setPreferredWidth(600);
+        columnModel.getColumn(2).setPreferredWidth(50);
+        columnModel.getColumn(3).setPreferredWidth(80);
+        columnModel.getColumn(4).setPreferredWidth(80);
+        columnModel.getColumn(5).setPreferredWidth(80);
+        columnModel.getColumn(6).setPreferredWidth(80);
+        columnModel.getColumn(7).setPreferredWidth(80);
+        columnModel.getColumn(8).setPreferredWidth(350);
+        columnModel.getColumn(9).setPreferredWidth(350);
+            System.out.print(stockmin);
+        ColorRowTabla colorrow= new ColorRowTabla(7, stockmin);
+        tabla.setDefaultRenderer (Object.class, colorrow );
+//        tabla.setDefaultRenderer (Object.class, colorrow );
         
         
         List<Producto> listprod = new ArrayList<>();
-         Conexion conexion = new Conexion();
-        NumberFormat nf = NumberFormat.getInstance();
+        
+        
          
          try{
              
              System.out.println("SELECT * from sp_busquedasensitivainventario('"+tipob+"','"+cadena+"')");
              String sql=("SELECT * from sp_busquedasensitivainventario(?,?,?,?)");
-             PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+             PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
              ps.setString(1, tipob);
              ps.setString(2, cadena);
              ps.setLong(3, idsucur);
              ps.setLong(4, idfamilia);
-             ResultSet rs = ps.executeQuery();
-             Object datosR[]= new Object[6];
+             ResultSet rs = Cbd.RealizarConsulta(ps);
+             Object datosR[]= new Object[10];
              
              while (rs.next()){
                  
@@ -540,45 +571,44 @@ public List<Producto> busquedasensitivainventario(JTable tabla,String tipob,Stri
                     prod.setCodigo(rs.getString("vcodigo"));
                     prod.setDescripcion( rs.getString("vdescripcion"));
                     prod.setPrecio(rs.getDouble("vprecio"));
+                    prod.setPrecio1(rs.getDouble("vprecio1"));
+                    prod.setPrecio2(rs.getDouble("vprecio2"));
+                    prod.setPrecio3(rs.getDouble("vprecio3"));
                     prod.setCantidad(rs.getDouble("vcantidad"));
-                   
+                    prod.setMoneda(rs.getString("vmoneda"));
                      datosR[0] = prod.getCodigo();
                                 
                      datosR[1] = prod.getDescripcion();
-                   
-                     datosR[2] = nf.format(prod.getPrecio());
+                     datosR[2] = prod.getMoneda();
+                     datosR[3] = nf.format(prod.getPrecio());
+                     datosR[4] = nf.format(prod.getPrecio1());
+                     datosR[5] = nf.format(prod.getPrecio2());
+                     datosR[6] = nf.format(prod.getPrecio3());
+                     
                   
-                     datosR[3] = nf.format(prod.getCantidad());
-                     datosR[4] = rs.getObject("vfamilia");
-                     datosR[5] = rs.getObject("vsucursal");
+                     datosR[7] = prod.getCantidad();
+                     datosR[8] = rs.getObject("vfamilia");
+                     datosR[9] = rs.getObject("vsucursal");
                  
                     modelo.addRow(datosR);
                     listprod.add(prod);
              }
-             TableColumnModel columnModel = tabla.getColumnModel();
-            columnModel.getColumn(0).setPreferredWidth(100);
-            columnModel.getColumn(1).setPreferredWidth(550);
-            columnModel.getColumn(2).setPreferredWidth(80);
-            columnModel.getColumn(3).setPreferredWidth(80);
-            columnModel.getColumn(4).setPreferredWidth(200);
-            columnModel.getColumn(5).setPreferredWidth(200);
+             
              if(tabla.getRowCount()>0){
               tabla.setRowSelectionInterval (0,0); 
-             tabla.setRowSelectionInterval(0, 0);
+            
              }
              
             // tabla.requestFocus();
              
-             ps.close();
-             rs.close(); 
-             conexion.devolverConexionPool();
+          
              
          }
          catch(Exception e)
          {
              JOptionPane.showMessageDialog(null, e.getMessage());
          }finally{
-             
+             Cbd.desconectar();
              
          }
          return listprod;
@@ -586,15 +616,14 @@ public List<Producto> busquedasensitivainventario(JTable tabla,String tipob,Stri
 }
 public void generarcodigo(JTextField codigo){
  
- 
-    Conexion conexion = new Conexion();
+     ConexionBD Cbd = new ConexionBD();
    
      try{
 	
         System.out.println("SELECT * from sp_generarcodigoprod()");
         String sql=("SELECT * from sp_generarcodigoprod()");       
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
-        ResultSet rs= ps.executeQuery();
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+        ResultSet rs= Cbd.RealizarConsulta(ps);
        if  (rs.next()){
             codigo.setText(rs.getString("codigo"));
         }
@@ -603,7 +632,7 @@ public void generarcodigo(JTextField codigo){
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-               conexion.devolverConexionPool();
+               Cbd.desconectar();
             }    
  
     
@@ -611,6 +640,7 @@ public void generarcodigo(JTextField codigo){
 
 }
 public void imprimircodigo(long id){
+     ConexionBD Cbd = new ConexionBD();
 try{
     ///////////////////////// formato fecha ////////////////////////////
 //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -619,7 +649,7 @@ try{
            
     ////////////////////////////////////////////////////////////+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333////////       
             //Connection miconexion = conectar.Connect();
-            Conexion conexion = new Conexion();
+          
                       
             String  rutaInforme  = "src/Reportes/GenerarCodigoProducto.jasper";
             
@@ -628,7 +658,7 @@ try{
             parametros.put("id",  id);
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperPrintManager.printReport(informe, true);    
 //            JasperViewer jv = new JasperViewer(informe,false);  
 //        
@@ -638,13 +668,19 @@ try{
         }catch (HeadlessException | JRException ex) {
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
-        }
+        }finally{
+        Cbd.desconectar();
+}
+
+
+
      
 
 }
 public void imprimirinventario(long idsucur){
-     Conexion conexion = new Conexion();
-try{
+   ConexionBD Cbd = new ConexionBD();
+
+ try{
     ///////////////////////// formato fecha ////////////////////////////
 //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 //           datepicker.setFormats(dateFormat);   
@@ -658,10 +694,10 @@ try{
             
             Map parametros = new HashMap();
            
-            parametros.put("idsucur",  idsucur);
+             parametros.put("idsucur",  idsucur);
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -671,11 +707,17 @@ try{
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
         }finally{
-    conexion.devolverConexionPool();
+        Cbd.desconectar();
+           
 }
+
+
+
+
+
 }
 public void imprimirinventariostockmin(long idsucur,double stockmin){
-     Conexion conexion = new Conexion();
+     ConexionBD Cbd = new ConexionBD();
 try{
     ///////////////////////// formato fecha ////////////////////////////
 //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -694,7 +736,7 @@ try{
             parametros.put("stockmin",  stockmin);
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -704,7 +746,7 @@ try{
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
         }finally{
-    conexion.devolverConexionPool();
+        Cbd.desconectar();
 }
      
      
@@ -712,49 +754,48 @@ try{
 }
 public boolean duplicado(long id,String cadena,String tipoop){
 
-    Conexion conexion = new Conexion();
+    ConexionBD Cbd = new ConexionBD();
     ResultSet rs=null;
     boolean valida=false;
      try{
 //	st= (Statement)miconexion.createStatement();
       
       String sql=("SELECT * from sp_duplicadoproducto(?,?,?)"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+      PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
       ps.setString(1, cadena);
       ps.setLong(2, id);
       ps.setString(3, tipoop);
-      rs = ps.executeQuery();
+      rs = Cbd.RealizarConsulta(ps);
 //      FileInputStream fis ;
 //      byte[] vacio= new byte[0];
         if (rs.next()){
             valida= rs.getBoolean("vvalida");
         }
 
-        ps.close();
-        rs.close();
+        
 //	
         } catch(Exception e)
             {
 //            JOptionPane.showMessageDialog(null, e.getMessage());
             } finally{
-            conexion.devolverConexionPool();
+           Cbd.desconectar();
      
      }
      return valida;
 
     }
-public boolean validastockrequerido(Double cant, Long idprod){
-     Conexion conexion = new Conexion();
+public boolean validastockrequerido(Producto prod){
+      ConexionBD Cbd = new ConexionBD();
     ResultSet rs=null;
     boolean valida=false;
      try{
 //	st= (Statement)miconexion.createStatement();
       
       String sql=("SELECT * from sp_validastockrequerido(?,?)"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
-      ps.setLong(1, idprod);
-      ps.setBigDecimal(2,new BigDecimal(cant));
-      rs = ps.executeQuery();
+      PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+      ps.setLong(1,prod.getIdproducto());
+      ps.setBigDecimal(2,new BigDecimal(prod.getCantidad()));
+      rs = Cbd.RealizarConsulta(ps);
 //      FileInputStream fis ;
 //      byte[] vacio= new byte[0];
         if (rs.next()){
@@ -768,7 +809,7 @@ public boolean validastockrequerido(Double cant, Long idprod){
             {
 //            JOptionPane.showMessageDialog(null, e.getMessage());
             } finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      
      }
      return valida;
@@ -776,76 +817,161 @@ public boolean validastockrequerido(Double cant, Long idprod){
 
 
 }
-public void devolverstockrequerido(List<DetalleOrdeSalidaEntrada> listdet,JTextArea mens,JIFOrdenSalida jifsalida){
-     Conexion conexion = new Conexion();
-    ResultSet rs=null;
-    PreparedStatement ps=null;  
+public void devolverstockrequerido(List<Producto> listdet,JLabel mens,JInternalFrame frame){
+    
+//    ResultSet rs=null;
+       
+      ConexionBD Cbd = new ConexionBD();
      
-     
-      Runnable miRunnable = new Runnable()
-      {
-         @Override
-         public void run()
-         {
-            
-            PreparedStatement ps = null;
-            try
+      Runnable miRunnable;
+        miRunnable = new Runnable()
+        {
+            @Override
+            public void run()
             {
+                
+                PreparedStatement ps = null;
+                try
+                {
 //               System.out.println("Me han pulsado");
 //               Thread.sleep(10000); //Tarea que consume diez segundos.
 //               System.out.println("Terminé");
-               
-               int i=1;
-               mens.append("Iniciando proceso ...");
-               mens.append(System.getProperty("line.separator"));
-               
-                if(listdet.size()>0){
+                    
+                    int i=1;
+                    mens.setVisible(true);
+                    mens.setText("Iniciando proceso ...");
+//               mens.append(System.getProperty("line.separator"));
                 
-                for(DetalleOrdeSalidaEntrada det: listdet){
-                    mens.append("Retornado del producto "+i);
-                    mens.append(System.getProperty("line.separator"));
-                    String sql=("SELECT * from sp_devolverstockrequerido(?,?)"); 
-                    ps=conexion.getConnection().prepareStatement(sql);
-                    ps.setBigDecimal(1,new BigDecimal(det.getCantidad()));
-                    ps.setLong(2, det.getIdproducto());
-
-                    ps.executeQuery();
-                    mens.setCaretPosition(mens.getDocument().getLength());
-                    i++;
+//                if(listdet.size()>0){
+                    System.out.println("listdetthread"+listdet.size());
+                    for(Producto det: listdet){
+                        mens.setText("Retornado Producto Cod. "+det.getCodigo());
+//                    mens.setText(System.getProperty("line.separator"));
+                        String sql=("SELECT * from sp_devolverstockrequerido(?,?)");
+                        ps=Cbd.conectar().prepareStatement(sql);
+                        ps.setBigDecimal(1,new BigDecimal(det.getCantidad()));
+                        ps.setLong(2, det.getIdproducto());
+                        
+                        Cbd.actualizarDatos(ps);
+//                    mens.setCaretPosition(mens.getDocument().getLength());
+//                        i++;
                     }
-             
-                
-                    ps.close();
-                }
-                
+                    
+                    
+                    
+                    
+//                }
+                    
+                    
                    
-                   
-                   
-                    mens.append("Extornado con exito ");
-                    mens.append(System.getProperty("line.separator"));
-                     mens.append("Saliendo.... ");
-                    mens.append(System.getProperty("line.separator"));
+                    mens.setText("Extornado con exito ");
+//                    mens.append(System.getProperty("line.separator"));
+                    mens.setText("Saliendo.... ");
+//                    mens.append(System.getProperty("line.separator"));
                     Thread.sleep(500);
-                    jifsalida.dispose();
-                    mens.setCaretPosition(mens.getDocument().getLength());
-               
-               
-               
+                    frame.dispose();
+//                    mens.setCaretPosition(mens.getDocument().getLength());
+                   
+                    
+                    
+                }
+                catch (SQLException e)
+                {
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DetalleOrdenSalidaDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }finally{
+                    Cbd.desconectar();
+                           
+                }
             }
-            catch (SQLException e)
-            {
-            } catch (InterruptedException ex) {
-                 Logger.getLogger(DetalleOrdenSalidaDAO.class.getName()).log(Level.SEVERE, null, ex);
-             }finally{
-            conexion.devolverConexionPool();
-     }
-         }
-      };
+        };
       Thread hilo = new Thread (miRunnable);
       hilo.start();
     
   
 }
+
+public void devolver(Producto prod,JLabel mens){
+   
+//    ResultSet rs=null;
+       
+     
+      ConexionBD Cbd = new ConexionBD();
+      Runnable miRunnable;
+        miRunnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                
+                PreparedStatement ps = null;
+                try
+                {
+//               System.out.println("Me han pulsado");
+//               Thread.sleep(10000); //Tarea que consume diez segundos.
+//               System.out.println("Terminé");
+                    
+                    int i=1;
+                    mens.setVisible(true);
+                    mens.setText("Iniciando proceso ...");
+//               mens.append(System.getProperty("line.separator"));
+                
+//                if(listdet.size()>0){
+                
+                  
+                        mens.setText("Retornado Producto Cod. "+prod.getCodigo());
+//                    mens.setText(System.getProperty("line.separator"));
+                        System.out.println("idprod"+prod.getIdproducto());
+                        System.err.println("cant"+prod.getCantidad());
+                        String sql=("SELECT * from sp_devolverstockrequerido(?,?)");
+                        ps=Cbd.conectar().prepareStatement(sql);
+                        ps.setBigDecimal(1,new BigDecimal(prod.getCantidad()));
+                        ps.setLong(2, prod.getIdproducto());
+                        
+                        Cbd.actualizarDatos(ps);
+                                
+//                    mens.setCaretPosition(mens.getDocument().getLength());
+//                        i++;
+                    
+                    
+                    
+                    
+                    
+//                }
+                    
+                    
+//                    if(ps!=null){
+//                      ps.close();
+//                    }
+                   
+                    mens.setText("Extornado con exito ");
+//                    mens.append(System.getProperty("line.separator"));
+//                    mens.setText("Saliendo.... ");
+//                    mens.append(System.getProperty("line.separator"));
+                    Thread.sleep(500);
+                    mens.setVisible(false);
+//                    mens.setCaretPosition(mens.getDocument().getLength());
+                   
+                    
+                    
+                }
+                catch (SQLException e)
+                {
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DetalleOrdenSalidaDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }finally{
+                    Cbd.desconectar();
+                }
+            }
+        };
+      Thread hilo = new Thread (miRunnable);
+      hilo.start();
+    
+  
+}
+    
+
+
     
     
 }

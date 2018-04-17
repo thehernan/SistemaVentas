@@ -30,21 +30,85 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
     SucursalDAO daosucursal = new SucursalDAO();
     Mayusculas mayus = new Mayusculas();
     FamiliaDAO daofamilia = new FamiliaDAO();
-    List<Familia> listfamilia= new ArrayList<>();
+    List<Familia> listfamilia;
     Familia fam = new Familia();
     ////
     List<Producto> listprod = new ArrayList<>();
     Sucursal sucursa= new Sucursal();
-    List<Sucursal> listsucur= new ArrayList<>();
+    List<Sucursal> listsucur;
+     int posx;
+    int posy;
     public JIFrmInventario() {
         initComponents();
-       listprod= daoproducto.inventario(jtabla,sucursalsingleton.getId(),sucursalsingleton.getStockmin(),"TODO");
-        jsstockmin.setValue(sucursalsingleton.getStockmin());
-        double stockmin=Double.parseDouble(jsstockmin.getValue().toString());
-          listfamilia = daofamilia.llenarcombo(jcbfamilia);
-          listsucur = daosucursal.llenarcombo(jcbsucursal);
-//        jtabla.requestFocus();
-       // jtabla.setRowSelectionInterval(0, 0);
+//        jlblimagencarga.setVisible(false);
+//        jlblletracarga.setVisible(false);
+        jlblmensajeimpresion.setVisible(false);
+        
+//        double stockmin=Double.parseDouble(jsstockmin.getValue().toString());
+       
+        mostrar();
+    }
+    
+    public void mostrar () {
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                jlblimagencarga.setVisible(true);
+                jlblletracarga.setVisible(true);
+                jsstockmin.setEnabled(false);
+                jtfdescripcion.setEnabled(false);
+                jcbfamilia.setEnabled(false);
+                jcbsucursal.setEnabled(false);
+                jsstockmin.setValue(sucursalsingleton.getStockmin());
+                listfamilia = daofamilia.llenarcombo(jcbfamilia);
+                 listsucur = daosucursal.llenarcombo(jcbsucursal);
+                listprod= daoproducto.inventario(jtabla,sucursalsingleton.getId(),sucursalsingleton.getStockmin(),"TODO");
+                jsstockmin.setEnabled(true);
+                jtfdescripcion.setEnabled(true);
+                jcbfamilia.setEnabled(true);
+                jcbsucursal.setEnabled(true);
+                jlblimagencarga.setVisible(false);
+                jlblletracarga.setVisible(false);
+            }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
+    
+    
+    }
+    
+    public synchronized void sensitiva(){
+       
+     
+     String descrip= jtfdescripcion.getText().toUpperCase();
+       
+        fam = listfamilia.get(jcbfamilia.getSelectedIndex());
+        sucursa = listsucur.get(jcbsucursal.getSelectedIndex());
+            
+        if(jcbfamilia.getSelectedIndex()==0 && jcbsucursal.getSelectedIndex()==0){
+           
+         listprod=daoproducto.busquedasensitivainventario(jtabla, "TODOSUCURSAL", descrip,
+        sucursa.getId(),fam.getIdfamilia(),sucursalsingleton.getStockmin());
+        
+        }
+        if(jcbfamilia.getSelectedIndex() !=0  && jcbsucursal.getSelectedIndex()==0){
+        listprod=daoproducto.busquedasensitivainventario(jtabla, "FAMILIASUCURSAL", descrip,
+        sucursa.getId(),fam.getIdfamilia(),sucursalsingleton.getStockmin());
+        
+        }
+         if(jcbfamilia.getSelectedIndex() ==0  && jcbsucursal.getSelectedIndex()!=0){
+              listprod=daoproducto.busquedasensitivainventario(jtabla, "TODO", descrip,
+        sucursa.getId(),fam.getIdfamilia(),sucursalsingleton.getStockmin());
+         }
+         
+          if(jcbfamilia.getSelectedIndex() !=0  && jcbsucursal.getSelectedIndex()!=0){
+              listprod=daoproducto.busquedasensitivainventario(jtabla, "FAMILIA", descrip,
+        sucursa.getId(),fam.getIdfamilia(),sucursalsingleton.getStockmin());
+         }
+    
+    
     }
 
     /**
@@ -61,6 +125,8 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
         jtfdescripcion = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jsstockmin = new javax.swing.JSpinner();
+        jlblletracarga = new javax.swing.JLabel();
+        jlblimagencarga = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
         jbtnimprimir = new javax.swing.JButton();
@@ -69,18 +135,21 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
         jcbfamilia = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jlblmensajeimpresion = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jlblmensajeimpresion = new javax.swing.JLabel();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
         setResizable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel4.setText("Buscar:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, 20));
 
         jtfdescripcion.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtfdescripcion.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -91,7 +160,15 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
                 jtfdescripcionFocusLost(evt);
             }
         });
+        jtfdescripcion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfdescripcionActionPerformed(evt);
+            }
+        });
         jtfdescripcion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtfdescripcionKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfdescripcionKeyReleased(evt);
             }
@@ -99,9 +176,11 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
                 jtfdescripcionKeyTyped(evt);
             }
         });
+        jPanel1.add(jtfdescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 130, 600, -1));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel5.setText("Stock Minimo:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, 20));
 
         jsstockmin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jsstockmin.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -109,19 +188,34 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
                 jsstockminStateChanged(evt);
             }
         });
+        jPanel1.add(jsstockmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 170, 100, -1));
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
+        jlblletracarga.setText("Cargando Productos ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 410, -1, -1));
+
+        jlblimagencarga.setBackground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setForeground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 190, 220, 260));
+
+        jScrollPane2.setForeground(new java.awt.Color(255, 255, 255));
 
         jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
+        jtabla.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtabla.getTableHeader().setReorderingAllowed(false);
         jtabla.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -131,8 +225,13 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(jtabla);
 
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 1160, 370));
+
         jbtnimprimir.setBackground(new java.awt.Color(255, 255, 255));
         jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
+        jbtnimprimir.setBorderPainted(false);
+        jbtnimprimir.setContentAreaFilled(false);
+        jbtnimprimir.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jbtnimprimir.setRequestFocusEnabled(false);
         jbtnimprimir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseExited(java.awt.event.MouseEvent evt) {
@@ -147,10 +246,13 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
                 jbtnimprimirActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 160, -1, -1));
 
-        jbtnimprimirstockmin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnimprimirstockmin.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jbtnimprimirstockmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
         jbtnimprimirstockmin.setText("Productos con Stock Minimo");
+        jbtnimprimirstockmin.setBorderPainted(false);
+        jbtnimprimirstockmin.setContentAreaFilled(false);
         jbtnimprimirstockmin.setRequestFocusEnabled(false);
         jbtnimprimirstockmin.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseExited(java.awt.event.MouseEvent evt) {
@@ -165,99 +267,54 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
                 jbtnimprimirstockminActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnimprimirstockmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 160, -1, -1));
 
-        jcbsucursal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jcbsucursal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbsucursalActionPerformed(evt);
             }
         });
+        jPanel1.add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 90, 323, -1));
 
-        jcbfamilia.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jcbfamilia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbfamiliaActionPerformed(evt);
             }
         });
+        jPanel1.add(jcbfamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, 380, -1));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("Familia:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, 20));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel2.setText("Sucursal:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, -1, 20));
 
-        jlblmensajeimpresion.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jlblmensajeimpresion.setForeground(new java.awt.Color(255, 51, 51));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(3, 3, 3)
-                                .addComponent(jsstockmin, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtfdescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jcbfamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jcbsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(39, 39, 39)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jbtnimprimir)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jbtnimprimirstockmin))
-                            .addComponent(jlblmensajeimpresion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane2))
-                .addGap(22, 22, 22))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfdescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jcbsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jcbfamilia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(22, 22, 22)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jsstockmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jbtnimprimir)
-                            .addComponent(jbtnimprimirstockmin))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jlblmensajeimpresion, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
-                .addGap(31, 31, 31))
-        );
-
-        jPanel2.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel2.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel2MouseDragged(evt);
+            }
+        });
+        jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel2MousePressed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("INVENTARIO DE PRODUCTOS");
+
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jLabel15.setToolTipText("Cerrar");
+        jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel15MouseReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -266,29 +323,38 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 825, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addGap(174, 174, 174))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1340, -1));
+
+        jlblmensajeimpresion.setForeground(new java.awt.Color(255, 255, 255));
+        jlblmensajeimpresion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
+        jlblmensajeimpresion.setText("Imprimiendo Inventario ...");
+        jPanel1.add(jlblmensajeimpresion, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 140, 181, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1177, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 577, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -296,7 +362,7 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
 
     private void jtfdescripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescripcionKeyTyped
         // TODO add your handling code here:
-       mayus.convertirmayus(jtfdescripcion);
+//       mayus.convertirmayus(jtfdescripcion);
     }//GEN-LAST:event_jtfdescripcionKeyTyped
 
     private void jsstockminStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jsstockminStateChanged
@@ -304,6 +370,7 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
         double stockmin=Double.parseDouble(jsstockmin.getValue().toString());
         daosucursal.editarstockmin(sucursalsingleton.getId(),stockmin);
         sucursalsingleton.setStockmin(stockmin);
+        
         daoproducto.inventario(jtabla,sucursalsingleton.getId(),stockmin,"TODO");
 //        daoproducto.inventario(jtabla,sucursalsingleton.getId());      
 //        ColorRowTabla colorrow= new ColorRowTabla(3, stockmin);
@@ -325,112 +392,79 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
 
     private void jtfdescripcionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescripcionKeyReleased
         // TODO add your handling code here:
-          String descrip= jtfdescripcion.getText().toUpperCase();
-       
-            fam = listfamilia.get(jcbfamilia.getSelectedIndex());
-            sucursa = listsucur.get(jcbsucursal.getSelectedIndex());
-            
-        if(jcbfamilia.getSelectedIndex()==0 && jcbsucursal.getSelectedIndex()==0){
-           
-         listprod=daoproducto.busquedasensitivainventario(jtabla, "TODOSUCURSAL", descrip,
-        sucursa.getId(),fam.getIdfamilia());
-        
-        }
-        if(jcbfamilia.getSelectedIndex() !=0  && jcbsucursal.getSelectedIndex()==0){
-        listprod=daoproducto.busquedasensitivainventario(jtabla, "FAMILIASUCURSAL", descrip,
-        sucursa.getId(),fam.getIdfamilia());
-        
-        }
-         if(jcbfamilia.getSelectedIndex() ==0  && jcbsucursal.getSelectedIndex()!=0){
-              listprod=daoproducto.busquedasensitivainventario(jtabla, "TODO", descrip,
-        sucursa.getId(),fam.getIdfamilia());
-         }
-         
-          if(jcbfamilia.getSelectedIndex() !=0  && jcbsucursal.getSelectedIndex()!=0){
-              listprod=daoproducto.busquedasensitivainventario(jtabla, "FAMILIA", descrip,
-        sucursa.getId(),fam.getIdfamilia());
-         }
        
        
     }//GEN-LAST:event_jtfdescripcionKeyReleased
 
     private void jbtnimprimirstockminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirstockminActionPerformed
         // TODO add your handling code here:
-        daoproducto.imprimirinventariostockmin(sucursalsingleton.getId(), sucursalsingleton.getStockmin());
-         jlblmensajeimpresion.setText("");
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+                jlblmensajeimpresion.setVisible(true);
+                daoproducto.imprimirinventariostockmin(sucursalsingleton.getId(), sucursalsingleton.getStockmin());
+                jlblmensajeimpresion.setVisible(false);
+        }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
     }//GEN-LAST:event_jbtnimprimirstockminActionPerformed
 
     private void jbtnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirActionPerformed
         // TODO add your handling code here:
-        daoproducto.imprimirinventario(sucursalsingleton.getId());
-          jlblmensajeimpresion.setText("");
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                jlblmensajeimpresion.setVisible(true);
+                daoproducto.imprimirinventario(sucursalsingleton.getId());
+                jlblmensajeimpresion.setVisible(false);
+            }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
+        
+         
     }//GEN-LAST:event_jbtnimprimirActionPerformed
 
     private void jcbfamiliaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbfamiliaActionPerformed
         // TODO add your handling code here:
-           String descrip= jtfdescripcion.getText().toUpperCase();
-       if(listfamilia.size()>0 && listsucur.size()>0){
-       
-         fam = listfamilia.get(jcbfamilia.getSelectedIndex());
-            sucursa = listsucur.get(jcbsucursal.getSelectedIndex());
-            
-        if(jcbfamilia.getSelectedIndex()==0 && jcbsucursal.getSelectedIndex()==0){
-           
-         listprod=daoproducto.busquedasensitivainventario(jtabla, "TODOSUCURSAL", descrip,
-        sucursa.getId(),fam.getIdfamilia());
+         Runnable runnable=new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                jlblimagencarga.setVisible(true);
+                jlblletracarga.setVisible(true);
+                sensitiva();
+                jlblimagencarga.setVisible(false);
+                jlblletracarga.setVisible(false);
+            }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
         
-        }
-        if(jcbfamilia.getSelectedIndex() !=0  && jcbsucursal.getSelectedIndex()==0){
-        listprod=daoproducto.busquedasensitivainventario(jtabla, "FAMILIASUCURSAL", descrip,
-        sucursa.getId(),fam.getIdfamilia());
-        
-        }
-         if(jcbfamilia.getSelectedIndex() ==0  && jcbsucursal.getSelectedIndex()!=0){
-              listprod=daoproducto.busquedasensitivainventario(jtabla, "TODO", descrip,
-        sucursa.getId(),fam.getIdfamilia());
-         }
-         
-          if(jcbfamilia.getSelectedIndex() !=0  && jcbsucursal.getSelectedIndex()!=0){
-              listprod=daoproducto.busquedasensitivainventario(jtabla, "FAMILIA", descrip,
-        sucursa.getId(),fam.getIdfamilia());
-         }
-        
-       
-       }
           
     }//GEN-LAST:event_jcbfamiliaActionPerformed
 
     private void jcbsucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbsucursalActionPerformed
         // TODO add your handling code here:
-          String descrip= jtfdescripcion.getText().toUpperCase();
-       if(listfamilia.size()>0 && listsucur.size()>0){
-       
-         fam = listfamilia.get(jcbfamilia.getSelectedIndex());
-            sucursa = listsucur.get(jcbsucursal.getSelectedIndex());
-            
-        if(jcbfamilia.getSelectedIndex()==0 && jcbsucursal.getSelectedIndex()==0){
-           
-         listprod=daoproducto.busquedasensitivainventario(jtabla, "TODOSUCURSAL", descrip,
-        sucursa.getId(),fam.getIdfamilia());
-        
-        }
-        if(jcbfamilia.getSelectedIndex() !=0  && jcbsucursal.getSelectedIndex()==0){
-        listprod=daoproducto.busquedasensitivainventario(jtabla, "FAMILIASUCURSAL", descrip,
-        sucursa.getId(),fam.getIdfamilia());
-        
-        }
-         if(jcbfamilia.getSelectedIndex() ==0  && jcbsucursal.getSelectedIndex()!=0){
-              listprod=daoproducto.busquedasensitivainventario(jtabla, "TODO", descrip,
-        sucursa.getId(),fam.getIdfamilia());
-         }
-         
-          if(jcbfamilia.getSelectedIndex() !=0  && jcbsucursal.getSelectedIndex()!=0){
-              listprod=daoproducto.busquedasensitivainventario(jtabla, "FAMILIA", descrip,
-        sucursa.getId(),fam.getIdfamilia());
-         }
-        
-       
-       }
+          Runnable runnable=new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                jlblimagencarga.setVisible(true);
+                jlblletracarga.setVisible(true);
+                sensitiva();
+                jlblimagencarga.setVisible(false);
+                jlblletracarga.setVisible(false);
+            }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
     }//GEN-LAST:event_jcbsucursalActionPerformed
 
     private void jbtnimprimirMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbtnimprimirMousePressed
@@ -453,9 +487,55 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
          jlblmensajeimpresion.setText("");
     }//GEN-LAST:event_jbtnimprimirstockminMouseExited
 
+    private void jtfdescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfdescripcionActionPerformed
+        // TODO add your handling code here:
+       
+       
+    }//GEN-LAST:event_jtfdescripcionActionPerformed
+
+    private void jLabel15MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseReleased
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jLabel15MouseReleased
+
+    private void jPanel2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseDragged
+        // TODO add your handling code here:
+        int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel2MouseDragged
+
+    private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
+        // TODO add your handling code here:
+          posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel2MousePressed
+
+    private void jtfdescripcionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfdescripcionKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+         Runnable runnable=new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                jlblimagencarga.setVisible(true);
+                jlblletracarga.setVisible(true);
+                sensitiva();
+                jlblimagencarga.setVisible(false);
+                jlblletracarga.setVisible(false);
+            }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
+         
+        }
+    }//GEN-LAST:event_jtfdescripcionKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -467,6 +547,8 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbtnimprimirstockmin;
     private javax.swing.JComboBox jcbfamilia;
     private javax.swing.JComboBox jcbsucursal;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
     private javax.swing.JLabel jlblmensajeimpresion;
     private javax.swing.JSpinner jsstockmin;
     private javax.swing.JTable jtabla;

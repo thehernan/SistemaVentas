@@ -90,9 +90,9 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
 
         jlbldescripcion.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jlbldescripcion.setText("jLabel2");
-        jPanel1.add(jlbldescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
+        jPanel1.add(jlbldescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
 
-        jtfcantllego.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfcantllego.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jtfcantllego.setEnabled(false);
         jtfcantllego.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -107,9 +107,9 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
                 jtfcantllegoKeyTyped(evt);
             }
         });
-        jPanel1.add(jtfcantllego, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 150, -1));
+        jPanel1.add(jtfcantllego, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 150, 150, -1));
 
-        jtfcantacord.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfcantacord.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jtfcantacord.setEnabled(false);
         jtfcantacord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,9 +121,9 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
                 jtfcantacordKeyReleased(evt);
             }
         });
-        jPanel1.add(jtfcantacord, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 100, 150, -1));
+        jPanel1.add(jtfcantacord, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 150, 150, -1));
 
-        jtfprecio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfprecio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jtfprecio.setEnabled(false);
         jtfprecio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -135,14 +135,14 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
                 jtfprecioKeyReleased(evt);
             }
         });
-        jPanel1.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, 150, -1));
+        jPanel1.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 150, -1));
 
-        jtfimporte.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jtfimporte.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jtfimporte.setCaretColor(new java.awt.Color(255, 51, 51));
         jtfimporte.setDisabledTextColor(new java.awt.Color(255, 51, 51));
         jtfimporte.setEnabled(false);
         jtfimporte.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jPanel1.add(jtfimporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 130, 150, -1));
+        jPanel1.add(jtfimporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 180, 150, -1));
 
         jbtneliminar.setBackground(new java.awt.Color(255, 255, 255));
         jbtneliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/recycle.png"))); // NOI18N
@@ -152,7 +152,7 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
                 jbtneliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 10, -1, -1));
+        jPanel1.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
 
         jbtneditar.setBackground(new java.awt.Color(255, 255, 255));
         jbtneditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/editlapiz.png"))); // NOI18N
@@ -162,7 +162,7 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
                 jbtneditarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, -1, -1));
+        jPanel1.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, -1, -1));
 
         jbtnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/savedisk.png"))); // NOI18N
         jbtnguardar.setToolTipText("Guardar");
@@ -172,33 +172,33 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
                 jbtnguardarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 10, -1, -1));
+        jPanel1.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setText("CANTIDAD LLEGO:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, 20));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, 20));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setText("CANTIDAD ACORDADA:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 100, -1, 20));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 150, -1, 20));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setText("PRECIO:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, -1, 20));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, -1, 20));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("IMPORTE:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 130, -1, 20));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, -1, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 778, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
         );
 
         pack();

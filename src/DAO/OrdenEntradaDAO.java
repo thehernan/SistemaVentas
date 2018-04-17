@@ -5,7 +5,7 @@
  */
 package DAO;
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import Pojos.OrdenSalidaEntrada;
 import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
@@ -25,13 +25,15 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class OrdenEntradaDAO {
     
+   
+    
      public long insertar(OrdenSalidaEntrada orden, long idordensalida){
-        Conexion conexion = new Conexion();
+         ConexionBD Cbd = new ConexionBD();
         long id=0;
      try{
             
-            String sql=("SELECT * from sp_insertarordensalidaentrada(?,?,?,?,?,?,?,?)");         
-            PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+            String sql=("SELECT * from sp_insertarordensalidaentrada(?,?,?,?,?,?,?,?,?)");         
+            PreparedStatement ps=  Cbd.conectar().prepareStatement(sql);
             ps.setString(1, orden.getSucurenvia());
             ps.setString(2, orden.getSucursolicita());
             ps.setTimestamp(3, orden.getFecha_pedido());
@@ -40,8 +42,8 @@ public class OrdenEntradaDAO {
             ps.setString(6,orden.getRecibido());
             ps.setString(7,orden.getTipoop());
             ps.setLong(8, idordensalida);
-          
-            ResultSet rs=ps.executeQuery();
+            ps.setLong(9, 0);
+            ResultSet rs=Cbd.RealizarConsulta(ps);
        if  (rs.next()){
             id=(rs.getLong("id"));
 //           JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
@@ -51,21 +53,22 @@ public class OrdenEntradaDAO {
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-             conexion.devolverConexionPool();
+             Cbd.desconectar();
 
 }
   return id;  
 }
       public void imprimir(long id){
-try{
-    ///////////////////////// formato fecha ////////////////////////////
-//            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//           datepicker.setFormats(dateFormat);   
-//           java.util.Date fecha =((datepicker.getDate())); 
-           
-    ////////////////////////////////////////////////////////////+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333////////       
-            //Connection miconexion = conectar.Connect();
-            Conexion conexion = new Conexion();
+           ConexionBD Cbd = new ConexionBD();
+        try{
+            ///////////////////////// formato fecha ////////////////////////////
+        //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        //           datepicker.setFormats(dateFormat);   
+        //           java.util.Date fecha =((datepicker.getDate())); 
+
+            ////////////////////////////////////////////////////////////+33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333////////       
+                    //Connection miconexion = conectar.Connect();
+
                       
             String  rutaInforme  = "src/Reportes/OrdenSalida.jasper";
             
@@ -74,7 +77,7 @@ try{
             parametros.put("id",  id);
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -83,7 +86,9 @@ try{
         }catch (HeadlessException | JRException ex) {
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
-        }
+        }finally{
+        Cbd.desconectar();
+}
      
 
 }

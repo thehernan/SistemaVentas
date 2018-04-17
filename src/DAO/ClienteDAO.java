@@ -6,11 +6,14 @@
 package DAO;
 
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import Pojos.Cliente;
+import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,8 +28,9 @@ import org.edisoncor.gui.textField.TextFieldRoundIcon;
  */
 public class ClienteDAO {
     
-    public void mostrarcliente(JTable tabla){
-        
+    
+    public List<Cliente> mostrarcliente(JTable tabla){
+        ConexionBD Cbd = new ConexionBD();
         DefaultTableModel modelo= new DefaultTableModel(){
         public boolean isCellEditable(int row, int column) {
     //      if (column == 5) return true;
@@ -34,62 +38,67 @@ public class ClienteDAO {
      return false;
     }
       };      
-     String titulos[]={"ID","RUT","NOMBRES","CELULAR"};
+     String titulos[]={"R.U.T.","NOMBRES","CELULAR"};
      modelo.setColumnIdentifiers(titulos);
+      tabla.setModel(modelo);
 
+//     Conexion conexion= new Conexion();
 
-     Conexion conexion= new Conexion();
-
-        Statement st=null;
+        PreparedStatement ps=null;
         ResultSet rs=null;
 
-     
+        List<Cliente> listcliente= new ArrayList<>();
+        
     try{
-	st= conexion.getConnection().createStatement();
-      
-        rs=st.executeQuery("SELECT * from sp_mostrarcliente()"); 
-        Object datosR[] = new Object[4];
+
+        
+        ps=Cbd.conectar().prepareStatement("SELECT * from sp_mostrarcliente()");
+        rs=Cbd.RealizarConsulta(ps);
+        Object datosR[] = new Object[3];
         while (rs.next()){
                    
-                         
-                     datosR[0] = rs.getObject("id");
-                    
-                     datosR[1] = rs.getObject("vrut");
-                    
-                     datosR[2] = rs.getObject("vnombre");
-                   
-                     datosR[3] = rs.getObject("vcelular");
-                    
-                    
-                    modelo.addRow(datosR);
+             Cliente cliente = new Cliente();  
+             cliente.setId_cliente(rs.getLong("id"));
+             cliente.setRut(rs.getString("vrut"));
+             cliente.setNombre_razons(rs.getString("vnombre"));
+             cliente.setCelular(rs.getString("vcelular"));
+             cliente.setDireccion(rs.getString("vdireccion"));
+             cliente.setEmail(rs.getString("vemail"));
+             datosR[0] = cliente.getRut();
+
+             datosR[1] = cliente.getNombre_razons();
+
+             datosR[2] = cliente.getCelular();
+
+
+            modelo.addRow(datosR);
+            listcliente.add(cliente);
 		
         }
-        tabla.setModel(modelo);
-        tabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        tabla.getColumnModel().getColumn(0).setMinWidth(0);
-        tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-        
+       
+             
         TableColumnModel columnModel = tabla.getColumnModel();
      
-        columnModel.getColumn(1).setPreferredWidth(90);
-        columnModel.getColumn(2).setPreferredWidth(400);
-        columnModel.getColumn(3).setPreferredWidth(90);
+        columnModel.getColumn(0).setPreferredWidth(90);
+        columnModel.getColumn(1).setPreferredWidth(400);
+        columnModel.getColumn(2).setPreferredWidth(90);
        
-        rs.close();
-        st.close();
+     
+       
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
-            }    
 
+                Cbd.desconectar();
+            }    
+      return listcliente;
     
     }
     
-    public void busquedasensitivacliente(String tipoB,String cadena,JTable tabla){
-        
+    public List<Cliente> busquedasensitivacliente(String tipoB,String cadena,JTable tabla){
+        ConexionBD Cbd = new ConexionBD();
        DefaultTableModel modelo= new DefaultTableModel(){
     public boolean isCellEditable(int row, int column) {
     //      if (column == 5) return true;
@@ -97,93 +106,99 @@ public class ClienteDAO {
     return false;
     }
     };      
-    String titulos[]={"ID","RUT","NOMBRES","CELULAR"};
+    String titulos[]={"R.U.T.","NOMBRES","CELULAR"};
     modelo.setColumnIdentifiers(titulos);
 
-     Conexion conexion= new Conexion();
-       Statement st=null;
+     
+       PreparedStatement ps=null;
        ResultSet rs=null;
-    
+       List<Cliente> listcliente= new ArrayList<>();
      
     try{
-	st= conexion.getConnection().createStatement();
-      
-        rs=st.executeQuery("SELECT * from sp_busquedasensitivacliente('"+tipoB+"','"+cadena+"')"); 
-        Object datosR[] = new Object[4];
+	ps= Cbd.conectar().prepareStatement("SELECT * from sp_busquedasensitivacliente(?,?)");
+        ps.setString(1, tipoB);
+        ps.setString(2, cadena);
+        rs=Cbd.RealizarConsulta(ps); 
+        Object datosR[] = new Object[3];
         while (rs.next()){
                     
-                         
-                     datosR[0] = rs.getObject("id");
-                     
-                     datosR[1] = rs.getObject("vrut");
-                    
-                     datosR[2] = rs.getObject("vnombre");
-                    
-                     datosR[3] = rs.getObject("vcelular");
-                    
-                    
-                    modelo.addRow(datosR);
-		
+             Cliente cliente = new Cliente();  
+             cliente.setId_cliente(rs.getLong("id"));
+             cliente.setRut(rs.getString("vrut"));
+             cliente.setNombre_razons(rs.getString("vnombre"));
+             cliente.setCelular(rs.getString("vcelular"));
+             cliente.setDireccion(rs.getString("vdireccion"));
+             cliente.setEmail(rs.getString("vemail"));
+             datosR[0] = cliente.getRut();
+
+             datosR[1] = cliente.getNombre_razons();
+
+             datosR[2] = cliente.getCelular();
+
+
+            modelo.addRow(datosR);
+            listcliente.add(cliente);
                      
         }
         tabla.setModel(modelo);
-        tabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        tabla.getColumnModel().getColumn(0).setMinWidth(0);
-        tabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-        
         TableColumnModel columnModel = tabla.getColumnModel();
      
-        columnModel.getColumn(1).setPreferredWidth(90);
-        columnModel.getColumn(2).setPreferredWidth(400);
-        columnModel.getColumn(3).setPreferredWidth(90);
-	rs.close();
-        st.close();
+        columnModel.getColumn(0).setPreferredWidth(90);
+        columnModel.getColumn(1).setPreferredWidth(400);
+        columnModel.getColumn(2).setPreferredWidth(90);
+        if (modelo.getRowCount()>0){
+            tabla.setRowSelectionInterval (0,0); 
+               
+        }
+	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
                                     
             }    
-       
+       return listcliente;
     }
 
 public Cliente buscarcliente(String tipoB,long id,String cadena,JLabel msj){
-
+    ConexionBD Cbd = new ConexionBD();
     Cliente cliente= new Cliente();
-    Conexion conexion = new Conexion();
+  
     ResultSet rs=null;
+    PreparedStatement ps=null;
      try{
-//	st= (Statement)miconexion.createStatement();
+
          System.out.println("SELECT * from sp_busquedacliente('"+tipoB+"',"+id+",'"+cadena+"')");
-      String sql=("SELECT * from sp_busquedacliente('"+tipoB+"',"+id+",'"+cadena+"')"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
-      rs = ps.executeQuery();
-//      FileInputStream fis ;
-//      byte[] vacio= new byte[0];
+        String sql=("SELECT * from sp_busquedacliente(?,?,?)"); 
+        ps=Cbd.conectar().prepareStatement(sql);
+        ps.setString(1, tipoB);
+        ps.setLong(2, id);
+        ps.setString(3, cadena);
+        rs = Cbd.RealizarConsulta(ps);
+
         if (rs.next()){
-                     cliente.setId_cliente(rs.getLong("vid"));
-                     cliente.setNombre_razons(rs.getString("vnombre"));
-                     cliente.setRut( rs.getString("vrut")) ;
-                     
-                     cliente.setDireccion(rs.getString("vdireccion"));
-                     cliente.setCelular(rs.getString("vcelular"));
-                     cliente.setEmail(rs.getString("vemail"));
+             cliente.setId_cliente(rs.getLong("vid"));
+             cliente.setNombre_razons(rs.getString("vnombre"));
+             cliente.setRut( rs.getString("vrut")) ;
+
+             cliente.setDireccion(rs.getString("vdireccion"));
+             cliente.setCelular(rs.getString("vcelular"));
+             cliente.setEmail(rs.getString("vemail"));
  
         msj.setText("");
         }else {
-        msj.setText("CLIENTE NO REGISTRADO");
+        msj.setText("Cliente no registrado");
         
         }
 
-        ps.close();
-        rs.close();
+     
 //	
         } catch(Exception e)
             {
 //            JOptionPane.showMessageDialog(null, e.getMessage());
             } finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      
      }
      return cliente;
@@ -192,32 +207,31 @@ public Cliente buscarcliente(String tipoB,long id,String cadena,JLabel msj){
 
 public boolean duplicado(long id,String cadena,String tipoop){
 
-    Conexion conexion = new Conexion();
+    ConexionBD Cbd = new ConexionBD();
     ResultSet rs=null;
+    PreparedStatement ps;
     boolean valida=false;
      try{
-//	st= (Statement)miconexion.createStatement();
+
       
       String sql=("SELECT * from sp_duplicadocliente(?,?,?)"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+      ps=Cbd.conectar().prepareStatement(sql);
       ps.setString(1, cadena);
       ps.setLong(2, id);
       ps.setString(3, tipoop);
-      rs = ps.executeQuery();
-//      FileInputStream fis ;
-//      byte[] vacio= new byte[0];
+      rs = Cbd.RealizarConsulta(ps);
+
         if (rs.next()){
             valida= rs.getBoolean("vvalida");
         }
 
-        ps.close();
-        rs.close();
+       
 //	
         } catch(Exception e)
             {
-//            JOptionPane.showMessageDialog(null, e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
             } finally{
-            conexion.devolverConexionPool();
+           Cbd.desconectar();
      
      }
      return valida;
@@ -227,19 +241,18 @@ public boolean duplicado(long id,String cadena,String tipoop){
 public long  buscarclientevent(String cadena,JLabel msj,TextFieldRoundIcon nombre,
         JFormattedTextField total,JFormattedTextField venta){
   
-    Conexion conexion = new Conexion();
+    ConexionBD Cbd = new ConexionBD();
     ResultSet rs=null;
-  
+    PreparedStatement ps=null;
     long id=0;
      try{
 //	st= (Statement)miconexion.createStatement();
         
       String sql=("SELECT * from sp_busquedaclienteventa(?)"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+      ps=Cbd.conectar().prepareStatement(sql);
       ps.setString(1, cadena);
-      rs = ps.executeQuery();
-//      FileInputStream fis ;
-//      byte[] vacio= new byte[0];
+      rs = Cbd.RealizarConsulta(ps);
+
       total.setValue(0);
       venta.setValue(0);
       nombre.setText("");
@@ -247,14 +260,14 @@ public long  buscarclientevent(String cadena,JLabel msj,TextFieldRoundIcon nombr
       
         if (rs.next()){
                    
-                    id=(rs.getLong("idb"));
-                    nombre.setText(rs.getString("nombre"));
-                    total.setValue(rs.getDouble("total"));
-                    venta.setValue(rs.getDouble("ventas"));
+            id=(rs.getLong("idb"));
+            nombre.setText(rs.getString("nombre"));
+            total.setValue(rs.getDouble("total"));
+            venta.setValue(rs.getDouble("ventas"));
                    
         msj.setText("");
         }else {
-        msj.setText("CLIENTE NO REGISTRADO, INGRESE SUS DATOS");
+        msj.setText("CLiente no Registrado, ingrese sus datos");
      
         }
 
@@ -265,75 +278,74 @@ public long  buscarclientevent(String cadena,JLabel msj,TextFieldRoundIcon nombr
             {
 //            JOptionPane.showMessageDialog(null, e.getMessage());
             } finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      
      }
      return id;
 
     }
 public long insertarcliente(Cliente cliente){
-
+        ConexionBD Cbd = new ConexionBD();
        long id=0;
-       Conexion conexion = new Conexion();
+       PreparedStatement ps=null;
+       ResultSet rs=null;
      try{
           
           
             String Sql = "SELECT * from sp_insertarcliente(?,?,?,?,?)";
 //            String insertImageSql = "UPDATE alumno SET foto=? where id_alumno=?;";
-            PreparedStatement ps = conexion.getConnection().prepareStatement(Sql);
+            ps = Cbd.conectar().prepareStatement(Sql);
             ps.setString(1,cliente.getNombre_razons());
             ps.setString(2,cliente.getRut());
             ps.setString(3,cliente.getDireccion());
             ps.setString(4,cliente.getCelular());
             ps.setString(5,cliente.getEmail());
            
-            ResultSet rs= ps.executeQuery();
+            rs= Cbd.RealizarConsulta(ps);
             
             if(rs.next()){
                 id= rs.getLong("id");
             
             }
             
-            rs.close();
-            ps.close();
+          
 
         }
      catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      }
 return id;
 }
 public void editarcliente(Cliente cliente){
  
+     ConexionBD Cbd = new ConexionBD();
      
-     Conexion conexion = new Conexion();
-
+     ResultSet rs=null;
+     PreparedStatement ps=null;
      try{
-
-     String sql=("SELECT * from sp_editarcliente(?,?,?,?,?,?)");         
-       PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
+          
+        String sql=("SELECT * from sp_editarcliente(?,?,?,?,?,?)");         
+        ps=Cbd.conectar().prepareStatement(sql);
        
-            ps.setLong(1,cliente.getId_cliente());
-            ps.setString(2,cliente.getNombre_razons());
-            ps.setString(3,cliente.getRut());
-            ps.setString(4,cliente.getDireccion());
-            ps.setString(5,cliente.getCelular());
-            ps.setString(6,cliente.getEmail());
-
-            ps.execute();
-           
-       if  (ps.getResultSet().next()){
-            JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
+        ps.setLong(1,cliente.getId_cliente());
+        ps.setString(2,cliente.getNombre_razons());
+        ps.setString(3,cliente.getRut());
+        ps.setString(4,cliente.getDireccion());
+        ps.setString(5,cliente.getCelular());
+        ps.setString(6,cliente.getEmail());
+   
+       if  (Cbd.actualizarDatos(ps)==true){
+            JOptionPane.showMessageDialog(null,"Cliente Editado con exito","",JOptionPane.INFORMATION_MESSAGE);
         }
-	 ps.close();
-        } catch(Exception e)
+	
+        } catch(SQLException | HeadlessException e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }  finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      }      
  
 }
@@ -367,25 +379,25 @@ public void editarcliente(Cliente cliente){
 //}
 public void eliminarcliente(long idcliente){
 
-    Conexion conexion = new Conexion();
-            
+   ConexionBD Cbd = new ConexionBD();
+    PreparedStatement ps=null;        
   
      try{
 	
-        System.out.println("SELECT * from sp_eliminarcliente("+idcliente+")");
+        
       String sql=("SELECT * from sp_eliminarcliente(?)");       
-      PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+      ps= Cbd.conectar().prepareStatement(sql);
       ps.setLong(1, idcliente);
-      ResultSet rs =ps.executeQuery();
-       if  (rs.next()){
-            JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
+      
+       if  (Cbd.actualizarDatos(ps)==true){
+            JOptionPane.showMessageDialog(null,"Cliente eliminado con exito","",JOptionPane.INFORMATION_MESSAGE);
         }
 	
-        } catch(Exception e)
+        } catch(SQLException | HeadlessException e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-               conexion.devolverConexionPool();
+               Cbd.desconectar();
             }    
  
     

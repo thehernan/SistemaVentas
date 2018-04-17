@@ -9,6 +9,7 @@ import ClasesGlobales.Mayusculas;
 import DAO.EmpleadoDAO;
 import Pojos.Empleado;
 import Pojos.Usuarios;
+import java.util.List;
 
 /**
  *
@@ -20,22 +21,23 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
      * Creates new form JDBuscarEmpleado
      */
     EmpleadoDAO daoempleado = new EmpleadoDAO();
-    Empleado empleado = new Empleado();
+    Empleado empleado;
     Usuarios user=new Usuarios();
     JIFUsuarios fromuser;
     JIFReparaciones frmreparacion;
     String tipoB;
     Mayusculas mayus = new Mayusculas();
+    List<Empleado> listempleado;
     public JDBuscarEmpleado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        daoempleado.mostrarempleado(jtabla);
+        mostrar();
         this.setLocationRelativeTo(null);
     }
      public JDBuscarEmpleado(java.awt.Frame parent, boolean modal,Usuarios user, JIFUsuarios frmuser) {//CONTRUCTOR USUARIO
         super(parent, modal);
         initComponents();
-        daoempleado.mostrarempleado(jtabla);
+        mostrar();
         this.user=user;
         this.fromuser=frmuser;
         this.setLocationRelativeTo(null);
@@ -44,11 +46,36 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
      public JDBuscarEmpleado(java.awt.Frame parent, boolean modal,JIFReparaciones frmreparacion) {//CONTRUCTOR REPARACION
         super(parent, modal);
         initComponents();
-        daoempleado.mostrarempleado(jtabla);
+        mostrar();
         this.setLocationRelativeTo(null);
         this.frmreparacion= frmreparacion;
         tipoB="REPARACION";
     }
+     
+     public void mostrar(){
+     Runnable runnable = new Runnable() {
+
+         @Override
+         public void run() {
+//             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+             jlblimagencarga.setVisible(true);
+             jlblletracarga.setVisible(true);
+             listempleado=daoempleado.mostrarempleado(jtabla);
+             jlblimagencarga.setVisible(false);
+             jlblletracarga.setVisible(false);
+         }
+     };
+     Thread T = new Thread(runnable);
+     T.start();
+     
+     }
+     public synchronized void sensitiva (){
+      jlblimagencarga.setVisible(true);
+      jlblletracarga.setVisible(true);
+      listempleado=daoempleado.busquedasensitivaempleado(jtabla,"NOMBRE", jtfnombre.getText().trim().toUpperCase());
+      jlblimagencarga.setVisible(false);
+      jlblletracarga.setVisible(false);
+     }
    
 
     /**
@@ -61,6 +88,8 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jlblletracarga = new javax.swing.JLabel();
+        jlblimagencarga = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
         jbtnaceptar = new javax.swing.JButton();
@@ -69,27 +98,38 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
         jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 380, -1, -1));
+
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, 190, 200));
 
         jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtabla.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jtabla);
 
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 122, 774, 420));
+
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
         jbtnaceptar.setText("Aceptar");
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -97,8 +137,9 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
                 jbtnaceptarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(671, 73, -1, -1));
 
-        jtfnombre.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jtfnombre.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfnombre.setText("NOMBRE");
         jtfnombre.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -106,6 +147,11 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jtfnombreFocusLost(evt);
+            }
+        });
+        jtfnombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnombreActionPerformed(evt);
             }
         });
         jtfnombre.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -116,12 +162,13 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
                 jtfnombreKeyTyped(evt);
             }
         });
+        jPanel1.add(jtfnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 80, 401, -1));
 
-        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("BUSCAR EMPLEADO");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -141,34 +188,7 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jtfnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jbtnaceptar)
-                .addContainerGap(27, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
-            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbtnaceptar)
-                    .addComponent(jtfnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-                .addGap(9, 9, 9))
-        );
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 798, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -187,7 +207,7 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
     private void jtfnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnombreKeyReleased
         // TODO add your handling code here:
         
-        daoempleado.busquedasensitivaempleado(jtabla,"NOMBRE", jtfnombre.getText().trim().toUpperCase());
+       
     }//GEN-LAST:event_jtfnombreKeyReleased
 
     private void jbtnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnaceptarActionPerformed
@@ -195,17 +215,10 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
         int index= jtabla.getSelectedRow();
         if(index>=0){
             
-            long idempleado= Long.parseLong(jtabla.getValueAt(index, 0).toString());
-            String rut=jtabla.getValueAt(index, 1).toString();
-            String nombre= jtabla.getValueAt(index, 2).toString();
-            System.out.println("idemplebuscar"+idempleado);
-            
-            empleado.setId_empleado(idempleado);
-            empleado.setNombre(nombre);
-            empleado.setRut(rut);
+            empleado=listempleado.get(index);
             
             if(tipoB.equals("USUARIO")){ //SI LLAMA EL CONTRUCTOR USUARIO
-                user.setIdempleado(idempleado);
+                user.setIdempleado(empleado.getId_empleado());
                 fromuser.setuser(user);
                 fromuser.setempleado(empleado);
                 fromuser.validaguardar();
@@ -241,8 +254,22 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
 
     private void jtfnombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnombreKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfnombre);
+//        mayus.convertirmayus(jtfnombre);
     }//GEN-LAST:event_jtfnombreKeyTyped
+
+    private void jtfnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnombreActionPerformed
+        // TODO add your handling code here:
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                sensitiva();
+            }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
+    }//GEN-LAST:event_jtfnombreActionPerformed
 
     /**
      * @param args the command line arguments
@@ -292,6 +319,8 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnaceptar;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
     private javax.swing.JTable jtabla;
     private javax.swing.JTextField jtfnombre;
     // End of variables declaration//GEN-END:variables

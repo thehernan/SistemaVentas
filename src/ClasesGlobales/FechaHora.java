@@ -5,8 +5,7 @@
  */
 package ClasesGlobales;
 
-import Conexion.Conexion;
-import Pojos.Usuarios;
+import Conexion.ConexionBD;
 import java.io.FileInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,17 +18,17 @@ import javax.swing.JOptionPane;
 public class FechaHora {
     private String fecha;
     private String hora;
-    
+     ConexionBD Cbd = new ConexionBD();
 public FechaHora extraer(){ 
     FechaHora fecha = new FechaHora();
     ResultSet rs=null;
-    Conexion conexion = new Conexion();
+   
      try{
 
          System.out.println("SELECT * from sp_fechasistema()");
       String sql=("SELECT * from sp_fechasistema()"); 
-      PreparedStatement ps=conexion.getConnection().prepareStatement(sql);
-      rs = ps.executeQuery();
+      PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+      rs = Cbd.RealizarConsulta(ps);
       FileInputStream fis ;
 
         if (rs.next()){
@@ -44,7 +43,7 @@ public FechaHora extraer(){
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+              Cbd.desconectar();
      }
      
      

@@ -5,17 +5,15 @@
  */
 package DAO;
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import Pojos.DetalleOrdeSalidaEntrada;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 /**
@@ -24,10 +22,12 @@ import javax.swing.JTextArea;
  */
 public class DetalleOrdenEntradaDAO {
     
+    
+    
      public void insertar(List<DetalleOrdeSalidaEntrada> detalleorden ,long idorden,long idsucur,JTextArea mens,JButton salir){
-        
-         System.out.println("com"+detalleorden.size());
-       Conexion conexion = new Conexion();
+        ConexionBD Cbd = new ConexionBD();
+        System.out.println("com"+detalleorden.size());
+       
 //        Iterator<DetalleOrdeSalidaEntrada> it= detalleorden.iterator();
        
        OrdenSalidaDAO daoorden = new OrdenSalidaDAO();
@@ -56,13 +56,13 @@ public class DetalleOrdenEntradaDAO {
                     System.out.println("SELECT * from sp_insertardetalleordenentrada("+det.getIdproducto()+","+det.getCantidad()+","+idorden+","+idsucur+")");  
                     String insertImageSql = "SELECT * from sp_insertardetalleordenentrada(?,?,?,?)";
 
-                    ps = conexion.getConnection().prepareStatement(insertImageSql);
+                    ps = Cbd.conectar().prepareStatement(insertImageSql);
 
                     ps.setLong(1,det.getIdproducto());
                     ps.setBigDecimal(2,new BigDecimal(det.getCantidad()));
                     ps.setLong(3,idorden);
                     ps.setLong(4, idsucur);
-                    ps.execute();
+                    Cbd.actualizarDatos(ps);
                     mens.setCaretPosition(mens.getDocument().getLength());
                     i++;
           }
@@ -70,7 +70,7 @@ public class DetalleOrdenEntradaDAO {
                 
                 
                 
-                    ps.close();
+                  
                     mens.append("Imprimiendo Orden de Entrada ...");
                     mens.append(System.getProperty("line.separator"));
                     Thread.sleep(500);
@@ -88,7 +88,7 @@ public class DetalleOrdenEntradaDAO {
             } catch (InterruptedException ex) {
                  Logger.getLogger(DetalleOrdenSalidaDAO.class.getName()).log(Level.SEVERE, null, ex);
              }finally{
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
      }
          }
       };

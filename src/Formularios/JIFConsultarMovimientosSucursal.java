@@ -6,7 +6,12 @@
 package Formularios;
 
 import DAO.OrdenSalidaDAO;
+import Pojos.OrdenSalidaEntrada;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,10 +22,39 @@ public class JIFConsultarMovimientosSucursal extends javax.swing.JInternalFrame 
     /**
      * Creates new form JIFConsultarMovimientosSucursal
      */
-    OrdenSalidaDAO orden = new OrdenSalidaDAO();
-            
+    OrdenSalidaDAO ordenDAO = new OrdenSalidaDAO();
+    List<OrdenSalidaEntrada> listorden= new ArrayList<>();
+     int posx;
+    int posy;
     public JIFConsultarMovimientosSucursal() {
         initComponents();
+        jlblmensajeimprimir.setVisible(false);
+        jdpdesde.setDate(new Date());
+        jdphasta.setDate(new Date());
+        buscar();
+    }
+    
+    public void buscar(){
+         Runnable runnable = new Runnable() {
+
+        @Override
+        public void run() {
+//            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       jlblimagencarga.setVisible(true);
+       jlblletracarga.setVisible(true);
+         if (jdpdesde.getDate()!=null && jdphasta.getDate()!=null){
+            Timestamp desde = new Timestamp(jdpdesde.getDate().getTime());
+            Timestamp hasta = new Timestamp(jdphasta.getDate().getTime());
+            listorden=ordenDAO.mostrar(jtabla, desde, hasta);
+        
+        }
+         jlblimagencarga.setVisible(false);
+        jlblletracarga.setVisible(false);
+         }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
+    
     }
 
     /**
@@ -38,48 +72,60 @@ public class JIFConsultarMovimientosSucursal extends javax.swing.JInternalFrame 
         jLabel2 = new javax.swing.JLabel();
         jdphasta = new org.jdesktop.swingx.JXDatePicker();
         jdpdesde = new org.jdesktop.swingx.JXDatePicker();
-        jbtnbuscar = new javax.swing.JButton();
-        jbtnimprimir = new javax.swing.JButton();
+        jlblletracarga = new javax.swing.JLabel();
+        jlblimagencarga = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
-        jlblmensaje = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jbtnimprimir = new javax.swing.JButton();
+        jlblmensajeimprimir = new javax.swing.JLabel();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
-        setTitle("CONSULTAR MOVIMIENTOS ENTRE SUCURSALES");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "INGRESE FECHA DE PEDIDO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ingrese Fecha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Light", 0, 12))); // NOI18N
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("Hasta:");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, -1, 20));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, -1, 20));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel2.setText("Desde:");
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, 20));
-        jPanel2.add(jdphasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 170, -1));
-        jPanel2.add(jdpdesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 140, -1));
 
-        jbtnbuscar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Searchx32.png"))); // NOI18N
-        jbtnbuscar.addActionListener(new java.awt.event.ActionListener() {
+        jdphasta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnbuscarActionPerformed(evt);
+                jdphastaActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtnbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 10, -1, 40));
+        jPanel2.add(jdphasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 130, -1));
 
-        jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
-        jbtnimprimir.addActionListener(new java.awt.event.ActionListener() {
+        jdpdesde.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnimprimirActionPerformed(evt);
+                jdpdesdeActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, -1, -1));
+        jPanel2.add(jdpdesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 120, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 74, 385, 55));
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 420, -1, -1));
+
+        jlblimagencarga.setBackground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setForeground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 1220, 390));
 
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -96,35 +142,75 @@ public class JIFConsultarMovimientosSucursal extends javax.swing.JInternalFrame 
         jtabla.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jtabla);
 
-        jlblmensaje.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jlblmensaje.setForeground(new java.awt.Color(255, 51, 51));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 141, 1220, 385));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 948, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 723, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(9, 9, 9))
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel7MouseDragged(evt);
+            }
+        });
+        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel7MousePressed(evt);
+            }
+        });
+
+        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("CONSULTAR MOVIMIENTOS ENTRE SUCURSALES");
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jLabel6.setToolTipText("Cerrar");
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel6MouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 686, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel11))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1239, -1));
+
+        jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
+        jbtnimprimir.setText("Imprimir");
+        jbtnimprimir.setBorder(null);
+        jbtnimprimir.setBorderPainted(false);
+        jbtnimprimir.setContentAreaFilled(false);
+        jbtnimprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnimprimirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 80, -1, 40));
+
+        jlblmensajeimprimir.setBackground(new java.awt.Color(0, 0, 0));
+        jlblmensajeimprimir.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jlblmensajeimprimir.setForeground(new java.awt.Color(0, 0, 0));
+        jlblmensajeimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
+        jlblmensajeimprimir.setText("Imprimiendo Orden ...");
+        jPanel1.add(jlblmensajeimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 80, 170, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,45 +226,76 @@ public class JIFConsultarMovimientosSucursal extends javax.swing.JInternalFrame 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbtnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarActionPerformed
-        // TODO add your handling code here:
-        if (jdpdesde.getDate()!=null && jdphasta.getDate()!=null){
-            Timestamp desde = new Timestamp(jdpdesde.getDate().getTime());
-            Timestamp hasta = new Timestamp(jdphasta.getDate().getTime());
-            orden.mostrar(jtabla, desde, hasta, jlblmensaje);
-        
-        }else {
-        jlblmensaje.setText("INGRESE FECHA");
-        
-        }
-    }//GEN-LAST:event_jbtnbuscarActionPerformed
-
     private void jbtnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirActionPerformed
         // TODO add your handling code here:
-        if (jdpdesde.getDate()!=null && jdphasta.getDate()!=null){
-            Timestamp desde = new Timestamp(jdpdesde.getDate().getTime());
-            Timestamp hasta = new Timestamp(jdphasta.getDate().getTime());
-            orden.imprimirtodo(desde, hasta);
-             jlblmensaje.setText("");
-            }else {
-            jlblmensaje.setText("INGRESE FECHA");
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                
+                if (jtabla.getSelectedRow()>=0){
+               
+                jlblmensajeimprimir.setVisible(true);
+                OrdenSalidaEntrada orden = listorden.get(jtabla.getSelectedRow());
+                ordenDAO.imprimir(orden.getIdordensalidaentrada());
+                jlblmensajeimprimir.setVisible(false);
+                
+                }else {
+                    JOptionPane.showMessageDialog(null, "Seleccione Orden a imprimir");
+                }
+            }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
         
-        }
         
     }//GEN-LAST:event_jbtnimprimirActionPerformed
+
+    private void jdpdesdeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jdpdesdeActionPerformed
+        // TODO add your handling code here:
+        buscar();
+    }//GEN-LAST:event_jdpdesdeActionPerformed
+
+    private void jdphastaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jdphastaActionPerformed
+        // TODO add your handling code here:
+        buscar();
+    }//GEN-LAST:event_jdphastaActionPerformed
+
+    private void jPanel7MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MousePressed
+        // TODO add your handling code here:
+          posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel7MousePressed
+
+    private void jPanel7MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseDragged
+        // TODO add your handling code here:
+         int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel7MouseDragged
+
+    private void jLabel6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseReleased
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jLabel6MouseReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton jbtnbuscar;
     private javax.swing.JButton jbtnimprimir;
     private org.jdesktop.swingx.JXDatePicker jdpdesde;
     private org.jdesktop.swingx.JXDatePicker jdphasta;
-    private javax.swing.JLabel jlblmensaje;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
+    private javax.swing.JLabel jlblmensajeimprimir;
     private javax.swing.JTable jtabla;
     // End of variables declaration//GEN-END:variables
 }

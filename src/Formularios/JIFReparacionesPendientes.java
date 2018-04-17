@@ -6,8 +6,16 @@
 package Formularios;
 
 import DAO.ReparacionDAO;
+import DAO.SucursalDAO;
 import Pojos.Reparacion;
+import Pojos.Sucursal;
+import Pojos.SucursalSingleton;
 import Pojos.UsuarioSingleton;
+import java.awt.Frame;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,15 +29,57 @@ public final class JIFReparacionesPendientes extends javax.swing.JInternalFrame 
     ReparacionDAO daoreparacion= new ReparacionDAO();
     UsuarioSingleton usuariosingleton =  UsuarioSingleton.getintancia();
     Reparacion reparacion= new Reparacion();
+    List<Sucursal> listsucur;
+    List<Reparacion> listrepara;
+    Sucursal sucursal;
+    SucursalDAO daosucursal = new SucursalDAO();
+    SucursalSingleton sucursalsingleton = SucursalSingleton.getinstancia();
+     int posx;
+    int posy;
     public JIFReparacionesPendientes() {
         initComponents();
-        jbtnimprimir.setEnabled(false);
-        mostrar(usuariosingleton.getIdempleado()); 
+        
+//        mostrar(usuariosingleton.getIdempleado());
+        
+        
+        buscar();
     }
-    public void mostrar(long idemple){
-        System.out.println("idemple"+idemple);
-         daoreparacion.mostrarpendientes(jtabla,idemple);
-         System.out.println(" mostrar");
+//    public void mostrar(long idemple){
+//        System.out.println("idemple"+idemple);
+//         listrepara=daoreparacion.mostrar(jtabla,jlbltotal,"pendientes",idemple);
+//         System.out.println(" mostrar");
+//    }
+    
+    public void buscar (){
+     Runnable runnable = new Runnable() {
+
+        @Override
+        public void run() {
+//            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       jlblimagencarga.setVisible(true);
+       jlblletracarga.setVisible(true);
+       if(listsucur==null){
+            listsucur=daosucursal.llenarcombo(jcbsucursal);
+       
+       }
+      
+     if(jcbsucursal.getSelectedIndex()==0){
+            listrepara=daoreparacion.busquedasensitiva(jtabla, sucursalsingleton.getId(), jlbltotal, jtfbuscar.getText().toUpperCase(),
+                    "todoempleado",usuariosingleton.getIdempleado(),new Timestamp(new Date().getTime()),new Timestamp(new Date().getTime()));
+
+        }else {
+            sucursal=listsucur.get(jcbsucursal.getSelectedIndex());
+            listrepara=daoreparacion.busquedasensitiva(jtabla, sucursal.getId() ,jlbltotal, jtfbuscar.getText().toUpperCase(),
+                    "sucursalempleado",usuariosingleton.getIdempleado(),new Timestamp(new Date().getTime()),new Timestamp(new Date().getTime()));
+
+        }
+    jlblimagencarga.setVisible(false);
+    jlblletracarga.setVisible(false);
+     }
+    };
+    Thread T = new Thread(runnable);
+    T.start();
+    
     }
 
     /**
@@ -42,29 +92,49 @@ public final class JIFReparacionesPendientes extends javax.swing.JInternalFrame 
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jlblletracarga = new javax.swing.JLabel();
+        jlblimagencarga = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
-        jbtnimprimir = new javax.swing.JButton();
+        jlbltotal = new javax.swing.JLabel();
+        jtfbuscar = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jcbsucursal = new javax.swing.JComboBox();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jlblmensaje = new javax.swing.JLabel();
         jbtnrefrescar = new javax.swing.JButton();
+        jbtnver = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jtabla.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 460, -1, -1));
+
+        jlblimagencarga.setBackground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setForeground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 1230, 460));
+
+        jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -76,119 +146,157 @@ public final class JIFReparacionesPendientes extends javax.swing.JInternalFrame 
         });
         jScrollPane1.setViewportView(jtabla);
 
-        jbtnimprimir.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print_46933.png"))); // NOI18N
-        jbtnimprimir.addActionListener(new java.awt.event.ActionListener() {
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 1217, 502));
+
+        jlbltotal.setText("jLabel2");
+        jPanel1.add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1269, 563, 79, -1));
+
+        jtfbuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnimprimirActionPerformed(evt);
+                jtfbuscarActionPerformed(evt);
+            }
+        });
+        jtfbuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfbuscarKeyReleased(evt);
+            }
+        });
+        jPanel1.add(jtfbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 100, 560, -1));
+
+        jLabel9.setText("Cod. / Tecnico / Cliente:");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, 20));
+
+        jLabel10.setText("Sucursal:");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 100, -1, 20));
+
+        jcbsucursal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbsucursalActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 100, 311, -1));
+
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel7MouseDragged(evt);
+            }
+        });
+        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel7MousePressed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel1.setText("DOBLE CLIC SOBRE SOBRE LA REPARACION ");
+        jLabel14.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel14.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("REPARACIONES PENDIENTES");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel2.setText("PARA DAR POR REPARADO O NO EL DISPOSITIVO");
-
-        jlblmensaje.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jlblmensaje.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("DOBLE CLIC SOBRE SOBRE LA REPARACION PARA DAR POR REPARADO O NO EL DISPOSITIVO");
 
         jbtnrefrescar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnrefrescar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnrefrescar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/refresh.png"))); // NOI18N
+        jbtnrefrescar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnrefrescar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Refresh_25px.png"))); // NOI18N
+        jbtnrefrescar.setText("Refrescar");
+        jbtnrefrescar.setToolTipText("Refrescar");
+        jbtnrefrescar.setBorderPainted(false);
+        jbtnrefrescar.setContentAreaFilled(false);
         jbtnrefrescar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnrefrescarActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(165, 165, 165)
-                                .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jbtnrefrescar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addComponent(jbtnimprimir))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jScrollPane1)))
-                .addGap(37, 37, 37))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(5, 5, 5)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jbtnrefrescar)
-                            .addComponent(jbtnimprimir))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        jbtnver.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnver.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/view25px.png"))); // NOI18N
+        jbtnver.setText("Ver");
+        jbtnver.setToolTipText("Ver ");
+        jbtnver.setBorderPainted(false);
+        jbtnver.setContentAreaFilled(false);
+        jbtnver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnverActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jLabel15.setToolTipText("Cerrar");
+        jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel15MouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel14)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 314, Short.MAX_VALUE)
+                .addComponent(jbtnrefrescar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
-                .addGap(15, 15, 15))
+                .addComponent(jbtnver)
+                .addGap(231, 231, 231)
+                .addComponent(jLabel15)
+                .addContainerGap())
         );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jbtnver)
+                                .addComponent(jbtnrefrescar))
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1))))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(0, 12, Short.MAX_VALUE)
+                        .addComponent(jLabel15)
+                        .addGap(28, 28, 28)))
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1249, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1249, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbtnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirActionPerformed
-        // TODO add your handling code here:
-        int index = jtabla.getSelectedRow();
-        if (index>=0){
-            long id = Long.parseLong(jtabla.getValueAt(index,0).toString());
-            daoreparacion.imprimir(id);
-            jlblmensaje.setText("");
-        }else {
-            jlblmensaje.setText("SELECCIONE UN REPARACION DE LA TABLA");
-            }
-    }//GEN-LAST:event_jbtnimprimirActionPerformed
-
     private void jtablaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMousePressed
         // TODO add your handling code here:
-        jbtnimprimir.setEnabled(true);
+//        jbtnimprimir.setEnabled(true);
         int index = jtabla.getSelectedRow();
         if(index >= 0){
             if (evt.getClickCount()==2) {
-                long id= Long.parseLong(jtabla.getValueAt(index, 0).toString());
-                String marca = jtabla.getValueAt(index,5).toString();
-                String modelo = jtabla.getValueAt(index, 6).toString();
-                reparacion.setIdreparacion(id);
-                reparacion.setModelo(modelo);
-                reparacion.setMarca(marca);
+                reparacion= listrepara.get(index);
                 JDDiagnosticoReparacion dreparacion= new JDDiagnosticoReparacion(new java.awt.Frame(), isVisible(),
                 reparacion,this);
                 dreparacion.setVisible(true);
@@ -201,18 +309,100 @@ public final class JIFReparacionesPendientes extends javax.swing.JInternalFrame 
 
     private void jbtnrefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnrefrescarActionPerformed
         // TODO add your handling code here:
-        mostrar(usuariosingleton.getIdempleado()); 
+        buscar();
     }//GEN-LAST:event_jbtnrefrescarActionPerformed
+
+    private void jtfbuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscarKeyReleased
+        // TODO add your handling code here:
+//        if(jcbsucursal.getSelectedIndex()==0){
+//            listrepara=daoreparacion.busquedasensitiva(jtabla, sucursalsingleton.getId(), jlbltotal, jtfbuscar.getText().toUpperCase(),
+//                    "todoempleado",usuariosingleton.getIdempleado());
+//
+//        }else {
+//            sucursal=listsucur.get(jcbsucursal.getSelectedIndex());
+//            listrepara=daoreparacion.busquedasensitiva(jtabla, sucursal.getId() ,jlbltotal, jtfbuscar.getText().toUpperCase(),
+//                    "sucursalempleado",usuariosingleton.getIdempleado());
+//
+//        }
+        if(evt.getKeyCode()==10){
+            buscar();
+        
+        
+        }
+
+    }//GEN-LAST:event_jtfbuscarKeyReleased
+
+    private void jcbsucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbsucursalActionPerformed
+        // TODO add your handling code here:
+//        if(jcbsucursal.getSelectedIndex()==0){
+//            listrepara= daoreparacion.busquedasensitiva(jtabla, sucursalsingleton.getId(), jlbltotal, jtfbuscar.getText().toUpperCase(),
+//                    "todoempleado",usuariosingleton.getIdempleado());
+//
+//        }else {
+//            sucursal=listsucur.get(jcbsucursal.getSelectedIndex());
+//            listrepara= daoreparacion.busquedasensitiva(jtabla, sucursal.getId() ,jlbltotal, jtfbuscar.getText().toUpperCase(),
+//                    "sucursalempleado",usuariosingleton.getIdempleado());
+//
+//        }
+        buscar();
+    }//GEN-LAST:event_jcbsucursalActionPerformed
+
+    private void jbtnverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnverActionPerformed
+        // TODO add your handling code here:
+        int index=jtabla.getSelectedRow();
+        if(index>=0){
+        reparacion=listrepara.get(index);
+        JDMostrarReparacion mostrar=new JDMostrarReparacion(new Frame(), isVisible(),reparacion.getIdreparacion());
+        mostrar.setVisible(true);
+      
+        }else {
+            JOptionPane.showMessageDialog(null,"Seleccione una reparación","",JOptionPane.INFORMATION_MESSAGE);
+        
+        }
+         
+    }//GEN-LAST:event_jbtnverActionPerformed
+
+    private void jtfbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfbuscarActionPerformed
+        // TODO add your handling code here:
+     
+    }//GEN-LAST:event_jtfbuscarActionPerformed
+
+    private void jLabel15MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseReleased
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jLabel15MouseReleased
+
+    private void jPanel7MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseDragged
+        // TODO add your handling code here:
+        int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel7MouseDragged
+
+    private void jPanel7MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MousePressed
+        // TODO add your handling code here:
+          posy=evt.getY();
+        posx=evt.getX();
+ 
+    }//GEN-LAST:event_jPanel7MousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton jbtnimprimir;
     private javax.swing.JButton jbtnrefrescar;
-    private javax.swing.JLabel jlblmensaje;
+    private javax.swing.JButton jbtnver;
+    private javax.swing.JComboBox jcbsucursal;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
+    private javax.swing.JLabel jlbltotal;
     private javax.swing.JTable jtabla;
+    private javax.swing.JTextField jtfbuscar;
     // End of variables declaration//GEN-END:variables
 }

@@ -8,6 +8,9 @@ package Formularios;
 import ClasesGlobales.Mayusculas;
 import DAO.ClienteDAO;
 import Pojos.Cliente;
+import java.util.ArrayList;
+import java.util.List;
+import org.jfree.chart.plot.ThermometerPlot;
 
 /**
  *
@@ -25,35 +28,80 @@ public class JDBuscarCliente extends javax.swing.JDialog {
     JIFVentaConsultar frmventaconsul;
     String tipo="";
     Mayusculas mayus= new Mayusculas();
+    List<Cliente> listcliente= new ArrayList<>();
+    
     public JDBuscarCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        daocliente.mostrarcliente(jtabla);
+        listcliente=daocliente.mostrarcliente(jtabla);
     }
+    
     public JDBuscarCliente(java.awt.Frame parent, boolean modal,JIFReparaciones frmreparacion) {
         super(parent, modal);
         initComponents();
-        daocliente.mostrarcliente(jtabla);
+//       listcliente= daocliente.mostrarcliente(jtabla);
+         jlblimagencarga.setVisible(false);
+        jlblletracarga.setVisible(false);
+         mostrar();
         this.frmreparacion= frmreparacion;
         this.setLocationRelativeTo(null);
         tipo="reparacion";
+      
     }
        public JDBuscarCliente(java.awt.Frame parent, boolean modal,JIFrmReparacionConsultar frmreparaconsul) {
         super(parent, modal);
         initComponents();
-        daocliente.mostrarcliente(jtabla);
+//        listcliente=daocliente.mostrarcliente(jtabla);
+          jlblimagencarga.setVisible(false);
+        jlblletracarga.setVisible(false);
+          mostrar();
         this.frmreparaconsul=frmreparaconsul;
         this.setLocationRelativeTo(null);
         tipo="reparaconsul";
+       
     }
        public JDBuscarCliente(java.awt.Frame parent, boolean modal,JIFVentaConsultar frmventaconsul) {
         super(parent, modal);
         initComponents();
-        daocliente.mostrarcliente(jtabla);
+//        listcliente=daocliente.mostrarcliente(jtabla);
+        jlblimagencarga.setVisible(false);
+        jlblletracarga.setVisible(false);
+        mostrar();
         this.frmventaconsul=frmventaconsul;
         this.setLocationRelativeTo(null);
         tipo="ventaconsul";
+         
     }
+       
+       public void mostrar(){
+       Runnable  runnable = new Runnable() {
+
+           @Override
+           public void run() {
+//               throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                jlblimagencarga.setVisible(true);
+                jlblletracarga.setVisible(true);
+                listcliente=daocliente.mostrarcliente(jtabla);
+                jlblimagencarga.setVisible(false);
+                jlblletracarga.setVisible(false);
+           }
+       };
+           Thread T = new Thread(runnable);
+           T.start();
+       
+       
+       
+       }
+       
+       public synchronized  void sensitiva (){
+           jlblimagencarga.setVisible(true);
+           jlblletracarga.setVisible(true);
+          listcliente=daocliente.busquedasensitivacliente("NOMBRE",jtfnombre.getText().trim().toUpperCase(),jtabla);
+          jlblimagencarga.setVisible(false);
+          jlblletracarga.setVisible(false);
+       
+       }
+       
 
 
     /**
@@ -68,21 +116,29 @@ public class JDBuscarCliente extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jtfnombre = new javax.swing.JTextField();
         jbtnaceptar = new javax.swing.JButton();
+        jlblimagencarga = new javax.swing.JLabel();
+        jlblletracarga = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
-        jlblmensaje = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jtfnombre.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfnombre.setText("NOMBRE RAZON SOCIAL");
         jtfnombre.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfnombreFocusGained(evt);
+            }
+        });
+        jtfnombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnombreActionPerformed(evt);
             }
         });
         jtfnombre.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -93,6 +149,7 @@ public class JDBuscarCliente extends javax.swing.JDialog {
                 jtfnombreKeyTyped(evt);
             }
         });
+        jPanel1.add(jtfnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 71, 405, -1));
 
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
         jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
@@ -102,31 +159,38 @@ public class JDBuscarCliente extends javax.swing.JDialog {
                 jbtnaceptarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(674, 64, -1, -1));
+
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 180, 190, 240));
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 390, -1, -1));
 
         jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtabla.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jtabla);
 
-        jlblmensaje.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jlblmensaje.setForeground(new java.awt.Color(255, 51, 51));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 764, 450));
 
-        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("BUSCAR CLIENTE");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -146,50 +210,17 @@ public class JDBuscarCliente extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jtfnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                        .addComponent(jbtnaceptar)
-                        .addGap(16, 16, 16))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnaceptar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 788, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
         );
 
         pack();
@@ -204,7 +235,7 @@ public class JDBuscarCliente extends javax.swing.JDialog {
 
     private void jtfnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnombreKeyReleased
         // TODO add your handling code here:
-        daocliente.busquedasensitivacliente("NOMBRE",jtfnombre.getText().trim().toUpperCase(),jtabla);
+        
     }//GEN-LAST:event_jtfnombreKeyReleased
 
     private void jbtnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnaceptarActionPerformed
@@ -212,33 +243,33 @@ public class JDBuscarCliente extends javax.swing.JDialog {
        
             int index=jtabla.getSelectedRow();
             if(index>=0){
-                cliente.setId_cliente(Long.parseLong(jtabla.getValueAt(index, 0).toString()));
-                cliente.setNombre_razons(jtabla.getValueAt(index, 2).toString());
-                cliente.setRut(jtabla.getValueAt(index, 1).toString());
+                cliente=listcliente.get(index);
                  if(tipo.equals("reparacion")){
                     
                     frmreparacion.setcliente(cliente);
                     frmreparacion.validaaceptar();
                     this.dispose();
                  }
-                 if(tipo.equals("reparaconsul")){
-                     frmreparaconsul.setcliente(cliente);
-                     this.dispose();
-        
-        
-                }
-                 if(tipo.equals("ventaconsul")){
-                     frmventaconsul.setcliente(cliente);
-                     this.dispose();
-        
-        
-                }
+//                 if(tipo.equals("reparaconsul")){
+//                     frmreparaconsul.setcliente(cliente);
+//                     this.dispose();
+//        
+//        
+//                }
+//                 if(tipo.equals("ventaconsul")){
+//                     frmventaconsul.setcliente(cliente);
+//                     this.dispose();
+//        
+//        
+//                }
                  
                  
-            }else {
-                jlblmensaje.setText("SELECCIONE UN CLIENTE ");
-
             }
+            
+//            else {
+//                jlblmensaje.setText("SELECCIONE UN CLIENTE ");
+//
+//            }
 
 
             
@@ -250,8 +281,23 @@ public class JDBuscarCliente extends javax.swing.JDialog {
 
     private void jtfnombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnombreKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfnombre);
+//        mayus.convertirmayus(jtfnombre);
     }//GEN-LAST:event_jtfnombreKeyTyped
+
+    private void jtfnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnombreActionPerformed
+        // TODO add your handling code here:
+       Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//                
+                sensitiva();
+            }
+        };
+        Thread T = new Thread(runnable);
+        T.start();
+    }//GEN-LAST:event_jtfnombreActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,7 +347,8 @@ public class JDBuscarCliente extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnaceptar;
-    private javax.swing.JLabel jlblmensaje;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
     private javax.swing.JTable jtabla;
     private javax.swing.JTextField jtfnombre;
     // End of variables declaration//GEN-END:variables

@@ -5,7 +5,7 @@
  */
 package DAO;
 
-import Conexion.Conexion;
+import Conexion.ConexionBD;
 import Pojos.PrecioReparacion;
 import Pojos.Reparacion;
 import java.awt.HeadlessException;
@@ -43,11 +43,12 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class ReparacionDAO {
     
+    
     public long insertar(Reparacion reparacion){
- 
+        ConexionBD Cbd = new ConexionBD();
         PreparedStatement preparedStatement = null;
+        ResultSet rs= null;
        
-        Conexion conexion = new Conexion();
         String codigo= "";
         long idrepara=0;
         byte[] FOTO= reparacion.getFoto();
@@ -55,9 +56,9 @@ public class ReparacionDAO {
         
      try{
        
-            String insertImageSql = "SELECT * from sp_insertareparacion(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String insertImageSql = "SELECT * from sp_insertareparacion(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-            preparedStatement = conexion.getConnection().prepareStatement(insertImageSql);
+            preparedStatement = Cbd.conectar().prepareStatement(insertImageSql);
             
             
             preparedStatement.setLong(1,reparacion.getIdcliente());
@@ -72,44 +73,44 @@ public class ReparacionDAO {
             preparedStatement.setBinaryStream(10,fis );  
            
             preparedStatement.setBigDecimal(11,new BigDecimal(reparacion.getPrecio()));
-            preparedStatement.setTimestamp(12, reparacion.getFechaE());
-            preparedStatement.setString(13, reparacion.getHora());
-            preparedStatement.setLong(14,reparacion.getId_sucural());
-            preparedStatement.setBigDecimal(15,new BigDecimal(reparacion.getPreciorevision()));
-            preparedStatement.setBigDecimal(16,new BigDecimal(reparacion.getDescuento()));
-            preparedStatement.execute();
+            preparedStatement.setString(12, reparacion.getFechaE());
+//            preparedStatement.setString(13, reparacion.getHora());
+            preparedStatement.setLong(13,reparacion.getId_sucural());
+            preparedStatement.setBigDecimal(14,new BigDecimal(reparacion.getPreciorevision()));
+            preparedStatement.setBigDecimal(15,new BigDecimal(reparacion.getDescuento()));
+            rs=Cbd.RealizarConsulta(preparedStatement);
             
-            if(preparedStatement.getResultSet().next()){
+            if(rs.next()){
                 codigo=preparedStatement.getResultSet().getString("vcodigo");
                 idrepara=preparedStatement.getResultSet().getLong("ridreparacion");
                 System.out.println("codrep"+codigo);
                 System.out.println("idrep"+idrepara);
                 
             }
-            preparedStatement.close();
+            
         }
      catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
          
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
             
      }
      return idrepara;
 }
     public void editar(Reparacion reparacion){
- 
+        ConexionBD Cbd = new ConexionBD();
         PreparedStatement preparedStatement = null;
        
-        Conexion conexion = new Conexion();
+     
       
         
      try{
        
             String insertImageSql = "SELECT * from sp_editarreparacion(?,?,?)";
 
-            preparedStatement = conexion.getConnection().prepareStatement(insertImageSql);
+            preparedStatement = Cbd.conectar().prepareStatement(insertImageSql);
             
             
             preparedStatement.setLong(1,reparacion.getIdreparacion());
@@ -117,24 +118,24 @@ public class ReparacionDAO {
             preparedStatement.setString(3, reparacion.getDiagnostico());
        
            
-            preparedStatement.execute();
+           Cbd.actualizarDatos(preparedStatement);
             
          
-            preparedStatement.close();
+          
         }
      catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
          
-            conexion.devolverConexionPool();
+            Cbd.desconectar();
             
      }
      
 }
-    public Reparacion buscar(JTable tab,String cod,JLabel cliente,JLabel rut,JFormattedTextField total,
-        JFormattedTextField subtotal,JFormattedTextField iva,JFormattedTextField abono){
-        Conexion conexion = new Conexion();
+    public Reparacion buscarcaja(JTable tab,String cod,JLabel cliente,JLabel rut,JFormattedTextField total,
+        JFormattedTextField subtotal,JFormattedTextField iva,JFormattedTextField abono,JFormattedTextField descuento){
+       ConexionBD Cbd = new ConexionBD();
  
         Reparacion repara= new Reparacion();
         DefaultTableModel tabla=new DefaultTableModel(){
@@ -151,9 +152,10 @@ public class ReparacionDAO {
 	
         System.out.println("SELECT * from sp_busquedareparacion('"+cod+"')");
         String sql=("SELECT * from sp_busquedareparacion(?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
         ps.setString(1, cod);
-        ResultSet rs= ps.executeQuery();
+        
+        ResultSet rs= Cbd.RealizarConsulta(ps);
         Object datosR[] = new Object[5];
         cliente.setText("");
         rut.setText("");
@@ -161,6 +163,7 @@ public class ReparacionDAO {
         subtotal.setValue(0);
         iva.setValue(0);
         abono.setValue(0);
+        descuento.setValue(0);
         int cont = 0;
         while (rs.next()){
             cont++;
@@ -173,7 +176,7 @@ public class ReparacionDAO {
            subtotal.setValue(rs.getBigDecimal("vsubtotal"));
            iva.setValue(rs.getBigDecimal("viva"));
            abono.setValue(rs.getBigDecimal("vabono"));
-            
+            descuento.setValue(rs.getBigDecimal("vdescuento"));
                      datosR[0] = repara.getCodigo();
                      
                      datosR[1] = rs.getObject("vproducto");
@@ -198,26 +201,25 @@ public class ReparacionDAO {
         columnModel.getColumn(3).setPreferredWidth(50);
         columnModel.getColumn(4).setPreferredWidth(50);
         if (cont==0){
-            JOptionPane.showMessageDialog(null,"LA REPARACION SE ENCUENTRA EN PROCESO");//SI NO ENCUENTRA LA REPARACION O ESTA EN PROCESO
+            JOptionPane.showMessageDialog(null,"La reparación se encuentra en proceso o ya fue cancelada","",JOptionPane.INFORMATION_MESSAGE);//SI NO ENCUENTRA LA REPARACION O ESTA EN PROCESO
         }
-        rs.close();
-        ps.close();
+       
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+               Cbd.desconectar();
                        
             }    
 return repara;
     
     }
     
-    public List<Reparacion> mostrar(JTable tab,Timestamp desde,Timestamp hasta,JLabel msj,JLabel jtotal){
+    public List<Reparacion> mostrar(JTable tab,JLabel jtotal,String op,long idempleado){
         
-     
-    Conexion conexion = new Conexion();
+     ConexionBD Cbd = new ConexionBD();
+   
  
    
     DefaultTableModel tabla=new DefaultTableModel(){
@@ -227,7 +229,7 @@ return repara;
     return false;
     }
     }; 
-    String titulos[]={"EMPLEADO","R.U.T","SUCURSAL","DIRECCION","IMPORTE","DESCUENTO","TOTAL"};
+    String titulos[]={"COD.","TECNICO","CLIENTE","FECHA RECEP.","IMPORTE","DESCUENTO","TOTAL","SUCURSAL"};
     tabla.setColumnIdentifiers(titulos);
     tab.setModel(tabla);
 
@@ -238,255 +240,423 @@ return repara;
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
         String sql=("SELECT * from sp_mostrarreparacion(?,?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
-        ps.setTimestamp(1, desde);
-        ps.setTimestamp(2, hasta);
-        ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[7];
-        msj.setText("");
+        
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
+        ps.setString(1, op);
+        ps.setLong(2, idempleado);
+        
+       
+        ResultSet rs=Cbd.RealizarConsulta(ps);
+        Object datosR[] = new Object[8];
+//        msj.setText("");
         int cont=0;
         double total=0.0;
         while (rs.next()){
            
             Reparacion repara= new Reparacion();
-            repara.setIdempleado(rs.getLong("videmple"));
-            repara.setId_sucural(rs.getLong("vidsucur"));
+            repara.setIdreparacion(rs.getLong("vidreparacion"));
+//            repara.setIdempleado(rs.getLong("videmple"));
+//            repara.setId_sucural(rs.getLong("vidsucur"));
             repara.setTotal(rs.getDouble("vtotal"));
             total = total+repara.getTotal();
              
-             datosR[0] = rs.getObject("vnombre");
+             datosR[0] = rs.getObject("vcodigo");
             
-             datosR[1] = rs.getObject("vrut");
+             datosR[1] = rs.getObject("vtecnico");
              
-             datosR[2] = rs.getObject("vsucursal");
+             datosR[2] = rs.getObject("vcliente");
             
-             datosR[3] = rs.getObject("vsucurdirec");
+              datosR[3] = rs.getObject("vfecha");
              datosR[4] = nf.format(rs.getObject("vimporte"));
              datosR[5] = nf.format(rs.getObject("vdescuento"));
-             datosR[6] =nf.format(repara.getTotal());             
+             datosR[6] =nf.format(repara.getTotal());  
+             datosR[7] = rs.getObject("vsucursal");
 
             tabla.addRow(datosR);
             listrepa.add(repara);
             cont++;
         }
         jtotal.setText("Total: "+nf.format(total));
-        rs.close();
-        ps.close();
-        if(cont == 0){
-            msj.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO DE "+df.format(desde)+" AL "+df.format(hasta));
-        }else {
-            msj.setText("REGISTROS ENCONTRADOS "+cont);
-        }
+        
+        
+          TableColumnModel columnModel = tab.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(50);
+        columnModel.getColumn(1).setPreferredWidth(290);
+        columnModel.getColumn(2).setPreferredWidth(290);
+        columnModel.getColumn(3).setPreferredWidth(50);
+        columnModel.getColumn(4).setPreferredWidth(50);
+        columnModel.getColumn(5).setPreferredWidth(50);
+        columnModel.getColumn(6).setPreferredWidth(50);
+        columnModel.getColumn(7).setPreferredWidth(120);
+       
+//        if(cont == 0){
+//            msj.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO DE "+df.format(desde)+" AL "+df.format(hasta));
+//        }else {
+//            msj.setText("REGISTROS ENCONTRADOS "+cont);
+//        }
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+              Cbd.desconectar();
                        
             }    
     return listrepa;
     
     }
-     public List<Reparacion> mostrarporempleado(JTable tab,Reparacion repair,JLabel emple,JLabel sucur,
-     Timestamp desde, Timestamp hasta){
+    
+    public List<Reparacion> busquedasensitiva(JTable tab,long idsucur,JLabel jtotal,String cadena,
+            String op,long idempleado,Timestamp desde,Timestamp hasta){
         
      
-    Conexion conexion = new Conexion();
- 
+   ConexionBD Cbd = new ConexionBD();
    
     DefaultTableModel tabla=new DefaultTableModel(){
     public boolean isCellEditable(int row, int column) {
-    //      if (column == 5) return true;
+       //      if (column == 5) return true;
     //else
-     return false;
+    return false;
     }
-  };     
-    
-    String titulos[]={"CODIGO","CLIENTE","ATENDIO","MARCA","MODELO","FALLAS","DIAGNOSTICO","FECHA REP.","FECHA ENTRE.","PRECIO","DESC.","TOTAL","ESTADO","MOTIVO"};
+    }; 
+    String titulos[]={"COD.","TECNICO","CLIENTE","FECHA RECEP.","IMPORTE","DESCUENTO","TOTAL","SUCURSAL"};
     tabla.setColumnIdentifiers(titulos);
     tab.setModel(tabla);
-     List<Reparacion> listrepa= new ArrayList<>();
-         NumberFormat nf = NumberFormat.getInstance();
+
+        DateFormat df= DateFormat.getDateInstance();
+        NumberFormat nf = NumberFormat.getInstance();
+        List<Reparacion> listrepa= new ArrayList<>();
+        System.out.println("id"+idempleado);
     try{
 	
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
-        String sql=("SELECT * from sp_mostrarreparacionempleado(?,?,?,?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
-        ps.setLong(1, repair.getIdempleado());
-        ps.setLong(2,repair.getId_sucural());
-        ps.setTimestamp(3, desde);
-        ps.setTimestamp(4, hasta);
-        ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[14];
+        String sql=("SELECT * from sp_busquedasensitivareparacion(?,?,?,?,?,?)"); 
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
+        ps.setString(1, op);
+        ps.setString(2, cadena);
+        ps.setLong(3, idempleado);
+        ps.setLong(4,idsucur);
+        ps.setTimestamp(5, desde);
+        ps.setTimestamp(6, hasta);
        
-        
+        ResultSet rs= Cbd.RealizarConsulta(ps);
+        Object datosR[] = new Object[8];
+//        msj.setText("");
+        int cont=0;
+        double total=0.0;
         while (rs.next()){
-            Reparacion repa = new Reparacion();
-            emple.setText(rs.getString("vempleado"));
-            sucur.setText(rs.getString("vsucursal"));
-       
-            repa.setIdreparacion(rs.getLong("vidrepa"));
-            System.out.println("idreparalist"+repa.getIdreparacion());
+           
+            Reparacion repara= new Reparacion();
+            repara.setIdreparacion(rs.getLong("vidreparacion"));
+//            repara.setIdempleado(rs.getLong("videmple"));
+//            repara.setId_sucural(rs.getLong("vidsucur"));
+            repara.setTotal(rs.getDouble("vtotal"));
+            total = total+repara.getTotal();
+             
              datosR[0] = rs.getObject("vcodigo");
-
-             datosR[1] = rs.getObject("vcliente");
-
-             datosR[2] = rs.getObject("vatentido");
-
-             datosR[3] = rs.getObject("vmarca");
-
-             datosR[4] = rs.getObject("vmodelo");
-
-             datosR[5] = rs.getObject("vfallas");
-
-
-             datosR[6] = rs.getObject("vdiagnostico");
-
+            
+             datosR[1] = rs.getObject("vtecnico");
              
-
-             datosR[7] = rs.getObject("vfecharecep");
-
-             datosR[8] = rs.getObject("vvfechaentre");
-
-             datosR[9] =nf.format(rs.getObject("vprecio"));
-             datosR[10] =nf.format(rs.getObject("vdescuento"));
-             datosR[11] =nf.format(rs.getObject("vtotal"));
-             
-             datosR[12] = rs.getObject("vestado");
-             datosR[13] = rs.getObject("vmotivo");
-
+             datosR[2] = rs.getObject("vcliente");
+            
+              datosR[3] = rs.getObject("vfecha");
+             datosR[4] = nf.format(rs.getObject("vimporte"));
+             datosR[5] = nf.format(rs.getObject("vdescuento"));
+             datosR[6] =nf.format(repara.getTotal());  
+             datosR[7] = rs.getObject("vsucursal");
 
             tabla.addRow(datosR);
-            listrepa.add(repa);
-           
+            listrepa.add(repara);
+            cont++;
         }
-        
-	rs.close();
-        ps.close();
-        } catch(Exception e)
-            {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-            }finally{
-                conexion.devolverConexionPool();
-                       
-            }    
-
-    return listrepa;
-    }
-     
-     public List<Reparacion> mostrarporcliente(JTable tab,long id, JLabel msj,JLabel jtotal){
-        
-     
-    Conexion conexion = new Conexion();
- 
-   
-    DefaultTableModel tabla=new DefaultTableModel(){
-    public boolean isCellEditable(int row, int column) {
-    //      if (column == 5) return true;
-    //else
-     return false;
-    }
-  };     
-    
-    String titulos[]={"SUCURSAL","CODIGO","TECNICO","ATENDIO","MARCA","MODELO","DIAGNOSTICO","FECHA REP.","FECHA ENTRE.","ESTADO","PRECIO","PRECIO REVISION","DESCUENTO","TOTAL"};
-    tabla.setColumnIdentifiers(titulos);
-    tab.setModel(tabla);
-   List<Reparacion> listrep= new ArrayList<>();
-   double total=0.0;
-   NumberFormat nf =NumberFormat.getInstance();
-    try{
-	
-        //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
-        String sql=("SELECT * from sp_mostrarreparacioncliente(?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
-        ps.setLong(1, id);
-        
-       
-        ResultSet rs= ps.executeQuery();
-        Object datosR[] = new Object[14];
-        
-        Integer cont=0;
-        while (rs.next()){
-           cont++;
-           Reparacion repara = new Reparacion();
-             repara.setIdreparacion(rs.getLong("vidreparacion"));
-             repara.setTotal(rs.getDouble("vtotal"));
-             total=total+repara.getTotal();
-              datosR[0] = rs.getObject("vsucursal");
-               
-             datosR[1] = rs.getObject("vcodigo");
-             
-             datosR[2] = rs.getObject("vempleado");
-            
-             datosR[3] = rs.getObject("vatentido");
-            
-             datosR[4] = rs.getObject("vmarca");
-            
-             datosR[5] = rs.getObject("vmodelo");
-             
-             datosR[6] = rs.getObject("vdiagnostico");
-             
-             datosR[7] = rs.getObject("vfecharecep");
-
-             
-             datosR[8] = rs.getObject("vvfechaentre");
-           
-             datosR[9] = rs.getObject("vestado");
-            
-             datosR[10] = nf.format(rs.getObject("vprecio"));
-             
-             datosR[11] = nf.format(rs.getObject("vpreciorevision"));
-            
-             datosR[12] = nf.format(rs.getObject("vdescuento"));
-             datosR[13] = nf.format(repara.getTotal());
-            
-                                        
-            tabla.addRow(datosR);
-            listrep.add(repara);
-		
-           
-        }
-        msj.setText("REGISTROS ENCONTRADOS "+cont.toString());
         jtotal.setText("Total: "+nf.format(total));
-	rs.close();
-        ps.close();
+        
+        
+          TableColumnModel columnModel = tab.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(50);
+        columnModel.getColumn(1).setPreferredWidth(290);
+        columnModel.getColumn(2).setPreferredWidth(290);
+        columnModel.getColumn(3).setPreferredWidth(50);
+        columnModel.getColumn(4).setPreferredWidth(50);
+        columnModel.getColumn(5).setPreferredWidth(50);
+        columnModel.getColumn(6).setPreferredWidth(50);
+        columnModel.getColumn(7).setPreferredWidth(120);
+       
+//        if(cont == 0){
+//            msj.setText("NO SE ENCONTRARON REGISTROS EN EL RANGO DE "+df.format(desde)+" AL "+df.format(hasta));
+//        }else {
+//            msj.setText("REGISTROS ENCONTRADOS "+cont);
+//        }
+	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
                        
             }    
-
-    return listrep;
+    return listrepa;
+    
     }
-      public void mostrarpendientes(JTable tab,long idemple){
+    
+     public Reparacion verdetalle(long idrepara){
         
      
-    Conexion conexion = new Conexion();
- 
-   
-    DefaultTableModel tabla=new DefaultTableModel(){
-    public boolean isCellEditable(int row, int column) {
-    //      if (column == 5) return true;
-    //else
-     return false;
-    }
-  }; 
-    String titulos[]={"id","SUCURSAL","CODIGO","CLIENTE","ATENDIO","MARCA","MODELO","FALLAS","FECHA REP.","FECHA ENTRE."};
-    tabla.setColumnIdentifiers(titulos);
-    tab.setModel(tabla);
-    tab.getColumnModel().getColumn(0).setMaxWidth(0);
-    tab.getColumnModel().getColumn(0).setMinWidth(0);
-    tab.getColumnModel().getColumn(0).setPreferredWidth(0);
-    try{
+    
+         ConexionBD Cbd = new ConexionBD();
+        Reparacion repara= new Reparacion();
+        try{
+
+            //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
+            String sql=("SELECT * from sp_verreparacion(?)"); 
+            PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+            ps.setLong(1, idrepara);
+
+            ResultSet rs= Cbd.RealizarConsulta(ps);
+
+            while (rs.next()){
+           
+           
+//            repara.setIdreparacion(rs.getLong("vidreparacion"));
+            repara.setCodigo(rs.getString("vcodigo"));
+            repara.setCliente(rs.getString("vcliente"));
+            repara.setEmpleado(rs.getString("vempleado"));
+            repara.setAtendido(rs.getString("vatendido"));
+            repara.setMarca(rs.getString("vmarca"));
+            repara.setModelo(rs.getString("vmodelo"));
+            repara.setFallas(rs.getString("vfallas"));
+            repara.setCausas(rs.getString("vcausas"));
+            repara.setObservacion(rs.getString("vobservacion"));
+            repara.setDiagnostico(rs.getString("vdiagnistico"));
+            repara.setFechaR(rs.getTimestamp("vfecharecep"));
+            repara.setFechaE(rs.getString("vfechaentrega"));
+            repara.setEstado(rs.getString("vestado"));
+            repara.setFoto(rs.getBytes("foto"));
+            repara.setCodigo(rs.getString("vcodigo"));
+            repara.setMotivo(rs.getString("vmotivo"));
+            repara.setDescuento(rs.getDouble("vdescuento"));
+            repara.setAbono(rs.getDouble("vabono"));
+            repara.setPrecio(rs.getDouble("vprecio"));
+            repara.setPreciorevision(rs.getDouble("vprevision"));
+            repara.setTotal(rs.getDouble("vtotalpagar"));
+//            repara.setIdempleado(rs.getLong("videmple"));
+//            repara.setId_sucural(rs.getLong("vidsucur"));
+//            repara.setTotal(rs.getDouble("vtotal"));
+          
+        }
+      
+     
 	
+        } catch(Exception e)
+            {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            }finally{
+                Cbd.desconectar();
+                       
+            }    
+   
+            return repara;
+    }
+    
+//     public List<Reparacion> mostrarporempleado(JTable tab,Reparacion repair,JLabel emple,JLabel sucur,
+//     Timestamp desde, Timestamp hasta){
+//        
+//     
+//    Conexion conexion = new Conexion();
+// 
+//   
+//    DefaultTableModel tabla=new DefaultTableModel(){
+//    public boolean isCellEditable(int row, int column) {
+//    //      if (column == 5) return true;
+//    //else
+//     return false;
+//    }
+//  };     
+//    
+//    String titulos[]={"CODIGO","CLIENTE","ATENDIO","MARCA","MODELO","FALLAS","DIAGNOSTICO","FECHA REP.","FECHA ENTRE.","PRECIO","DESC.","TOTAL","ESTADO","MOTIVO"};
+//    tabla.setColumnIdentifiers(titulos);
+//    tab.setModel(tabla);
+//     List<Reparacion> listrepa= new ArrayList<>();
+//         NumberFormat nf = NumberFormat.getInstance();
+//    try{
+//	
+//        //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
+//        String sql=("SELECT * from sp_mostrarreparacionempleado(?,?,?,?)"); 
+//        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+//        ps.setLong(1, repair.getIdempleado());
+//        ps.setLong(2,repair.getId_sucural());
+//        ps.setTimestamp(3, desde);
+//        ps.setTimestamp(4, hasta);
+//        ResultSet rs= ps.executeQuery();
+//        Object datosR[] = new Object[14];
+//       
+//        
+//        while (rs.next()){
+//            Reparacion repa = new Reparacion();
+//            emple.setText(rs.getString("vempleado"));
+//            sucur.setText(rs.getString("vsucursal"));
+//       
+//            repa.setIdreparacion(rs.getLong("vidrepa"));
+//            System.out.println("idreparalist"+repa.getIdreparacion());
+//             datosR[0] = rs.getObject("vcodigo");
+//
+//             datosR[1] = rs.getObject("vcliente");
+//
+//             datosR[2] = rs.getObject("vatentido");
+//
+//             datosR[3] = rs.getObject("vmarca");
+//
+//             datosR[4] = rs.getObject("vmodelo");
+//
+//             datosR[5] = rs.getObject("vfallas");
+//
+//
+//             datosR[6] = rs.getObject("vdiagnostico");
+//
+//             
+//
+//             datosR[7] = rs.getObject("vfecharecep");
+//
+//             datosR[8] = rs.getObject("vvfechaentre");
+//
+//             datosR[9] =nf.format(rs.getObject("vprecio"));
+//             datosR[10] =nf.format(rs.getObject("vdescuento"));
+//             datosR[11] =nf.format(rs.getObject("vtotal"));
+//             
+//             datosR[12] = rs.getObject("vestado");
+//             datosR[13] = rs.getObject("vmotivo");
+//
+//
+//            tabla.addRow(datosR);
+//            listrepa.add(repa);
+//           
+//        }
+//        
+//	rs.close();
+//        ps.close();
+//        } catch(Exception e)
+//            {
+//            JOptionPane.showMessageDialog(null, e.getMessage());
+//            }finally{
+//                conexion.devolverConexionPool();
+//                       
+//            }    
+//
+//    return listrepa;
+//    }
+     
+//     public List<Reparacion> mostrarporcliente(JTable tab,long id, JLabel msj,JLabel jtotal){
+//        
+//     
+//    Conexion conexion = new Conexion();
+// 
+//   
+//    DefaultTableModel tabla=new DefaultTableModel(){
+//    public boolean isCellEditable(int row, int column) {
+//    //      if (column == 5) return true;
+//    //else
+//     return false;
+//    }
+//  };     
+//    
+//    String titulos[]={"SUCURSAL","CODIGO","TECNICO","ATENDIO","MARCA","MODELO","DIAGNOSTICO","FECHA REP.","FECHA ENTRE.","ESTADO","PRECIO","PRECIO REVISION","DESCUENTO","TOTAL"};
+//    tabla.setColumnIdentifiers(titulos);
+//    tab.setModel(tabla);
+//   List<Reparacion> listrep= new ArrayList<>();
+//   double total=0.0;
+//   NumberFormat nf =NumberFormat.getInstance();
+//    try{
+//	
+//        //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
+//        String sql=("SELECT * from sp_mostrarreparacioncliente(?)"); 
+//        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+//        ps.setLong(1, id);
+//        
+//       
+//        ResultSet rs= ps.executeQuery();
+//        Object datosR[] = new Object[14];
+//        
+//        Integer cont=0;
+//        while (rs.next()){
+//           cont++;
+//           Reparacion repara = new Reparacion();
+//             repara.setIdreparacion(rs.getLong("vidreparacion"));
+//             repara.setTotal(rs.getDouble("vtotal"));
+//             total=total+repara.getTotal();
+//              datosR[0] = rs.getObject("vsucursal");
+//               
+//             datosR[1] = rs.getObject("vcodigo");
+//             
+//             datosR[2] = rs.getObject("vempleado");
+//            
+//             datosR[3] = rs.getObject("vatentido");
+//            
+//             datosR[4] = rs.getObject("vmarca");
+//            
+//             datosR[5] = rs.getObject("vmodelo");
+//             
+//             datosR[6] = rs.getObject("vdiagnostico");
+//             
+//             datosR[7] = rs.getObject("vfecharecep");
+//
+//             
+//             datosR[8] = rs.getObject("vvfechaentre");
+//           
+//             datosR[9] = rs.getObject("vestado");
+//            
+//             datosR[10] = nf.format(rs.getObject("vprecio"));
+//             
+//             datosR[11] = nf.format(rs.getObject("vpreciorevision"));
+//            
+//             datosR[12] = nf.format(rs.getObject("vdescuento"));
+//             datosR[13] = nf.format(repara.getTotal());
+//            
+//                                        
+//            tabla.addRow(datosR);
+//            listrep.add(repara);
+//		
+//           
+//        }
+//        msj.setText("REGISTROS ENCONTRADOS "+cont.toString());
+//        jtotal.setText("Total: "+nf.format(total));
+//	rs.close();
+//        ps.close();
+//        } catch(Exception e)
+//            {
+//            JOptionPane.showMessageDialog(null, e.getMessage());
+//            }finally{
+//                conexion.devolverConexionPool();
+//                       
+//            }    
+//
+//    return listrep;
+//    }
+   public void mostrarpendientes(JTable tab,long idemple){
+        
+     
+  
+       ConexionBD Cbd = new ConexionBD();
+   
+        DefaultTableModel tabla=new DefaultTableModel(){
+        public boolean isCellEditable(int row, int column) {
+        //      if (column == 5) return true;
+        //else
+         return false;
+        }
+      }; 
+        String titulos[]={"id","SUCURSAL","CODIGO","CLIENTE","ATENDIO","MARCA","MODELO","FALLAS","FECHA REP.","FECHA ENTRE."};
+        tabla.setColumnIdentifiers(titulos);
+        tab.setModel(tabla);
+        tab.getColumnModel().getColumn(0).setMaxWidth(0);
+        tab.getColumnModel().getColumn(0).setMinWidth(0);
+        tab.getColumnModel().getColumn(0).setPreferredWidth(0);
+        try{
+
         //System.out.println("SELECT * from sp_mostrarreparacion('"+cod+"')");
         String sql=("SELECT * from sp_mostrarreparacionpendiente(?)"); 
-        PreparedStatement ps= conexion.getConnection().prepareStatement(sql);
+        PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, idemple);
-        ResultSet rs= ps.executeQuery();
+        ResultSet rs= Cbd.RealizarConsulta(ps);
         Object datosR[] = new Object[10];
         
         
@@ -524,13 +694,12 @@ return repara;
            
         }
         
-	rs.close();
-        ps.close();
+	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+              Cbd.desconectar();
                        
             }    
 
@@ -538,14 +707,14 @@ return repara;
     }
  public List<PrecioReparacion> llenarcombobox(JComboBox combo){
  
-  Conexion conexion = new Conexion();
+     ConexionBD Cbd = new ConexionBD();
     
-  List<PrecioReparacion> listprecio = new ArrayList<>();
-  DefaultComboBoxModel modelo = new DefaultComboBoxModel();   
-    try{
+    List<PrecioReparacion> listprecio = new ArrayList<>();
+    DefaultComboBoxModel modelo = new DefaultComboBoxModel();   
+      try{
         
-	PreparedStatement ps=conexion.getConnection().prepareStatement("SELECT * from sp_mostrarprecioporreparacion()");
-       ResultSet rs=ps.executeQuery();
+	PreparedStatement ps=Cbd.conectar().prepareStatement("SELECT * from sp_mostrarprecioporreparacion()");
+       ResultSet rs=Cbd.RealizarConsulta(ps);
         
         while (rs.next()){
             PrecioReparacion precio = new PrecioReparacion();
@@ -562,7 +731,7 @@ return repara;
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+               Cbd.desconectar();
             }    
     return listprecio;
     
@@ -570,29 +739,29 @@ return repara;
  
  public void extornar(Reparacion repara){
  
-  Conexion conexion = new Conexion();
+     ConexionBD Cbd = new ConexionBD();
     
   
     try{
         
-	PreparedStatement ps=conexion.getConnection().prepareStatement("SELECT * from sp_extornareparacion(?,?)");
+	PreparedStatement ps=Cbd.conectar().prepareStatement("SELECT * from sp_extornareparacion(?,?)");
         ps.setLong(1, repara.getIdreparacion());
         ps.setString(2, repara.getMotivo());
-       ps.executeQuery();
-       ps.close();
+       Cbd.actualizarDatos(ps);
+     
 	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
             }finally{
-                conexion.devolverConexionPool();
+                Cbd.desconectar();
             }    
     
     
     }
 
     public void imprimir(long id){
-       Conexion conexion = new Conexion();  
+     ConexionBD Cbd = new ConexionBD();
     try{
     ///////////////////////// formato fecha ////////////////////////////
 //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -610,7 +779,7 @@ return repara;
             parametros.put("id",  id);
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -620,22 +789,23 @@ return repara;
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
         }finally{
-        conexion.devolverConexionPool();
+       Cbd.desconectar();
 
 }
      
 
 }
      public void imprimirticketcaja(long id){
-try{
-    ///////////////////////// formato fecha ////////////////////////////
-//            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//           datepicker.setFormats(dateFormat);   
-//           java.util.Date fecha =((datepicker.getDate())); 
-           
-    ////////////////////////////////////////////////////////////////////    
-           
-           Conexion conexion = new Conexion();
+         ConexionBD Cbd = new ConexionBD();
+        try{
+            ///////////////////////// formato fecha ////////////////////////////
+        //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        //           datepicker.setFormats(dateFormat);   
+        //           java.util.Date fecha =((datepicker.getDate())); 
+
+            ////////////////////////////////////////////////////////////////////    
+
+       
             
                       
             String  rutaInforme  = "src/Reportes/ticketreparacion.jasper";
@@ -643,7 +813,7 @@ try{
             Map parametros = new HashMap();
             System.out.println("idticket"+id);
             parametros.put("id",id);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperPrintManager.printReport(informe, true);    
 //            JasperViewer jv = new JasperViewer(informe,false);  
 //        
@@ -653,21 +823,24 @@ try{
         }catch (HeadlessException | JRException ex) {
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
-        }
+        }finally{
+        Cbd.desconectar();
+}
      
 
 }
      
       public void imprimirreparaciontodo(long id){
-try{
-    ///////////////////////// formato fecha ////////////////////////////
-//            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//           datepicker.setFormats(dateFormat);   
-//           java.util.Date fecha =((datepicker.getDate())); 
+          ConexionBD Cbd = new ConexionBD();
+        try{
+            ///////////////////////// formato fecha ////////////////////////////
+        //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        //           datepicker.setFormats(dateFormat);   
+        //           java.util.Date fecha =((datepicker.getDate())); 
+
+            ////////////////////////////////////////////////////////////////////    
            
-    ////////////////////////////////////////////////////////////////////    
-           
-           Conexion conexion = new Conexion();
+         
             
                       
             String  rutaInforme  = "src/Reportes/ReparacionPorCliente.jasper";
@@ -675,7 +848,7 @@ try{
             Map parametros = new HashMap();
            
             parametros.put("id",id);
-            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,conexion.getConnection());
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
             JasperViewer jv = new JasperViewer(informe,false);  
         
              jv.setVisible(true);
@@ -684,7 +857,9 @@ try{
         }catch (HeadlessException | JRException ex) {
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());
-        }
+        }finally{
+        Cbd.desconectar();
+}
      
 
 }

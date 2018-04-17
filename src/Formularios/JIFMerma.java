@@ -13,10 +13,14 @@ import Pojos.DetalleMerma;
 import Pojos.Merma;
 import Pojos.Producto;
 import Pojos.SucursalSingleton;
+import java.awt.Image;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -35,49 +39,58 @@ public class JIFMerma extends javax.swing.JInternalFrame {
     MermaDAO daomerma= new MermaDAO();
     DetalleMermaDAO daodetallemerma= new DetalleMermaDAO();
     Mayusculas mayus = new Mayusculas();
+    List<Producto> listdet= new ArrayList<>();
      DefaultTableModel modelo= new DefaultTableModel(){
     public boolean isCellEditable(int row, int column) {
     //      if (column == 5) return true;
     //else
     return false;
-}
-  }; 
+    }
+      }; 
+      int posx;
+    int posy;
     public JIFMerma() {
         initComponents();
-        String titulos[]={"IDDET","ID","CODIGO","DESCRIPCION","CANTIDAD"};
+//        String titulos[]={"IDDET","ID","CODIGO","DESCRIPCION","CANTIDAD"};
+        String titulos[]={"CODIGO","DESCRIPCION","CANTIDAD"};
         modelo.setColumnIdentifiers(titulos);
         jtabla.setModel(modelo);
-        jtabla.getColumnModel().getColumn(0).setMaxWidth(0);
-        jtabla.getColumnModel().getColumn(0).setMinWidth(0);
-        jtabla.getColumnModel().getColumn(0).setPreferredWidth(0);
+        TableColumnModel columnModel = jtabla.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(50);
+        columnModel.getColumn(1).setPreferredWidth(550);      
+        columnModel.getColumn(2).setPreferredWidth(50);
+       
+        jdpfecha.setDate(new Date());
+        jlblmensajecarga.setVisible(false);
+ 
+    }
+    public void validaagregar(){
         
-        jtabla.getColumnModel().getColumn(1).setMaxWidth(0);
-        jtabla.getColumnModel().getColumn(1).setMinWidth(0);
-        jtabla.getColumnModel().getColumn(1).setPreferredWidth(0);
- 
- 
-    }
-    public void validaingreso(){
-    if(producto.getIdproducto()!=0 && Double.parseDouble(jtfcantidad.getValue().toString())>0 
-            && jdpfecha.getDate()!=null && jtamotivo.getText().replaceAll("\\s","").length()>0 
-            && !jtamotivo.getText().equals("MOTIVO") ){
-    jbtnagregar.setEnabled(true);
-    }else {
-    jbtnagregar.setEnabled(false);
-    }
+        try {
+            if(producto.getIdproducto()!=0 && Double.parseDouble(jtfcantidad.getText())>0 
+                   ){
+            jbtnagregar.setEnabled(true);
+            }else {
+            jbtnagregar.setEnabled(false);
+            }
+        } catch (Exception e) {
+             jbtnagregar.setEnabled(false);
+        }
+    
     
     }
     public void nuevoprod(){
     producto= new Producto();
-    jtfcantidad.setValue(0);
+    jtfcantidad.setText("");
     jtfproducto.setText("");
-    jtfcodigo.setText("CODIGO");
+    jtfcodigo.setText("");
+    jlblimagen.setIcon(null);
     
     }
     public void validaaceptar(){
      
     if(jdpfecha.getDate()!=null && jtamotivo.getText().replaceAll("\\s","").length()>0 &&
-            modelo.getRowCount() > 0  && !jtamotivo.getText().equals("MOTIVO")){
+            modelo.getRowCount() > 0  ){
     jbtnaceptar.setEnabled(true);
     
     }else {
@@ -88,28 +101,39 @@ public class JIFMerma extends javax.swing.JInternalFrame {
     }
     public void nuevamerma(){
     merma = new Merma();
+    listdet = new ArrayList<>();
 //    producto= new Producto();
-    modelo= new DefaultTableModel(){
-    public boolean isCellEditable(int row, int column) {
-    //      if (column == 5) return true;
-    //else
-    return false;
+    for (int i = 0; i < jtabla.getRowCount(); i++) {
+        modelo.removeRow(i);
+        i-=1;
+     }
+    jdpfecha.setDate(new Date());
+    jtamotivo.setText("");
+    jbtnaceptar.setEnabled(false);
+     nuevoprod();
     }
-    }; 
-    String titulos[]={"IDDET","ID","CODIGO","DESCRIPCION","CANTIDAD"};
-    modelo.setColumnIdentifiers(titulos);
-    jtabla.setModel(modelo);
-    jtabla.getColumnModel().getColumn(0).setMaxWidth(0);
-    jtabla.getColumnModel().getColumn(0).setMinWidth(0);
-    jtabla.getColumnModel().getColumn(0).setPreferredWidth(0);
-        
-    jtabla.getColumnModel().getColumn(1).setMaxWidth(0);
-    jtabla.getColumnModel().getColumn(1).setMinWidth(0);
-    jtabla.getColumnModel().getColumn(1).setPreferredWidth(0);
-    jdpfecha.setDate(null);
-    jtamotivo.setText("MOTIVO");
-    nuevoprod();
+    
+    public void setproducto(Producto prod){
+//            producto=prod;
+            
+            producto=daoproducto.buscarproducto("CODIGO", 0,sucursalsingleton.getId(), prod.getCodigo());
+           // jtfcodigo.setText(producto.getCodigo());
+//            jtfstock.setValue((producto.getCantidad()));
+            jtfproducto.setText(producto.getDescripcion());
+            jtfcodigo.setText(producto.getCodigo());
+            
+            /// mostrar imagen ///
+            ImageIcon imageIcon = new ImageIcon(producto.getFoto());
+            //ImageIcon imageUser = imageIcon;
+            Image img = imageIcon.getImage();
+            Image newimg = img.getScaledInstance(jlblimagen.getWidth(), jlblimagen.getHeight(), java.awt.Image.SCALE_AREA_AVERAGING);
+            imageIcon = new ImageIcon(newimg);
+            jlblimagen.setIcon(imageIcon);   
+        //////////////////////////////////////////////
+            jtfcantidad.requestFocus();
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -131,16 +155,21 @@ public class JIFMerma extends javax.swing.JInternalFrame {
         jtfproducto = new javax.swing.JTextField();
         jbtnagregar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jtfcantidad = new javax.swing.JFormattedTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jtfcantidad = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtamotivo = new javax.swing.JTextArea();
         panelNice1 = new org.edisoncor.gui.panel.PanelNice();
         jlblimagen = new javax.swing.JLabel();
         jbtnaceptar = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jlblmensajecarga = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
         jbtnsalir = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        setTitle("INGRESO DE MERMAS");
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setToolTipText("");
 
         jPanel1.setBackground(new java.awt.Color(238, 238, 238));
@@ -151,13 +180,13 @@ public class JIFMerma extends javax.swing.JInternalFrame {
                 jdpfechaActionPerformed(evt);
             }
         });
-        jPanel1.add(jdpfecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 170, -1));
+        jPanel1.add(jdpfecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 150, -1));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("FECHA:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, 20));
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel1.setText("Fecha:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, 20));
 
-        jtabla.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -178,14 +207,13 @@ public class JIFMerma extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtabla);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 254, 900, 253));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 940, 253));
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "PRODUCTO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel2.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "PRODUCTO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Light", 0, 10))); // NOI18N
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jtfcodigo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jtfcodigo.setText("CODIGO");
         jtfcodigo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfcodigoFocusGained(evt);
@@ -199,48 +227,50 @@ public class JIFMerma extends javax.swing.JInternalFrame {
                 jtfcodigoKeyReleased(evt);
             }
         });
-        jPanel2.add(jtfcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 160, -1));
+        jPanel2.add(jtfcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 160, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("PRODUCTO:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, -1, 20));
+        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel2.setText("Producto:");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, -1, 20));
 
         jtfproducto.setEnabled(false);
-        jPanel2.add(jtfproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 350, -1));
+        jPanel2.add(jtfproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, 350, -1));
 
         jbtnagregar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnagregar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnagregar.setText("AGREGAR");
+        jbtnagregar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtnagregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add20X20.png"))); // NOI18N
+        jbtnagregar.setText("Agregar");
+        jbtnagregar.setBorder(null);
+        jbtnagregar.setBorderPainted(false);
+        jbtnagregar.setContentAreaFilled(false);
         jbtnagregar.setEnabled(false);
         jbtnagregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnagregarActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtnagregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 50, -1, 30));
+        jPanel2.add(jbtnagregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 50, 80, 30));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setText("CANTIDAD:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, -1, 20));
+        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel3.setText("Cantidad:");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, -1, 20));
 
-        jtfcantidad.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
-        jtfcantidad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfcantidadActionPerformed(evt);
-            }
-        });
+        jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel4.setText("Cod.(F1):");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+
         jtfcantidad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfcantidadKeyReleased(evt);
             }
         });
-        jPanel2.add(jtfcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 120, 20));
+        jPanel2.add(jtfcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 80, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 52, 700, 112));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 730, 90));
 
         jtamotivo.setColumns(20);
         jtamotivo.setRows(5);
-        jtamotivo.setText("MOTIVO");
+        jtamotivo.setText("\n");
         jtamotivo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtamotivoFocusGained(evt);
@@ -259,33 +289,89 @@ public class JIFMerma extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(jtamotivo);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 174, 700, 70));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 430, 70));
 
         panelNice1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        panelNice1.add(jlblimagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 160, 130));
+        panelNice1.add(jlblimagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 180, 150));
 
-        jPanel1.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 10, 180, 154));
+        jPanel1.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 100, 200, 170));
 
-        jbtnaceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
         jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setBorder(null);
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
         jbtnaceptar.setEnabled(false);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 517, -1, -1));
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 620, -1, 30));
 
-        jbtnsalir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnsalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel.png"))); // NOI18N
-        jbtnsalir.setText("Cancelar");
+        jLabel7.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel7.setText("Motivo:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel8.setText("Productos:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
+
+        jlblmensajecarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
+        jlblmensajecarga.setText("* * *");
+        jPanel1.add(jlblmensajecarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 600, 340, 60));
+
+        jPanel4.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel4.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel4MouseDragged(evt);
+            }
+        });
+        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel4MousePressed(evt);
+            }
+        });
+
+        jLabel6.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel6.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("INGRESO DE MERMAS");
+
+        jbtnsalir.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtnsalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jbtnsalir.setBorder(null);
+        jbtnsalir.setBorderPainted(false);
+        jbtnsalir.setContentAreaFilled(false);
         jbtnsalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnsalirActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnsalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(132, 517, -1, -1));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 684, Short.MAX_VALUE)
+                .addComponent(jbtnsalir)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbtnsalir)
+                    .addComponent(jLabel6))
+                .addGap(15, 15, 15))
+        );
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -295,7 +381,7 @@ public class JIFMerma extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -304,60 +390,71 @@ public class JIFMerma extends javax.swing.JInternalFrame {
     private void jtfcodigoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcodigoKeyReleased
         // TODO add your handling code here:
            String codigo= jtfcodigo.getText().replaceAll("\\s", "");
-        if(codigo.length()>=10){
-            producto=daoproducto.buscarproducto("CODIGO", 0,sucursalsingleton.getId(), jlblimagen, codigo);
+        if(evt.getKeyCode()==10){
+            producto=daoproducto.buscarproducto("CODIGO", 0,sucursalsingleton.getId(), codigo);
            // jtfcodigo.setText(producto.getCodigo());
 //            jtfstock.setValue((producto.getCantidad()));
             jtfproducto.setText(producto.getDescripcion());
+            
+            /// mostrar imagen ///
+        ImageIcon imageIcon = new ImageIcon(producto.getFoto());
+        //ImageIcon imageUser = imageIcon;
+        Image img = imageIcon.getImage();
+        Image newimg = img.getScaledInstance(jlblimagen.getWidth(), jlblimagen.getHeight(), java.awt.Image.SCALE_AREA_AVERAGING);
+        imageIcon = new ImageIcon(newimg);
+        jlblimagen.setIcon(imageIcon);   
+        //////////////////////////////////////////////
         
+        
+        }
+        validaagregar();
+      
+        if(evt.getKeyCode()==112){
+            JDBuscarProductoVenta buscarproducto = new JDBuscarProductoVenta(new java.awt.Frame(),
+                    isVisible(),this);
+            buscarproducto.setVisible(true);     
         }
         
     }//GEN-LAST:event_jtfcodigoKeyReleased
 
     private void jbtnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnagregarActionPerformed
         // TODO add your handling code here:
-         List<Object> returdetorden= new ArrayList<>();
+       
 //        long iddet=0;
 //        boolean valida=false;
-        if(merma.getId_merma()==0){
+       
           /// INSERT MERMA
-            merma.setFecha(new java.sql.Date(jdpfecha.getDate().getTime()));
-            merma.setMotivo(jtamotivo.getText());
-            merma.setId_merma(daomerma.insertar(merma));//insert
+//            merma.setFecha(new java.sql.Date(jdpfecha.getDate().getTime()));
+//            merma.setMotivo(jtamotivo.getText());
+//            merma.setId_merma(daomerma.insertar(merma));//insert
            ////// INSERT DETALLE
-            detallemerma.setCantidad(Double.parseDouble(jtfcantidad.getValue().toString()));
-            detallemerma.setIdproducto(producto.getIdproducto());
-            detallemerma.setIdmerma(merma.getId_merma());
             
-            returdetorden=daodetallemerma.insertar(detallemerma);
+//            daodetallemerma.insertar(listdet,jlblmensajecarga,merma.getId_merma());
             
-        }else {
-           ////// INSERT DETALLE
-            detallemerma.setCantidad(Double.parseDouble(jtfcantidad.getValue().toString()));
-            detallemerma.setIdproducto(producto.getIdproducto());
-            detallemerma.setIdmerma(merma.getId_merma());
-            
-            returdetorden=daodetallemerma.insertar(detallemerma);
-        }
+       
 //        System.out.println("valida"+valida);
-        if(Boolean.parseBoolean(returdetorden.get(0).toString())==true){
-             Object[] miarray = new Object[5];
-                    miarray[0]=returdetorden.get(1);
-                    miarray[1]=producto.getIdproducto();
-                    miarray[2]=producto.getCodigo();
-                    miarray[3]=producto.getDescripcion();
-                    miarray[4]=jtfcantidad.getValue();
-                   
-                   
-        
-                    modelo.addRow(miarray);
+        producto.setCantidad(Double.parseDouble(jtfcantidad.getText()));
+        if(daoproducto.validastockrequerido(producto)==true){
+            Object[] miarray = new Object[3];
             
-                   nuevoprod();
-        
+            miarray[0]=producto.getCodigo();
+            miarray[1]=producto.getDescripcion();
+            miarray[2]=jtfcantidad.getText();
+            
+            
+            
+//            detallemerma.setIdproducto(producto.getIdproducto());        
+            
+            listdet.add(producto);
+            modelo.addRow(miarray);
+            
+            nuevoprod();
+            jbtnagregar.setEnabled(true);     
+        }else {
+            JOptionPane.showMessageDialog(null, "No cuenta con stock suficiente");
         }
-        jbtnagregar.setEnabled(true);
-        jdpfecha.setEnabled(false);
-        jtamotivo.setEnabled(false);
+        
+     
         validaaceptar();
     }//GEN-LAST:event_jbtnagregarActionPerformed
 
@@ -369,13 +466,16 @@ public class JIFMerma extends javax.swing.JInternalFrame {
 
                 if(index>=0){
                     if (JOptionPane.showConfirmDialog(null,"ESTA SEGURO DE RETIRAR EL PRODUCTO","SISTEMA",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-                        DetalleMerma detmerma= new DetalleMerma();
-
-                        detmerma.setIddetallemerma(Long.parseLong(modelo.getValueAt(index, 0).toString()));
-                        detmerma.setIdproducto(Long.parseLong(modelo.getValueAt(index, 1).toString()));
-                        detmerma.setCantidad(Double.parseDouble(modelo.getValueAt(index, 4).toString()));
-                        daodetallemerma.eliminar(detmerma);
-                        modelo.removeRow(index);
+//                        DetalleMerma detmerma= new DetalleMerma();
+//
+//                        detmerma.setIddetallemerma(Long.parseLong(modelo.getValueAt(index, 0).toString()));
+//                        detmerma.setIdproducto(Long.parseLong(modelo.getValueAt(index, 1).toString()));
+//                        detmerma.setCantidad(Double.parseDouble(modelo.getValueAt(index, 4).toString()));
+                       Producto prod;
+                       prod=listdet.get(index);
+                       daoproducto.devolver(prod, jlblmensajecarga);
+                       listdet.remove(index);
+                       modelo.removeRow(index);
                         
                     }
 
@@ -392,49 +492,53 @@ public class JIFMerma extends javax.swing.JInternalFrame {
            
 //            if(modelo.getRowCount()>0){
              
-              DetalleMerma detmerma= new DetalleMerma();
-              int cont=0;
-             System.out.println("modelorow"+modelo.getRowCount()); 
-                for(int i=0;i<=modelo.getRowCount()-1;i++){
-                    cont++;
-                    detmerma.setIddetallemerma(Long.parseLong(modelo.getValueAt(i, 0).toString()));
-                    detmerma.setIdproducto(Long.parseLong(modelo.getValueAt(i, 1).toString()));
-                    detmerma.setCantidad(Double.parseDouble(modelo.getValueAt(i, 4).toString()));
-                    daodetallemerma.eliminar(detmerma);
-//                    //modelo.removeRow(i);
+//              DetalleMerma detmerma= new DetalleMerma();
+//              int cont=0;
+//             System.out.println("modelorow"+modelo.getRowCount()); 
+//                for(int i=0;i<=modelo.getRowCount()-1;i++){
 //                    cont++;
-//            }           
-            }
-                if(merma.getId_merma()!=0){
-                    daomerma.eliminar(merma.getId_merma());
-                
-                }
-              
-            
-            this.dispose();
+//                    detmerma.setIddetallemerma(Long.parseLong(modelo.getValueAt(i, 0).toString()));
+//                    detmerma.setIdproducto(Long.parseLong(modelo.getValueAt(i, 1).toString()));
+//                    detmerma.setCantidad(Double.parseDouble(modelo.getValueAt(i, 4).toString()));
+//                    daodetallemerma.eliminar(detmerma);
+////                    //modelo.removeRow(i);
+////                    cont++;
+////            }           
+//            }
+//                if(merma.getId_merma()!=0){
+//                    daomerma.eliminar(merma.getId_merma());
+//                
+//                }
+//              
+            daoproducto.devolverstockrequerido(listdet, jlblmensajecarga, this);
         
         }
     }//GEN-LAST:event_jbtnsalirActionPerformed
 
     private void jbtnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnaceptarActionPerformed
         // TODO add your handling code here:
+        merma.setFecha(new java.sql.Date(jdpfecha.getDate().getTime()));
+        merma.setMotivo(jtamotivo.getText().trim().toUpperCase());
+        merma.setId_merma(daomerma.insertar(merma));//insert
+        
+        daodetallemerma.insertar(listdet, jlblmensajecarga, merma.getId_merma());
         nuevamerma();
-        JOptionPane.showMessageDialog(null, "INGRESADO CORRECTAMENTE");
+        
     }//GEN-LAST:event_jbtnaceptarActionPerformed
 
     private void jtfcodigoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcodigoFocusGained
         // TODO add your handling code here:
-        if(jtfcodigo.getText().equals("CODIGO")){
-        jtfcodigo.setText("");
-        }
+//        if(jtfcodigo.getText().equals("CODIGO")){
+//        jtfcodigo.setText("");
+//        }
     }//GEN-LAST:event_jtfcodigoFocusGained
 
     private void jtfcodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcodigoFocusLost
         // TODO add your handling code here:
-        if(jtfcodigo.getText().equals("")){
-         jtfcodigo.setText("CODIGO");
-        
-        }
+//        if(jtfcodigo.getText().equals("")){
+//         jtfcodigo.setText("CODIGO");
+//        
+//        }
     }//GEN-LAST:event_jtfcodigoFocusLost
 
     private void jtamotivoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtamotivoFocusGained
@@ -456,37 +560,51 @@ public class JIFMerma extends javax.swing.JInternalFrame {
     private void jdpfechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jdpfechaActionPerformed
         // TODO add your handling code here:
         validaaceptar();
-        validaingreso();
+   
     }//GEN-LAST:event_jdpfechaActionPerformed
 
     private void jtamotivoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtamotivoKeyReleased
         // TODO add your handling code here:
          validaaceptar();
-         validaingreso();
+        
     }//GEN-LAST:event_jtamotivoKeyReleased
-
-    private void jtfcantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcantidadKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtfcantidadKeyReleased
-
-    private void jtfcantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfcantidadActionPerformed
-        // TODO add your handling code here:
-        validaingreso();
-         validaaceptar();
-    }//GEN-LAST:event_jtfcantidadActionPerformed
 
     private void jtamotivoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtamotivoKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayusTA(jtamotivo);
+//        mayus.convertirmayusTA(jtamotivo);
     }//GEN-LAST:event_jtamotivoKeyTyped
+
+    private void jtfcantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcantidadKeyReleased
+        // TODO add your handling code here:
+        validaagregar();
+    }//GEN-LAST:event_jtfcantidadKeyReleased
+
+    private void jPanel4MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MousePressed
+        // TODO add your handling code here:
+          posy=evt.getY();
+        posx=evt.getX();
+ 
+    }//GEN-LAST:event_jPanel4MousePressed
+
+    private void jPanel4MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseDragged
+        // TODO add your handling code here:
+        int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel4MouseDragged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbtnaceptar;
@@ -494,9 +612,10 @@ public class JIFMerma extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbtnsalir;
     private org.jdesktop.swingx.JXDatePicker jdpfecha;
     private javax.swing.JLabel jlblimagen;
+    private javax.swing.JLabel jlblmensajecarga;
     private javax.swing.JTable jtabla;
     private javax.swing.JTextArea jtamotivo;
-    private javax.swing.JFormattedTextField jtfcantidad;
+    private javax.swing.JTextField jtfcantidad;
     private javax.swing.JTextField jtfcodigo;
     private javax.swing.JTextField jtfproducto;
     private org.edisoncor.gui.panel.PanelNice panelNice1;

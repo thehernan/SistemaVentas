@@ -109,8 +109,9 @@ public class JDCantidadSalida extends javax.swing.JDialog {
         // TODO add your handling code here:
         Double cant = Double.parseDouble(jtfcantidad.getText());
         System.out.println("idprod"+prod.getIdproducto());
+        prod.setCantidad(cant);
         System.out.println("cant"+cant);
-        if(daoprod.validastockrequerido(cant,prod.getIdproducto())==true){
+        if(daoprod.validastockrequerido(prod)==true){
              jifordensalida.setagregar(prod, cant);
             jdbuscar.mostrar();
              this.dispose();

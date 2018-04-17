@@ -36,8 +36,8 @@ public class JDReparacionesEmpleado extends javax.swing.JDialog {
         this.hasta=hasta;
         DateFormat df = DateFormat.getDateInstance();
         jlblrangofecha.setText("RANGO DE FECHAS DEL "+df.format(desde)+" HASTA "+df.format(hasta));
-       listrepa= daoreparacion.mostrarporempleado(jtabla,reparacion, jlblempleado, jlblsucursal,
-        desde,hasta);
+//       listrepa= daoreparacion.mostrarporempleado(jtabla,reparacion, jlblempleado, jlblsucursal,
+//        desde,hasta);
         System.out.println("tamañolsit"+listrepa.size());
         this.setLocationRelativeTo(null);
     }
@@ -47,8 +47,8 @@ public class JDReparacionesEmpleado extends javax.swing.JDialog {
        
     }
     public void mostrar(){
-    listrepa= daoreparacion.mostrarporempleado(jtabla, reparacion, jlblempleado, jlblsucursal,
-        desde,hasta);
+//    listrepa= daoreparacion.mostrarporempleado(jtabla, reparacion, jlblempleado, jlblsucursal,
+//        desde,hasta);
     }
 
     /**

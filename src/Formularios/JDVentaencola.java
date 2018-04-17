@@ -35,9 +35,54 @@ public class JDVentaencola extends java.awt.Dialog {
         super(parent, modal);
         initComponents();
         this.caja=caja;
-        listventa=daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
+        jlblmensajever.setVisible(false);
+//        listventa=daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
         this.setLocationRelativeTo(null);
+        mostrar();
     }
+    
+     public void mostrar(){
+    Runnable runnable = new Runnable() {
+
+        @Override
+        public void run() {
+//            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       jlblimagencarga.setVisible(true);
+       jlblletracarga.setVisible(true);
+       listventa=daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
+       
+       jlblimagencarga.setVisible(false);
+      jlblletracarga.setVisible(false);
+      jlblimagencarga.setVisible(false);
+      jlblletracarga.setVisible(false);
+     }
+       
+         
+        };
+        Thread T = new Thread(runnable);
+        T.start();
+     }
+     
+     public synchronized void ver(){
+         int index= jtabla.getSelectedRow();
+         if(index>=0){
+            jlblmensajever.setVisible(true);
+            venta = listventa.get(jtabla.getSelectedRow());
+            JDMostrarVenta mostrarventa= new JDMostrarVenta(new Frame(),isVisible(),venta.getIdventa());
+            jlblmensajever.setVisible(false);
+            mostrarventa.setVisible(true);
+         
+         
+         }else {
+             JOptionPane.showMessageDialog(null, "Seleccione una venta","",JOptionPane.INFORMATION_MESSAGE);
+         }
+        
+        
+      
+     
+     
+     
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,13 +93,19 @@ public class JDVentaencola extends java.awt.Dialog {
     private void initComponents() {
 
         jPanel7 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
         jlblrefrescar = new javax.swing.JButton();
+        jlblletracarga = new javax.swing.JLabel();
+        jlblimagencarga = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
         jbtnaceptar = new javax.swing.JButton();
         jlblmsj = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jbtnver = new javax.swing.JButton();
+        jlblmensajever = new javax.swing.JLabel();
 
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
@@ -62,11 +113,7 @@ public class JDVentaencola extends java.awt.Dialog {
         });
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel11.setText("VENTAS EN COLA");
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jlblrefrescar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Refresh_25px.png"))); // NOI18N
         jlblrefrescar.setToolTipText("Refrescar");
@@ -75,16 +122,28 @@ public class JDVentaencola extends java.awt.Dialog {
                 jlblrefrescarActionPerformed(evt);
             }
         });
+        jPanel7.add(jlblrefrescar, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 70, -1, -1));
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel7.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 420, -1, -1));
+
+        jlblimagencarga.setBackground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setForeground(new java.awt.Color(255, 255, 255));
+        jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel7.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 760, 350));
 
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jtabla.setToolTipText("Doble clic para ver detalle");
@@ -95,6 +154,8 @@ public class JDVentaencola extends java.awt.Dialog {
         });
         jScrollPane1.setViewportView(jtabla);
 
+        jPanel7.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 879, 462));
+
         jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/compra.png"))); // NOI18N
         jbtnaceptar.setToolTipText("Cobrar");
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -102,50 +163,51 @@ public class JDVentaencola extends java.awt.Dialog {
                 jbtnaceptarActionPerformed(evt);
             }
         });
+        jPanel7.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 70, -1, -1));
 
         jlblmsj.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
         jlblmsj.setForeground(new java.awt.Color(255, 51, 51));
-        jlblmsj.setText("jLabel1");
+        jlblmsj.setText("* * *");
+        jPanel7.add(jlblmsj, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addComponent(jlblmsj)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbtnaceptar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jlblrefrescar))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 879, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
+        jPanel8.setBackground(new java.awt.Color(220, 151, 96));
+
+        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("VENTAS EN COLA");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlblrefrescar)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addComponent(jlblmsj)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jbtnaceptar)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap(703, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel11)
                 .addContainerGap())
         );
+
+        jPanel7.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, -1));
+
+        jbtnver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/view25px.png"))); // NOI18N
+        jbtnver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnverActionPerformed(evt);
+            }
+        });
+        jPanel7.add(jbtnver, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 70, -1, -1));
+
+        jlblmensajever.setForeground(new java.awt.Color(0, 0, 0));
+        jlblmensajever.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
+        jlblmensajever.setText("Cargando detalle ...");
+        jPanel7.add(jlblmensajever, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
 
         add(jPanel7, java.awt.BorderLayout.CENTER);
 
@@ -175,18 +237,25 @@ public class JDVentaencola extends java.awt.Dialog {
 
     private void jlblrefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jlblrefrescarActionPerformed
         // TODO add your handling code here:
-        listventa=daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
+//        listventa=daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
+        mostrar();
     }//GEN-LAST:event_jlblrefrescarActionPerformed
 
     private void jtablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMouseReleased
         // TODO add your handling code here:
-        if(evt.getClickCount()==2){
-        venta = listventa.get(jtabla.getSelectedRow());
-        JDMostrarVenta mostrarventa= new JDMostrarVenta(new Frame(),isVisible(),venta);
-        mostrarventa.setVisible(true);
-        
-        }
+       
     }//GEN-LAST:event_jtablaMouseReleased
+
+    private void jbtnverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnverActionPerformed
+        // TODO add your handling code here:
+        Runnable runnable = new Runnable() {
+            public void run() {
+                ver();
+            }
+        };
+        Thread T= new Thread(runnable);
+        T.start();
+    }//GEN-LAST:event_jbtnverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -209,8 +278,13 @@ public class JDVentaencola extends java.awt.Dialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel11;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnaceptar;
+    private javax.swing.JButton jbtnver;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
+    private javax.swing.JLabel jlblmensajever;
     private javax.swing.JLabel jlblmsj;
     private javax.swing.JButton jlblrefrescar;
     private javax.swing.JTable jtabla;

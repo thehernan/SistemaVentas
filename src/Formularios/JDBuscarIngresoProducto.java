@@ -29,16 +29,43 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
     public JDBuscarIngresoProducto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-      ;
+     
     }
      public JDBuscarIngresoProducto(java.awt.Frame parent, boolean modal,JIFIngresoProducto frmingresoprod) {
         super(parent, modal);
         initComponents();
-        listcompra=daocompras.mostrar(jtabla, sucursalsingleton.getId());
+        mostrar();
         this.frmingresoprod= frmingresoprod;
         jbtnaceptar.setEnabled(false);
         this.setLocationRelativeTo(null);
     }
+     
+     public void mostrar(){
+     Runnable runnable = new Runnable() {
+
+         @Override
+         public void run() {
+//             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+             jlblimagencarga.setVisible(true);
+             jlblletracarga.setVisible(true);
+              listcompra=daocompras.mostrar(jtabla, sucursalsingleton.getId());
+              jlblimagencarga.setVisible(false);
+             jlblletracarga.setVisible(false);
+             
+         }
+     };
+     Thread T = new Thread(runnable);
+     T.start();
+     
+     }
+     
+     public synchronized void sensitiva(){
+         jlblimagencarga.setVisible(true);
+         jlblletracarga.setVisible(true);
+         daocompras.busquedasensitiva(jtabla, sucursalsingleton.getId(), jtfnumero.getText());
+         jlblimagencarga.setVisible(false);
+         jlblletracarga.setVisible(false);
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -50,25 +77,44 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jlblimagencarga = new javax.swing.JLabel();
+        jlblletracarga = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jtfnumero = new javax.swing.JTextField();
         jbtnaceptar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 160, 190, 240));
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 370, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("N°: ");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 69, -1, 20));
 
         jtfnumero.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jtfnumero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnumeroActionPerformed(evt);
+            }
+        });
         jtfnumero.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfnumeroKeyReleased(evt);
             }
         });
+        jPanel1.add(jtfnumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(52, 70, 806, -1));
 
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
         jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
@@ -78,16 +124,18 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
                 jbtnaceptarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(876, 62, -1, -1));
 
+        jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -99,34 +147,32 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jtabla);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jtfnumero, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(179, 179, 179)
-                .addComponent(jbtnaceptar))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
-                .addGap(17, 17, 17))
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 102, 958, 408));
+
+        jPanel4.setBackground(new java.awt.Color(220, 151, 96));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("BUSCAR DOCUMENTO");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbtnaceptar)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfnumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
-                .addGap(18, 18, 18))
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 995, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -169,8 +215,24 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
     private void jtfnumeroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnumeroKeyReleased
         // TODO add your handling code here:
         
-        daocompras.busquedasensitiva(jtabla, sucursalsingleton.getId(), jtfnumero.getText());
+       
     }//GEN-LAST:event_jtfnumeroKeyReleased
+
+    private void jtfnumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnumeroActionPerformed
+        // TODO add your handling code here:
+        Runnable runnable = new Runnable() {
+
+         @Override
+         public void run() {
+//             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            sensitiva();
+             
+         }
+     };
+     Thread T = new Thread(runnable);
+     T.start();
+        
+    }//GEN-LAST:event_jtfnumeroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -216,9 +278,13 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnaceptar;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
     private javax.swing.JTable jtabla;
     private javax.swing.JTextField jtfnumero;
     // End of variables declaration//GEN-END:variables

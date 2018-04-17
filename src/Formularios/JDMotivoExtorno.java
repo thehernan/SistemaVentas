@@ -37,22 +37,23 @@ public class JDMotivoExtorno extends javax.swing.JDialog {
         initComponents();
     }
     
-    public JDMotivoExtorno(java.awt.Frame parent, boolean modal,Ventas venta, JDVentasEmpleado jdventas) {
-        super(parent, modal);
-        initComponents();
-        this.venta=venta;
-        this.jdventas=jdventas;
-        this.setLocationRelativeTo(null);
-        identifi="VENTAEMPLEADO";
-    }
+//    public JDMotivoExtorno(java.awt.Frame parent, boolean modal,Ventas venta, JDVentasEmpleado jdventas) {
+//        super(parent, modal);
+//        initComponents();
+//        this.venta=venta;
+//        this.jdventas=jdventas;
+//        this.setLocationRelativeTo(null);
+//        identifi="VENTAEMPLEADO";
+//    }
     
     public JDMotivoExtorno(java.awt.Frame parent, boolean modal,Ventas venta, JIFVentaConsultar jifventaconsu) {
         super(parent, modal);
         initComponents();
         this.venta=venta;
         this.jifventaconsu=jifventaconsu;
-        this.setLocationRelativeTo(null);
-        identifi="VENTACLIENTE";
+       
+        identifi="VENTA";
+         this.setLocationRelativeTo(null);
     }
     
      public JDMotivoExtorno(java.awt.Frame parent, boolean modal,Reparacion repara,JDReparacionesEmpleado jdrepara) {
@@ -102,7 +103,6 @@ public class JDMotivoExtorno extends javax.swing.JDialog {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("MOTIVO DE ANULACION");
         setResizable(false);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -120,12 +120,13 @@ public class JDMotivoExtorno extends javax.swing.JDialog {
         jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 450, 160));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel1.setText("MOTIVO:");
+        jLabel1.setText("Ingrese Motivo de Anulación:");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        jbtnaceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
         jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
@@ -141,7 +142,7 @@ public class JDMotivoExtorno extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
         );
 
         pack();
@@ -153,7 +154,7 @@ public class JDMotivoExtorno extends javax.swing.JDialog {
                  if(jtamotivo.getText().replaceAll("\\s", "").length()>0){
                      if(identifi.equals("VENTAEMPLEADO")){
                      if(JOptionPane.showConfirmDialog(null,"ESTA SEGURO DE ANULAR LA VENTA, ESTA OPERACION NO SE PODRA REVERTIR","MENSAJE SISTEMA",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-                     daoventa.extornarconcretada(venta.getIdventa(),jtamotivo.getText());
+                     daoventa.extornarconcretada(venta.getIdventa(),jtamotivo.getText().trim().toUpperCase());
                      jdventas.refrescar();
                      
                      this.dispose();
@@ -161,10 +162,10 @@ public class JDMotivoExtorno extends javax.swing.JDialog {
                      
                      }
                      
-                      if(identifi.equals("VENTACLIENTE")){
+                      if(identifi.equals("VENTA")){
                      if(JOptionPane.showConfirmDialog(null,"ESTA SEGURO DE ANULAR LA VENTA, ESTA OPERACION NO SE PODRA REVERTIR","MENSAJE SISTEMA",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-                     daoventa.extornarconcretada(venta.getIdventa(),jtamotivo.getText());
-                     jifventaconsu.refrecar();
+                     daoventa.extornarconcretada(venta.getIdventa(),jtamotivo.getText().trim().toUpperCase());
+                     jifventaconsu.busqueda();
                      
                      this.dispose();
                      }                     
@@ -174,7 +175,7 @@ public class JDMotivoExtorno extends javax.swing.JDialog {
                       if(identifi.equals("REPARAEMPLEADO")){
                           
                         if(JOptionPane.showConfirmDialog(null,"ESTA SEGURO DE ANULAR LA REPARACION, ESTA OPERACION NO SE PODRA REVERTIR","MENSAJE SISTEMA",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-                         reparacion.setMotivo(jtamotivo.getText());
+                         reparacion.setMotivo(jtamotivo.getText().trim().toUpperCase());
                          reparacion.getIdreparacion();
                             System.out.println("idrepara"+reparacion.getIdreparacion());
                          daorepa.extornar(reparacion);
@@ -188,7 +189,7 @@ public class JDMotivoExtorno extends javax.swing.JDialog {
                        if(identifi.equals("REPARACLIENTE")){
                           
                         if(JOptionPane.showConfirmDialog(null,"ESTA SEGURO DE ANULAR LA REPARACION, ESTA OPERACION NO SE PODRA REVERTIR","MENSAJE SISTEMA",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-                         reparacion.setMotivo(jtamotivo.getText());
+                         reparacion.setMotivo(jtamotivo.getText().trim().toUpperCase());
                          reparacion.getIdreparacion();
                             System.out.println("idrepara"+reparacion.getIdreparacion());
                          daorepa.extornar(reparacion);
@@ -211,7 +212,7 @@ public class JDMotivoExtorno extends javax.swing.JDialog {
 
     private void jtamotivoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtamotivoKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayusTA(jtamotivo);
+//        mayus.convertirmayusTA(jtamotivo);
     }//GEN-LAST:event_jtamotivoKeyTyped
 
     /**

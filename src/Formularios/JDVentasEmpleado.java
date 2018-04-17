@@ -36,11 +36,11 @@ public class JDVentasEmpleado extends javax.swing.JDialog {
         this.ventadb=venta;
         this.desde=desde;
         this.hasta=hasta;
-        listventList=daoventas.mostrarporempleado(jtabla,venta, jlblempleado, jlblsucursal, desde, hasta,jlbltotal);
+//        listventList=daoventas.mostrarporempleado(jtabla,venta, jlblempleado, jlblsucursal, desde, hasta,jlbltotal);
         this.setLocationRelativeTo(null);
     }
     public void refrescar(){
-    listventList=daoventas.mostrarporempleado(jtabla,ventadb, jlblempleado, jlblsucursal, desde, hasta,jlbltotal);
+//    listventList=daoventas.mostrarporempleado(jtabla,ventadb, jlblempleado, jlblsucursal, desde, hasta,jlbltotal);
     }
 
     /**
@@ -95,11 +95,11 @@ public class JDVentasEmpleado extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jtabla);
 
-        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("HISTORIAL DE VENTAS");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -203,8 +203,8 @@ public class JDVentasEmpleado extends javax.swing.JDialog {
           
             if(evt.getClickCount()==2){
             
-             JDMotivoExtorno motextorno =new JDMotivoExtorno(new JFrame(),isVisible(),venta,this);
-             motextorno.setVisible(true);
+//             JDMotivoExtorno motextorno =new JDMotivoExtorno(new JFrame(),isVisible(),venta,this);
+//             motextorno.setVisible(true);
             }
         }
     }//GEN-LAST:event_jtablaMouseReleased

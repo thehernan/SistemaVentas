@@ -10,6 +10,7 @@ import DAO.UsuariosDAO;
 
 import Pojos.Empleado;
 import Pojos.Usuarios;
+import java.util.List;
 import javax.swing.JOptionPane;
 /**
  *
@@ -25,21 +26,34 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
    Empleado empleado = new Empleado();
    
    boolean editar= false;
+   List<Usuarios> listuser;
    ////     PRIVILEGIOS //////////////////////
 //   boolean cliente=false,proveedor=false,apertura=false,consultarrepara=false,consultarventa=false,
 //           debe=false,ckempleado=false,familia=false,haber=false,ingreso=false,inventario=false,
 //           movimientos=false,nueva=false,pendientes=false,productos=false,user=false,vender=false;
 
    //////////////////////////////////////////
+   
    Mayusculas mayus= new Mayusculas();
+   int posx;
+    int posy;
     public JIFUsuarios() {
         initComponents();
-        daousuario.mostrar(jtabla);
+       
+        mostrar("");
       
         bloquearjbtn(true, false, false, false, false, true,false,false);
         bloquearjtf(false, false, false, false);
         bloquearckec(false);
     }
+    
+    
+
+    
+    
+    
+    
+    
     public void setuser(Usuarios user){
     this.usuario= user;
     
@@ -96,6 +110,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
          jcksucursalida.setEnabled(ban);
          jcksucurentrada.setEnabled(ban);
          jcksucurconsultar.setEnabled(ban);
+         jckweb.setEnabled(ban);
     }
      public void limpiarjtf(){
     jtfrut.setText("R.U.T");
@@ -140,8 +155,95 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
          jcksucursalida.setSelected(ban);
          jcksucurentrada.setSelected(ban);
          jcksucurconsultar.setSelected(ban);
+         jckweb.setSelected(ban);
      
      }
+     public void ver(){
+//         long id = Long.parseLong(jtabla.getValueAt(jtabla.getSelectedRow(), 0).toString());
+//        String nombre = jtabla.getValueAt(jtabla.getSelectedRow(), 2).toString();
+//        String rut =jtabla.getValueAt(jtabla.getSelectedRow(), 1).toString();
+         
+//        usuario = daousuario.buscar("ID", id,jtfnombre,jtfrut);
+        usuario = listuser.get(jtabla.getSelectedRow());
+        jtfnombre.setText(usuario.getNombreempleado());
+        jtfrut.setText(usuario.getRutempleado());
+        
+        jtfusuario.setText(usuario.getUsuario());
+        jtfclave.setText(usuario.getClave());
+//        System.out.println("clave"+CifradoMD5.Cifrado(usuario.getClave()));
+        jckcliente.setSelected(usuario.isCliente());
+         jckproveedor.setSelected(usuario.isProveedor());
+         jckapertura.setSelected(usuario.isApertura());
+         jckconsultarrepara.setSelected(usuario.isConsultarrepara());
+         jckconsultarventa.setSelected(usuario.isConsultarventa());
+         jckdebe.setSelected(usuario.isDebe());
+         jckempleado.setSelected(usuario.isCkempleado());
+         jckfamilia.setSelected(usuario.isFamilia());
+         jckhaber.setSelected(usuario.isHaber());
+         jckingreso.setSelected(usuario.isIngreso());
+         jckinventario.setSelected(usuario.isInventario());
+         jckmovimientos.setSelected(usuario.isMovimientos());
+         jcknueva.setSelected(usuario.isNueva());
+         jckpendientes.setSelected(usuario.isPendientes());
+         jckproductos.setSelected(usuario.isProductos());
+         jckuser.setSelected(usuario.isUser());
+         jckvender.setSelected(usuario.isVender());
+         jckenproceso.setSelected(usuario.isExtornar());
+        
+         jckprodpendientes.setSelected(usuario.isProdpendientes());
+         jckmermas.setSelected(usuario.isMermas());
+         jckconsulmerma.setSelected(usuario.isConsulmermas());
+         jcksucursalida.setSelected(usuario.isSucursalida());
+         jcksucurentrada.setSelected(usuario.isSucurentrada());
+         jcksucurconsultar.setSelected(usuario.isConsultasucur());
+         jckweb.setSelected(usuario.isWeb());
+        bloquearjbtn(true, true, false, true, false, true,false,false);
+        bloquearckec(false);
+        bloquearjtf(false, false, false,false);
+     
+     
+     
+     }
+     public synchronized void sensitiva(String cadena){
+        jlblimagencarga.setVisible(true);
+        jlblletracarga.setVisible(true);
+        
+            
+         
+        listuser=daousuario.busquedasensitiva(jtabla, cadena);
+        
+           
+      if(jtabla.getSelectedRow()>=0){
+            ver();
+        }else{ 
+             limpiarjtf();
+             bloquearjtf(false, false,false, false);
+             bloquearjbtn(true, false, false, false, false, true,false,false);
+             seleccionartodo(false);
+        
+        }
+      jlblimagencarga.setVisible(false);
+      jlblletracarga.setVisible(false);
+    
+    }
+     
+    public void mostrar(String cadena){
+        
+    Runnable runnable = new Runnable() {
+
+        @Override
+        public void run() {
+//            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            sensitiva(cadena);
+          
+        }
+        };
+
+        Thread T = new Thread(runnable);
+        T.start();
+    
+    
+    }
      
 
     /**
@@ -154,6 +256,8 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jlblimagencarga = new javax.swing.JLabel();
+        jlblletracarga = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
         jbtncancelar = new javax.swing.JButton();
@@ -199,6 +303,8 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         jcksucursalida = new javax.swing.JCheckBox();
         jcksucurentrada = new javax.swing.JCheckBox();
         jcksucurconsultar = new javax.swing.JCheckBox();
+        jPanel12 = new javax.swing.JPanel();
+        jckweb = new javax.swing.JCheckBox();
         jLabel2 = new javax.swing.JLabel();
         jbtnbuscarempleado = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -206,22 +312,34 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jtfbuscarnombre = new javax.swing.JTextField();
         jbtneditar = new javax.swing.JButton();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
-        setTitle("REGISTRO DE USUARIOS");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 250, 190));
+
+        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
+        jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
+        jlblletracarga.setText("Cargando Registros ...");
+        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, -1, -1));
 
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -238,37 +356,59 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtabla);
 
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 111, 438, 500));
+
         jbtncancelar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtncancelar.setText("CANCELAR");
+        jbtncancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel20x20.png"))); // NOI18N
+        jbtncancelar.setText("Cancelar");
+        jbtncancelar.setBorder(null);
+        jbtncancelar.setBorderPainted(false);
+        jbtncancelar.setContentAreaFilled(false);
         jbtncancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtncancelarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 80, 70, 20));
 
         jbtneliminar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneliminar.setText("ELIMINAR");
+        jbtneliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete20x20.png"))); // NOI18N
+        jbtneliminar.setText("Eliminar");
+        jbtneliminar.setBorder(null);
+        jbtneliminar.setBorderPainted(false);
+        jbtneliminar.setContentAreaFilled(false);
         jbtneliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtneliminarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 80, 60, 20));
 
         jbtnguardar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnguardar.setText("GUARDAR");
+        jbtnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
+        jbtnguardar.setText("Guardar");
+        jbtnguardar.setBorder(null);
+        jbtnguardar.setBorderPainted(false);
+        jbtnguardar.setContentAreaFilled(false);
         jbtnguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnguardarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 80, 70, 20));
 
         jbtnnew.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnnew.setText("NUEVO");
+        jbtnnew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add20X20.png"))); // NOI18N
+        jbtnnew.setText("Nuevo");
+        jbtnnew.setBorder(null);
+        jbtnnew.setBorderPainted(false);
+        jbtnnew.setContentAreaFilled(false);
         jbtnnew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnnewActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnnew, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 80, 60, 20));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -351,8 +491,8 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         });
         jPanel3.add(jcktodos, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 9, -1, -1));
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("MANTENIMIENTO DE REGISTRO"));
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Mantenimiento registro"));
 
         jckcliente.setBackground(new java.awt.Color(255, 255, 255));
         jckcliente.setText("Cliente");
@@ -415,8 +555,8 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
 
         jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 370, 60));
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("PRODUCTO"));
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Producto"));
 
         jckingreso.setBackground(new java.awt.Color(255, 255, 255));
         jckingreso.setText("Ingreso");
@@ -515,10 +655,10 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, 380, 90));
+        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, 340, 90));
 
-        jPanel6.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("VENTA"));
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Venta"));
 
         jckvender.setBackground(new java.awt.Color(255, 255, 255));
         jckvender.setText("Vender");
@@ -565,15 +705,15 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jckvender)
                     .addComponent(jckconsultarventa))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jckenproceso)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 180, 140));
+        jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 180, 80));
 
-        jPanel7.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("CAJA"));
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Caja"));
 
         jckapertura.setBackground(new java.awt.Color(255, 255, 255));
         jckapertura.setText("Apertura");
@@ -613,8 +753,8 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
 
         jPanel3.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 110, 190, 60));
 
-        jPanel8.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("REPARACION"));
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Reparación"));
 
         jcknueva.setBackground(new java.awt.Color(255, 255, 255));
         jcknueva.setText("Nueva");
@@ -651,7 +791,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                 .addComponent(jckconsultarrepara)
                 .addGap(18, 18, 18)
                 .addComponent(jckpendientes)
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -664,13 +804,13 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 110, 380, 60));
+        jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 110, 340, 60));
 
-        jPanel9.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("ESTADO CUENTA"));
+        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Cotización"));
 
         jckdebe.setBackground(new java.awt.Color(255, 255, 255));
-        jckdebe.setText("Debe");
+        jckdebe.setText("Nueva Cotización");
         jckdebe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jckdebeActionPerformed(evt);
@@ -678,7 +818,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         });
 
         jckhaber.setBackground(new java.awt.Color(255, 255, 255));
-        jckhaber.setText("Haber");
+        jckhaber.setText("Cotizaciones");
         jckhaber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jckhaberActionPerformed(evt);
@@ -691,25 +831,24 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jckdebe)
-                .addGap(18, 18, 18)
-                .addComponent(jckhaber)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jckdebe)
+                    .addComponent(jckhaber))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jckdebe)
-                    .addComponent(jckhaber))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addComponent(jckdebe)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jckhaber)
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, 190, 70));
 
-        jPanel10.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("SUCURSAL"));
+        jPanel10.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("Sucursal"));
 
         jcksucursalida.setBackground(new java.awt.Color(255, 255, 255));
         jcksucursalida.setText("Salida");
@@ -746,7 +885,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                 .addComponent(jcksucurentrada)
                 .addGap(10, 10, 10)
                 .addComponent(jcksucurconsultar)
-                .addContainerGap(135, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -759,9 +898,39 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
-        jPanel3.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, 380, 70));
+        jPanel3.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, 340, 70));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 850, 280));
+        jPanel12.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Acceso web"));
+        jPanel12.setForeground(new java.awt.Color(255, 255, 255));
+
+        jckweb.setBackground(new java.awt.Color(255, 255, 255));
+        jckweb.setText("Web");
+        jckweb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jckwebActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jckweb)
+                .addContainerGap(115, Short.MAX_VALUE))
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addComponent(jckweb)
+                .addGap(0, 5, Short.MAX_VALUE))
+        );
+
+        jPanel3.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 180, 50));
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 740, 280));
 
         jLabel2.setText("PRIVILEGIOS ");
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
@@ -781,10 +950,13 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         jLabel4.setText("CLAVE:");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 60, 20));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("BUSCAR:");
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(454, 111, 760, 500));
 
-        jtfbuscarnombre.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel1.setText("Buscar:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 62, -1, -1));
+
+        jtfbuscarnombre.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfbuscarnombre.setText("NOMBRES Y APELLIDOS");
         jtfbuscarnombre.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -792,6 +964,11 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jtfbuscarnombreFocusLost(evt);
+            }
+        });
+        jtfbuscarnombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfbuscarnombreActionPerformed(evt);
             }
         });
         jtfbuscarnombre.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -802,83 +979,79 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                 jtfbuscarnombreKeyTyped(evt);
             }
         });
+        jPanel1.add(jtfbuscarnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 83, 480, -1));
 
         jbtneditar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneditar.setText("EDITAR");
+        jbtneditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/edit20x20.png"))); // NOI18N
+        jbtneditar.setText("Editar");
+        jbtneditar.setBorder(null);
+        jbtneditar.setBorderPainted(false);
+        jbtneditar.setContentAreaFilled(false);
         jbtneditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtneditarActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 80, 60, 20));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(416, 416, 416))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jtfbuscarnombre)
-                                .addGap(93, 93, 93)))
-                        .addComponent(jbtnnew, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtneditar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jbtncancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 871, Short.MAX_VALUE)))
-                .addGap(12, 12, 12))
+        jPanel11.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel11.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel11MouseDragged(evt);
+            }
+        });
+        jPanel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel11MousePressed(evt);
+            }
+        });
+
+        jLabel5.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("REGISTRO DE USUARIOS");
+
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jLabel15.setToolTipText("Cerrar");
+        jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel15MouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 930, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addGap(73, 73, 73))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(5, 5, 5)
-                        .addComponent(jtfbuscarnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jbtnnew, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbtneditar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbtnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbtneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbtncancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(9, 9, 9)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
-                        .addGap(8, 8, 8)))
-                .addGap(25, 25, 25))
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel5))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1228, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(4, 4, 4))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -888,48 +1061,48 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
      
      
-        long id = Long.parseLong(jtabla.getValueAt(jtabla.getSelectedRow(), 0).toString());
-        String nombre = jtabla.getValueAt(jtabla.getSelectedRow(), 2).toString();
-        String rut =jtabla.getValueAt(jtabla.getSelectedRow(), 1).toString();
-        usuario = daousuario.buscar("ID", id,jtfnombre,jtfrut);
-       
-        jtfusuario.setText(usuario.getUsuario());
-        jtfclave.setText(usuario.getClave());
-//        System.out.println("clave"+CifradoMD5.Cifrado(usuario.getClave()));
-        jckcliente.setSelected(usuario.isCliente());
-         jckproveedor.setSelected(usuario.isProveedor());
-         jckapertura.setSelected(usuario.isApertura());
-         jckconsultarrepara.setSelected(usuario.isConsultarrepara());
-         jckconsultarventa.setSelected(usuario.isConsultarventa());
-         jckdebe.setSelected(usuario.isDebe());
-         jckempleado.setSelected(usuario.isCkempleado());
-         jckfamilia.setSelected(usuario.isFamilia());
-         jckhaber.setSelected(usuario.isHaber());
-         jckingreso.setSelected(usuario.isIngreso());
-         jckinventario.setSelected(usuario.isInventario());
-         jckmovimientos.setSelected(usuario.isMovimientos());
-         jcknueva.setSelected(usuario.isNueva());
-         jckpendientes.setSelected(usuario.isPendientes());
-         jckproductos.setSelected(usuario.isProductos());
-         jckuser.setSelected(usuario.isUser());
-         jckvender.setSelected(usuario.isVender());
-         jckenproceso.setSelected(usuario.isExtornar());
-        
-         jckprodpendientes.setSelected(usuario.isProdpendientes());
-         jckmermas.setSelected(usuario.isMermas());
-         jckconsulmerma.setSelected(usuario.isConsulmermas());
-         jcksucursalida.setSelected(usuario.isSucursalida());
-         jcksucurentrada.setSelected(usuario.isSucurentrada());
-         jcksucurconsultar.setSelected(usuario.isConsultasucur());
-        bloquearjbtn(true, true, false, true, false, true,false,false);
-        bloquearckec(false);
-        bloquearjtf(false, false, false,false);
-        
+//        long id = Long.parseLong(jtabla.getValueAt(jtabla.getSelectedRow(), 0).toString());
+//        String nombre = jtabla.getValueAt(jtabla.getSelectedRow(), 2).toString();
+//        String rut =jtabla.getValueAt(jtabla.getSelectedRow(), 1).toString();
+//        usuario = daousuario.buscar("ID", id,jtfnombre,jtfrut);
+//       
+//        jtfusuario.setText(usuario.getUsuario());
+//        jtfclave.setText(usuario.getClave());
+////        System.out.println("clave"+CifradoMD5.Cifrado(usuario.getClave()));
+//        jckcliente.setSelected(usuario.isCliente());
+//         jckproveedor.setSelected(usuario.isProveedor());
+//         jckapertura.setSelected(usuario.isApertura());
+//         jckconsultarrepara.setSelected(usuario.isConsultarrepara());
+//         jckconsultarventa.setSelected(usuario.isConsultarventa());
+//         jckdebe.setSelected(usuario.isDebe());
+//         jckempleado.setSelected(usuario.isCkempleado());
+//         jckfamilia.setSelected(usuario.isFamilia());
+//         jckhaber.setSelected(usuario.isHaber());
+//         jckingreso.setSelected(usuario.isIngreso());
+//         jckinventario.setSelected(usuario.isInventario());
+//         jckmovimientos.setSelected(usuario.isMovimientos());
+//         jcknueva.setSelected(usuario.isNueva());
+//         jckpendientes.setSelected(usuario.isPendientes());
+//         jckproductos.setSelected(usuario.isProductos());
+//         jckuser.setSelected(usuario.isUser());
+//         jckvender.setSelected(usuario.isVender());
+//         jckenproceso.setSelected(usuario.isExtornar());
+//        
+//         jckprodpendientes.setSelected(usuario.isProdpendientes());
+//         jckmermas.setSelected(usuario.isMermas());
+//         jckconsulmerma.setSelected(usuario.isConsulmermas());
+//         jcksucursalida.setSelected(usuario.isSucursalida());
+//         jcksucurentrada.setSelected(usuario.isSucurentrada());
+//         jcksucurconsultar.setSelected(usuario.isConsultasucur());
+//        bloquearjbtn(true, true, false, true, false, true,false,false);
+//        bloquearckec(false);
+//        bloquearjtf(false, false, false,false);
+        ver();
     }//GEN-LAST:event_jtablaMouseReleased
 
     private void jtablaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablaKeyReleased
         // TODO add your handling code here:
-        jtablaMouseReleased(null);
+        ver();
     }//GEN-LAST:event_jtablaKeyReleased
 
     private void jbtncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncancelarActionPerformed
@@ -1013,7 +1186,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                     usuario.setFamilia(jckfamilia.isSelected());
                     usuario.setHaber(jckhaber.isSelected());
                     usuario.setIngreso(jckingreso.isSelected());
-                    usuario.setInventario(jckingreso.isSelected());
+                    usuario.setInventario(jckinventario.isSelected());
                     usuario.setMovimientos(jckmovimientos.isSelected());
                     usuario.setNueva(jcknueva.isSelected());
                     usuario.setPendientes(jckpendientes.isSelected());
@@ -1028,11 +1201,12 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                     usuario.setSucursalida(jcksucursalida.isSelected());
                     usuario.setSucurentrada(jcksucurentrada.isSelected());
                     usuario.setConsultasucur(jcksucurconsultar.isSelected());
+                    usuario.setWeb(jckweb.isSelected());
 
                 if(editar==false){
                     boolean validaduplicado=daousuario.duplicado(usuario.getIdempleado());
                     if(validaduplicado==true){
-                    usuario.setClave(CifradoMD5.Cifrado(new String(jtfclave.getPassword())));
+                    usuario.setClave(CifradoMD5.encriptaEnMD5(new String(jtfclave.getPassword())));
                     System.out.println("idempleado2"+usuario.getIdempleado());
                     daousuario.insertar(usuario);
                     }else {
@@ -1051,13 +1225,15 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "RELLENE LOS CAMPOS","ERROR",JOptionPane.ERROR_MESSAGE);
             }
 
-       
-        daousuario.mostrar(jtabla);
-        bloquearjbtn(true, false, false, false, false, true,false,false);
-        bloquearjtf(false, false, false, false);
-        limpiarjtf();
-        bloquearckec(false);
-        seleccionartodo(false);
+       if(jtfbuscarnombre.getText().equals("NOMBRES Y APELLIDOS"))
+            mostrar("");
+       else 
+           mostrar(jtfbuscarnombre.getText().trim().toUpperCase());
+//        bloquearjbtn(true, false, false, false, false, true,false,false);
+//        bloquearjtf(false, false, false, false);
+//        limpiarjtf();
+//        bloquearckec(false);
+//        seleccionartodo(false);
 
         //        String RUT = jtfrut.getText();
         //        Integer index= jtablaalumno.getSelectedRow();
@@ -1181,8 +1357,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
 
     private void jtfbuscarnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscarnombreKeyReleased
         // TODO add your handling code here:
-        String nombre=jtfbuscarnombre.getText().trim().toUpperCase();
-        daousuario.busquedasensitiva(jtabla, nombre);
+       
     }//GEN-LAST:event_jtfbuscarnombreKeyReleased
 
     private void jbtneditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtneditarActionPerformed
@@ -1406,7 +1581,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
 
     private void jtfbuscarnombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscarnombreKeyTyped
         // TODO add your handling code here:
-        mayus.convertirmayus(jtfbuscarnombre);
+//        mayus.convertirmayus(jtfbuscarnombre);
     }//GEN-LAST:event_jtfbuscarnombreKeyTyped
 
     private void jckprodpendientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jckprodpendientesActionPerformed
@@ -1463,14 +1638,63 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         validaguardar();
     }//GEN-LAST:event_jcksucurconsultarActionPerformed
 
+    private void jtfbuscarnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfbuscarnombreActionPerformed
+        // TODO add your handling code here:
+//        Runnable runnable = new Runnable() {
+//
+//            @Override
+//            public void run() {
+////                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                 String nombre=jtfbuscarnombre.getText().trim().toUpperCase();
+//                sensitiva(nombre);
+//            }
+//        };
+//        Thread T = new Thread(runnable);
+//        T.start();
+        mostrar(nombre);
+        
+    }//GEN-LAST:event_jtfbuscarnombreActionPerformed
+
+    private void jLabel15MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseReleased
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jLabel15MouseReleased
+
+    private void jPanel11MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel11MousePressed
+        // TODO add your handling code here:
+          posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel11MousePressed
+
+    private void jPanel11MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel11MouseDragged
+        // TODO add your handling code here:
+         int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel11MouseDragged
+
+    private void jckwebActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jckwebActionPerformed
+        // TODO add your handling code here:
+           if(jckweb.isSelected()==false){
+            jcktodos.setSelected(false);
+          
+           
+        }
+        validaguardar();
+    }//GEN-LAST:event_jckwebActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1512,6 +1736,9 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox jcktodos;
     private javax.swing.JCheckBox jckuser;
     private javax.swing.JCheckBox jckvender;
+    private javax.swing.JCheckBox jckweb;
+    private javax.swing.JLabel jlblimagencarga;
+    private javax.swing.JLabel jlblletracarga;
     private javax.swing.JTable jtabla;
     private javax.swing.JTextField jtfbuscarnombre;
     private javax.swing.JPasswordField jtfclave;
