@@ -123,7 +123,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI Light" size="11" style="1"/>
+              <Font name="Segoe UI Light" size="11" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imagenes/cancel20x20.png"/>
@@ -154,7 +154,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI Light" size="11" style="1"/>
+              <Font name="Segoe UI Light" size="11" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imagenes/delete20x20.png"/>
@@ -185,7 +185,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI Light" size="11" style="1"/>
+              <Font name="Segoe UI Light" size="11" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imagenes/save20x20.png"/>
@@ -216,7 +216,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI Light" size="11" style="1"/>
+              <Font name="Segoe UI Light" size="11" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imagenes/add20X20.png"/>
@@ -254,7 +254,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="530" y="120" width="569" height="160"/>
+              <AbsoluteConstraints x="530" y="120" width="569" height="240"/>
             </Constraint>
           </Constraints>
 
@@ -275,7 +275,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="410" y="30" width="139" height="-1"/>
+                  <AbsoluteConstraints x="400" y="80" width="139" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -293,7 +293,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="10" y="80" width="370" height="-1"/>
+                  <AbsoluteConstraints x="10" y="130" width="370" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -310,7 +310,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="410" y="80" width="140" height="-1"/>
+                  <AbsoluteConstraints x="400" y="130" width="140" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -328,7 +328,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="10" y="130" width="540" height="20"/>
+                  <AbsoluteConstraints x="10" y="180" width="530" height="20"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -346,7 +346,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="10" y="30" width="370" height="-1"/>
+                  <AbsoluteConstraints x="10" y="30" width="530" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -362,11 +362,11 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
-                <Property name="text" type="java.lang.String" value="R.U.T:"/>
+                <Property name="text" type="java.lang.String" value="N&#xb0; Doc.:"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="410" y="10" width="-1" height="-1"/>
+                  <AbsoluteConstraints x="400" y="60" width="-1" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -376,7 +376,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="10" y="60" width="-1" height="-1"/>
+                  <AbsoluteConstraints x="10" y="110" width="-1" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -386,7 +386,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="410" y="60" width="-1" height="-1"/>
+                  <AbsoluteConstraints x="400" y="110" width="-1" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -396,7 +396,32 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="10" y="110" width="-1" height="-1"/>
+                  <AbsoluteConstraints x="10" y="160" width="-1" height="-1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel9">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Tipo de Doc.:"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="10" y="60" width="-1" height="-1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="jcbtipodocumento">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="0"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbtipodocumentoActionPerformed"/>
+              </Events>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="10" y="80" width="370" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -461,7 +486,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI Light" size="11" style="1"/>
+              <Font name="Segoe UI Light" size="11" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imagenes/edit20x20.png"/>
@@ -489,7 +514,7 @@
         <Container class="javax.swing.JPanel" name="jPanel3">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="60" green="97" red="dc" type="rgb"/>
+              <Color blue="ee" green="ee" red="ee" type="rgb"/>
             </Property>
           </Properties>
           <Events>
@@ -535,9 +560,6 @@
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI Light" size="24" style="0"/>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="REGISTRO DE CLIENTES"/>
               </Properties>

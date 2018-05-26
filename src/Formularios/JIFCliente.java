@@ -9,7 +9,10 @@ package Formularios;
 import ClasesGlobales.Mayusculas;
 import javax.swing.JOptionPane;
 import DAO.ClienteDAO;
+import DAO.ClienteTipoDocumentoDAO;
 import Pojos.Cliente;
+import Pojos.Cliente_Tipo_Documento;
+import java.util.ArrayList;
 import java.util.List;
 /**
  *
@@ -27,14 +30,15 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
     List<Cliente> listcliente;
     int posx;
     int posy;
+    List<Cliente_Tipo_Documento> listdocumento;
     public JIFCliente() {
         initComponents();
        
-        bloquearjtf(false, false, false, false, false);
+        bloquearjtf(false, false, false, false, false,false);
         bloquearjbtn(true, false, false, false, false, true);
   
-         mostrar();
-       
+        mostrar();
+        mostrardocumento();
         
     }
   
@@ -65,12 +69,13 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
     }
     
     
-    public void bloquearjtf(boolean rut, boolean nombre,boolean email, boolean direccion, boolean celular){
+    public void bloquearjtf(boolean rut, boolean nombre,boolean email, boolean direccion, boolean celular,boolean documento){
     jtfrut.setEnabled(rut);
     jtfnombrerazon.setEnabled(nombre);
     jtfemail.setEnabled(email);
     jtfdireccion.setEnabled(direccion);
     jtfcelular.setEnabled(celular);
+    jcbtipodocumento.setEnabled(documento);
      
     
     }
@@ -90,6 +95,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
     jtfemail.setText("");
     jtfdireccion.setText("");
     jtfcelular.setText("");
+    jcbtipodocumento.setSelectedIndex(1);
     }
     public void validaguardar(){
         String nombre= jtfnombrerazon.getText().replaceAll("\\s","");
@@ -98,7 +104,8 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         String cel=jtfcelular.getText().replaceAll("\\s", "");
         String email=jtfemail.getText().replaceAll("\\s", "");
         
-    if( nombre.length()>0 &&  rut.length()>0 && direc.length()>0 && cel.length()>0 && email.length()>0){
+    if( nombre.length()>0 &&  rut.length()>0 && direc.length()>0 && cel.length()>0 && email.length()>0
+            && jcbtipodocumento.getSelectedIndex()>0){
         bloquearjbtn(false, false, true,false ,true, true);
     }else {
         bloquearjbtn(true, false, false, false, true, true);
@@ -112,8 +119,9 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         jtfcelular.setText(cliente.getCelular());
         jtfdireccion.setText(cliente.getDireccion());
         jtfemail.setText(cliente.getEmail());
+        jcbtipodocumento.setSelectedItem(cliente.getDocumento());
         bloquearjbtn(true, true, false, true, false, true);
-        
+        bloquearjtf(false, false,false, false,false,false);
         
     }
     public synchronized void sensitiva(String op){
@@ -133,13 +141,24 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
             ver();
         }else{ 
              limpiarjtf();
-             bloquearjtf(false, false,false, false,false);
+             bloquearjtf(false, false,false, false,false,false);
             bloquearjbtn(true, false, false, false, false, true);
         
         }
       jlblimagencarga.setVisible(false);
       jlblletracarga.setVisible(false);
     
+    }
+    public void mostrardocumento(){
+        ClienteTipoDocumentoDAO documentodao = new ClienteTipoDocumentoDAO();
+        
+        jcbtipodocumento.addItem("<<Seleccione>>");
+        
+        listdocumento = documentodao.mostrar();
+        for(Cliente_Tipo_Documento documento : listdocumento){
+        
+            jcbtipodocumento.addItem(documento.getOp()+" - "+documento.getDocumento());
+        }  
     }
 
     /**
@@ -171,6 +190,8 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jcbtipodocumento = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         jtfbuscarrut = new javax.swing.JTextField();
         jtfbuscarnombrerazon = new javax.swing.JTextField();
@@ -225,7 +246,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 506, 288));
 
         jbtncancelar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtncancelar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtncancelar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtncancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel20x20.png"))); // NOI18N
         jbtncancelar.setText("Cancelar");
         jbtncancelar.setToolTipText("Cancelar");
@@ -241,7 +262,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         jPanel1.add(jbtncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 80, 80, -1));
 
         jbtneliminar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneliminar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtneliminar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtneliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete20x20.png"))); // NOI18N
         jbtneliminar.setText("Eliminar");
         jbtneliminar.setToolTipText("Eliminar");
@@ -257,7 +278,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         jPanel1.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 80, 70, -1));
 
         jbtnguardar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
         jbtnguardar.setText("Guardar");
         jbtnguardar.setToolTipText("Guardar");
@@ -273,7 +294,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         jPanel1.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 80, -1, -1));
 
         jbtnnew.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnnew.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnnew.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtnnew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add20X20.png"))); // NOI18N
         jbtnnew.setText("Nuevo");
         jbtnnew.setToolTipText("Nuevo");
@@ -306,7 +327,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
                 jtfrutKeyReleased(evt);
             }
         });
-        jPanel2.add(jtfrut, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 30, 139, -1));
+        jPanel2.add(jtfrut, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 80, 139, -1));
 
         jtfdireccion.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfdireccion.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -325,7 +346,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
                 jtfdireccionKeyTyped(evt);
             }
         });
-        jPanel2.add(jtfdireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 370, -1));
+        jPanel2.add(jtfdireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 370, -1));
 
         jtfcelular.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfcelular.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -341,7 +362,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
                 jtfcelularKeyReleased(evt);
             }
         });
-        jPanel2.add(jtfcelular, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 80, 140, -1));
+        jPanel2.add(jtfcelular, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 130, 140, -1));
 
         jtfemail.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfemail.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -360,7 +381,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
                 jtfemailKeyTyped(evt);
             }
         });
-        jPanel2.add(jtfemail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 540, 20));
+        jPanel2.add(jtfemail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 530, 20));
 
         jtfnombrerazon.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtfnombrerazon.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -379,24 +400,34 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
                 jtfnombrerazonKeyTyped(evt);
             }
         });
-        jPanel2.add(jtfnombrerazon, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 370, -1));
+        jPanel2.add(jtfnombrerazon, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 530, -1));
 
         jLabel3.setText("Sr(es):");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        jLabel4.setText("R.U.T:");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 10, -1, -1));
+        jLabel4.setText("N° Doc.:");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, -1, -1));
 
         jLabel5.setText("Dirección:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
 
         jLabel6.setText("Celular:");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, -1, -1));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 110, -1, -1));
 
         jLabel7.setText("E-mail:");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 120, 569, 160));
+        jLabel9.setText("Tipo de Doc.:");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+
+        jcbtipodocumento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbtipodocumentoActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jcbtipodocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 370, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 120, 569, 240));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("Buscar:");
@@ -453,7 +484,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         jPanel1.add(jtfbuscarnombrerazon, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 320, -1));
 
         jbtneditar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneditar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtneditar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtneditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/edit20x20.png"))); // NOI18N
         jbtneditar.setText("Editar");
         jbtneditar.setToolTipText("Editar");
@@ -468,7 +499,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         });
         jPanel1.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 80, 60, -1));
 
-        jPanel3.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel3.setBackground(new java.awt.Color(238, 238, 238));
         jPanel3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel3MouseDragged(evt);
@@ -482,7 +513,6 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 0));
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("REGISTRO DE CLIENTES");
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -541,7 +571,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         limpiarjtf();
         
         }
-        bloquearjtf(false, false,false, false,false);
+        bloquearjtf(false, false,false, false,false,false);
         bloquearjbtn(true, false, false, false, false, true);
         //int index= jtablaalumno.getSelectedRow();
 
@@ -572,7 +602,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
             if (JOptionPane.showConfirmDialog(null, "ESTA SEGURO DE ELIMINAR EL CLIENTE","ELIMINAR",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
                 daocliente.eliminarcliente(cliente.getId_cliente());
                 mostrar();
-                bloquearjtf(false, false, false, false, false);
+                bloquearjtf(false, false, false, false, false,false);
                 bloquearjbtn(true, false, false, false, false, true);
                 limpiarjtf();
             }
@@ -588,7 +618,8 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
     private void jbtnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnguardarActionPerformed
         // TODO add your handling code here:
 //        Cliente cliente= new Cliente();
-       
+        Cliente_Tipo_Documento documento;
+        documento= listdocumento.get(jcbtipodocumento.getSelectedIndex()-1);
         String nombre=jtfnombrerazon.getText().trim().toUpperCase();
         String rut=jtfrut.getText().replaceAll("\\s", "");
         String direccion=jtfdireccion.getText().trim().toUpperCase();
@@ -601,7 +632,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         cliente.setDireccion(direccion);
         cliente.setCelular(celular);
         cliente.setEmail(email);
-        
+        cliente.setIdtipodoc(documento.getId());
         if (nombre.length()>0 && rut.length()>0 && direccion.length()>0
                 && celular.length()>0 && email.length()>0){
 //            if(!nombre.equals("NOMBRE O RAZON SOCIAL")){
@@ -609,11 +640,16 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
                 boolean valida=daocliente.duplicado(0, rut,"GUARDAR");
                 if(valida==true){
                      long id=daocliente.insertarcliente(cliente);
+                    
                      if(id!=0){
                          JOptionPane.showMessageDialog(null , "Cliente registrado con exito");
+                       
+                        
                      }
                 }else {
-                    JOptionPane.showMessageDialog(null, "EL CLIENTE YA SE ENCUENTRA REGISTRADO","SISTEMA",JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "El cliente ya se encuentra registrado","",JOptionPane.INFORMATION_MESSAGE);
+                    jtfrut.selectAll();
+                    jtfrut.requestFocus();
                 }
                
                 }
@@ -625,17 +661,20 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
                 boolean Vvalida=daocliente.duplicado(cliente.getId_cliente(), rut,"EDITAR");
                  if(Vvalida==true){
                     daocliente.editarcliente(cliente);
+                    
+                    
                 }else {
-                     JOptionPane.showMessageDialog(null, "EL RUT INGRESADO YA SE ENCUENTRA REGISTRADO","SISTEMA",JOptionPane.INFORMATION_MESSAGE);
+                     JOptionPane.showMessageDialog(null, "El cliente ya se encuentra registrado","",JOptionPane.INFORMATION_MESSAGE);
+                      jtfrut.selectAll();
+                      jtfrut.requestFocus();
                  }
                 
                 }
-                
-                 mostrar();
-                bloquearjtf(false, false, false, false, false);
+                mostrar();
+                bloquearjtf(false, false, false, false, false,false);
                 bloquearjbtn(true, false, false, false, false, true);
 
-                limpiarjtf();      
+                limpiarjtf();  
                     
                 
                 
@@ -707,7 +746,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
 
     private void jbtnnewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnnewActionPerformed
         // TODO add your handling code here:
-        bloquearjtf(true, true, true, true, true);
+        bloquearjtf(true, true, true, true, true,true);
         bloquearjbtn(true, false, false, false, true, true);
         limpiarjtf();editar=false;
 
@@ -769,7 +808,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
 
     private void jbtneditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtneditarActionPerformed
         // TODO add your handling code here:
-        bloquearjtf(true, true, true,true, true);
+        bloquearjtf(true, true, true,true, true,true);
         editar=true;
         bloquearjbtn(true, false, false, false, true, true);
     }//GEN-LAST:event_jbtneditarActionPerformed
@@ -859,6 +898,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
 //        long id = Long.parseLong(jtablacliente.getValueAt(jtablacliente.getSelectedRow(), 0).toString());
         
         ver();
+        
         
     }//GEN-LAST:event_jtablaclienteMouseReleased
 
@@ -957,6 +997,11 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel8MouseReleased
 
+    private void jcbtipodocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbtipodocumentoActionPerformed
+        // TODO add your handling code here:
+        validaguardar();
+    }//GEN-LAST:event_jcbtipodocumentoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -967,6 +1012,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -976,6 +1022,7 @@ public final class JIFCliente extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbtneliminar;
     private javax.swing.JButton jbtnguardar;
     private javax.swing.JButton jbtnnew;
+    private javax.swing.JComboBox jcbtipodocumento;
     private javax.swing.JLabel jlblimagencarga;
     private javax.swing.JLabel jlblletracarga;
     private javax.swing.JTable jtablacliente;

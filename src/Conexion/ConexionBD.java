@@ -31,10 +31,10 @@ import javax.swing.JOptionPane;
 public class ConexionBD {
     private String driver="org.postgresql.Driver";
     private String protocolo="jdbc:postgresql";
-    private String servidor="138.36.239.172:5432";
+    private String servidor="localhost:5432";
     private String usuario="postgres";
     private String contrasena="hernan$123";
-    private String bd="BDVentas";
+    private String bd="BDVentasInfosegurity";
     
     private Connection conexion;
     private Statement sentencia;

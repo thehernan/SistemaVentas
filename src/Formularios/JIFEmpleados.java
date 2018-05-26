@@ -133,7 +133,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jtfemail.setText(this.empleado.getEmail());
 //        fotoB= empleado.getFoto();
         bloquearjbtn(true, true, false, true, false, true,false,true);
-        
+        bloquearjtf(false, false,false, false,false);
       
 
         //////////////  mostrar imagen ////////////////
@@ -230,7 +230,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
 
         jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
-        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 150, 500, 310));
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 220, 310, 170));
 
         jtablaempleado.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtablaempleado.setModel(new javax.swing.table.DefaultTableModel(
@@ -261,13 +261,14 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 492, 357));
 
         jbtncancelar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtncancelar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtncancelar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtncancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel20x20.png"))); // NOI18N
         jbtncancelar.setText("Cancelar");
         jbtncancelar.setToolTipText("Cancelar");
         jbtncancelar.setBorder(null);
         jbtncancelar.setBorderPainted(false);
         jbtncancelar.setContentAreaFilled(false);
+        jbtncancelar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtncancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtncancelarActionPerformed(evt);
@@ -276,13 +277,14 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jPanel1.add(jbtncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 90, 80, -1));
 
         jbtneliminar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneliminar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtneliminar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtneliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete20x20.png"))); // NOI18N
         jbtneliminar.setText("Eliminar");
         jbtneliminar.setToolTipText("Eliminar");
         jbtneliminar.setBorder(null);
         jbtneliminar.setBorderPainted(false);
         jbtneliminar.setContentAreaFilled(false);
+        jbtneliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtneliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtneliminarActionPerformed(evt);
@@ -291,13 +293,14 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jPanel1.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 90, 70, -1));
 
         jbtnguardar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
         jbtnguardar.setText("Guardar");
         jbtnguardar.setToolTipText("Guardar");
         jbtnguardar.setBorder(null);
         jbtnguardar.setBorderPainted(false);
         jbtnguardar.setContentAreaFilled(false);
+        jbtnguardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnguardarActionPerformed(evt);
@@ -306,13 +309,14 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jPanel1.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 90, 70, -1));
 
         jbtnnew.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnnew.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnnew.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtnnew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add20X20.png"))); // NOI18N
         jbtnnew.setText("Nuevo");
         jbtnnew.setToolTipText("Nuevo");
         jbtnnew.setBorder(null);
         jbtnnew.setBorderPainted(false);
         jbtnnew.setContentAreaFilled(false);
+        jbtnnew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnnew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnnewActionPerformed(evt);
@@ -422,7 +426,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jPanel2.add(jtfnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 340, -1));
 
         jbtnfoto.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnfoto.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtnfoto.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtnfoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/FOTO.png"))); // NOI18N
         jbtnfoto.setText("Foto");
         jbtnfoto.setBorder(null);
@@ -436,7 +440,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jPanel2.add(jbtnfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 120, 40));
 
         jbtngeneracarnet.setBackground(new java.awt.Color(255, 255, 255));
-        jbtngeneracarnet.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
+        jbtngeneracarnet.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtngeneracarnet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/carnet.png"))); // NOI18N
         jbtngeneracarnet.setText("Generar Carné");
         jbtngeneracarnet.setBorder(null);
@@ -453,7 +457,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jLabel3.setText("Nombre y Apellidos:");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
 
-        jLabel4.setText("R.U.T.:");
+        jLabel4.setText("N° Doc.:");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
 
         jLabel5.setText("Celular:");
@@ -472,7 +476,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
         jtfbuscarrut.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfbuscarrut.setText("R.U.T");
+        jtfbuscarrut.setText("Doc");
         jtfbuscarrut.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfbuscarrutFocusGained(evt);
@@ -519,13 +523,14 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jPanel1.add(jtfbuscarnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 560, -1));
 
         jbtneditar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneditar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtneditar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtneditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/edit20x20.png"))); // NOI18N
         jbtneditar.setText("Editar");
         jbtneditar.setToolTipText("Editar");
         jbtneditar.setBorder(null);
         jbtneditar.setBorderPainted(false);
         jbtneditar.setContentAreaFilled(false);
+        jbtneditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtneditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtneditarActionPerformed(evt);
@@ -544,7 +549,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jPanel1.add(jlblImageUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 324, 357));
         jPanel1.add(jlblmensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 170, 20));
 
-        jPanel4.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel4.setBackground(new java.awt.Color(238, 238, 238));
         jPanel4.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel4MouseDragged(evt);
@@ -558,7 +563,6 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 0));
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("REGISTRO EMPLEADOS");
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -876,7 +880,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
 
     private void jtfbuscarrutFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfbuscarrutFocusGained
         // TODO add your handling code here:
-        if (jtfbuscarrut.getText().equals("R.U.T")){
+        if (jtfbuscarrut.getText().equals("Doc")){
             jtfbuscarrut.setText("");
         }
     }//GEN-LAST:event_jtfbuscarrutFocusGained
@@ -884,7 +888,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
     private void jtfbuscarrutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfbuscarrutFocusLost
         // TODO add your handling code here:
         if (jtfbuscarrut.getText().equals("")){
-            jtfbuscarrut.setText("R.U.T");
+            jtfbuscarrut.setText("Doc");
         }
     }//GEN-LAST:event_jtfbuscarrutFocusLost
 

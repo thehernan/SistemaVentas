@@ -375,7 +375,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         });
         jScrollPane4.setViewportView(jtablaproducto);
 
-        jPanel4.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 104, 740, 450));
+        jPanel4.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 104, 740, 480));
 
         jbtnnuevo.setBackground(new java.awt.Color(255, 255, 255));
         jbtnnuevo.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
@@ -471,7 +471,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jtfcodigoKeyTyped(evt);
             }
         });
-        jPanel4.add(jtfcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 254, 210, -1));
+        jPanel4.add(jtfcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 310, 210, -1));
 
         jtfdescripcion.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jtfdescripcion.setText("DESCRIPCION");
@@ -492,7 +492,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jtfdescripcionKeyTyped(evt);
             }
         });
-        jPanel4.add(jtfdescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 414, 460, -1));
+        jPanel4.add(jtfdescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 470, 460, -1));
 
         jtaobservacion.setColumns(20);
         jtaobservacion.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
@@ -516,7 +516,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         });
         jScrollPane5.setViewportView(jtaobservacion);
 
-        jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 444, 460, 110));
+        jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 500, 460, 110));
 
         jbtngenerarcodigo.setBackground(new java.awt.Color(255, 255, 255));
         jbtngenerarcodigo.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
@@ -526,12 +526,12 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jbtngenerarcodigoActionPerformed(evt);
             }
         });
-        jPanel4.add(jbtngenerarcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 254, -1, 20));
+        jPanel4.add(jbtngenerarcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 310, -1, 20));
 
         jtffamilia.setFont(new java.awt.Font("Segoe UI Light", 1, 10)); // NOI18N
         jtffamilia.setText("FAMILIA");
         jtffamilia.setEnabled(false);
-        jPanel4.add(jtffamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 384, 300, -1));
+        jPanel4.add(jtffamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 440, 300, -1));
 
         jbtnbuscarfamilia.setBackground(new java.awt.Color(255, 255, 255));
         jbtnbuscarfamilia.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -542,11 +542,11 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jbtnbuscarfamiliaActionPerformed(evt);
             }
         });
-        jPanel4.add(jbtnbuscarfamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 384, 50, 20));
+        jPanel4.add(jbtnbuscarfamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 440, 50, 20));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("Precio 3:");
-        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 344, -1, 20));
+        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 400, -1, 20));
 
         panelNice1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -562,7 +562,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jbtnfotoActionPerformed(evt);
             }
         });
-        panelNice1.add(jbtnfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, 180, 40));
+        panelNice1.add(jbtnfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, 160, 40));
 
         jbtngeneracodigobarras.setBackground(new java.awt.Color(255, 255, 255));
         jbtngeneracodigobarras.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
@@ -584,20 +584,20 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jbtngeneracodigobarrasActionPerformed(evt);
             }
         });
-        panelNice1.add(jbtngeneracodigobarras, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 200, 50));
+        panelNice1.add(jbtngeneracodigobarras, new org.netbeans.lib.awtextra.AbsoluteConstraints(292, 60, -1, 50));
 
         jlblcargafoto.setFont(new java.awt.Font("Segoe Script", 0, 10)); // NOI18N
         jlblcargafoto.setForeground(new java.awt.Color(238, 238, 238));
         jlblcargafoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
         jlblcargafoto.setText("Cargando vista previa");
-        panelNice1.add(jlblcargafoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
+        panelNice1.add(jlblcargafoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 200, -1));
 
         jlblImageProducto.setBackground(new java.awt.Color(255, 255, 255));
         jlblImageProducto.setForeground(new java.awt.Color(255, 255, 255));
         jlblImageProducto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        panelNice1.add(jlblImageProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 190, 130));
+        panelNice1.add(jlblImageProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 240, 180));
 
-        jPanel4.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 104, 460, 150));
+        jPanel4.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 104, 480, 200));
 
         jtfprecio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jtfprecio.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -605,7 +605,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jtfprecioKeyReleased(evt);
             }
         });
-        jPanel4.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 314, 130, -1));
+        jPanel4.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 370, 130, -1));
 
         jcbfamilia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -616,15 +616,15 @@ public class JIProductos extends javax.swing.JInternalFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel4.setText("Precio:");
-        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 314, -1, 20));
+        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 370, -1, 20));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel5.setText("Precio 1:");
-        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 314, -1, 20));
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 370, -1, 20));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel6.setText("Precio 2:");
-        jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 344, -1, 20));
+        jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 400, -1, 20));
 
         jtfprecio3.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jtfprecio3.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -632,7 +632,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jtfprecio3KeyReleased(evt);
             }
         });
-        jPanel4.add(jtfprecio3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 344, 130, -1));
+        jPanel4.add(jtfprecio3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 400, 130, -1));
 
         jtfprecio1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jtfprecio1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -640,7 +640,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jtfprecio1KeyReleased(evt);
             }
         });
-        jPanel4.add(jtfprecio1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 314, 130, -1));
+        jPanel4.add(jtfprecio1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 370, 130, -1));
 
         jtfprecio2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         jtfprecio2.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -648,11 +648,11 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jtfprecio2KeyReleased(evt);
             }
         });
-        jPanel4.add(jtfprecio2, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 344, 130, -1));
+        jPanel4.add(jtfprecio2, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 400, 130, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel7.setText("Moneda:");
-        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 284, -1, -1));
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 340, -1, -1));
 
         jcbmoneda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Soles", "Dolares", "Pesos" }));
         jcbmoneda.addActionListener(new java.awt.event.ActionListener() {
@@ -660,7 +660,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 jcbmonedaActionPerformed(evt);
             }
         });
-        jPanel4.add(jcbmoneda, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 284, 90, -1));
+        jPanel4.add(jcbmoneda, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 340, 90, -1));
 
         jPanel1.setBackground(new java.awt.Color(220, 151, 96));
         jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -715,7 +715,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jlbltiempoproceso.setForeground(new java.awt.Color(0, 0, 0));
         jlbltiempoproceso.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlbltiempoproceso.setText("* * *");
-        jPanel4.add(jlbltiempoproceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 551, 280, 20));
+        jPanel4.add(jlbltiempoproceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 590, 280, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -725,7 +725,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
         );
 
         pack();

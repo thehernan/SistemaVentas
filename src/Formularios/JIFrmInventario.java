@@ -47,6 +47,7 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
 //        double stockmin=Double.parseDouble(jsstockmin.getValue().toString());
        
         mostrar();
+       
     }
     
     public void mostrar () {
@@ -62,9 +63,10 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
                 jcbfamilia.setEnabled(false);
                 jcbsucursal.setEnabled(false);
                 jsstockmin.setValue(sucursalsingleton.getStockmin());
-                listfamilia = daofamilia.llenarcombo(jcbfamilia);
-                 listsucur = daosucursal.llenarcombo(jcbsucursal);
+                
                 listprod= daoproducto.inventario(jtabla,sucursalsingleton.getId(),sucursalsingleton.getStockmin(),"TODO");
+                listfamilia = daofamilia.llenarcombo(jcbfamilia);
+                listsucur = daosucursal.llenarcombo(jcbsucursal);
                 jsstockmin.setEnabled(true);
                 jtfdescripcion.setEnabled(true);
                 jcbfamilia.setEnabled(true);

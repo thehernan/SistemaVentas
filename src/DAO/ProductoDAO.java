@@ -656,15 +656,21 @@ try{
             Map parametros = new HashMap();
            
             parametros.put("id",  id);
-//            parametros.put("fecha",fecha);
-//            parametros.put("motivodet", motdet);
+
             JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
-            JasperPrintManager.printReport(informe, true);    
-//            JasperViewer jv = new JasperViewer(informe,false);  
-//        
-//             jv.setVisible(true);
-//             jv.setTitle(rutaInforme);
-          
+            
+            // no vista previa 
+//            JasperPrintManager.printReport(informe, true);    
+            
+            ///////////////////
+            
+            //vista previa ////
+            JasperViewer jv = new JasperViewer(informe,false);  
+        
+             jv.setVisible(true);
+             jv.setTitle(rutaInforme);
+          //////////////////////////////////////
+             
         }catch (HeadlessException | JRException ex) {
         JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
         JOptionPane.showMessageDialog(null,ex.getMessage());

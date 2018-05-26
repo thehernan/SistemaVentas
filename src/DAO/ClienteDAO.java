@@ -64,6 +64,8 @@ public class ClienteDAO {
              cliente.setCelular(rs.getString("vcelular"));
              cliente.setDireccion(rs.getString("vdireccion"));
              cliente.setEmail(rs.getString("vemail"));
+             cliente.setIdtipodoc(rs.getLong("iddocumento"));
+             cliente.setDocumento(rs.getString("vdocumento"));
              datosR[0] = cliente.getRut();
 
              datosR[1] = cliente.getNombre_razons();
@@ -238,13 +240,14 @@ public boolean duplicado(long id,String cadena,String tipoop){
 
     }
 
-public long  buscarclientevent(String cadena,JLabel msj,TextFieldRoundIcon nombre,
+public Cliente  buscarclientevent(String cadena,JLabel msj,
         JFormattedTextField total,JFormattedTextField venta){
   
     ConexionBD Cbd = new ConexionBD();
     ResultSet rs=null;
     PreparedStatement ps=null;
     long id=0;
+    Cliente cliente =null;
      try{
 //	st= (Statement)miconexion.createStatement();
         
@@ -255,19 +258,21 @@ public long  buscarclientevent(String cadena,JLabel msj,TextFieldRoundIcon nombr
 
       total.setValue(0);
       venta.setValue(0);
-      nombre.setText("");
+     
       boolean val;
       
         if (rs.next()){
-                   
-            id=(rs.getLong("idb"));
-            nombre.setText(rs.getString("nombre"));
+            cliente = new Cliente();
+            cliente.setId_cliente(rs.getLong("idb"));
+            cliente.setNombre_razons(rs.getString("nombre"));
+            cliente.setDireccion(rs.getString("vdireccion"));
+            cliente.setEmail(rs.getString("vemail"));
             total.setValue(rs.getDouble("total"));
             venta.setValue(rs.getDouble("ventas"));
                    
         msj.setText("");
         }else {
-        msj.setText("CLiente no Registrado, ingrese sus datos");
+        msj.setText("VARIOS - VENTAS MENORES A S/.700.00 Y OTROS");
      
         }
 
@@ -276,12 +281,12 @@ public long  buscarclientevent(String cadena,JLabel msj,TextFieldRoundIcon nombr
 //	
         } catch(Exception e)
             {
-//            JOptionPane.showMessageDialog(null, e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
             } finally{
             Cbd.desconectar();
      
      }
-     return id;
+     return cliente;
 
     }
 public long insertarcliente(Cliente cliente){
@@ -292,7 +297,7 @@ public long insertarcliente(Cliente cliente){
      try{
           
           
-            String Sql = "SELECT * from sp_insertarcliente(?,?,?,?,?)";
+            String Sql = "SELECT * from sp_insertarcliente(?,?,?,?,?,?)";
 //            String insertImageSql = "UPDATE alumno SET foto=? where id_alumno=?;";
             ps = Cbd.conectar().prepareStatement(Sql);
             ps.setString(1,cliente.getNombre_razons());
@@ -300,7 +305,7 @@ public long insertarcliente(Cliente cliente){
             ps.setString(3,cliente.getDireccion());
             ps.setString(4,cliente.getCelular());
             ps.setString(5,cliente.getEmail());
-           
+            ps.setLong(6, cliente.getIdtipodoc());
             rs= Cbd.RealizarConsulta(ps);
             
             if(rs.next()){
@@ -327,7 +332,7 @@ public void editarcliente(Cliente cliente){
      PreparedStatement ps=null;
      try{
           
-        String sql=("SELECT * from sp_editarcliente(?,?,?,?,?,?)");         
+        String sql=("SELECT * from sp_editarcliente(?,?,?,?,?,?,?)");         
         ps=Cbd.conectar().prepareStatement(sql);
        
         ps.setLong(1,cliente.getId_cliente());
@@ -336,6 +341,7 @@ public void editarcliente(Cliente cliente){
         ps.setString(4,cliente.getDireccion());
         ps.setString(5,cliente.getCelular());
         ps.setString(6,cliente.getEmail());
+        ps.setLong(7, cliente.getIdtipodoc());
    
        if  (Cbd.actualizarDatos(ps)==true){
             JOptionPane.showMessageDialog(null,"Cliente Editado con exito","",JOptionPane.INFORMATION_MESSAGE);

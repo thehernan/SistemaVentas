@@ -237,7 +237,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 507, 280));
 
         jbtncancelar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtncancelar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtncancelar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtncancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel20x20.png"))); // NOI18N
         jbtncancelar.setText("Cancelar");
         jbtncancelar.setToolTipText("Cancelar");
@@ -252,7 +252,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
         jPanel1.add(jbtncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 80, 80, -1));
 
         jbtneliminar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneliminar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtneliminar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtneliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete20x20.png"))); // NOI18N
         jbtneliminar.setText("Eliminar");
         jbtneliminar.setToolTipText("Eliminar");
@@ -267,7 +267,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
         jPanel1.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 80, 70, -1));
 
         jbtnguardar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
         jbtnguardar.setText("Guardar");
         jbtnguardar.setToolTipText("Guardar");
@@ -282,7 +282,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
         jPanel1.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 80, 70, -1));
 
         jbtnnew.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnnew.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnnew.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtnnew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add20X20.png"))); // NOI18N
         jbtnnew.setText("Nuevo");
         jbtnnew.setToolTipText("Nuevo");
@@ -392,7 +392,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
         jLabel3.setText("Sr(es):");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        jLabel4.setText("R.U.T.:");
+        jLabel4.setText("N° Doc.:");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 10, -1, -1));
 
         jLabel5.setText("Dirección:");
@@ -411,7 +411,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
         jtfbuscarrut.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfbuscarrut.setText("R.U.T");
+        jtfbuscarrut.setText("Doc");
         jtfbuscarrut.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfbuscarrutFocusGained(evt);
@@ -458,7 +458,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
         jPanel1.add(jtfbuscarnombrerazon, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 320, -1));
 
         jbtneditar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneditar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtneditar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtneditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/edit20x20.png"))); // NOI18N
         jbtneditar.setText("Editar");
         jbtneditar.setToolTipText("Editar");
@@ -472,7 +472,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
         });
         jPanel1.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 80, 70, -1));
 
-        jPanel3.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel3.setBackground(new java.awt.Color(238, 238, 238));
         jPanel3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel3MouseDragged(evt);
@@ -485,7 +485,6 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("REGISTRO PROVEEDORES");
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -786,7 +785,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
 
     private void jtfbuscarrutFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfbuscarrutFocusGained
         // TODO add your handling code here:
-        if (jtfbuscarrut.getText().equals("R.U.T")){
+        if (jtfbuscarrut.getText().equals("Doc")){
             jtfbuscarrut.setText("");
         }
     }//GEN-LAST:event_jtfbuscarrutFocusGained
@@ -794,7 +793,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
     private void jtfbuscarrutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfbuscarrutFocusLost
         // TODO add your handling code here:
         if (jtfbuscarrut.getText().equals("")){
-            jtfbuscarrut.setText("R.U.T");
+            jtfbuscarrut.setText("Doc");
         }
     }//GEN-LAST:event_jtfbuscarrutFocusLost
 

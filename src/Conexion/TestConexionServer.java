@@ -64,7 +64,7 @@ public class TestConexionServer {
         
         
         
-    String host="138.36.239.172";
+    String host="localhost";
     boolean isWindows = System.getProperty("os.name").toLowerCase().contains("win");
 
     ProcessBuilder processBuilder = new ProcessBuilder("ping", isWindows? "-n" : "-c", "1", host);
