@@ -8,17 +8,17 @@ package Formularios;
 import ClasesGlobales.Mayusculas;
 import DAO.FamiliaDAO;
 import DAO.ProductoDAO;
+import DAO.UnidadMedidaDAO;
 import Pojos.Familia;
 import Pojos.Producto;
 import Pojos.SucursalSingleton;
+import Pojos.Unidad_Medida;
 
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -49,8 +49,9 @@ public class JIProductos extends javax.swing.JInternalFrame {
     FamiliaDAO daofamilia = new FamiliaDAO();
     List<Familia> listfamilia= new ArrayList<>();
     Producto producto = new Producto();
-      int posx;
+    int posx;
     int posy;
+    List<Unidad_Medida> listunidad;
     public JIProductos() {
         initComponents();
         jlblcargando.setVisible(false);
@@ -60,7 +61,8 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jbtngenerarcodigo.setEnabled(false);      
         jtaobservacion.setLineWrap(true);
         
-        mostrar();     
+        mostrar();    
+        mostrarunidadm();
     }
     public void mostrar() {
         Runnable runnable = new Runnable() {
@@ -99,7 +101,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jtfprecio1.setEnabled(precio1);
         jtfprecio2.setEnabled(precio2);
         jtfprecio3.setEnabled(precio3);
-        jcbmoneda.setEnabled(moneda);
+        jcbunidmedida.setEnabled(moneda);
      
     
     }
@@ -181,7 +183,8 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jtfprecio1.setValue(producto.getPrecio1());
         jtfprecio2.setValue(producto.getPrecio2());
         jtfprecio3.setValue(producto.getPrecio3());
-        jcbmoneda.setSelectedItem(producto.getMoneda());
+        jcbunidmedida.setSelectedItem(producto.getUnidadm()+" - "+producto.getUnidabrev());
+//        jcbmoneda.setSelectedItem(producto.getMoneda());
 //        jspmargen.setValue(producto.getMargenG());
         bloquearjbtn(true, true, false, true, false, true,false,true,false);
         jbtngenerarcodigo.setEnabled(false);
@@ -250,6 +253,20 @@ public class JIProductos extends javax.swing.JInternalFrame {
             M.start();
   
     }
+    
+    public void mostrarunidadm()
+    {
+        UnidadMedidaDAO  unddao = new UnidadMedidaDAO();
+        listunidad = unddao.mostrar();
+        for(Unidad_Medida unid: listunidad)
+        {
+            jcbunidmedida.addItem(unid.getMedida()+" - "+unid.getAbreviatura());
+        
+        }
+        
+        
+    
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -293,14 +310,14 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jtfprecio3 = new javax.swing.JFormattedTextField();
         jtfprecio1 = new javax.swing.JFormattedTextField();
         jtfprecio2 = new javax.swing.JFormattedTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jcbmoneda = new javax.swing.JComboBox();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jlbltiempoproceso = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jcbunidmedida = new javax.swing.JComboBox();
 
-        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         setClosable(true);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -378,7 +395,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jPanel4.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 104, 740, 480));
 
         jbtnnuevo.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnnuevo.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnnuevo.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtnnuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add20X20.png"))); // NOI18N
         jbtnnuevo.setText("Nuevo");
         jbtnnuevo.setToolTipText("Nuevo");
@@ -393,7 +410,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jPanel4.add(jbtnnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 70, 60, -1));
 
         jbtneditar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneditar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtneditar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtneditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/edit20x20.png"))); // NOI18N
         jbtneditar.setText("Editar");
         jbtneditar.setToolTipText("Editar");
@@ -408,7 +425,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jPanel4.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 70, 60, -1));
 
         jbtnguardar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
         jbtnguardar.setText("Guardar");
         jbtnguardar.setToolTipText("Guardar");
@@ -423,7 +440,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jPanel4.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 70, 80, -1));
 
         jbtneliminar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneliminar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtneliminar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtneliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete20x20.png"))); // NOI18N
         jbtneliminar.setText("Eliminar");
         jbtneliminar.setToolTipText("Eliminar");
@@ -438,7 +455,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jPanel4.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 70, 80, -1));
 
         jbtncancelar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtncancelar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
+        jbtncancelar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jbtncancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel20x20.png"))); // NOI18N
         jbtncancelar.setText("Cancelar");
         jbtncancelar.setToolTipText("Cancelar");
@@ -544,7 +561,6 @@ public class JIProductos extends javax.swing.JInternalFrame {
         });
         jPanel4.add(jbtnbuscarfamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 440, 50, 20));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("Precio 3:");
         jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 400, -1, 20));
 
@@ -614,15 +630,12 @@ public class JIProductos extends javax.swing.JInternalFrame {
         });
         jPanel4.add(jcbfamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 74, 350, -1));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel4.setText("Precio:");
         jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 370, -1, 20));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel5.setText("Precio 1:");
         jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 370, -1, 20));
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel6.setText("Precio 2:");
         jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 400, -1, 20));
 
@@ -650,19 +663,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         });
         jPanel4.add(jtfprecio2, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 400, 130, -1));
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel7.setText("Moneda:");
-        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 340, -1, -1));
-
-        jcbmoneda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Soles", "Dolares", "Pesos" }));
-        jcbmoneda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbmonedaActionPerformed(evt);
-            }
-        });
-        jPanel4.add(jcbmoneda, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 340, 90, -1));
-
-        jPanel1.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel1.setBackground(new java.awt.Color(238, 238, 238));
         jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel1MouseDragged(evt);
@@ -675,7 +676,6 @@ public class JIProductos extends javax.swing.JInternalFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("MANTENIMIENTO DE PRODUCTOS Y SERVICIOS");
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -694,7 +694,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 702, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 710, Short.MAX_VALUE)
                 .addComponent(jLabel15)
                 .addContainerGap())
         );
@@ -708,7 +708,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1242, 50));
+        jPanel4.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1250, 50));
 
         jlbltiempoproceso.setBackground(new java.awt.Color(0, 0, 0));
         jlbltiempoproceso.setFont(new java.awt.Font("Segoe UI Light", 0, 8)); // NOI18N
@@ -716,6 +716,10 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jlbltiempoproceso.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlbltiempoproceso.setText("* * *");
         jPanel4.add(jlbltiempoproceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 590, 280, 20));
+
+        jLabel8.setText("Unid. Medida:");
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 340, -1, 20));
+        jPanel4.add(jcbunidmedida, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 340, 270, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -725,7 +729,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
         );
 
         pack();
@@ -841,7 +845,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
     private void jbtnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnguardarActionPerformed
         // TODO add your handling code here:
 //        Producto producto= new Producto();
-       
+       Unidad_Medida und = listunidad.get(jcbunidmedida.getSelectedIndex());
         boolean refrescar = false;
         String codigo=jtfcodigo.getText().replaceAll("\\s","");
         String descripcion=jtfdescripcion.getText().trim().toUpperCase();
@@ -854,12 +858,12 @@ public class JIProductos extends javax.swing.JInternalFrame {
         producto.setPrecio1(Double.parseDouble(jtfprecio1.getValue().toString()));
         producto.setPrecio2(Double.parseDouble(jtfprecio2.getValue().toString()));
         producto.setPrecio3(Double.parseDouble(jtfprecio3.getValue().toString()));
-       
-        try {
-             producto.setMoneda(jcbmoneda.getSelectedItem().toString());
-        } catch (Exception e) {
-            producto.setMoneda("");
-        }
+       producto.setIdunidm(und.getId());
+//        try {
+//             producto.setMoneda(jcbmoneda.getSelectedItem().toString());
+//        } catch (Exception e) {
+//            producto.setMoneda("");
+//        }
        
         producto.setFoto(fotoB);
         producto.setId_sucursal(sucursalsingleton.getId());
@@ -875,7 +879,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                        refrescar=true;
                         bloquearjtf(false, false, false,false,false,false,false,false);   
                    }else{
-                    JOptionPane.showMessageDialog(null, "EL PRODUCTO YA SE ENCUENTRA REGISTRADO","SISTEMA",JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "El prodcuto ya se encuentra registrado","",JOptionPane.ERROR_MESSAGE);
                 }    
                  
                 }
@@ -1151,11 +1155,6 @@ public class JIProductos extends javax.swing.JInternalFrame {
 //        jlblmensajeimpresion.setText("");
     }//GEN-LAST:event_jbtngeneracodigobarrasMouseExited
 
-    private void jcbmonedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbmonedaActionPerformed
-        // TODO add your handling code here:
-        validaguardar();
-    }//GEN-LAST:event_jcbmonedaActionPerformed
-
     private void jLabel15MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseReleased
         // TODO add your handling code here:
         this.dispose();
@@ -1211,7 +1210,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane4;
@@ -1226,7 +1225,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbtnguardar;
     private javax.swing.JButton jbtnnuevo;
     private javax.swing.JComboBox jcbfamilia;
-    private javax.swing.JComboBox jcbmoneda;
+    private javax.swing.JComboBox jcbunidmedida;
     private javax.swing.JLabel jlblImageProducto;
     private javax.swing.JLabel jlblcargafoto;
     private javax.swing.JLabel jlblcargando;

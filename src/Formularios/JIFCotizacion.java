@@ -92,7 +92,7 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
         for (DetalleCotizacion deta: listdetc){
             totalf+=(deta.getPrecioprod()*deta.getCantidad());
         }
-        jlbltotal.setText("Total= "+nf.format(totalf));
+        jlbltotal.setText("Total: "+nf.format(totalf));
         
         validagenerar();
     
@@ -172,6 +172,7 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
         jlbltotal = new javax.swing.JLabel();
         jbtnretirar = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -179,7 +180,7 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Empresa / Cliente"));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setText("R.U.T:");
+        jLabel1.setText("Doc.:");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 31, -1, -1));
 
         jLabel4.setText("Dirección:");
@@ -220,7 +221,7 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 66, 944, 130));
 
-        jPanel1.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel1.setBackground(new java.awt.Color(238, 238, 238));
         jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel1MouseDragged(evt);
@@ -233,7 +234,6 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("NUEVA COTIZACION");
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -332,11 +332,9 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
         jlblmensajecarga.setText("Imprimiento Cotizacion . . .");
         getContentPane().add(jlblmensajecarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 550, -1, 50));
 
-        jlbltotal.setBackground(new java.awt.Color(255, 51, 51));
-        jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlbltotal.setForeground(new java.awt.Color(255, 51, 51));
+        jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
         jlbltotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jlbltotal.setText("Total= 0,00");
+        jlbltotal.setText("Total: 0.00");
         getContentPane().add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 550, 180, -1));
 
         jbtnretirar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/minus20x20.png"))); // NOI18N

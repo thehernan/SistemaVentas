@@ -28,7 +28,34 @@ public class Producto {
     private double precio2;
     private double precio3;
     private String moneda;
+    private long idunidm;
+    private String unidadm;
+    private String unidabrev;
     public Producto() {
+    }
+
+    public String getUnidabrev() {
+        return unidabrev;
+    }
+
+    public void setUnidabrev(String unidabrev) {
+        this.unidabrev = unidabrev;
+    }
+
+    public String getUnidadm() {
+        return unidadm;
+    }
+
+    public void setUnidadm(String unidadm) {
+        this.unidadm = unidadm;
+    }
+
+    public long getIdunidm() {
+        return idunidm;
+    }
+
+    public void setIdunidm(long idunidm) {
+        this.idunidm = idunidm;
     }
 
     public String getMoneda() {

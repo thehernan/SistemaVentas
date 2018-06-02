@@ -14,16 +14,28 @@ public class Moneda {
     private String moneda;
     private double tipo_cambio;
     private int op;
+    private String abrev;
 
     public Moneda() {
     }
 
-    public Moneda(long id, String moneda, double tipo_cambio, int op) {
+    public Moneda(long id, String moneda, double tipo_cambio, int op, String abrev) {
         this.id = id;
         this.moneda = moneda;
         this.tipo_cambio = tipo_cambio;
         this.op = op;
+        this.abrev = abrev;
     }
+
+    public String getAbrev() {
+        return abrev;
+    }
+
+    public void setAbrev(String abrev) {
+        this.abrev = abrev;
+    }
+
+
 
     public long getId() {
         return id;

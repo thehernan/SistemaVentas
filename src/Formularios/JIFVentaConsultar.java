@@ -141,12 +141,14 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
 
         jLabel3.setText("jLabel3");
 
-        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
+        setOpaque(false);
         setPreferredSize(new java.awt.Dimension(1254, 588));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
         jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel7MouseDragged(evt);
@@ -160,11 +162,9 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("CONSULTAR VENTAS CONCRETADAS");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Doble clic para Anular");
 
         jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -309,11 +309,10 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
 
         getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 1230, 382));
 
-        jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlbltotal.setForeground(new java.awt.Color(255, 51, 51));
+        jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
         jlbltotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlbltotal.setText("* * *");
-        getContentPane().add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 530, 329, -1));
+        getContentPane().add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 540, 329, -1));
 
         jbtnver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/view25px.png"))); // NOI18N
         jbtnver.setText("Ver");

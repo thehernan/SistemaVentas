@@ -111,7 +111,7 @@ public class JDCantidadSalida extends javax.swing.JDialog {
         System.out.println("idprod"+prod.getIdproducto());
         prod.setCantidad(cant);
         System.out.println("cant"+cant);
-        if(daoprod.validastockrequerido(prod)==true){
+        if(daoprod.validastockrequerido(prod.getIdproducto(),prod.getCantidad())==true){
              jifordensalida.setagregar(prod, cant);
             jdbuscar.mostrar();
              this.dispose();

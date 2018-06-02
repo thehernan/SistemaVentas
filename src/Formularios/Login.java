@@ -229,7 +229,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 410, -1, -1));
 
         fondo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loginvector2.png"))); // NOI18N
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loginvector3.png"))); // NOI18N
         fondo.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 fondoMouseDragged(evt);

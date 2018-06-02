@@ -256,6 +256,9 @@ public Producto buscarproducto(String tipoB,long id,long idsucur,String cadena) 
 //                      System.out.println("byte"+rs.getBytes("vfoto"));
           producto.setMargenG(rs.getDouble("vmargen"));
           producto.setFoto(imgBytes);
+          producto.setIdunidm(rs.getLong("vidunid"));
+          producto.setUnidadm(rs.getString("vmedida"));
+          producto.setUnidabrev(rs.getString("vabreviatura"));
           System.out.println("imgbytes"+imgBytes);
                       
                       
@@ -301,7 +304,7 @@ public void insertarproducto(Producto producto){
      try{
             
           
-            String Sql = "SELECT * from sp_insertarproducto(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String Sql = "SELECT * from sp_insertarproducto(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             ps = Cbd.conectar().prepareStatement(Sql);
             
@@ -322,7 +325,7 @@ public void insertarproducto(Producto producto){
             ps.setBinaryStream(11,fis);
             ps.setBigDecimal(12, new BigDecimal(producto.getMargenG()));
             ps.setLong(13, producto.getId_sucursal());
-            
+            ps.setLong(14, producto.getIdunidm());
             
             
            Cbd.actualizarDatos(ps);
@@ -360,7 +363,7 @@ public void editarproducto(Producto producto){
 	InputStream fis = new ByteArrayInputStream(FOTO); 
        
       // System.out.println("SELECT * from sp_editaralumno('"+RUT+"','"+NOMBRE+"','"+APELLIDO+"','"+CURSO+"','"+SECCION+"','"+PRIORITARIO+"','"+FOTO+"')");
-        String sql=("SELECT * from sp_editarproducto(?,?,?,?,?,?,?,?,?,?,?,?)");         
+        String sql=("SELECT * from sp_editarproducto(?,?,?,?,?,?,?,?,?,?,?,?,?)");         
         PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
         
             ps.setLong(1,producto.getIdproducto());
@@ -378,10 +381,11 @@ public void editarproducto(Producto producto){
             ps.setBigDecimal(10, new BigDecimal(producto.getPrecio2()));
             ps.setBigDecimal(11, new BigDecimal(producto.getPrecio3()));
              ps.setString(12,producto.getMoneda());
+             ps.setLong(13, producto.getIdunidm());
             Cbd.actualizarDatos(ps);
            
 //       if  (rs.next()){
-            JOptionPane.showMessageDialog(null,"Producto editado con exitosamente");
+//            JOptionPane.showMessageDialog(null,"Producto editado con exitosamente");
 //        }
 	
         } catch(Exception e)
@@ -790,7 +794,7 @@ public boolean duplicado(long id,String cadena,String tipoop){
      return valida;
 
     }
-public boolean validastockrequerido(Producto prod){
+public boolean validastockrequerido(long idprod,double cantidad){
       ConexionBD Cbd = new ConexionBD();
     ResultSet rs=null;
     boolean valida=false;
@@ -799,8 +803,8 @@ public boolean validastockrequerido(Producto prod){
       
       String sql=("SELECT * from sp_validastockrequerido(?,?)"); 
       PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
-      ps.setLong(1,prod.getIdproducto());
-      ps.setBigDecimal(2,new BigDecimal(prod.getCantidad()));
+      ps.setLong(1,idprod);
+      ps.setBigDecimal(2,new BigDecimal(cantidad));
       rs = Cbd.RealizarConsulta(ps);
 //      FileInputStream fis ;
 //      byte[] vacio= new byte[0];

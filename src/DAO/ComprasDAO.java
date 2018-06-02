@@ -111,7 +111,7 @@ public void editar(Compras compra){
    return false;
   }
   };      
-    String titulos[]={"DOCUMENTO","NUMERO","PROVEEDOR","FECHA","TIPO PAGO","ABONO"};
+    String titulos[]={"Documento","Numero","Proveedor","Fecha","Tipo Pago","Abono"};
     modelo.setColumnIdentifiers(titulos);
     tabla.setModel(modelo);
     TableColumnModel columnModel = tabla.getColumnModel();

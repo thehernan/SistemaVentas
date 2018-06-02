@@ -5,9 +5,10 @@
  */
 package Formularios;
 
+import DAO.ProductoDAO;
 import Pojos.Producto;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,29 +24,31 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
     JIFVenta jifventa;
     JIFCotizacion jifcotiza;
     String op;
-    Double precioselect;
+    
     DecimalFormat nf =new  DecimalFormat("#.00");  
     JDBuscarProductoVenta jifbuscarprod;
+    ProductoDAO  daoprod = new ProductoDAO();
     public JDFOpcionPrecio(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+       
     }
     public JDFOpcionPrecio(java.awt.Frame parent, boolean modal,Producto prod,JIFVenta jifventa,JDBuscarProductoVenta jifbuscarprod) {
         super(parent, modal);
         initComponents();
+        
         this.prod=prod;
         this.jifventa = jifventa;
         this.jifbuscarprod= jifbuscarprod; 
         jlblproducto.setText(prod.getCodigo()+" - "+(prod.getDescripcion()));
-        jlblopprecio.setText("0.-Precio: "+nf.format(prod.getPrecio()));
-        jlblopprecio1.setText("1.-Precio: "+nf.format(prod.getPrecio1()));
-        jlblopprecio2.setText("2.-Precio: "+nf.format(prod.getPrecio2()));
-        jlblopprecio3.setText("3.-Precio: "+nf.format(prod.getPrecio3()));
-        jlblcantidad.setVisible(false);
-        jtfcantidad.setVisible(false);
+          jlblopprecio.setText("Precio a negociar > ó = "+nf.format(prod.getPrecio3()));
+        
+//        jlblcantidad.setVisible(false);
+//        jtfcantidad.setVisible(false);
         
         op="venta";
         this.setLocationRelativeTo(null);
+        
         
     }
      public JDFOpcionPrecio(java.awt.Frame parent, boolean modal,Producto prod,JIFVenta jifventa) {
@@ -55,12 +58,9 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
         this.jifventa = jifventa;
        
         jlblproducto.setText(prod.getCodigo()+" - "+(prod.getDescripcion()));
-        jlblopprecio.setText("0.-Precio: "+nf.format(prod.getPrecio()));
-        jlblopprecio1.setText("1.-Precio: "+nf.format(prod.getPrecio1()));
-        jlblopprecio2.setText("2.-Precio: "+nf.format(prod.getPrecio2()));
-        jlblopprecio3.setText("3.-Precio: "+nf.format(prod.getPrecio3()));
-        jlblcantidad.setVisible(false);
-        jtfcantidad.setVisible(false);
+          jlblopprecio.setText("Precio a negociar > ó = "+nf.format(prod.getPrecio3()));
+//        jlblcantidad.setVisible(false);
+//        jtfcantidad.setVisible(false);
         
         op="venta";
         this.setLocationRelativeTo(null);
@@ -72,11 +72,8 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
         this.prod=prod;
         this.jifcotiza = jifcotiza;
         this.jifbuscarprod= jifbuscarprod; 
-        jlblproducto.setText(prod.getCodigo()+" - "+prod.getDescripcion());
-        jlblopprecio.setText("0.-Precio: "+nf.format(prod.getPrecio()));
-        jlblopprecio1.setText("1.-Precio: "+nf.format(prod.getPrecio1()));
-        jlblopprecio2.setText("2.-Precio: "+nf.format(prod.getPrecio2()));
-        jlblopprecio3.setText("3.-Precio: "+nf.format(prod.getPrecio3()));
+       jlblproducto.setText(prod.getCodigo()+" - "+(prod.getDescripcion()));
+        jlblopprecio.setText("Precio a negociar > ó = "+nf.format(prod.getPrecio3()));
         
         op="cotiza";
         
@@ -87,15 +84,24 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
     public void validaaceptar(){
        
         try {
-            if(op.equals("cotiza")){
-                if(Double.parseDouble(jtfcantidad.getText())<=0){
+           double precio = Double.parseDouble(jtfprecio.getText());
+           double canti=Double.parseDouble(jtfcantidad.getText());
+                if(canti>0 && precio >=prod.getPrecio3()){
                     
-                    jbtnaceptar.setEnabled(false);
-                }else {
                     jbtnaceptar.setEnabled(true);
+                    jlblmensaje.setText("");
+                }else {
+                    jbtnaceptar.setEnabled(false);
+                    
                 }
-        
-            }    
+        if(precio < prod.getPrecio3()){
+                         jlblmensaje.setText("Ingrese un precio mayor a "+prod.getPrecio3());
+                    
+                    }
+        if(canti<=0){
+                        jlblmensaje.setText("Ingrese una cantidad valida ");
+                    }
+              
             
         } catch (Exception e) {
             jbtnaceptar.setEnabled(false);
@@ -104,56 +110,58 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
    
     }
     
-    public double precio(int op){
-        double precio=0.0;
-//        try {
-      
-            switch(op){
-                case 0:
-                    jlblprecio.setText(nf.format(prod.getPrecio()));
-                    precio=prod.getPrecio();
-                    
-                    jbtnaceptar.setEnabled(true);
-                    validaaceptar();
-                    break;
-                case 1:
-                    jlblprecio.setText(nf.format(prod.getPrecio1()));
-                    precio=prod.getPrecio1();
-                   
-                    jbtnaceptar.setEnabled(true);
-                    validaaceptar();
-                    break;
-                case 2:
-                    jlblprecio.setText(nf.format(prod.getPrecio2()));
-                    precio=prod.getPrecio2();
-                    
-                    jbtnaceptar.setEnabled(true);
-                    validaaceptar();
-                    break;
-                case 3:
-                    jlblprecio.setText(nf.format(prod.getPrecio3()));
-                    precio=prod.getPrecio3();
-                   
-                    jbtnaceptar.setEnabled(true);
-                    validaaceptar();
-                    break;
-                default:
-                    jlblprecio.setText("Opción invalida");
-                    jbtnaceptar.setEnabled(false);
-                    break;
-       
-       
-            }
-//        } catch (Exception e) {
-//            jlblprecio.setText("Opción invalida");
-//            jbtnaceptar.setEnabled(false);
-//        }
-       
-            
-        return precio;
-    
-    }
+//    public double precio(int op){
+//        double precio=0.0;
+////        try {
+//      
+//            switch(op){
+//                case 0:
+//                    jlblprecio.setText(nf.format(prod.getPrecio()));
+//                    precio=prod.getPrecio();
+//                    
+//                    jbtnaceptar.setEnabled(true);
+//                    validaaceptar();
+//                    break;
+//                case 1:
+//                    jlblprecio.setText(nf.format(prod.getPrecio1()));
+//                    precio=prod.getPrecio1();
+//                   
+//                    jbtnaceptar.setEnabled(true);
+//                    validaaceptar();
+//                    break;
+//                case 2:
+//                    jlblprecio.setText(nf.format(prod.getPrecio2()));
+//                    precio=prod.getPrecio2();
+//                    
+//                    jbtnaceptar.setEnabled(true);
+//                    validaaceptar();
+//                    break;
+//                case 3:
+//                    jlblprecio.setText(nf.format(prod.getPrecio3()));
+//                    precio=prod.getPrecio3();
+//                   
+//                    jbtnaceptar.setEnabled(true);
+//                    validaaceptar();
+//                    break;
+//                default:
+//                    jlblprecio.setText("Opción invalida");
+//                    jbtnaceptar.setEnabled(false);
+//                    break;
+//       
+//       
+//            }
+////        } catch (Exception e) {
+////            jlblprecio.setText("Opción invalida");
+////            jbtnaceptar.setEnabled(false);
+////        }
+//       
+//            
+//        return precio;
+//    
+//    }
 
+
+  ///////////////////////////////////////////////////////////  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -164,36 +172,38 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
 
         jlblproducto = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jtfopcionprecio = new javax.swing.JTextField();
+        jtfprecio = new javax.swing.JTextField();
         jbtnaceptar = new javax.swing.JButton();
-        jlblprecio = new javax.swing.JLabel();
+        jlblmensaje = new javax.swing.JLabel();
         jlblopprecio = new javax.swing.JLabel();
-        jlblopprecio1 = new javax.swing.JLabel();
-        jlblopprecio2 = new javax.swing.JLabel();
-        jlblopprecio3 = new javax.swing.JLabel();
         jlblcantidad = new javax.swing.JLabel();
         jtfcantidad = new javax.swing.JTextField();
 
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
             }
         });
-
-        jlblproducto.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
-        jlblproducto.setForeground(new java.awt.Color(255, 51, 51));
-        jlblproducto.setText("jLabel1");
-
-        jLabel2.setText("Opción de Precio");
-
-        jtfopcionprecio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfopcionprecioActionPerformed(evt);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                formKeyReleased(evt);
             }
         });
-        jtfopcionprecio.addKeyListener(new java.awt.event.KeyAdapter() {
+
+        jlblproducto.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jlblproducto.setText("jLabel1");
+
+        jLabel2.setText("Precio:");
+
+        jtfprecio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfprecioActionPerformed(evt);
+            }
+        });
+        jtfprecio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfopcionprecioKeyReleased(evt);
+                jtfprecioKeyReleased(evt);
             }
         });
 
@@ -206,27 +216,10 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
             }
         });
 
-        jlblprecio.setText("* * *");
+        jlblmensaje.setText("* * *");
 
-        jlblopprecio.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jlblopprecio.setForeground(new java.awt.Color(255, 51, 51));
         jlblopprecio.setText("jLabel1");
         jlblopprecio.setAutoscrolls(true);
-
-        jlblopprecio1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jlblopprecio1.setForeground(new java.awt.Color(255, 51, 51));
-        jlblopprecio1.setText("jLabel1");
-        jlblopprecio1.setAutoscrolls(true);
-
-        jlblopprecio2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jlblopprecio2.setForeground(new java.awt.Color(255, 51, 51));
-        jlblopprecio2.setText("jLabel1");
-        jlblopprecio2.setAutoscrolls(true);
-
-        jlblopprecio3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jlblopprecio3.setForeground(new java.awt.Color(255, 51, 51));
-        jlblopprecio3.setText("jLabel1");
-        jlblopprecio3.setAutoscrolls(true);
 
         jlblcantidad.setText("Cantidad:");
 
@@ -246,60 +239,47 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlblproducto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlblopprecio1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlblproducto, javax.swing.GroupLayout.PREFERRED_SIZE, 774, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblopprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 774, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlblopprecio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jlblopprecio2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jlblopprecio3, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jtfopcionprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jlblprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 0, Short.MAX_VALUE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jtfcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(104, 104, 104)
-                                                .addComponent(jbtnaceptar)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                                .addGap(102, 102, 102))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jlblcantidad)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                        .addComponent(jLabel2)
+                        .addGap(12, 12, 12)
+                        .addComponent(jtfprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jlblcantidad)
+                        .addGap(0, 0, 0)
+                        .addComponent(jtfcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(jbtnaceptar))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(12, 12, 12)
                 .addComponent(jlblproducto)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(12, 12, 12)
                 .addComponent(jlblopprecio)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlblopprecio1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlblopprecio2)
-                .addGap(3, 3, 3)
-                .addComponent(jlblopprecio3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jtfopcionprecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblprecio))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbtnaceptar)
-                    .addComponent(jlblcantidad)
-                    .addComponent(jtfcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtfprecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jlblmensaje))))
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jlblcantidad))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(jtfcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jbtnaceptar)))
         );
 
         pack();
@@ -313,37 +293,50 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
         dispose();
     }//GEN-LAST:event_closeDialog
 
-    private void jtfopcionprecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfopcionprecioKeyReleased
+    private void jtfprecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecioKeyReleased
         // TODO add your handling code here:
-        try{
+//        try{
+//        
+//            int opc =Integer.parseInt(jtfopcionprecio.getText());
+//            precioselect=precio(opc);
+//        }catch(Exception e){
+//            jlblprecio.setText("Opción invalida");
+//        
+//        }
         
-            int opc =Integer.parseInt(jtfopcionprecio.getText());
-            precioselect=precio(opc);
-        }catch(Exception e){
-            jlblprecio.setText("Opción invalida");
         
-        }
+        ////////////////////////////////////////////////
+        //
+      validaaceptar();
          
                 
-    }//GEN-LAST:event_jtfopcionprecioKeyReleased
+    }//GEN-LAST:event_jtfprecioKeyReleased
 
     private void jbtnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnaceptarActionPerformed
         // TODO add your handling code here:
         if(op.equals("venta")){
-            prod.setPrecio(precioselect);
+            Double precio = Double.parseDouble(jtfprecio.getText());
+            Double cant = Double.parseDouble(jtfcantidad.getText());
+            
+            if(daoprod.validastockrequerido(prod.getIdproducto(),cant)==true){ ////valida stock venta
+            
+            prod.setPrecio(precio);
+            prod.setCantidad(cant);
             jifventa.setproducto(prod);
              this.dispose();
              if(jifbuscarprod!=null){
                 jifbuscarprod.dispose();
              }
-                 
+            }else {
+                JOptionPane.showMessageDialog(null,"No cuenta con stock suficiente","",JOptionPane.INFORMATION_MESSAGE);
+            }     
              
         
         }
         if(op.equals("cotiza")){
-            int opc =Integer.parseInt(jtfopcionprecio.getText());
-         
-           jifcotiza.setagregar(prod, Double.parseDouble(jtfcantidad.getText()),precio(opc));
+           
+            double precio= Double.parseDouble(jtfprecio.getText());
+           jifcotiza.setagregar(prod, Double.parseDouble(jtfcantidad.getText()),precio);
            jifcotiza.validagenerar();
            this.dispose();
            jifbuscarprod.dispose();
@@ -352,10 +345,10 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
         
     }//GEN-LAST:event_jbtnaceptarActionPerformed
 
-    private void jtfopcionprecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfopcionprecioActionPerformed
+    private void jtfprecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfprecioActionPerformed
         // TODO add your handling code here:
         jbtnaceptar.doClick();
-    }//GEN-LAST:event_jtfopcionprecioActionPerformed
+    }//GEN-LAST:event_jtfprecioActionPerformed
 
     private void jtfcantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcantidadKeyReleased
         // TODO add your handling code here:
@@ -366,6 +359,12 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
         // TODO add your handling code here:
         jbtnaceptar.doClick();
     }//GEN-LAST:event_jtfcantidadActionPerformed
+
+    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
+        // TODO add your handling code here:
+         if(evt.getKeyCode()==27)
+            this.dispose();
+    }//GEN-LAST:event_formKeyReleased
 
     /**
      * @param args the command line arguments
@@ -389,13 +388,10 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JButton jbtnaceptar;
     private javax.swing.JLabel jlblcantidad;
+    private javax.swing.JLabel jlblmensaje;
     private javax.swing.JLabel jlblopprecio;
-    private javax.swing.JLabel jlblopprecio1;
-    private javax.swing.JLabel jlblopprecio2;
-    private javax.swing.JLabel jlblopprecio3;
-    private javax.swing.JLabel jlblprecio;
     private javax.swing.JLabel jlblproducto;
     private javax.swing.JTextField jtfcantidad;
-    private javax.swing.JTextField jtfopcionprecio;
+    private javax.swing.JTextField jtfprecio;
     // End of variables declaration//GEN-END:variables
 }

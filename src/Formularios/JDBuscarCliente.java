@@ -10,7 +10,6 @@ import DAO.ClienteDAO;
 import Pojos.Cliente;
 import java.util.ArrayList;
 import java.util.List;
-import org.jfree.chart.plot.ThermometerPlot;
 
 /**
  *
@@ -29,49 +28,60 @@ public class JDBuscarCliente extends javax.swing.JDialog {
     String tipo="";
     Mayusculas mayus= new Mayusculas();
     List<Cliente> listcliente= new ArrayList<>();
+    JDNotaCreditoDebito jdnotacreditodebito;
     
     public JDBuscarCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        listcliente=daocliente.mostrarcliente(jtabla);
+        
     }
     
     public JDBuscarCliente(java.awt.Frame parent, boolean modal,JIFReparaciones frmreparacion) {
         super(parent, modal);
         initComponents();
 //       listcliente= daocliente.mostrarcliente(jtabla);
-         jlblimagencarga.setVisible(false);
-        jlblletracarga.setVisible(false);
+        
          mostrar();
         this.frmreparacion= frmreparacion;
         this.setLocationRelativeTo(null);
         tipo="reparacion";
-      
+        jtfnombre.requestFocus();
     }
        public JDBuscarCliente(java.awt.Frame parent, boolean modal,JIFrmReparacionConsultar frmreparaconsul) {
         super(parent, modal);
         initComponents();
 //        listcliente=daocliente.mostrarcliente(jtabla);
-          jlblimagencarga.setVisible(false);
-        jlblletracarga.setVisible(false);
+   
           mostrar();
         this.frmreparaconsul=frmreparaconsul;
         this.setLocationRelativeTo(null);
         tipo="reparaconsul";
+        jtfnombre.requestFocus();
        
     }
        public JDBuscarCliente(java.awt.Frame parent, boolean modal,JIFVentaConsultar frmventaconsul) {
         super(parent, modal);
         initComponents();
 //        listcliente=daocliente.mostrarcliente(jtabla);
-        jlblimagencarga.setVisible(false);
-        jlblletracarga.setVisible(false);
+      
         mostrar();
         this.frmventaconsul=frmventaconsul;
         this.setLocationRelativeTo(null);
         tipo="ventaconsul";
+        jtfnombre.requestFocus();
          
     }
+     public JDBuscarCliente(java.awt.Frame parent, boolean modal,JDNotaCreditoDebito jdnotacreditodebito) {
+        super(parent, modal);
+        initComponents();
+        this.jdnotacreditodebito = jdnotacreditodebito;
+        mostrar();
+        this.setLocationRelativeTo(null);
+        tipo="nota";
+        jtfnombre.requestFocus();
+        
+    }
+    
        
        public void mostrar(){
        Runnable  runnable = new Runnable() {
@@ -149,17 +159,20 @@ public class JDBuscarCliente extends javax.swing.JDialog {
                 jtfnombreKeyTyped(evt);
             }
         });
-        jPanel1.add(jtfnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 71, 405, -1));
+        jPanel1.add(jtfnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 71, 690, -1));
 
         jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
         jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
-        jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setToolTipText("Aceptar");
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
+        jbtnaceptar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(674, 64, -1, -1));
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 60, -1, -1));
 
         jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
         jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 180, 190, 240));
@@ -182,15 +195,19 @@ public class JDBuscarCliente extends javax.swing.JDialog {
         ));
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtabla.getTableHeader().setReorderingAllowed(false);
+        jtabla.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtablaKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtabla);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 764, 450));
 
-        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("BUSCAR CLIENTE");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -250,6 +267,13 @@ public class JDBuscarCliente extends javax.swing.JDialog {
                     frmreparacion.validaaceptar();
                     this.dispose();
                  }
+                 if(tipo.equals("nota"))
+                 {
+                     jdnotacreditodebito.setcliente(cliente);
+                     this.dispose();
+                 
+                 }
+                 
 //                 if(tipo.equals("reparaconsul")){
 //                     frmreparaconsul.setcliente(cliente);
 //                     this.dispose();
@@ -265,6 +289,7 @@ public class JDBuscarCliente extends javax.swing.JDialog {
                  
                  
             }
+            
             
 //            else {
 //                jlblmensaje.setText("SELECCIONE UN CLIENTE ");
@@ -293,11 +318,25 @@ public class JDBuscarCliente extends javax.swing.JDialog {
 //                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //                
                 sensitiva();
+                if(jtabla.getSelectedRow()>=0)
+                {
+                    jtabla.requestFocus();
+                }
+                
             }
         };
         Thread T = new Thread(runnable);
         T.start();
     }//GEN-LAST:event_jtfnombreActionPerformed
+
+    private void jtablaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablaKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10)
+        {
+            jbtnaceptar.doClick();
+        
+        }
+    }//GEN-LAST:event_jtablaKeyPressed
 
     /**
      * @param args the command line arguments

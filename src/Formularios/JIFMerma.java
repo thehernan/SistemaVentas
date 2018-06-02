@@ -434,7 +434,7 @@ public class JIFMerma extends javax.swing.JInternalFrame {
        
 //        System.out.println("valida"+valida);
         producto.setCantidad(Double.parseDouble(jtfcantidad.getText()));
-        if(daoproducto.validastockrequerido(producto)==true){
+        if(daoproducto.validastockrequerido(producto.getIdproducto(),producto.getCantidad())==true){
             Object[] miarray = new Object[3];
             
             miarray[0]=producto.getCodigo();

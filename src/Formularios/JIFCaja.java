@@ -64,7 +64,7 @@ public class JIFCaja extends javax.swing.JInternalFrame {
          s1= s1+ lista;
         
     }
-     jtfnumero.setText(s1);
+//     jtfnumero.setText(s1);
     }
      
    
@@ -137,8 +137,8 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         System.out.println("reparacobrar"+repara.getIdreparacion());
             detcaja.setIdreparacion(repara.getIdreparacion());
             detcaja.setIdventa(venta.getIdventa());
-            detcaja.setDocumento(jcbcomprobante.getSelectedItem().toString());
-            detcaja.setNumero(jtfnumero.getText());
+//            detcaja.setDocumento(jcbcomprobante.getSelectedItem().toString());
+//            detcaja.setNumero(jtfnumero.getText());
             detcaja.setIdcaja(caja.getId_caja());
             if(jtfcodigo.getText().substring(0,1).equalsIgnoreCase("R")){
             tipo = "REPARACION";
@@ -154,7 +154,7 @@ public class JIFCaja extends javax.swing.JInternalFrame {
            
            
 //            calculatotal();
-            jtfnumero.setText("");
+//            jtfnumero.setText("");
             /////////////////////
     
     }
@@ -176,9 +176,9 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         jlbliva.setValue(0);
         jlblsubtotal.setValue(0);
         jlblabono.setValue(0);
-        jtfnumero.setText("");
+//        jtfnumero.setText("");
         jtfcodigo.setText("COD. VENTA");
-        jcbcomprobante.setSelectedIndex(0);
+//        jcbcomprobante.setSelectedIndex(0);
         jtfdescuento.setValue(0);
         
     }
@@ -215,17 +215,13 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         jtfdescuento = new javax.swing.JFormattedTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        jcbcomprobante = new javax.swing.JComboBox();
-        jLabel4 = new javax.swing.JLabel();
-        jtfcierrecaja = new org.edisoncor.gui.button.ButtonColoredAction();
-        jtfcobrar = new org.edisoncor.gui.button.ButtonColoredAction();
-        jbtnegreso = new org.edisoncor.gui.button.ButtonColoredAction();
-        jtfnumero = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jbtnventas = new javax.swing.JButton();
+        jbtncorte = new javax.swing.JButton();
+        jbtncobrar = new javax.swing.JButton();
+        jbtnegreso = new javax.swing.JButton();
 
         setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -264,7 +260,7 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         jLabel1.setText("CLIENTE:");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel2.setText("R.U.T:");
+        jLabel2.setText("Doc.:");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jLabel5.setText("SUBTOTAL :");
@@ -364,7 +360,6 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                     .addGroup(panelNice1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 989, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
                             .addGroup(panelNice1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -372,7 +367,8 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                                 .addGroup(panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jlblrut, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
                                     .addComponent(jlblcliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(267, Short.MAX_VALUE))
+            .addComponent(jScrollPane2)
         );
         panelNice1Layout.setVerticalGroup(
             panelNice1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -407,65 +403,7 @@ public class JIFCaja extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel3.setText("NUMERO:");
-
-        jcbcomprobante.setBackground(new java.awt.Color(153, 153, 153));
-        jcbcomprobante.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jcbcomprobante.setForeground(new java.awt.Color(0, 0, 0));
-        jcbcomprobante.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "BOLETA", "FACTURA" }));
-        jcbcomprobante.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbcomprobanteActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel4.setText("COMPROBANTE:");
-
-        jtfcierrecaja.setBackground(new java.awt.Color(255, 255, 255));
-        jtfcierrecaja.setText("Corte");
-        jtfcierrecaja.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfcierrecaja.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfcierrecajaActionPerformed(evt);
-            }
-        });
-
-        jtfcobrar.setBackground(new java.awt.Color(255, 255, 255));
-        jtfcobrar.setForeground(new java.awt.Color(255, 0, 0));
-        jtfcobrar.setText("Cobrar (F2)");
-        jtfcobrar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfcobrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfcobrarActionPerformed(evt);
-            }
-        });
-
-        jbtnegreso.setText("Egreso");
-        jbtnegreso.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jbtnegreso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnegresoActionPerformed(evt);
-            }
-        });
-
-        jtfnumero.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jtfnumero.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jtfnumeroFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jtfnumeroFocusLost(evt);
-            }
-        });
-        jtfnumero.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfnumeroKeyReleased(evt);
-            }
-        });
-
-        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
         jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel7MouseDragged(evt);
@@ -479,7 +417,6 @@ public class JIFCaja extends javax.swing.JInternalFrame {
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("CAJA");
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -513,6 +450,7 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         );
 
         jbtnventas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/compra.png"))); // NOI18N
+        jbtnventas.setText("Venta en cola");
         jbtnventas.setToolTipText("En cola");
         jbtnventas.setBorder(null);
         jbtnventas.setBorderPainted(false);
@@ -523,71 +461,75 @@ public class JIFCaja extends javax.swing.JInternalFrame {
             }
         });
 
+        jbtncorte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cut20x20.png"))); // NOI18N
+        jbtncorte.setText("Corte");
+        jbtncorte.setToolTipText("Corte de Caja");
+        jbtncorte.setBorderPainted(false);
+        jbtncorte.setContentAreaFilled(false);
+        jbtncorte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtncorteActionPerformed(evt);
+            }
+        });
+
+        jbtncobrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cobrar20X20.png"))); // NOI18N
+        jbtncobrar.setText("Cobrar");
+        jbtncobrar.setBorderPainted(false);
+        jbtncobrar.setContentAreaFilled(false);
+        jbtncobrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtncobrarActionPerformed(evt);
+            }
+        });
+
+        jbtnegreso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/exitmoney20x20.png"))); // NOI18N
+        jbtnegreso.setText("Egreso");
+        jbtnegreso.setBorderPainted(false);
+        jbtnegreso.setContentAreaFilled(false);
+        jbtnegreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnegresoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jtfnumero, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                            .addComponent(jcbcomprobante, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(panelNice1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jbtnventas, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jtfcierrecaja, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtfcobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtnegreso, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(36, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jtfcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelNice1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jtfcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jbtnventas, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addComponent(jbtncorte, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jbtnegreso)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jbtncobrar)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(59, 59, 59)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jcbcomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfnumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(19, 19, 19)
-                        .addComponent(jtfcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jtfcierrecaja, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                                    .addComponent(jbtnventas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(9, 9, 9))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jtfcobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jbtnegreso, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                        .addComponent(panelNice1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 10, Short.MAX_VALUE))))
+                        .addComponent(jtfcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jbtncorte)
+                        .addComponent(jbtnegreso)
+                        .addComponent(jbtncobrar)
+                        .addComponent(jbtnventas, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(panelNice1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 12, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -627,57 +569,6 @@ public class JIFCaja extends javax.swing.JInternalFrame {
       
     }//GEN-LAST:event_jtfcodigoActionPerformed
 
-    private void jcbcomprobanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbcomprobanteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jcbcomprobanteActionPerformed
-
-    private void jtfcobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfcobrarActionPerformed
-        // TODO add your handling code here:
-        System.out.println("idrepara"+repara.getIdreparacion());
-        System.out.println("idventa"+venta.getIdventa());
-        String tipopago="";
-       
-        if(repara.getIdreparacion()!=0 || venta.getIdventa()!=0 ){
-          double total= Double.parseDouble(jlbltotal.getValue().toString());
-                String cod= (jtfcodigo.getText());
-                  if(venta.getIdventa()!=0){
-                      tipopago="VENTA";
-                }else{
-                      tipopago="REPARACION";
-                }
-                JDCobrarCaja cobrarcaja= new JDCobrarCaja(new java.awt.Frame(),isVisible(),this,repara,total);
-                cobrarcaja.setVisible(true);
-                  
-         
-            
-        }else {
-            JOptionPane.showMessageDialog(null, "INGRESE LOS DATOS NECESARIOS PARA REALIZAR EL COBRO E INTENTE"
-                    + " NUEVAMENTE");
-        
-        }
-        
-        
-    }//GEN-LAST:event_jtfcobrarActionPerformed
-
-    private void jtfcierrecajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfcierrecajaActionPerformed
-        // TODO add your handling code here:
-      JDCerrarCaja Ccaja= new JDCerrarCaja(new java.awt.Frame(),isVisible(),caja,this);
-      Ccaja.setVisible(true);
-      
-      
-    }//GEN-LAST:event_jtfcierrecajaActionPerformed
-
-    private void jtfnumeroFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnumeroFocusGained
-        // TODO add your handling code here:
-        numfoco= true;
-        codfoco=false;
-    }//GEN-LAST:event_jtfnumeroFocusGained
-
-    private void jtfnumeroFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnumeroFocusLost
-        // TODO add your handling code here:
-     
-    }//GEN-LAST:event_jtfnumeroFocusLost
-
     private void jlblsubtotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jlblsubtotalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jlblsubtotalActionPerformed
@@ -685,26 +576,10 @@ public class JIFCaja extends javax.swing.JInternalFrame {
     private void jtfcodigoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcodigoKeyReleased
         // TODO add your handling code here:
          if(evt.getKeyCode()==113){
-           jtfcobrar.doClick();
+           jbtncobrar.doClick();
         
         }
     }//GEN-LAST:event_jtfcodigoKeyReleased
-
-    private void jtfnumeroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnumeroKeyReleased
-        // TODO add your handling code here:
-         if(evt.getKeyCode()==113){
-           jtfcobrar.doClick();
-        
-        }
-    }//GEN-LAST:event_jtfnumeroKeyReleased
-
-    private void jbtnegresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnegresoActionPerformed
-        // TODO add your handling code here:
-        JDEgresoCaja egreso = new JDEgresoCaja(new Frame(), isVisible(),caja.getId_caja());
-        egreso.setVisible(true);
-        
-        
-    }//GEN-LAST:event_jbtnegresoActionPerformed
 
     private void jbtnventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnventasActionPerformed
         // TODO add your handling code here:
@@ -739,14 +614,51 @@ public class JIFCaja extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jtfcodigoKeyPressed
 
+    private void jbtncorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncorteActionPerformed
+       // TODO add your handling code here:
+        JDCerrarCaja Ccaja= new JDCerrarCaja(new java.awt.Frame(),isVisible(),caja,this);
+      Ccaja.setVisible(true);
+    }//GEN-LAST:event_jbtncorteActionPerformed
+
+    private void jbtncobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncobrarActionPerformed
+        // TODO add your handling code here:
+         System.out.println("idrepara"+repara.getIdreparacion());
+        System.out.println("idventa"+venta.getIdventa());
+        String tipopago="";
+       
+        if(repara.getIdreparacion()!=0 || venta.getIdventa()!=0 ){
+          double total= Double.parseDouble(jlbltotal.getValue().toString());
+                String cod= (jtfcodigo.getText());
+                  if(venta.getIdventa()!=0){
+                      tipopago="VENTA";
+                }else{
+                      tipopago="REPARACION";
+                }
+                JDCobrarCaja cobrarcaja= new JDCobrarCaja(new java.awt.Frame(),isVisible(),this,repara,total);
+                cobrarcaja.setVisible(true);
+                  
+         
+            
+        }else {
+            JOptionPane.showMessageDialog(null, "INGRESE LOS DATOS NECESARIOS PARA REALIZAR EL COBRO E INTENTE"
+                    + " NUEVAMENTE");
+        
+        }
+        
+    }//GEN-LAST:event_jbtncobrarActionPerformed
+
+    private void jbtnegresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnegresoActionPerformed
+        // TODO add your handling code here:
+          JDEgresoCaja egreso = new JDEgresoCaja(new Frame(), isVisible(),caja.getId_caja());
+        egreso.setVisible(true);
+    }//GEN-LAST:event_jbtnegresoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -755,9 +667,10 @@ public class JIFCaja extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
-    private org.edisoncor.gui.button.ButtonColoredAction jbtnegreso;
+    private javax.swing.JButton jbtncobrar;
+    private javax.swing.JButton jbtncorte;
+    private javax.swing.JButton jbtnegreso;
     private javax.swing.JButton jbtnventas;
-    private javax.swing.JComboBox jcbcomprobante;
     private javax.swing.JFormattedTextField jlblabono;
     private javax.swing.JLabel jlblcliente;
     private javax.swing.JFormattedTextField jlbliva;
@@ -765,11 +678,8 @@ public class JIFCaja extends javax.swing.JInternalFrame {
     private javax.swing.JFormattedTextField jlblsubtotal;
     private javax.swing.JFormattedTextField jlbltotal;
     private javax.swing.JTable jtabla;
-    private org.edisoncor.gui.button.ButtonColoredAction jtfcierrecaja;
-    private org.edisoncor.gui.button.ButtonColoredAction jtfcobrar;
     private org.edisoncor.gui.textField.TextFieldRoundIcon jtfcodigo;
     private javax.swing.JFormattedTextField jtfdescuento;
-    private javax.swing.JTextField jtfnumero;
     private org.edisoncor.gui.panel.PanelNice panelNice1;
     // End of variables declaration//GEN-END:variables
 }

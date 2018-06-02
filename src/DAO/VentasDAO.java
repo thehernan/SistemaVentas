@@ -6,22 +6,30 @@
 package DAO;
 
 
+import Conexion.Conexion;
 import Conexion.ConexionBD;
+import Pojos.DetalleVenta;
+import Pojos.Producto;
 import Pojos.Ventas;
 import java.awt.HeadlessException;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.Date;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -41,37 +49,132 @@ import net.sf.jasperreports.view.JasperViewer;
 public class VentasDAO {
     
      
-      DecimalFormat nf=new DecimalFormat("#.00");
-    public long insertar(Ventas venta){
+     
+     
+     public String formatnumeric(Object n){
+     DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
+     simbolos.setDecimalSeparator('.');   
+     DecimalFormat nf=new DecimalFormat("#.00",simbolos);
+     String num = nf.format(n);
+     
+     return num;
+     }
+     
+    public String insertar(Ventas venta,List<Producto> listdet,boolean cliente){
         ConexionBD Cbd = new ConexionBD();
-      
+        Connection cnn = Cbd.getConexion();
+        try {
+             cnn.setAutoCommit(false);
+        } catch (SQLException e) {
+        }
+       PreparedStatement cabecera=null,detalle=null;
+       ResultSet rscabecera=null,rsdetalle=null;
+       String mensa=""; 
+       boolean validacabecera=true,validadetalle=true; 
+        
+        
        long id=0;
    
      try{
+            /////////////////// cabecera ///////////////////////////////////////
+            if(cliente==true)
+            {
+                
+                String sql=("SELECT * from sp_insertarventa(?,?,?,?,?)");         
+                cabecera=Cbd.conectar().prepareStatement(sql);
+                cabecera.setLong(1, venta.getIdcliente());
+                cabecera.setLong(2, venta.getIdempleado());
+                cabecera.setLong(3, venta.getId_sucursal());
+                cabecera.setBigDecimal(4,new BigDecimal(venta.getDescuento()));
+                cabecera.setString(5, venta.getMotivodescuento());
             
-            System.out.println("SELECT * from sp_insertarventa("+venta.getIdcliente()+","+venta.getIdempleado()+")");
-            String sql=("SELECT * from sp_insertarventa(?,?,?,?,?)");         
-            PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
-            ps.setLong(1, venta.getIdcliente());
-            ps.setLong(2, venta.getIdempleado());
-            ps.setLong(3, venta.getId_sucursal());
-            ps.setBigDecimal(4,new BigDecimal(venta.getDescuento()));
-            ps.setString(5, venta.getMotivodescuento());
-            ResultSet rs= Cbd.RealizarConsulta(ps);
-       if  (rs.next()){
-         id=(rs.getLong("vidventa"));
-     
-        }
-	rs.close();
-        ps.close();
+            }else
+            {
+               
+                String sql=("SELECT * from sp_insertarventanocliente(?,?,?,?)");         
+                cabecera= Cbd.conectar().prepareStatement(sql);
+
+                cabecera.setLong(1, venta.getIdempleado());
+                cabecera.setLong(2, venta.getId_sucursal());
+                cabecera.setBigDecimal(3,new BigDecimal(venta.getDescuento()));
+                cabecera.setString(4, venta.getMotivodescuento());
+            
+            }
+          
+            rscabecera= Cbd.RealizarConsulta(cabecera);
+            
+            if  (rscabecera.next()){
+                id=(rscabecera.getLong("vidventa"));
+
+            }
+           if(id!=0)
+           
+           {
+           /////////////// detalle /////////////////////////////////////////
+            for(Producto prod :listdet ){
+        //          System.out.println("SELECT * from sp_insertardetalleventa("+detventa.getIdproducto()+","+detventa.getPrecio()+","+detventa.getCantidad()+","+detventa.getIdventa()+")");
+                String sqldet=("SELECT * from sp_insertardetalleventa(?,?,?,?)"); 
+                detalle=Cbd.conectar().prepareStatement(sqldet);
+                detalle.setLong(1, prod.getIdproducto());
+                detalle.setBigDecimal(2, new BigDecimal(prod.getPrecio()));
+                detalle.setBigDecimal(3, new BigDecimal(prod.getCantidad()));
+                detalle.setLong(4, id);
+                
+                rsdetalle=Cbd.RealizarConsulta(detalle);
+//                mensa="Vendiendo Cod.: "+prod.getCodigo();
+               
+            }
+            
+            while(rsdetalle.next()){
+                if(rsdetalle.getBoolean("valida")==false)
+                {
+                    mensa="No cuenta con stock para venta del producto: "+rsdetalle.getString("mens")+" retire ó edite";
+//                    cnn.rollback();
+                    validadetalle=false;
+//                    break;
+                    
+                }        
+                
+            }
+           
+           
+           }else {
+           
+               
+               validacabecera=false;
+           }
+           if(validacabecera==true && validadetalle==true)
+           {
+               cnn.commit();
+           }else {
+               cnn.rollback();
+           }
+            
+            
+            
+            
+      
+	
         } catch(Exception e)
             {
             JOptionPane.showMessageDialog(null, e.getMessage());
+            try {
+                cnn.rollback();
+            } catch (SQLException ex) {
+                Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
             }finally{
-               Cbd.desconectar();
-
-}
-  return id;  
+                Cbd.desconectar();
+            try {
+                rscabecera.close();
+                cabecera.close();
+                detalle.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
+            }
+  return mensa;  
 }
     
 public long insertarnocliente(Ventas venta){
@@ -155,11 +258,11 @@ public Ventas buscarventa(JTable tab,String cod,JLabel nombre,JLabel rut,
               
              datosR[1] = rs.getObject("vproducto");
              
-             datosR[2] = nf.format(rs.getObject("vcantidad"));
+             datosR[2] = formatnumeric(rs.getObject("vcantidad"));
            
-             datosR[3] = nf.format(rs.getObject("vprecio"));
+             datosR[3] = formatnumeric(rs.getObject("vprecio"));
              
-             datosR[4] =nf.format(importe);
+             datosR[4] =formatnumeric(importe);
              total = total+ importe;
              tabla.addRow(datosR);
 		
@@ -189,7 +292,8 @@ public Ventas buscarventa(JTable tab,String cod,JLabel nombre,JLabel rut,
             }finally{
                Cbd.desconectar();
             }    
-return venta;
+    
+    return venta;
     
     }
 
@@ -323,11 +427,11 @@ public List<Ventas> mostrarenproceso(JTable tab,long idsucur,JLabel msj){
 //
 //             datosR[4] = rs.getObject("vsucurdirec");
 
-             datosR[2] = nf.format(rs.getDouble("vimporte"));
+             datosR[2] = formatnumeric(rs.getDouble("vimporte"));
 
-             datosR[3] = nf.format(rs.getDouble("vdescuento"));
+             datosR[3] = formatnumeric(rs.getDouble("vdescuento"));
              
-             datosR[4] =nf.format(venta.getTotal());
+             datosR[4] =formatnumeric(venta.getTotal());
              total= total + venta.getTotal();
              
 
@@ -350,7 +454,7 @@ public List<Ventas> mostrarenproceso(JTable tab,long idsucur,JLabel msj){
         if(cont == 0){
             msj.setText("NO SE ENCONTRARON VENTAS EN COLA");
         }else {
-            msj.setText("VENTAS EN COLA "+cont+ " - TOTAL: " +nf.format(total));
+            msj.setText("VENTAS EN COLA "+cont+ " - TOTAL: " +formatnumeric(total));
         }
 	
         } catch(Exception e)
@@ -502,13 +606,13 @@ public List<Ventas> busquedasensitiva(JTable tab,Timestamp desde, Timestamp hast
 
              datosR[4] = rs.getObject("vfecha");
 
-             datosR[5] =nf.format(rs.getObject("vimporte"));
+             datosR[5] =formatnumeric(rs.getObject("vimporte"));
 
 
-             datosR[6] =nf.format(rs.getObject("vdescuento"));
+             datosR[6] =formatnumeric(rs.getObject("vdescuento"));
              datosR[7] =(rs.getObject("vmotivodes"));
 
-             datosR[8] =nf.format(importe);
+             datosR[8] =formatnumeric(importe);
              
              datosR[9] =extor;
              datosR[10] =(rs.getObject("vmotivo"));
@@ -518,7 +622,7 @@ public List<Ventas> busquedasensitiva(JTable tab,Timestamp desde, Timestamp hast
 	    listventa.add(venta);
            
         }
-        jtotal.setText("Total: "+nf.format(total));
+        jtotal.setText("Total: "+formatnumeric(total));
         TableColumnModel columnModel = tab.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(50);
         columnModel.getColumn(1).setPreferredWidth(80);
@@ -585,36 +689,36 @@ public List<Ventas> mostrarporcliente(JTable tab,long idcliente,JLabel msj){
         
         Integer cont = 0;
         while (rs.next()){
-         Ventas venta = new Ventas();
-                      cont++;
-                    venta.setIdventa(rs.getLong("vidventa"));
-                    
+             Ventas venta = new Ventas();
+              cont++;
+            venta.setIdventa(rs.getLong("vidventa"));
+
 //                     datosR[i] = rs.getObject("vsucursal");
 //                     i++;  
-                     datosR[0] = rs.getObject("vcodigo");
-                  
-                     datosR[1] = rs.getObject("vdocumento");
-                   
-                     datosR[2] = rs.getObject("vnumero");
-                    
-                     datosR[3] = rs.getObject("vcliente");
-                   
-                     datosR[4] = rs.getObject("vfecha");
-                  
-                     datosR[5] = rs.getObject("vimporte");
-                     
-                   
-                     datosR[6] = rs.getObject("vdescuento");
-                     
-                    
-                     datosR[7] = rs.getObject("vtotal");
-                     
-                    
-                      datosR[8] = rs.getBoolean("vanulada");
-                   
-                                  
-                    tabla.addRow(datosR);
-                    listvent.add(venta);
+             datosR[0] = rs.getObject("vcodigo");
+
+             datosR[1] = rs.getObject("vdocumento");
+
+             datosR[2] = rs.getObject("vnumero");
+
+             datosR[3] = rs.getObject("vcliente");
+
+             datosR[4] = rs.getObject("vfecha");
+
+             datosR[5] = rs.getObject("vimporte");
+
+
+             datosR[6] = rs.getObject("vdescuento");
+
+
+             datosR[7] = rs.getObject("vtotal");
+
+
+              datosR[8] = rs.getBoolean("vanulada");
+
+
+            tabla.addRow(datosR);
+            listvent.add(venta);
            
         }
         msj.setText("REGISTROS ENCONTRADOS "+cont.toString());

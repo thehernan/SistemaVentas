@@ -142,7 +142,7 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
         jLabel15 = new javax.swing.JLabel();
         jlblmensajeimpresion = new javax.swing.JLabel();
 
-        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         setClosable(true);
         setResizable(true);
 
@@ -248,11 +248,11 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
                 jbtnimprimirActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 160, -1, -1));
+        jPanel1.add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 160, -1, -1));
 
         jbtnimprimirstockmin.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jbtnimprimirstockmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
-        jbtnimprimirstockmin.setText("Productos con Stock Minimo");
+        jbtnimprimirstockmin.setText("Bajo stock");
         jbtnimprimirstockmin.setBorderPainted(false);
         jbtnimprimirstockmin.setContentAreaFilled(false);
         jbtnimprimirstockmin.setRequestFocusEnabled(false);
@@ -269,7 +269,7 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
                 jbtnimprimirstockminActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnimprimirstockmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 160, -1, -1));
+        jPanel1.add(jbtnimprimirstockmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 160, -1, -1));
 
         jcbsucursal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -293,7 +293,7 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
         jLabel2.setText("Sucursal:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, -1, 20));
 
-        jPanel2.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel2.setBackground(new java.awt.Color(238, 238, 238));
         jPanel2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel2MouseDragged(evt);
@@ -306,8 +306,7 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("INVENTARIO DE PRODUCTOS");
+        jLabel3.setText("BUSQUEDA DE PRODUCTOS");
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
         jLabel15.setToolTipText("Cerrar");
@@ -325,7 +324,7 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 825, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 836, Short.MAX_VALUE)
                 .addComponent(jLabel15)
                 .addGap(174, 174, 174))
         );
@@ -344,19 +343,17 @@ public class JIFrmInventario extends javax.swing.JInternalFrame {
         jlblmensajeimpresion.setForeground(new java.awt.Color(255, 255, 255));
         jlblmensajeimpresion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
         jlblmensajeimpresion.setText("Imprimiendo Inventario ...");
-        jPanel1.add(jlblmensajeimpresion, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 140, 181, -1));
+        jPanel1.add(jlblmensajeimpresion, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 90, 181, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1177, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1185, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 577, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 577, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();

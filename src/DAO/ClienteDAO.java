@@ -38,7 +38,7 @@ public class ClienteDAO {
      return false;
     }
       };      
-     String titulos[]={"R.U.T.","NOMBRES","CELULAR"};
+     String titulos[]={"Doc.","Cliente","Celular"};
      modelo.setColumnIdentifiers(titulos);
       tabla.setModel(modelo);
 

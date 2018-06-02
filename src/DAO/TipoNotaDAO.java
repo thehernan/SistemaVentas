@@ -5,8 +5,10 @@
  */
 package DAO;
 
+import Conexion.Conexion;
 import Conexion.ConexionBD;
-import Pojos.Moneda;
+import Pojos.TipoNota;
+import Pojos.Tipo_Igv;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -17,31 +19,29 @@ import javax.swing.JOptionPane;
  *
  * @author HERNAN
  */
-public class MonedaDAO {
-       
-      ConexionBD Cbd = new ConexionBD();
-      
-      public List<Moneda> mostrar(){
-
+public class TipoNotaDAO {
+    
+    public List<TipoNota> mostrar(String tipo){
+        ConexionBD Cbd = new ConexionBD(); 
         PreparedStatement ps=null;
         ResultSet rs=null;
-        List<Moneda> listmoneda = new ArrayList<>();
+        List<TipoNota> listnota = new ArrayList<>();
                
     try{
      
-        ps=Cbd.conectar().prepareStatement("SELECT * from sp_mostrarmoneda()");
+        ps=Cbd.conectar().prepareStatement("SELECT * from sp_mostrartiponota(?)");
+        ps.setString(1, tipo);
         rs=Cbd.RealizarConsulta(ps);
       
         while (rs.next()){
                    
-             Moneda moneda = new Moneda();
-             moneda.setId(rs.getLong(1));
-             moneda.setMoneda(rs.getString(2));
-             moneda.setTipo_cambio(rs.getDouble(3));
-             moneda.setOp(rs.getInt(4));
-             moneda.setAbrev(rs.getString(5));
-            listmoneda.add(moneda);
-		
+             TipoNota tn = new TipoNota();
+             tn.setId(rs.getLong(1));
+             tn.setDescripcion(rs.getString(2));
+             tn.setOp(rs.getInt(3));
+             tn.setNota(rs.getString(4));
+             listnota.add(tn);
+                    
         }
        	
         } catch(Exception e)
@@ -51,9 +51,10 @@ public class MonedaDAO {
 
                 Cbd.desconectar();
             }    
-      return listmoneda;
+      return listnota;
         
       
     }
+    
     
 }
