@@ -5,18 +5,28 @@
  */
 package Formularios;
 
+import ClasesGlobales.FormatoNumerico;
+import DAO.DocumentoDAO;
 import DAO.VentasDAO;
 import Pojos.SucursalSingleton;
 import Pojos.Ventas;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 /**
  *
  * @author HERNAN
  */
-public class JDVentaencola extends java.awt.Dialog {
+public class JDVentaencola extends javax.swing.JDialog {
 
     /**
      * Creates new form JDVentaencola
@@ -26,6 +36,8 @@ public class JDVentaencola extends java.awt.Dialog {
     SucursalSingleton sucursalsingleton = SucursalSingleton.getinstancia();
     Ventas venta;
     JIFCaja caja;
+    DocumentoDAO daodoc = new DocumentoDAO();
+    FormatoNumerico fn = new FormatoNumerico();
     public JDVentaencola(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -39,6 +51,9 @@ public class JDVentaencola extends java.awt.Dialog {
 //        listventa=daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
         this.setLocationRelativeTo(null);
         mostrar();
+        jlblrefrescar.setMnemonic(KeyEvent.VK_F5);
+        addEscapeListener(this);
+        jtfbuscar.requestFocus();
     }
     
      public void mostrar(){
@@ -49,8 +64,15 @@ public class JDVentaencola extends java.awt.Dialog {
 //            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
        jlblimagencarga.setVisible(true);
        jlblletracarga.setVisible(true);
-       listventa=daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
-       
+       double sum=0.0;
+//       listventa=daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
+       listventa=daodoc.mostrar(1, jtfbuscar.getText().toUpperCase(), "todonofecha", new Timestamp(new Date().getTime()),
+                new Timestamp(new Date().getTime()), jtabla);
+       for(Ventas venta:listventa){
+                   sum=sum+ venta.getTotal();
+                }
+       jlblmsj.setText("Total: "+fn.FormatoN(sum));
+      
        jlblimagencarga.setVisible(false);
       jlblletracarga.setVisible(false);
       jlblimagencarga.setVisible(false);
@@ -83,6 +105,20 @@ public class JDVentaencola extends java.awt.Dialog {
      
      
      }
+    public static void addEscapeListener(final JDialog dialog) {
+    ActionListener escListener = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            dialog.setVisible(false);
+        }
+    };
+
+    dialog.getRootPane().registerKeyboardAction(escListener,
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -104,6 +140,8 @@ public class JDVentaencola extends java.awt.Dialog {
         jLabel11 = new javax.swing.JLabel();
         jbtnver = new javax.swing.JButton();
         jlblmensajever = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jtfbuscar = new javax.swing.JTextField();
 
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -116,24 +154,26 @@ public class JDVentaencola extends java.awt.Dialog {
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jlblrefrescar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Refresh_25px.png"))); // NOI18N
-        jlblrefrescar.setToolTipText("Refrescar");
+        jlblrefrescar.setToolTipText("Refrescar (F5)");
+        jlblrefrescar.setBorderPainted(false);
+        jlblrefrescar.setContentAreaFilled(false);
         jlblrefrescar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jlblrefrescarActionPerformed(evt);
             }
         });
-        jPanel7.add(jlblrefrescar, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 70, -1, -1));
+        jPanel7.add(jlblrefrescar, new org.netbeans.lib.awtextra.AbsoluteConstraints(849, 70, 40, -1));
 
         jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
         jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
         jlblletracarga.setText("Cargando Registros ...");
-        jPanel7.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 420, -1, -1));
+        jPanel7.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 400, -1, -1));
 
         jlblimagencarga.setBackground(new java.awt.Color(255, 255, 255));
         jlblimagencarga.setForeground(new java.awt.Color(255, 255, 255));
         jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
-        jPanel7.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 760, 350));
+        jPanel7.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 220, 180, 170));
 
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -146,36 +186,42 @@ public class JDVentaencola extends java.awt.Dialog {
 
             }
         ));
-        jtabla.setToolTipText("Doble clic para ver detalle");
+        jtabla.setToolTipText("");
         jtabla.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jtablaMouseReleased(evt);
             }
         });
+        jtabla.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtablaKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtabla);
 
-        jPanel7.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 879, 462));
+        jPanel7.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 112, 879, 410));
 
         jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/compra.png"))); // NOI18N
         jbtnaceptar.setToolTipText("Cobrar");
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel7.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 70, -1, -1));
+        jPanel7.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 70, 40, -1));
 
-        jlblmsj.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblmsj.setForeground(new java.awt.Color(255, 51, 51));
+        jlblmsj.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jlblmsj.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlblmsj.setText("* * *");
-        jPanel7.add(jlblmsj, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
+        jPanel7.add(jlblmsj, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 530, 310, -1));
 
-        jPanel8.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel8.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("VENTAS EN COLA");
+        jLabel11.setText("VENTAS EN PROCESO");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -184,7 +230,7 @@ public class JDVentaencola extends java.awt.Dialog {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel11)
-                .addContainerGap(703, Short.MAX_VALUE))
+                .addContainerGap(661, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,17 +243,31 @@ public class JDVentaencola extends java.awt.Dialog {
         jPanel7.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, -1));
 
         jbtnver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/view25px.png"))); // NOI18N
+        jbtnver.setMnemonic('v');
+        jbtnver.setToolTipText("Ver detalle (alt + v)");
+        jbtnver.setBorderPainted(false);
+        jbtnver.setContentAreaFilled(false);
         jbtnver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnverActionPerformed(evt);
             }
         });
-        jPanel7.add(jbtnver, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 70, -1, -1));
+        jPanel7.add(jbtnver, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 70, 40, -1));
 
         jlblmensajever.setForeground(new java.awt.Color(0, 0, 0));
         jlblmensajever.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
         jlblmensajever.setText("Cargando detalle ...");
         jPanel7.add(jlblmensajever, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
+
+        jLabel1.setText("Doc./ Cliente:");
+        jPanel7.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
+
+        jtfbuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfbuscarKeyReleased(evt);
+            }
+        });
+        jPanel7.add(jtfbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 400, -1));
 
         add(jPanel7, java.awt.BorderLayout.CENTER);
 
@@ -257,6 +317,32 @@ public class JDVentaencola extends java.awt.Dialog {
         T.start();
     }//GEN-LAST:event_jbtnverActionPerformed
 
+    private void jtfbuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscarKeyReleased
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+            mostrar();
+
+
+           if(jtabla.getSelectedRow()>=0){
+               jtabla.requestFocus();
+
+           }
+        
+        }
+       
+    }//GEN-LAST:event_jtfbuscarKeyReleased
+
+    private void jtablaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablaKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+          jbtnaceptar.doClick();
+        
+        }
+      
+    }//GEN-LAST:event_jtablaKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -276,6 +362,7 @@ public class JDVentaencola extends java.awt.Dialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
@@ -288,5 +375,6 @@ public class JDVentaencola extends java.awt.Dialog {
     private javax.swing.JLabel jlblmsj;
     private javax.swing.JButton jlblrefrescar;
     private javax.swing.JTable jtabla;
+    private javax.swing.JTextField jtfbuscar;
     // End of variables declaration//GEN-END:variables
 }

@@ -97,7 +97,7 @@ public class JIFConsultarMerma extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
-        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -133,7 +133,7 @@ public class JIFConsultarMerma extends javax.swing.JInternalFrame {
         jlblmensaje.setForeground(new java.awt.Color(255, 51, 51));
         jPanel2.add(jlblmensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 490, 20));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 570, 60));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 570, 60));
 
         jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
         jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
@@ -162,7 +162,7 @@ public class JIFConsultarMerma extends javax.swing.JInternalFrame {
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 1150, 350));
 
         jLabel4.setText("Cod.:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
 
         jtfbuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,19 +174,19 @@ public class JIFConsultarMerma extends javax.swing.JInternalFrame {
                 jtfbuscarKeyReleased(evt);
             }
         });
-        jPanel1.add(jtfbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 440, -1));
+        jPanel1.add(jtfbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, 440, -1));
 
         jcbsucursal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbsucursalActionPerformed(evt);
             }
         });
-        jPanel1.add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 160, 310, -1));
+        jPanel1.add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 150, 310, -1));
 
         jLabel5.setText("Sucursal:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 160, -1, 20));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 150, -1, 20));
 
-        jPanel3.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel3.setBackground(new java.awt.Color(238, 238, 238));
         jPanel3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel3MouseDragged(evt);
@@ -199,7 +199,6 @@ public class JIFConsultarMerma extends javax.swing.JInternalFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("CONSULTAR MERMAS");
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -242,7 +241,7 @@ public class JIFConsultarMerma extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         pack();

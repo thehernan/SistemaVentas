@@ -25,8 +25,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author m2 <linuxitos@gmail.com>
+
  */
 public class ConexionBD {
     private String driver="org.postgresql.Driver";
@@ -34,7 +33,7 @@ public class ConexionBD {
     private String servidor="localhost:5432";
     private String usuario="postgres";
     private String contrasena="hernan$123";
-    private String bd="BDVentasInfosegurity";
+    private String bd="BDVentaWalter";
     
     private Connection conexion;
     private Statement sentencia;
@@ -68,6 +67,7 @@ public class ConexionBD {
     
     /*Inicio declaración de set's y get's*/
     public Connection getConexion() {
+        conectar();
         return conexion;
     }
     public void setConexion(Connection conexion) {

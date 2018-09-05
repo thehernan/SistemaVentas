@@ -134,19 +134,20 @@ public class JDDiagnosticoReparacion extends javax.swing.JDialog {
         jlblmodelo.setText("jLabel2");
         jPanel1.add(jlblmodelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 390, -1));
 
-        jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
+        jbtnaceptar.setBackground(new java.awt.Color(77, 161, 227));
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtnaceptar.setForeground(new java.awt.Color(255, 255, 255));
         jbtnaceptar.setText("Aceptar");
         jbtnaceptar.setBorderPainted(false);
         jbtnaceptar.setContentAreaFilled(false);
         jbtnaceptar.setDefaultCapable(false);
+        jbtnaceptar.setOpaque(true);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 370, -1, -1));
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 380, 130, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -156,7 +157,7 @@ public class JDDiagnosticoReparacion extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
         );
 
         pack();

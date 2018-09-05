@@ -8,6 +8,7 @@ package Formularios;
 import ClasesGlobales.Mayusculas;
 import DAO.ProveedorDAO;
 import Pojos.Proveedor;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -44,6 +45,7 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
       
         op="INGRESOPROD";
+        jtfrazonsocial.requestFocus();
     }
      public JDBuscarProveedor(java.awt.Frame parent, boolean modal,JIFIngresoProdPendiente frmprodpend) {
         super(parent, modal);
@@ -52,6 +54,7 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         this.frmprodpend=frmprodpend;
         op= "PENDIENTES";
+        jtfrazonsocial.requestFocus();
     }
      
      public void mostrar(){
@@ -79,6 +82,10 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
         listprov=daoproveedor.busquedasensitivaproveedor("NOMBRE", razonS,jtabla);
          jlblimagencarga.setVisible(false);
          jlblletracarga.setVisible(false);
+         if(listprov.size()>0)
+         {
+             jtabla.requestFocus();
+         }
      }
      
      
@@ -101,6 +108,7 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
         jtabla = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -116,7 +124,6 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
         jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 370, -1, -1));
 
         jtfrazonsocial.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfrazonsocial.setText("NOMBRE O RAZON SOCIAL");
         jtfrazonsocial.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfrazonsocialFocusGained(evt);
@@ -141,20 +148,22 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
                 jtfrazonsocialKeyTyped(evt);
             }
         });
-        jPanel1.add(jtfrazonsocial, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 69, 661, -1));
+        jPanel1.add(jtfrazonsocial, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 70, 620, -1));
 
-        jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setBackground(new java.awt.Color(77, 161, 227));
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtnaceptar.setForeground(new java.awt.Color(255, 255, 255));
         jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
+        jbtnaceptar.setOpaque(true);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(797, 62, -1, -1));
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 60, 130, 40));
 
-        jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -168,15 +177,19 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
         ));
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtabla.getTableHeader().setReorderingAllowed(false);
+        jtabla.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtablaKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtabla);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 106, 890, 432));
 
-        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("BUSCAR PROVEEDOR");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -196,13 +209,16 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 918, -1));
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 910, -1));
+
+        jLabel1.setText("Señor(es):");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 906, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,18 +235,12 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
 
     private void jtfrazonsocialFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfrazonsocialFocusGained
         // TODO add your handling code here:
-        if (jtfrazonsocial.getText().equals("NOMBRE O RAZON SOCIAL")){
-            jtfrazonsocial.setText("");
-        
-        }
+       
     }//GEN-LAST:event_jtfrazonsocialFocusGained
 
     private void jtfrazonsocialFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfrazonsocialFocusLost
         // TODO add your handling code here:
-         if (jtfrazonsocial.getText().equals("")){
-            jtfrazonsocial.setText("NOMBRE O RAZON SOCIAL");
-        
-        }
+       
     }//GEN-LAST:event_jtfrazonsocialFocusLost
 
     private void jtfrazonsocialKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrazonsocialKeyReleased
@@ -266,7 +276,7 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
         
         } else {
         
-            JOptionPane.showMessageDialog(null, "SELECCIONE UN PROVEEDOR");
+            JOptionPane.showMessageDialog(null, "Seleccione Item","",JOptionPane.ERROR_MESSAGE);
         }
        
         
@@ -279,7 +289,7 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
 
     private void jtfrazonsocialKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrazonsocialKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyCode()==10){
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             Runnable runnable = new Runnable() {
 
             @Override
@@ -296,6 +306,15 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
         }
             
     }//GEN-LAST:event_jtfrazonsocialKeyPressed
+
+    private void jtablaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablaKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+            jbtnaceptar.doClick();
+        
+        }
+    }//GEN-LAST:event_jtablaKeyPressed
 
     /**
      * @param args the command line arguments
@@ -340,6 +359,7 @@ public class JDBuscarProveedor extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel7;

@@ -39,7 +39,11 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
      Empleado empleado=new Empleado();
       int posx;
     int posy;
+    MDIMenu menu;
     public JIFEmpleados() {
+        
+    }
+    public JIFEmpleados(MDIMenu menu) {
         initComponents();
         jlblimagencarga.setVisible(false);
         jlblletracarga.setVisible(false);
@@ -48,6 +52,7 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         bloquearjtf(false, false, false, false, false);
         bloquearjbtn(true, false, false, false, false, true,false,false);
         mostrar();
+        this.menu=menu;
     }
     
     public void mostrar(){
@@ -232,7 +237,6 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
         jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 220, 310, 170));
 
-        jtablaempleado.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtablaempleado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -545,7 +549,6 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
         jPanel1.add(jlblcargaimagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, -1, -1));
 
         jlblImageUser.setBackground(new java.awt.Color(255, 255, 255));
-        jlblImageUser.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.add(jlblImageUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 324, 357));
         jPanel1.add(jlblmensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 170, 20));
 
@@ -704,8 +707,9 @@ public class JIFEmpleados extends javax.swing.JInternalFrame {
                  boolean valida=daoempleado.duplicado(0, rut,"GUARDAR");
                 if(valida==true){
                     daoempleado.insertarempleado(empleado);
+                    menu.cargarresumen();
                 } else {
-                    JOptionPane.showMessageDialog(null, "EL EMPLEADO YA SE ENCUENTRA REGISTRADO","SISTEMA",JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "El empleaado ya se encuentra registrado","",JOptionPane.INFORMATION_MESSAGE);
                 }  
                  
                 }

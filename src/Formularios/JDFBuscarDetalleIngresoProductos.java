@@ -38,6 +38,7 @@ public class JDFBuscarDetalleIngresoProductos extends java.awt.Dialog {
         columnModel.getColumn(3).setPreferredWidth(50);
         columnModel.getColumn(4).setPreferredWidth(50);
         columnModel.getColumn(5).setPreferredWidth(50);
+        jtfbuscar.requestFocus();
     }
     
     public void filtro() {

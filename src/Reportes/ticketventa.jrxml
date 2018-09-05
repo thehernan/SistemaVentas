@@ -113,21 +113,21 @@ sum (detalle_venta.precio*detalle_venta.cantidad) as importe, venta.descuento, s
 				</textElement>
 				<text><![CDATA[Total Pagar:]]></text>
 			</staticText>
-			<textField pattern="#,##0">
+			<textField pattern="###0.00">
 				<reportElement x="32" y="107" width="100" height="10" backcolor="#000000" uuid="84beb98e-04a3-4388-b394-3662931cd01f"/>
 				<textElement>
 					<font fontName="Segoe UI Light" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0">
+			<textField pattern="#,##0.00">
 				<reportElement x="40" y="123" width="100" height="10" backcolor="#000000" uuid="b88cd017-7c21-425b-ba33-6032cdd8d94f"/>
 				<textElement>
 					<font fontName="Segoe UI Light" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0">
+			<textField pattern="#,##0.00">
 				<reportElement x="44" y="140" width="100" height="10" backcolor="#000000" uuid="06222be3-5916-452f-b512-cef466906f8d"/>
 				<textElement>
 					<font fontName="Segoe UI Light" size="7"/>

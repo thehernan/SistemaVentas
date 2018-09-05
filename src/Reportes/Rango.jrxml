@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="08b7ac1b-263a-4e00-911c-ef0c5b29a491">
+	<queryString language="SQL">
+		<![CDATA[select * from sp_busquedasensitivadoc(' ',3,'05-09-2017','05-09-2018','comprobante',1);]]>
+	</queryString>
+	<field name="vidventa" class="java.lang.Long"/>
+	<field name="vcodigo" class="java.lang.String"/>
+	<field name="vidcliente" class="java.lang.Long"/>
+	<field name="vfecha" class="java.lang.String"/>
+	<field name="vidempleado" class="java.lang.Long"/>
+	<field name="vestado" class="java.lang.String"/>
+	<field name="vdescuento" class="java.math.BigDecimal"/>
+	<field name="vextornado" class="java.lang.Boolean"/>
+	<field name="vmotivodes" class="java.lang.String"/>
+	<field name="vmotivo" class="java.lang.String"/>
+	<field name="vfechaextorno" class="java.lang.String"/>
+	<field name="vidcomprobante" class="java.lang.Long"/>
+	<field name="vserie" class="java.lang.String"/>
+	<field name="vnumero" class="java.lang.String"/>
+	<field name="vcomprobateref" class="java.lang.String"/>
+	<field name="vidsunattrans" class="java.lang.Long"/>
+	<field name="vfechavenci" class="java.lang.String"/>
+	<field name="porcentajeigv" class="java.lang.Integer"/>
+	<field name="descglobal" class="java.math.BigDecimal"/>
+	<field name="totaldesc" class="java.math.BigDecimal"/>
+	<field name="totalanti" class="java.math.BigDecimal"/>
+	<field name="totalgravada" class="java.math.BigDecimal"/>
+	<field name="totalinafec" class="java.math.BigDecimal"/>
+	<field name="totalexo" class="java.math.BigDecimal"/>
+	<field name="totaligv" class="java.math.BigDecimal"/>
+	<field name="totalgratui" class="java.math.BigDecimal"/>
+	<field name="totalotroscar" class="java.math.BigDecimal"/>
+	<field name="vtotal" class="java.math.BigDecimal"/>
+	<field name="percepbaseimpo" class="java.math.BigDecimal"/>
+	<field name="totalpercep" class="java.math.BigDecimal"/>
+	<field name="totalinclu" class="java.math.BigDecimal"/>
+	<field name="vdetraccion" class="java.lang.Boolean"/>
+	<field name="vobservacion" class="java.lang.String"/>
+	<field name="vcondicionpago" class="java.lang.String"/>
+	<field name="venlace" class="java.lang.String"/>
+	<field name="vaceptadasunat" class="java.lang.Boolean"/>
+	<field name="vsunatdesc" class="java.lang.String"/>
+	<field name="vsunatnote" class="java.lang.String"/>
+	<field name="vsunatresponse" class="java.lang.String"/>
+	<field name="vsunarsoaperror" class="java.lang.String"/>
+	<field name="cadenaqr" class="java.lang.String"/>
+	<field name="vcodigohash" class="java.lang.String"/>
+	<field name="vcodbarras" class="java.lang.String"/>
+	<field name="vsunatticket" class="java.lang.String"/>
+	<field name="idpercepcion" class="java.lang.Long"/>
+	<field name="vestadosunat" class="java.lang.String"/>
+	<field name="vrazons" class="java.lang.String"/>
+	<field name="vrut" class="java.lang.String"/>
+	<field name="vabreviatura" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="8219467a-3f80-4e3e-b505-9b664b9af08c"/>
+				<staticText>
+					<reportElement x="20" y="20" width="234" height="43" forecolor="#FFFFFF" uuid="6d898074-459b-416c-aa80-006a7bb02716"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TITLE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="395" y="43" width="180" height="20" forecolor="#FFFFFF" uuid="a10cabc6-330d-4479-a7c7-f29962df890d"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Add a description here]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="0f03be67-6ec3-48e0-8498-30d75b8558b3"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="af68de89-bf05-4a4d-a996-3817b23ff08c"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vidventa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="11" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="f0cd0f3d-2998-4e4e-9a19-5602c73723b1"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vcodigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="22" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="4f8aa8e4-4956-47e3-9249-522aceea92a8"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vidcliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="33" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="7ae4a988-207d-414c-abfd-bc3e12d22332"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vfecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="44" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="d5400d40-765d-4433-97d1-3a16fb31e60e"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vidempleado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="55" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="d6866d06-083d-4261-a005-7cc228f8df0a"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vestado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="66" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="fbcf7362-562d-4321-8332-c8a3ec7af05a"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vdescuento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="77" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="8f488067-cf0f-4b2f-a4d1-a189c4067e9e"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vextornado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="88" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="c175a512-69b5-4c24-b306-935b70fcc085"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vmotivodes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="99" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="b044c01a-37bd-4605-91fe-246d11c7e768"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vmotivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="110" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="85532e55-187d-4939-b678-1a88d9fdd49b"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vfechaextorno]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="121" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="f4f5fc08-fc18-4d3b-8cb8-effd2fed14ef"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vidcomprobante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="132" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="8334d283-1f82-415d-b6ee-757db8a295bd"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vserie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="143" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="6d6a106f-fff2-4efe-8e23-46793761708a"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vnumero]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="154" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="434f8301-1282-46b7-a625-a72a60718b10"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vcomprobateref]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="165" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="f4860787-6f5e-4889-9fcb-fb6befdd96a0"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vidsunattrans]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="176" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="4020944f-46fe-4511-a72a-a50f2eb03c6f"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vfechavenci]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="187" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="cc1e3728-4c99-4efa-b744-4be3727b3049"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[porcentajeigv]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="198" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="b3e115e7-3c78-4e40-b191-c030a133f871"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[descglobal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="209" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="11449acc-5c9c-462e-a155-4974c6eddc49"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[totaldesc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="220" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="a2b52008-8007-421e-8697-c4117e4ff3e7"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[totalanti]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="231" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="138c1307-ee97-4a32-ba0f-8c3465611a7b"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[totalgravada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="242" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="e1289d6c-11a8-45bf-a527-3a759dfc946e"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[totalinafec]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="253" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="8782f99b-769a-41b8-92f7-b3bf6ab90c7a"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[totalexo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="264" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="256019ba-fc46-4080-a9a1-d7676e80066a"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[totaligv]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="275" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="62d00b80-6add-4175-8679-b09d66e9fdf2"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[totalgratui]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="286" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="a216d194-2f7d-4736-ad46-a11a178e1577"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[totalotroscar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="297" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="4b29b225-4453-4625-a018-94b985843eb1"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vtotal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="308" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="98d4237f-7f89-487e-9df4-a436278d3f7d"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[percepbaseimpo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="319" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="8011358e-26c1-4a56-bb04-ae0906463061"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[totalpercep]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="330" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="55dd5005-7a85-4b6a-9f29-42b4dca30f7b"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[totalinclu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="341" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="d51882fa-bdc0-4617-9d56-220cbc8973d1"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vdetraccion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="352" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="0ba1714e-7be3-4c29-bbc1-8d07b3d31b53"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vobservacion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="363" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="e8719f8a-9896-424a-ad92-9522c8ef4b2b"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vcondicionpago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="374" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="12be6dda-88cf-403e-a0ef-db50975f9a25"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[venlace]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="385" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="20a40896-f26b-49d0-afd3-cf8afa026afa"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vaceptadasunat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="396" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="9dbc8c57-c07e-4fba-b931-5a2c037307c4"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vsunatdesc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="407" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="9596815c-be00-4fdd-80f5-ea00bdf6cb9f"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vsunatnote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="418" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="79ec5b09-5a45-4d90-aa8e-2f4b2158bce8"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vsunatresponse]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="429" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="880fab8f-0e7d-4a5e-82b2-4b8f290f20dd"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vsunarsoaperror]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="440" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="0e41ec6a-158b-4e83-8143-d246f5a7f127"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[cadenaqr]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="451" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="ba56af80-f72d-4dd0-9e5d-50e12a29b1ed"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vcodigohash]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="462" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="032b1043-870f-47f4-a5ab-65e63ce969ba"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vcodbarras]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="473" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="a75bc9da-d781-4ef1-bad9-f162aaa2ac2c"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vsunatticket]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="484" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="6f0b19dd-35d9-4e05-9867-594cec68bdbd"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[idpercepcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="495" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="e8625600-3347-4f2d-a95b-73cb6bd5a1e7"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vestadosunat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="506" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="2b81b738-89fc-4060-a2c7-e98940d77e42"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vrazons]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="517" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="f9c511da-24c5-422d-94bf-2dbfb00c27ee"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vrut]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="528" y="0" width="11" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="8b80d660-13a8-4695-a6c4-29caa89a9920"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[vabreviatura]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="399abc3c-0b18-4773-8c27-cda16c4f0266"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="11" height="20" uuid="618acad1-e410-436a-a279-dd0d9a3fb98e"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vidventa}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="11" y="0" width="11" height="20" uuid="ca1a3cdd-bff2-4674-b7af-4e1f1b34013a"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vcodigo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="22" y="0" width="11" height="20" uuid="55429e48-0d1f-4609-9bd8-79a93c72dda5"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vidcliente}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="33" y="0" width="11" height="20" uuid="9001710c-a55b-47e8-a26c-3850788b3cde"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vfecha}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="44" y="0" width="11" height="20" uuid="42251777-03a3-4c0d-b028-335dae9f526d"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vidempleado}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="55" y="0" width="11" height="20" uuid="52f278bc-3c1d-47b0-8be6-c0c0f90cfa19"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vestado}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="66" y="0" width="11" height="20" uuid="cd8cab42-2522-48e9-967c-0c76af118115"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vdescuento}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="77" y="0" width="11" height="20" uuid="97117cfd-7776-45a7-9eb6-7504a44ebf37"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vextornado}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="88" y="0" width="11" height="20" uuid="1aef671a-97d5-408c-a65d-0aaebd75d8dc"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vmotivodes}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="99" y="0" width="11" height="20" uuid="cc88abac-3e01-4f26-a7cc-33b5f449dbbd"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vmotivo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="110" y="0" width="11" height="20" uuid="b2f40388-6bfb-41c4-a3bd-eb133541f90b"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vfechaextorno}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="121" y="0" width="11" height="20" uuid="a0305812-f5f2-419f-a2bf-276b1706b9e7"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vidcomprobante}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="132" y="0" width="11" height="20" uuid="0ff5a5d5-1820-407a-8263-7eec3e99f273"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vserie}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="143" y="0" width="11" height="20" uuid="f5a843eb-e85d-49bb-8da2-6fd7c23cf091"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vnumero}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="154" y="0" width="11" height="20" uuid="e56f7fbd-5315-4753-815f-f253efa998db"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vcomprobateref}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="165" y="0" width="11" height="20" uuid="54eb4885-f1db-4fb7-857a-be9ce8b83aa3"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vidsunattrans}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="176" y="0" width="11" height="20" uuid="e8d475c2-96bd-4e68-b015-e385ff865527"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vfechavenci}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="187" y="0" width="11" height="20" uuid="e5f3cd65-7680-4651-8a4d-9cb99d27dc2f"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{porcentajeigv}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="198" y="0" width="11" height="20" uuid="b5612173-c8a3-4313-a270-e639cd520719"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descglobal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="209" y="0" width="11" height="20" uuid="b38e7a5e-bf32-49e0-81ff-9807e566f797"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totaldesc}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="220" y="0" width="11" height="20" uuid="9c8f0622-afbc-41e7-914b-1f5e7b970fbb"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalanti}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="231" y="0" width="11" height="20" uuid="cfab78d5-e441-4cbe-8d0b-2f3746c5b8ba"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalgravada}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="242" y="0" width="11" height="20" uuid="2dd42938-719c-424d-aa93-b067c31081be"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalinafec}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="253" y="0" width="11" height="20" uuid="e32fa93a-2b55-4e6a-acd6-b082caa3c910"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalexo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="264" y="0" width="11" height="20" uuid="c023569a-85cb-48fa-8aba-5699e86716ea"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totaligv}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="275" y="0" width="11" height="20" uuid="fee3cabe-d2e8-4ce1-b82d-349558a0baca"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalgratui}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="286" y="0" width="11" height="20" uuid="a259d73a-29af-451b-a17c-dbf8d4432d96"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalotroscar}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="297" y="0" width="11" height="20" uuid="18419808-39c6-4d6c-96f1-c43c417ff1eb"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vtotal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="308" y="0" width="11" height="20" uuid="f00fb7a1-1004-491a-a33a-2dae963da83a"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{percepbaseimpo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="319" y="0" width="11" height="20" uuid="2decdf7b-3bba-4c54-a4a1-0a59e2c27e76"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalpercep}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="330" y="0" width="11" height="20" uuid="fe06025a-d024-48e4-b83c-755b4087c280"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalinclu}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="341" y="0" width="11" height="20" uuid="2e5a4aa5-7960-4e4a-9734-b438a3cb0015"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vdetraccion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="352" y="0" width="11" height="20" uuid="a7240188-2564-4c2f-8310-932f1631475e"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vobservacion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="363" y="0" width="11" height="20" uuid="c0ecd7e9-5809-4b8f-a1e2-dc239c47c3d5"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vcondicionpago}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="374" y="0" width="11" height="20" uuid="c24445f6-62fc-4ce2-b297-7defd41aee00"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{venlace}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="385" y="0" width="11" height="20" uuid="5185f819-29c5-49b6-aa1d-87b9dd9b4e6d"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vaceptadasunat}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="396" y="0" width="11" height="20" uuid="517ed7b2-f68d-4b7f-94c3-6f1e7a3c4347"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vsunatdesc}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="407" y="0" width="11" height="20" uuid="8f5cbfff-5694-4222-9f4a-5dd876675263"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vsunatnote}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="418" y="0" width="11" height="20" uuid="6059dc34-4965-4575-9318-09713766de44"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vsunatresponse}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="429" y="0" width="11" height="20" uuid="84be7963-d734-4ead-95d5-86e7e068b733"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vsunarsoaperror}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="440" y="0" width="11" height="20" uuid="d0b172a5-7c1e-46bf-8a15-47d2fbeaf75d"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cadenaqr}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="451" y="0" width="11" height="20" uuid="f859ed13-d53a-435f-b454-fc9ee877dffe"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vcodigohash}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="462" y="0" width="11" height="20" uuid="8d0a30e8-d9b4-43ac-88a5-24faea6b2217"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vcodbarras}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="473" y="0" width="11" height="20" uuid="7e84095b-10b0-465f-a6a0-e5f1ca102b64"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vsunatticket}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="484" y="0" width="11" height="20" uuid="2ad56409-4e45-4188-8a38-f407df72bd32"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idpercepcion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="495" y="0" width="11" height="20" uuid="50d09097-f9fb-4817-b53b-7c1a4219d7e8"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vestadosunat}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="506" y="0" width="11" height="20" uuid="62239187-645f-403b-a7a2-d73186269a71"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vrazons}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="517" y="0" width="11" height="20" uuid="a4f45470-0e04-4770-844a-075aa8e5413f"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vrut}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="528" y="0" width="11" height="20" uuid="31870275-157b-4365-aeba-778913b02fd4"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vabreviatura}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="61937650-f4ff-4c9f-92b9-7de86db947d8"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="b14f0deb-6f62-4a51-8fd2-213cb1166801"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="8bae4045-9a3d-43e6-98d1-43e8f6eb214e"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

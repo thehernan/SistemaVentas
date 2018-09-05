@@ -59,7 +59,6 @@ public class JDVentasEmpleado extends javax.swing.JDialog {
         jtabla = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jlbltotal = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -95,11 +94,10 @@ public class JDVentasEmpleado extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jtabla);
 
-        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("HISTORIAL DE VENTAS");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -119,12 +117,8 @@ public class JDVentasEmpleado extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel8.setText("DOBLE DOBLIC PARA ANULAR VENTA.");
-
-        jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jlbltotal.setForeground(new java.awt.Color(255, 51, 51));
+        jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jlbltotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlbltotal.setText("* * *");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
@@ -143,20 +137,17 @@ public class JDVentasEmpleado extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1057, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jlblsucursal)
-                                    .addComponent(jlblempleado))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jlblsucursal)
+                            .addComponent(jlblempleado))
+                        .addGap(0, 953, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jlbltotal)))
+                        .addComponent(jlbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -171,13 +162,11 @@ public class JDVentasEmpleado extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlblsucursal)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jlbltotal)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -196,17 +185,17 @@ public class JDVentasEmpleado extends javax.swing.JDialog {
 
     private void jtablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMouseReleased
         // TODO add your handling code here:
-         int index= jtabla.getSelectedRow();
-        
-        if(index>=0){
-            venta= listventList.get(index);
-          
-            if(evt.getClickCount()==2){
-            
-//             JDMotivoExtorno motextorno =new JDMotivoExtorno(new JFrame(),isVisible(),venta,this);
-//             motextorno.setVisible(true);
-            }
-        }
+//         int index= jtabla.getSelectedRow();
+//        
+//        if(index>=0){
+//            venta= listventList.get(index);
+//          
+//            if(evt.getClickCount()==2){
+//            
+////             JDMotivoExtorno motextorno =new JDMotivoExtorno(new JFrame(),isVisible(),venta,this);
+////             motextorno.setVisible(true);
+//            }
+//        }
     }//GEN-LAST:event_jtablaMouseReleased
 
     /**
@@ -255,7 +244,6 @@ public class JDVentasEmpleado extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;

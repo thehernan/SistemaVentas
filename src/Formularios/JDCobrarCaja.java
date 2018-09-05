@@ -5,12 +5,22 @@
  */
 package Formularios;
 
-import DAO.ReparacionDAO;
+import ClasesGlobales.FormatoNumerico;
+import DAO.DetalleCajaDAO;
+import DAO.VentasDAO;
+import Facturacion.ConsumingPost;
 import Pojos.DetalleCaja;
-import Pojos.Reparacion;
+import Pojos.Producto;
+import Pojos.SerieNumeroRef;
+import Pojos.Ventas;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.KeyStroke;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 /**
  *
@@ -21,98 +31,127 @@ public class JDCobrarCaja extends javax.swing.JDialog {
     /**
      * Creates new form JDCobrarCaja
      */
-    JIFCaja frmcaja;
+//    JIFCaja frmcaja;
     DetalleCaja detcaja = new DetalleCaja();
-    String estado;
-    double abonoo;
-    Reparacion reparacion  = new Reparacion();
-    ReparacionDAO daoreparacion = new ReparacionDAO();
-    double total;
-    DecimalFormat nf =new  DecimalFormat("#.00");
-    
+//    String estado;
+//   
+//    Reparacion reparacion  = new Reparacion();
+//    ReparacionDAO daoreparacion = new ReparacionDAO();
+    Ventas venta;       
+    List<Producto> listprod;
+    JIFCaja jifcaja;
+//    double total;
+    FormatoNumerico fn = new FormatoNumerico();
+    DetalleCajaDAO daodetcaja = new DetalleCajaDAO();
+    VentasDAO daoventa= new VentasDAO();
     
     public JDCobrarCaja(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
    
-    public JDCobrarCaja(java.awt.Frame parent, boolean modal,JIFCaja frmcaja,Reparacion reparacion, double total) {
+    public JDCobrarCaja(java.awt.Frame parent, boolean modal,Ventas venta,List<Producto> listprod,long idcaja,JIFCaja jifcaja) {
         super(parent, modal);
         initComponents();
-        abonoo=0;
-        this.frmcaja= frmcaja;
-//        Double total=frmcaja.calculatotal();
-        this.total=total;
-        jlbltotal.setText(nf.format(total));
-        jbtncobrar.setEnabled(false);
-        this.setLocationRelativeTo(null);
-        this.reparacion=reparacion;
-        if(reparacion.getIdreparacion()==0){
-            jtfabono.setEnabled(false);
-            
-        }
-    }
-    public boolean calculavuelto(){
-        Double vuelto=0.0,pago=0.0,saldo=0.0;
-        boolean valida=false;
-        System.out.println("tecla");
-        try {
-            double abono= Double.parseDouble(jtfabono.getValue().toString());
-            
-//            double total = Double.parseDouble(jlbltotal.getValue().toString());
-            pago = Double.parseDouble(jtfpago.getText());
-            detcaja.setPagocon(pago);
-            if( total >= abono && pago>=abono){
-                saldo= total-abono;
-                vuelto= pago- abono;
-                abonoo=abono;
-                jlblvuelto.setValue(vuelto);
-                jlblsaldo.setValue(saldo);
-                jlblmensaje.setText("");
-                jbtncobrar.setEnabled(true);
-                valida=true;
-                if(saldo==0){
-                    estado="COBRADO";
-                }else {
-                    estado="DEBE";
-                }
-            }else {
-                jlblmensaje.setText("VERIFIQUE LAS CANTIDADES INGRESADAS");
-                jbtncobrar.setEnabled(false);
-                jlblvuelto.setText("");
-        }
-            
-        } catch (NullPointerException e) {
-            jlblmensaje.setText("");
-            jbtncobrar.setEnabled(false);
-            valida=false;
-            jlblvuelto.setText("");
-        }
+       
+//        this.frmcaja= frmcaja;
+////        Double total=frmcaja.calculatotal();
+//        this.total=total;
         
-    return valida;
+        this.venta=venta;
+        this.listprod=listprod;
+        this.jifcaja=jifcaja;
+        
+        detcaja.setIdcaja(idcaja);
+        jlbltotal.setText(fn.FormatoN(venta.getTotal()));
+        jbtncobrar.setEnabled(false);
+        jprogres.setVisible(false);
+        
+        this.setLocationRelativeTo(null);
+//        this.reparacion=reparacion;
+//        if(reparacion.getIdreparacion()==0){
+//            jtfabono.setEnabled(false);
+//            
+//        }
+        addEscapeListener(this);
     }
+//    public boolean calculavuelto(){
+//        Double vuelto=0.0,pago=0.0,saldo=0.0;
+//        boolean valida=false;
+//        System.out.println("tecla");
+//        try {
+////            double abono= Double.parseDouble(jtfabono.getText());
+//            
+////            double total = Double.parseDouble(jlbltotal.getValue().toString());
+//            pago = Double.parseDouble(jtfpago.getText());
+//            detcaja.setPagocon(pago);
+//            if( pago  >= venta.getTotal()){
+////                saldo= total-abono;
+//                vuelto= venta.getTotal()-pago;
+////                abonoo=abono;
+//                jlblvuelto.setText(fn.FormatoN(vuelto));
+////                jlblsaldo.setText(fn.FormatoN(saldo));
+//                jlblmensaje.setText("");
+//                jbtncobrar.setEnabled(true);
+//                valida=true;
+////                if(saldo==0){
+////                    estado="COBRADO";
+////                }else {
+////                    estado="DEBE";
+////                }
+//            }else {
+//            
+//                jbtncobrar.setEnabled(false);
+//                jlblvuelto.setText("* * *");
+//        }
+//            
+//        } catch (Exception e) {
+//            jlblmensaje.setText("Error");
+//            jbtncobrar.setEnabled(false);
+//            valida=false;
+//            jlblvuelto.setText("Error");
+//        }
+//        
+//    return valida;
+//    }
     public void calculavueltoventa(){
         Double vuelto=0.0;
         try {
 //             Double total = Double.parseDouble(jlbltotal.getValue().toString());
         Double pago = Double.parseDouble(jtfpago.getText());
-        if(pago >= total){
-        vuelto= pago - total;
-        jlblvuelto.setValue(vuelto);
+        if(pago >= venta.getTotal()){
+        vuelto= pago - venta.getTotal();
+        jlblvuelto.setText(fn.FormatoN(vuelto));
         jbtncobrar.setEnabled(true);
         jlblmensaje.setText("");
-        estado="COBRADO";
+//        estado="COBRADO";
         }else {
-            jlblmensaje.setText("EL PAGO DEBE DE SER MAYOR O IGUAL AL TOTAL");
+           
             jbtncobrar.setEnabled(false);
+            jlblvuelto.setText("* * *");
         }
             
-        } catch (NullPointerException e) {
-            jlblmensaje.setText("EL PAGO DEBE DE SER MAYOR O IGUAL AL TOTAL");
+        } catch (Exception e) {
+            jlblmensaje.setText("");
+            jlblvuelto.setText("* * *");
         }
        
         
     }
+    public static void addEscapeListener(final JDialog dialog) {
+    ActionListener escListener = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            dialog.setVisible(false);
+        }
+    };
+
+    dialog.getRootPane().registerKeyboardAction(escListener,
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -125,82 +164,45 @@ public class JDCobrarCaja extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jbtncobrar = new javax.swing.JButton();
         jlblmensaje = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jtfabono = new javax.swing.JFormattedTextField();
-        jlblsaldo = new javax.swing.JFormattedTextField();
-        jlblvuelto = new javax.swing.JFormattedTextField();
         jlbltotal = new javax.swing.JLabel();
         jtfpago = new javax.swing.JTextField();
+        jlblvuelto = new javax.swing.JLabel();
+        jprogres = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("COBRO CAJA");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("TOTAL A PAGAR:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 130, -1));
+        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 48)); // NOI18N
+        jLabel1.setText("Total:");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("ABONO:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 60, 50, 20));
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel3.setText("VUELTO:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 50, 20));
+        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 48)); // NOI18N
+        jLabel3.setText("Vuelto:");
 
         jbtncobrar.setBackground(new java.awt.Color(255, 255, 255));
         jbtncobrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cashier_icon-icons.64X64.png"))); // NOI18N
+        jbtncobrar.setBorderPainted(false);
+        jbtncobrar.setContentAreaFilled(false);
         jbtncobrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtncobrarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtncobrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 240, -1, -1));
 
-        jlblmensaje.setForeground(new java.awt.Color(255, 51, 51));
-        jlblmensaje.setText("---");
-        jPanel1.add(jlblmensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 120, 10, -1));
+        jlblmensaje.setFont(new java.awt.Font("Segoe UI Light", 1, 24)); // NOI18N
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setText("SALDO:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 140, 50, 20));
+        jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 48)); // NOI18N
+        jLabel5.setText("Efectivo:");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel5.setText("PAGO CON:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 100, 70, 20));
-
-        jtfabono.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jtfabono.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfabonoKeyReleased(evt);
-            }
-        });
-        jPanel1.add(jtfabono, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 230, -1));
-
-        jlblsaldo.setEditable(false);
-        jlblsaldo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jPanel1.add(jlblsaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 140, 230, -1));
-
-        jlblvuelto.setEditable(false);
-        jlblvuelto.setForeground(new java.awt.Color(255, 51, 51));
-        jlblvuelto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jlblvuelto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jPanel1.add(jlblvuelto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 270, 40));
-
-        jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 1, 18)); // NOI18N
-        jlbltotal.setForeground(new java.awt.Color(255, 51, 51));
+        jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 48)); // NOI18N
         jlbltotal.setText("* * *");
-        jPanel1.add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 250, 30));
 
+        jtfpago.setFont(new java.awt.Font("Segoe UI Light", 0, 48)); // NOI18N
         jtfpago.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtfpagoActionPerformed(evt);
@@ -214,19 +216,78 @@ public class JDCobrarCaja extends javax.swing.JDialog {
                 jtfpagoKeyTyped(evt);
             }
         });
-        jPanel1.add(jtfpago, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 230, -1));
+
+        jlblvuelto.setFont(new java.awt.Font("Segoe UI Light", 0, 48)); // NOI18N
+        jlblvuelto.setText("* * *");
+
+        jprogres.setBorder(null);
+        jprogres.setBorderPainted(false);
+        jprogres.setString("");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jlblvuelto, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jlbltotal, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel5)
+                            .addGap(4, 4, 4)
+                            .addComponent(jtfpago, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jbtncobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
+            .addComponent(jprogres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jprogres, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlbltotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(17, 17, 17)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jtfpago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
+                            .addComponent(jlblvuelto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbtncobrar)
+                        .addContainerGap())))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -234,36 +295,123 @@ public class JDCobrarCaja extends javax.swing.JDialog {
 
     private void jbtncobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncobrarActionPerformed
         // TODO add your handling code here:
-         frmcaja.cobrar(detcaja,estado,abonoo,reparacion);
-         System.out.println("repara"+reparacion.getIdreparacion());
-         this.setVisible(false);
-         if(reparacion.getIdreparacion()!=0){
-             daoreparacion.imprimir(reparacion.getIdreparacion());
-         
-         }
-         frmcaja.newcobro();
-         this.dispose();
-    }//GEN-LAST:event_jbtncobrarActionPerformed
-
-    private void jtfabonoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfabonoKeyReleased
-        // TODO add your handling code here:
-        if(reparacion.getIdreparacion()==0){
-            calculavueltoventa();
         
-        }else {
-            calculavuelto();
-        }
-            
-    }//GEN-LAST:event_jtfabonoKeyReleased
+//         frmcaja.generadocumentosunat();
+//         System.out.println("repara"+reparacion.getIdreparacion());
+       
+        detcaja.setIdventa(venta.getIdventa());
+        detcaja.setAbono(venta.getTotal());
+        detcaja.setPagocon(Double.parseDouble(jtfpago.getText()));
+        
+        
+         ////////////////////    ///////////////////////////  nuevo hilo ////////////////
+                        Runnable runnable=new Runnable() {
+
+                            @Override
+                            public void run() {
+                                ConsumingPost api;
+                          
+                            jprogres.setVisible(true);
+                            jprogres.setMinimum(0);
+                            jprogres.setMaximum(100);
+                            jprogres.setStringPainted(true);
+                            Ventas cab=null;
+                                int i = 0;
+                            while(i<=100)
+                            {
+                                 jprogres.setValue(i);
+                                 if(i==0)
+                                 {
+                                     jtfpago.setEnabled(false);
+                                     jbtncobrar.setEnabled(false);
+                                     JDCobrarCaja.this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                                 }
+                                     
+                             
+                                if(i==10){
+                                    System.out.println("genera numero ref");
+                                    SerieNumeroRef sn;
+                                    sn=(daoventa.generarserienumref(venta.getComprobante()));
+                                    venta.setSerie(sn.getSerie());
+                                    venta.setNumero(sn.getNumero());
+                                }
+                                if(i==15){
+                                    System.out.println("Consumiendo api");
+                                    api=new ConsumingPost(venta,listprod);
+
+                                    cab=api.apiConsume();
+                                    
+                                
+                                }
+                                if(i==25)
+                                {
+                                    if(cab!=null){
+                                        System.out.println("insertando cab");
+                                        daodetcaja.insertar(detcaja,cab.getSerie(),cab.getNumero());
+                                    }
+                                    
+                                    
+                                }
+                                if(i==40)
+                                {
+                                     if(cab!=null){
+                                        System.out.println("actualizando datos sunat");
+                                        daoventa.actualizarsunat(cab);
+                                         
+                                     }
+                                   
+                                    
+                                }
+   
+                                if(i==50){
+                                    if(cab!=null){
+                                        JDCobrarCaja.this.setVisible(false);
+                                         daoventa.imprimir(cab.getIdventa());
+                                    }
+                                    
+                                }
+                                    
+                                
+                                if(i==100)
+                                {
+                                        if(cab!=null)
+                                        {
+                                            
+                                            jifcaja.newcobro();
+                                            JDCobrarCaja.this.dispose();
+                                        
+                                        }else {
+                                            jtfpago.setEnabled(true);
+                                            jbtncobrar.setEnabled(true);
+                                            JDCobrarCaja.this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                                            
+                                        }
+                                        
+                                    
+                                   
+                                      
+                                
+                                }
+                            i++;
+                            }
+                           jprogres.setVisible(false);
+                            }
+                        };
+
+                        Thread t = new Thread(runnable);
+                        t.start();
+
+       
+    }//GEN-LAST:event_jbtncobrarActionPerformed
 
     private void jtfpagoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfpagoKeyReleased
         // TODO add your handling code here:
-         if(reparacion.getIdreparacion()==0){
+//         if(reparacion.getIdreparacion()==0){
             calculavueltoventa();
         
-        }else {
-            calculavuelto();
-        }
+//        }else {
+//            calculavuelto();
+//        }
     }//GEN-LAST:event_jtfpagoKeyReleased
 
     private void jtfpagoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfpagoKeyTyped
@@ -325,17 +473,14 @@ public class JDCobrarCaja extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbtncobrar;
     private javax.swing.JLabel jlblmensaje;
-    private javax.swing.JFormattedTextField jlblsaldo;
     private javax.swing.JLabel jlbltotal;
-    private javax.swing.JFormattedTextField jlblvuelto;
-    private javax.swing.JFormattedTextField jtfabono;
+    private javax.swing.JLabel jlblvuelto;
+    private javax.swing.JProgressBar jprogres;
     private javax.swing.JTextField jtfpago;
     // End of variables declaration//GEN-END:variables
 }

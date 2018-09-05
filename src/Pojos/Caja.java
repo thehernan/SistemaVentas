@@ -22,6 +22,8 @@ public class Caja {
     private String estado;
     private String descripcion;
     private long id_sucursal;
+    private double total;
+    private String cajero;
 
     public Caja(long id_caja, long id_empleado, Timestamp fechahora_apertura, Timestamp fechahora_cierre, double aperturadinero, double cierradinero, String estado, String descripcion, long id_sucursal) {
         this.id_caja = id_caja;
@@ -37,6 +39,22 @@ public class Caja {
 
     public long getId_sucursal() {
         return id_sucursal;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public String getCajero() {
+        return cajero;
+    }
+
+    public void setCajero(String cajero) {
+        this.cajero = cajero;
     }
 
     public void setId_sucursal(long id_sucursal) {

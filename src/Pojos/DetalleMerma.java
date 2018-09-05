@@ -14,6 +14,7 @@ public class DetalleMerma {
     private long idproducto;
     private double cantidad;
     private long idmerma;
+    private String motivo;
 
     public DetalleMerma(long iddetallemerma, long idproducto, double cantidad, long idmerma) {
         this.iddetallemerma = iddetallemerma;
@@ -23,6 +24,14 @@ public class DetalleMerma {
     }
 
     public DetalleMerma() {
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
     }
 
     public long getIddetallemerma() {

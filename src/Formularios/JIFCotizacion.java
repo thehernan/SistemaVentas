@@ -5,6 +5,7 @@
  */
 package Formularios;
 
+import ClasesGlobales.FormatoNumerico;
 import DAO.ClienteDAO;
 import DAO.CotizacionDAO;
 import DAO.DetalleCotizacionDAO;
@@ -13,13 +14,15 @@ import Pojos.Cotizacion;
 import Pojos.DetalleCotizacion;
 import Pojos.Producto;
 import java.awt.Frame;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -30,13 +33,7 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
     /**
      * Creates new form JIFCotizacion
      */
-    DefaultTableModel modelo= new DefaultTableModel(){
-        public boolean isCellEditable(int row, int column) {
-        //      if (column == 5) return true;
-        //else
-         return false;
-        }
-        };
+    DefaultTableModel modelo;
      Object datos[] = new Object[5];
      List<DetalleCotizacion> listdetc= new ArrayList<>();
      Cliente cliente= new Cliente();
@@ -45,19 +42,19 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
      DetalleCotizacionDAO detcotizadao= new DetalleCotizacionDAO();
      int posx;
      int posy;
-     DecimalFormat nf =new DecimalFormat("#.00");
+     boolean validadoc=true;
+     FormatoNumerico fn = new FormatoNumerico();
     public JIFCotizacion() {
         initComponents();
         jlblmensajecarga.setVisible(false);
         modeloT();
-        jlblcarga.setVisible(false);
+        jlblcarga.setVisible(false);  
+        anadeListenerAlModelo(jtabla);
     }
     
     public void modeloT(){
         
-        String titulos[]={"Item","Cantidad","Descripcion","Precio C/U","Total"};
-        modelo.setColumnIdentifiers(titulos);
-        jtabla.setModel(modelo);
+       modelo=(DefaultTableModel) jtabla.getModel();
         TableColumnModel columnModel = jtabla.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(50);
         columnModel.getColumn(1).setPreferredWidth(50);      
@@ -65,8 +62,92 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
         columnModel.getColumn(3).setPreferredWidth(50);
         columnModel.getColumn(4).setPreferredWidth(50);
        
-        
+      
     
+    }
+    
+    
+    /**
+     * Se añade el listener al modelo y se llama a actualizaSumas(), que es el método 
+     * encargado de actualizar las sumas de las celdas no editables.
+     */
+    private void anadeListenerAlModelo(JTable tabla) {
+        tabla.getModel().addTableModelListener(new TableModelListener() {
+
+            @Override
+            public void tableChanged(TableModelEvent evento) {
+                actualizaimporte(evento);
+            }
+        });
+    }
+       protected void actualizaimporte(TableModelEvent evento)
+    {
+          
+              if(evento.getType() == TableModelEvent.UPDATE)
+        {
+
+                // Se obtiene el modelo de la tabla y la fila/columna que han cambiado.
+            TableModel model = ((TableModel) (evento.getSource()));
+            int fila = evento.getFirstRow();
+            int columna = evento.getColumn();
+
+            // Los cambios en la ultima fila y columna se ignoran.
+            // Este return es necesario porque cuando nuestro codigo modifique
+            // los valores de las sumas en esta fila y columna, saltara nuevamente
+            // el evento, metiendonos en un bucle recursivo de llamadas a este
+            // metodo.
+            if (columna == 0 || columna == 2 || columna==4) {
+                return;
+            }
+            try {
+                double totalf=0.0;
+                DetalleCotizacion detalle= listdetc.get(fila);
+                double cantI=detalle.getCantidad();
+                double precioI=detalle.getPrecioprod();
+                
+                double cantF = Double.parseDouble(modelo.getValueAt(fila, 1).toString());
+                double precioF =Double.parseDouble(modelo.getValueAt(fila, 3).toString());
+                System.err.println("cantf"+cantF);
+                System.err.println("preciof"+precioF);
+                double importe=0.0;
+                if(cantF>0)
+                {
+                    detalle.setCantidad(cantF);
+                    importe= cantF*precioF;
+                    modelo.setValueAt(importe, fila, 4);
+                  
+                
+                }else {
+                    detalle.setCantidad(cantI);
+                    JOptionPane.showMessageDialog(null,"Ingrese una cantidad valida","",JOptionPane.ERROR_MESSAGE);
+                    validadoc=false;
+                }
+                if(precioF>0)
+                {
+                    detalle.setPrecioprod(precioF);
+                    importe= cantF*precioF;
+                    modelo.setValueAt(importe, fila, 4);
+                     
+                }else {
+                    detalle.setPrecioprod(precioI);
+                    JOptionPane.showMessageDialog(null,"Ingrese un precio valido","",JOptionPane.ERROR_MESSAGE);
+                    validadoc=false;
+                }
+                
+                for (DetalleCotizacion deta: listdetc){
+                totalf+=(deta.getPrecioprod()*deta.getCantidad());
+                }
+                
+
+                jlbltotal.setText("Total: "+fn.FormatoN(totalf));
+                
+            } catch (Exception e) {
+                jlbltotal.setText("Error");
+                validadoc=false;
+            }
+            
+            
+        }
     }
     
     
@@ -77,10 +158,10 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
         datos[0]=modelo.getRowCount()+1;
         datos[1]=cant;
         datos[2]=prod.getDescripcion()+" - "+prod.getCodigo();
-        datos[3]=nf.format(precio);
+        datos[3]=(fn.FormatoN(precio));
         
         Double total=(precio*cant);
-        datos[4]=nf.format(total);
+        datos[4]=(fn.FormatoN(total));
         
         modelo.addRow(datos);
         det.setCantidad(cant);
@@ -92,7 +173,7 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
         for (DetalleCotizacion deta: listdetc){
             totalf+=(deta.getPrecioprod()*deta.getCantidad());
         }
-        jlbltotal.setText("Total: "+nf.format(totalf));
+        jlbltotal.setText("Total: "+fn.FormatoN(totalf));
         
         validagenerar();
     
@@ -101,7 +182,7 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
      public void validagenerar(){
          
         if(cliente.getId_cliente()!=0 && listdetc.size() >0 && jtfcondicionp.getText().replaceAll(" ", "").length() >0 
-                && jtfemitidapor.getText().replaceAll(" ", "").length()>0){
+                && jtfemitidapor.getText().replaceAll(" ", "").length()>0 && validadoc==true){
         jbtnaceptar.setEnabled(true);
         }else {
         jbtnaceptar.setEnabled(false);
@@ -123,7 +204,7 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
       
       listdetc = new ArrayList<>();
       jbtnaceptar.setEnabled(false);
-      jlbltotal.setText("Total= 0,00");
+      jlbltotal.setText("Total= 0.00");
          
      
      
@@ -173,7 +254,7 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
         jbtnretirar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -282,15 +363,27 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
 
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Item", "Cantidad", "Descripcion", "Precio C/U", "Total"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, false, true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jtabla);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 239, 944, 300));
@@ -446,7 +539,7 @@ public class JIFCotizacion extends javax.swing.JInternalFrame {
             for (DetalleCotizacion det : listdetc)
                 total+=det.getCantidad()*det.getPrecioprod();
             
-            jlbltotal.setText("Total= "+nf.format(total));
+            jlbltotal.setText("Total= "+fn.FormatoN(total));
             validagenerar();
         }else {
             JOptionPane.showMessageDialog(null,"Seleccione producto a retirar","",JOptionPane.ERROR_MESSAGE);

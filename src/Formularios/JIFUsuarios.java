@@ -90,10 +90,10 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
          jckapertura.setEnabled(ban);
          jckconsultarrepara.setEnabled(ban);
          jckconsultarventa.setEnabled(ban);
-         jckdebe.setEnabled(ban);
+         jcknueva_cot.setEnabled(ban);
          jckempleado.setEnabled(ban);
          jckfamilia.setEnabled(ban);
-         jckhaber.setEnabled(ban);
+         jckbcotiza.setEnabled(ban);
          jckingreso.setEnabled(ban);
          jckinventario.setEnabled(ban);
          jckmovimientos.setEnabled(ban);
@@ -105,11 +105,24 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
          jckenproceso.setEnabled(ban);
          
          jckprodpendientes.setEnabled(ban);
-         jckmermas.setEnabled(ban);
-         jckconsulmerma.setEnabled(ban);
-         jcksucursalida.setEnabled(ban);
-         jcksucurentrada.setEnabled(ban);
-         jcksucurconsultar.setEnabled(ban);
+         
+         jckmantproductos.setEnabled(ban);
+         jckkardex.setEnabled(ban);
+         jckactprecios.setEnabled(ban);
+         jckfacturas.setEnabled(ban);
+         jckboletas.setEnabled(ban);
+         jckcredito.setEnabled(ban);
+         jckdebito.setEnabled(ban);
+         jcknueva_cot.setEnabled(ban);
+         jckbcotiza.setEnabled(ban);
+         
+         
+         
+//         jckmermas.setEnabled(ban);
+//         jckconsulmerma.setEnabled(ban);
+//         jcksucursalida.setEnabled(ban);
+//         jcksucurentrada.setEnabled(ban);
+//         jcksucurconsultar.setEnabled(ban);
          jckweb.setEnabled(ban);
     }
      public void limpiarjtf(){
@@ -135,10 +148,10 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
          jckapertura.setSelected(ban);
          jckconsultarrepara.setSelected(ban);
          jckconsultarventa.setSelected(ban);
-         jckdebe.setSelected(ban);
+         jcknueva_cot.setSelected(ban);
          jckempleado.setSelected(ban);
          jckfamilia.setSelected(ban);
-         jckhaber.setSelected(ban);
+         jckbcotiza.setSelected(ban);
          jckingreso.setSelected(ban);
          jckinventario.setSelected(ban);
          jckmovimientos.setSelected(ban);
@@ -150,11 +163,23 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
          jckenproceso.setSelected(ban);
          
          jckprodpendientes.setSelected(ban);
-         jckmermas.setSelected(ban);
-         jckconsulmerma.setSelected(ban);
-         jcksucursalida.setSelected(ban);
-         jcksucurentrada.setSelected(ban);
-         jcksucurconsultar.setSelected(ban);
+         
+         
+         
+         jckmantproductos.setSelected(ban);
+         jckkardex.setSelected(ban);
+         jckactprecios.setSelected(ban);
+         jckfacturas.setSelected(ban);
+         jckboletas.setSelected(ban);
+         jckcredito.setSelected(ban);
+         jckdebito.setSelected(ban);
+         jcknueva_cot.setSelected(ban);
+         jckbcotiza.setSelected(ban);
+//         jckmermas.setSelected(ban);
+//         jckconsulmerma.setSelected(ban);
+//         jcksucursalida.setSelected(ban);
+//         jcksucurentrada.setSelected(ban);
+//         jcksucurconsultar.setSelected(ban);
          jckweb.setSelected(ban);
      
      }
@@ -176,10 +201,10 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
          jckapertura.setSelected(usuario.isApertura());
          jckconsultarrepara.setSelected(usuario.isConsultarrepara());
          jckconsultarventa.setSelected(usuario.isConsultarventa());
-         jckdebe.setSelected(usuario.isDebe());
+         jcknueva_cot.setSelected(usuario.isDebe());
          jckempleado.setSelected(usuario.isCkempleado());
          jckfamilia.setSelected(usuario.isFamilia());
-         jckhaber.setSelected(usuario.isHaber());
+         jckbcotiza.setSelected(usuario.isHaber());
          jckingreso.setSelected(usuario.isIngreso());
          jckinventario.setSelected(usuario.isInventario());
          jckmovimientos.setSelected(usuario.isMovimientos());
@@ -191,12 +216,32 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
          jckenproceso.setSelected(usuario.isExtornar());
         
          jckprodpendientes.setSelected(usuario.isProdpendientes());
-         jckmermas.setSelected(usuario.isMermas());
-         jckconsulmerma.setSelected(usuario.isConsulmermas());
-         jcksucursalida.setSelected(usuario.isSucursalida());
-         jcksucurentrada.setSelected(usuario.isSucurentrada());
-         jcksucurconsultar.setSelected(usuario.isConsultasucur());
+//         jckmermas.setSelected(usuario.isMermas());
+//         jckconsulmerma.setSelected(usuario.isConsulmermas());
+//         jcksucursalida.setSelected(usuario.isSucursalida());
+//         jcksucurentrada.setSelected(usuario.isSucurentrada());
+//         jcksucurconsultar.setSelected(usuario.isConsultasucur());
+         
+         jckmantproductos.setSelected(usuario.isMant_prod());
+         jckkardex.setSelected(usuario.isKardex());
+         jckactprecios.setSelected(usuario.isAct_precios());
+         jckfacturas.setSelected(usuario.isFacturas());
+         jckboletas.setSelected(usuario.isBoletas());
+         jckcredito.setSelected(usuario.isNcredito());
+         jckdebito.setSelected(usuario.isNdebito());
+         jcknueva_cot.setSelected(usuario.isCotizacion());
+         jckbcotiza.setSelected(usuario.isBuscar_cot());
+         
+         
+         
          jckweb.setSelected(usuario.isWeb());
+         
+         
+         
+         
+         
+         
+         
         bloquearjbtn(true, true, false, true, false, true,false,false);
         bloquearckec(false);
         bloquearjtf(false, false, false,false);
@@ -279,12 +324,13 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         jckuser = new javax.swing.JCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jckingreso = new javax.swing.JCheckBox();
-        jckproductos = new javax.swing.JCheckBox();
+        jckmantproductos = new javax.swing.JCheckBox();
         jckinventario = new javax.swing.JCheckBox();
         jckfamilia = new javax.swing.JCheckBox();
         jckprodpendientes = new javax.swing.JCheckBox();
-        jckmermas = new javax.swing.JCheckBox();
-        jckconsulmerma = new javax.swing.JCheckBox();
+        jckproductos = new javax.swing.JCheckBox();
+        jckkardex = new javax.swing.JCheckBox();
+        jckactprecios = new javax.swing.JCheckBox();
         jPanel6 = new javax.swing.JPanel();
         jckvender = new javax.swing.JCheckBox();
         jckconsultarventa = new javax.swing.JCheckBox();
@@ -297,14 +343,15 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         jckconsultarrepara = new javax.swing.JCheckBox();
         jckpendientes = new javax.swing.JCheckBox();
         jPanel9 = new javax.swing.JPanel();
-        jckdebe = new javax.swing.JCheckBox();
-        jckhaber = new javax.swing.JCheckBox();
-        jPanel10 = new javax.swing.JPanel();
-        jcksucursalida = new javax.swing.JCheckBox();
-        jcksucurentrada = new javax.swing.JCheckBox();
-        jcksucurconsultar = new javax.swing.JCheckBox();
+        jcknueva_cot = new javax.swing.JCheckBox();
+        jckbcotiza = new javax.swing.JCheckBox();
         jPanel12 = new javax.swing.JPanel();
         jckweb = new javax.swing.JCheckBox();
+        jPanel13 = new javax.swing.JPanel();
+        jckfacturas = new javax.swing.JCheckBox();
+        jckboletas = new javax.swing.JCheckBox();
+        jckcredito = new javax.swing.JCheckBox();
+        jckdebito = new javax.swing.JCheckBox();
         jLabel2 = new javax.swing.JLabel();
         jbtnbuscarempleado = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -316,7 +363,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
 
-        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -414,7 +461,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jtfrut.setText("R.U.T");
+        jtfrut.setText("Doc.");
         jtfrut.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfrutFocusGained(evt);
@@ -566,11 +613,11 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
             }
         });
 
-        jckproductos.setBackground(new java.awt.Color(255, 255, 255));
-        jckproductos.setText("Productos");
-        jckproductos.addActionListener(new java.awt.event.ActionListener() {
+        jckmantproductos.setBackground(new java.awt.Color(255, 255, 255));
+        jckmantproductos.setText("Mant. Productos");
+        jckmantproductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jckproductosActionPerformed(evt);
+                jckmantproductosActionPerformed(evt);
             }
         });
 
@@ -598,21 +645,14 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
             }
         });
 
-        jckmermas.setBackground(new java.awt.Color(255, 255, 255));
-        jckmermas.setText("Mermas");
-        jckmermas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jckmermasActionPerformed(evt);
-            }
-        });
+        jckproductos.setBackground(new java.awt.Color(255, 255, 255));
+        jckproductos.setText("Productos");
 
-        jckconsulmerma.setBackground(new java.awt.Color(255, 255, 255));
-        jckconsulmerma.setText("Consul. Mermas");
-        jckconsulmerma.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jckconsulmermaActionPerformed(evt);
-            }
-        });
+        jckkardex.setBackground(new java.awt.Color(255, 255, 255));
+        jckkardex.setText("Kardex");
+
+        jckactprecios.setBackground(new java.awt.Color(255, 255, 255));
+        jckactprecios.setText("Act. Precios");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -624,18 +664,19 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jckingreso)
                         .addGap(18, 18, 18)
-                        .addComponent(jckproductos))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jckprodpendientes)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jckmermas)))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jckinventario)
+                        .addComponent(jckmantproductos)
+                        .addGap(5, 5, 5)
+                        .addComponent(jckproductos)
                         .addGap(18, 18, 18)
                         .addComponent(jckfamilia))
-                    .addComponent(jckconsulmerma))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jckprodpendientes)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jckkardex)
+                        .addGap(18, 18, 18)
+                        .addComponent(jckinventario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jckactprecios)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -644,18 +685,19 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jckingreso)
-                    .addComponent(jckproductos)
-                    .addComponent(jckinventario)
-                    .addComponent(jckfamilia))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                    .addComponent(jckmantproductos)
+                    .addComponent(jckfamilia)
+                    .addComponent(jckproductos))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jckprodpendientes)
-                    .addComponent(jckmermas)
-                    .addComponent(jckconsulmerma))
-                .addContainerGap())
+                    .addComponent(jckkardex)
+                    .addComponent(jckinventario)
+                    .addComponent(jckactprecios))
+                .addGap(18, 18, 18))
         );
 
-        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, 340, 90));
+        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, 360, 100));
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Venta"));
@@ -791,7 +833,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                 .addComponent(jckconsultarrepara)
                 .addGap(18, 18, 18)
                 .addComponent(jckpendientes)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -804,24 +846,24 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 110, 340, 60));
+        jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 110, 360, 60));
 
         jPanel9.setBackground(new java.awt.Color(255, 255, 255));
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Cotización"));
 
-        jckdebe.setBackground(new java.awt.Color(255, 255, 255));
-        jckdebe.setText("Nueva Cotización");
-        jckdebe.addActionListener(new java.awt.event.ActionListener() {
+        jcknueva_cot.setBackground(new java.awt.Color(255, 255, 255));
+        jcknueva_cot.setText("Nueva Cotización");
+        jcknueva_cot.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jckdebeActionPerformed(evt);
+                jcknueva_cotActionPerformed(evt);
             }
         });
 
-        jckhaber.setBackground(new java.awt.Color(255, 255, 255));
-        jckhaber.setText("Cotizaciones");
-        jckhaber.addActionListener(new java.awt.event.ActionListener() {
+        jckbcotiza.setBackground(new java.awt.Color(255, 255, 255));
+        jckbcotiza.setText("Cotizaciones");
+        jckbcotiza.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jckhaberActionPerformed(evt);
+                jckbcotizaActionPerformed(evt);
             }
         });
 
@@ -832,73 +874,20 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jckdebe)
-                    .addComponent(jckhaber))
+                    .addComponent(jcknueva_cot)
+                    .addComponent(jckbcotiza))
                 .addContainerGap(63, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(jckdebe)
+                .addComponent(jcknueva_cot)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jckhaber)
+                .addComponent(jckbcotiza)
                 .addGap(0, 2, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, 190, 70));
-
-        jPanel10.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("Sucursal"));
-
-        jcksucursalida.setBackground(new java.awt.Color(255, 255, 255));
-        jcksucursalida.setText("Salida");
-        jcksucursalida.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcksucursalidaActionPerformed(evt);
-            }
-        });
-
-        jcksucurentrada.setBackground(new java.awt.Color(255, 255, 255));
-        jcksucurentrada.setText("Entrada");
-        jcksucurentrada.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcksucurentradaActionPerformed(evt);
-            }
-        });
-
-        jcksucurconsultar.setBackground(new java.awt.Color(255, 255, 255));
-        jcksucurconsultar.setText("Consultar");
-        jcksucurconsultar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcksucurconsultarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jcksucursalida)
-                .addGap(18, 18, 18)
-                .addComponent(jcksucurentrada)
-                .addGap(10, 10, 10)
-                .addComponent(jcksucurconsultar)
-                .addContainerGap(97, Short.MAX_VALUE))
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jcksucursalida)
-                    .addComponent(jcksucurentrada)
-                    .addComponent(jcksucurconsultar))
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
-
-        jPanel3.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, 340, 70));
 
         jPanel12.setBackground(new java.awt.Color(255, 255, 255));
         jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Acceso web"));
@@ -930,7 +919,51 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
 
         jPanel3.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 180, 50));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 740, 280));
+        jPanel13.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Facturación"));
+
+        jckfacturas.setBackground(new java.awt.Color(255, 255, 255));
+        jckfacturas.setText("Facturas");
+
+        jckboletas.setBackground(new java.awt.Color(255, 255, 255));
+        jckboletas.setText("Boletas");
+
+        jckcredito.setBackground(new java.awt.Color(255, 255, 255));
+        jckcredito.setText("Nota Crédito");
+
+        jckdebito.setBackground(new java.awt.Color(255, 255, 255));
+        jckdebito.setText("Nota Débito");
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jckfacturas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jckboletas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jckcredito)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jckdebito)
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jckfacturas)
+                    .addComponent(jckboletas)
+                    .addComponent(jckcredito)
+                    .addComponent(jckdebito))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+
+        jPanel3.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, 340, 70));
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 760, 270));
 
         jLabel2.setText("PRIVILEGIOS ");
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
@@ -950,7 +983,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         jLabel4.setText("CLAVE:");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 60, 20));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(454, 111, 760, 500));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(454, 111, 780, 500));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("Buscar:");
@@ -994,7 +1027,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         });
         jPanel1.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 80, 60, 20));
 
-        jPanel11.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel11.setBackground(new java.awt.Color(238, 238, 238));
         jPanel11.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel11MouseDragged(evt);
@@ -1008,7 +1041,6 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
 
         jLabel5.setBackground(new java.awt.Color(0, 0, 0));
         jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("REGISTRO DE USUARIOS");
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -1047,7 +1079,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1228, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1240, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1181,10 +1213,10 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                     usuario.setApertura(jckapertura.isSelected());
                     usuario.setConsultarrepara(jckconsultarrepara.isSelected());
                     usuario.setConsultarventa(jckconsultarventa.isSelected());
-                    usuario.setDebe(jckdebe.isSelected());
+                    
                     usuario.setCkempleado(jckempleado.isSelected());
                     usuario.setFamilia(jckfamilia.isSelected());
-                    usuario.setHaber(jckhaber.isSelected());
+                    
                     usuario.setIngreso(jckingreso.isSelected());
                     usuario.setInventario(jckinventario.isSelected());
                     usuario.setMovimientos(jckmovimientos.isSelected());
@@ -1196,13 +1228,23 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
                     usuario.setExtornar(jckenproceso.isSelected());
                     
                     usuario.setProdpendientes(jckprodpendientes.isSelected());
-                    usuario.setMermas(jckmermas.isSelected());
-                    usuario.setConsulmermas(jckconsulmerma.isSelected());
-                    usuario.setSucursalida(jcksucursalida.isSelected());
-                    usuario.setSucurentrada(jcksucurentrada.isSelected());
-                    usuario.setConsultasucur(jcksucurconsultar.isSelected());
+//                    usuario.setMermas(jckmermas.isSelected());
+//                    usuario.setConsulmermas(jckconsulmerma.isSelected());
+//                    usuario.setSucursalida(jcksucursalida.isSelected());
+//                    usuario.setSucurentrada(jcksucurentrada.isSelected());
+//                    usuario.setConsultasucur(jcksucurconsultar.isSelected());
                     usuario.setWeb(jckweb.isSelected());
-
+                    usuario.setMant_prod(jckmantproductos.isSelected());
+                    usuario.setKardex(jckkardex.isSelected());
+                    usuario.setAct_precios(jckactprecios.isSelected());
+                    
+                    usuario.setBuscar_cot(jckbcotiza.isSelected());
+                    usuario.setCotizacion(jcknueva_cot.isSelected());
+                    usuario.setFacturas(jckfacturas.isSelected());
+                    usuario.setBoletas(jckboletas.isSelected());
+                    usuario.setNcredito(jckcredito.isSelected());
+                    usuario.setNdebito(jckdebito.isSelected());
+                    
                 if(editar==false){
                     boolean validaduplicado=daousuario.duplicado(usuario.getIdempleado());
                     if(validaduplicado==true){
@@ -1304,7 +1346,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
 
     private void jtfrutFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfrutFocusGained
         // TODO add your handling code here:
-        if (jtfrut.getText().equals("R.U.T")){
+        if (jtfrut.getText().equals("Doc.")){
             jtfrut.setText("");
         }
     }//GEN-LAST:event_jtfrutFocusGained
@@ -1312,7 +1354,7 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
     private void jtfrutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfrutFocusLost
         // TODO add your handling code here:
         if (jtfrut.getText().equals("")){
-            jtfrut.setText("R.U.T");
+            jtfrut.setText("Doc.");
         }
     }//GEN-LAST:event_jtfrutFocusLost
 
@@ -1461,14 +1503,14 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         validaguardar();
     }//GEN-LAST:event_jckingresoActionPerformed
 
-    private void jckproductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jckproductosActionPerformed
+    private void jckmantproductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jckmantproductosActionPerformed
         // TODO add your handling code here:
-       if(jckproductos.isSelected()==false){
+       if(jckmantproductos.isSelected()==false){
             jcktodos.setSelected(false);
           
         }
        validaguardar();
-    }//GEN-LAST:event_jckproductosActionPerformed
+    }//GEN-LAST:event_jckmantproductosActionPerformed
 
     private void jckinventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jckinventarioActionPerformed
         // TODO add your handling code here:
@@ -1551,24 +1593,24 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         validaguardar();
     }//GEN-LAST:event_jckpendientesActionPerformed
 
-    private void jckdebeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jckdebeActionPerformed
+    private void jcknueva_cotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcknueva_cotActionPerformed
         // TODO add your handling code here:
-         if(jckdebe.isSelected()==false){
+         if(jcknueva_cot.isSelected()==false){
             jcktodos.setSelected(false);
             
         }
          validaguardar();
-    }//GEN-LAST:event_jckdebeActionPerformed
+    }//GEN-LAST:event_jcknueva_cotActionPerformed
 
-    private void jckhaberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jckhaberActionPerformed
+    private void jckbcotizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jckbcotizaActionPerformed
         // TODO add your handling code here:
-        if(jckhaber.isSelected()==false){
+        if(jckbcotiza.isSelected()==false){
             jcktodos.setSelected(false);
           
            
         }
         validaguardar();
-    }//GEN-LAST:event_jckhaberActionPerformed
+    }//GEN-LAST:event_jckbcotizaActionPerformed
 
     private void jckenprocesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jckenprocesoActionPerformed
         // TODO add your handling code here:
@@ -1592,51 +1634,6 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
         }
         validaguardar();
     }//GEN-LAST:event_jckprodpendientesActionPerformed
-
-    private void jckmermasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jckmermasActionPerformed
-        // TODO add your handling code here:
-        if(jckmermas.isSelected()==false){
-            jcktodos.setSelected(false);
-           
-        }
-        validaguardar();
-    }//GEN-LAST:event_jckmermasActionPerformed
-
-    private void jckconsulmermaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jckconsulmermaActionPerformed
-        // TODO add your handling code here:
-         if(jckconsulmerma.isSelected()==false){
-            jcktodos.setSelected(false);
-           
-        }
-        validaguardar();
-    }//GEN-LAST:event_jckconsulmermaActionPerformed
-
-    private void jcksucursalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcksucursalidaActionPerformed
-        // TODO add your handling code here:
-        if(jcksucursalida.isSelected()==false){
-            jcktodos.setSelected(false);
-           
-        }
-        validaguardar();
-    }//GEN-LAST:event_jcksucursalidaActionPerformed
-
-    private void jcksucurentradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcksucurentradaActionPerformed
-        // TODO add your handling code here:
-         if(jcksucurentrada.isSelected()==false){
-            jcktodos.setSelected(false);
-           
-        }
-        validaguardar();
-    }//GEN-LAST:event_jcksucurentradaActionPerformed
-
-    private void jcksucurconsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcksucurconsultarActionPerformed
-        // TODO add your handling code here:
-        if(jcksucurconsultar.isSelected()==false){
-            jcktodos.setSelected(false);
-           
-        }
-        validaguardar();
-    }//GEN-LAST:event_jcksucurconsultarActionPerformed
 
     private void jtfbuscarnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfbuscarnombreActionPerformed
         // TODO add your handling code here:
@@ -1692,9 +1689,9 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1711,28 +1708,30 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbtneliminar;
     private javax.swing.JButton jbtnguardar;
     private javax.swing.JButton jbtnnew;
+    private javax.swing.JCheckBox jckactprecios;
     private javax.swing.JCheckBox jckapertura;
+    private javax.swing.JCheckBox jckbcotiza;
+    private javax.swing.JCheckBox jckboletas;
     private javax.swing.JCheckBox jckcliente;
-    private javax.swing.JCheckBox jckconsulmerma;
     private javax.swing.JCheckBox jckconsultarrepara;
     private javax.swing.JCheckBox jckconsultarventa;
-    private javax.swing.JCheckBox jckdebe;
+    private javax.swing.JCheckBox jckcredito;
+    private javax.swing.JCheckBox jckdebito;
     private javax.swing.JCheckBox jckempleado;
     private javax.swing.JCheckBox jckenproceso;
+    private javax.swing.JCheckBox jckfacturas;
     private javax.swing.JCheckBox jckfamilia;
-    private javax.swing.JCheckBox jckhaber;
     private javax.swing.JCheckBox jckingreso;
     private javax.swing.JCheckBox jckinventario;
-    private javax.swing.JCheckBox jckmermas;
+    private javax.swing.JCheckBox jckkardex;
+    private javax.swing.JCheckBox jckmantproductos;
     private javax.swing.JCheckBox jckmovimientos;
     private javax.swing.JCheckBox jcknueva;
+    private javax.swing.JCheckBox jcknueva_cot;
     private javax.swing.JCheckBox jckpendientes;
     private javax.swing.JCheckBox jckprodpendientes;
     private javax.swing.JCheckBox jckproductos;
     private javax.swing.JCheckBox jckproveedor;
-    private javax.swing.JCheckBox jcksucurconsultar;
-    private javax.swing.JCheckBox jcksucurentrada;
-    private javax.swing.JCheckBox jcksucursalida;
     private javax.swing.JCheckBox jcktodos;
     private javax.swing.JCheckBox jckuser;
     private javax.swing.JCheckBox jckvender;

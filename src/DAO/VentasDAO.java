@@ -6,10 +6,12 @@
 package DAO;
 
 
-import Conexion.Conexion;
+import ClasesGlobales.FormatoNumerico;
 import Conexion.ConexionBD;
-import Pojos.DetalleVenta;
 import Pojos.Producto;
+import Pojos.SerieNumeroRef;
+import Pojos.SucursalSingleton;
+import Pojos.UsuarioSingleton;
 import Pojos.Ventas;
 import java.awt.HeadlessException;
 import java.math.BigDecimal;
@@ -21,12 +23,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,9 +37,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
@@ -48,91 +49,115 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class VentasDAO {
     
-     
-     
-     
-     public String formatnumeric(Object n){
-     DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
-     simbolos.setDecimalSeparator('.');   
-     DecimalFormat nf=new DecimalFormat("#.00",simbolos);
-     String num = nf.format(n);
-     
-     return num;
-     }
-     
-    public String insertar(Ventas venta,List<Producto> listdet,boolean cliente){
-        ConexionBD Cbd = new ConexionBD();
-        Connection cnn = Cbd.getConexion();
-        try {
-             cnn.setAutoCommit(false);
-        } catch (SQLException e) {
-        }
-       PreparedStatement cabecera=null,detalle=null;
-       ResultSet rscabecera=null,rsdetalle=null;
-       String mensa=""; 
-       boolean validacabecera=true,validadetalle=true; 
-        
-        
-       long id=0;
-   
-     try{
-            /////////////////// cabecera ///////////////////////////////////////
-            if(cliente==true)
-            {
-                
-                String sql=("SELECT * from sp_insertarventa(?,?,?,?,?)");         
-                cabecera=Cbd.conectar().prepareStatement(sql);
-                cabecera.setLong(1, venta.getIdcliente());
-                cabecera.setLong(2, venta.getIdempleado());
-                cabecera.setLong(3, venta.getId_sucursal());
-                cabecera.setBigDecimal(4,new BigDecimal(venta.getDescuento()));
-                cabecera.setString(5, venta.getMotivodescuento());
-            
-            }else
-            {
-               
-                String sql=("SELECT * from sp_insertarventanocliente(?,?,?,?)");         
-                cabecera= Cbd.conectar().prepareStatement(sql);
+    FormatoNumerico fn= new FormatoNumerico();
+        UsuarioSingleton user= UsuarioSingleton.getintancia();
+        SucursalSingleton  sucur= SucursalSingleton.getinstancia();
+    public long insertar(Ventas venta,List<Producto> listdet,boolean cliente,String op,String mov){
+           ConexionBD Cbd = new ConexionBD();
+           Connection cnn = Cbd.getConexion();
+           boolean estadoventa=false;
+           try {
+                cnn.setAutoCommit(false);
+           } catch (SQLException e) {
+               JOptionPane.showMessageDialog(null, e.getMessage(),"",JOptionPane.ERROR_MESSAGE);
+           }
+          PreparedStatement cabecera=null,detalle=null;
+          ResultSet rscabecera=null,rsdetalle=null;
+          String mensa=""; 
+          boolean validacabecera=true,validadetalle=true; 
 
-                cabecera.setLong(1, venta.getIdempleado());
-                cabecera.setLong(2, venta.getId_sucursal());
-                cabecera.setBigDecimal(3,new BigDecimal(venta.getDescuento()));
-                cabecera.setString(4, venta.getMotivodescuento());
-            
-            }
-          
-            rscabecera= Cbd.RealizarConsulta(cabecera);
-            
-            if  (rscabecera.next()){
-                id=(rscabecera.getLong("vidventa"));
 
-            }
-           if(id!=0)
-           
-           {
-           /////////////// detalle /////////////////////////////////////////
-            for(Producto prod :listdet ){
-        //          System.out.println("SELECT * from sp_insertardetalleventa("+detventa.getIdproducto()+","+detventa.getPrecio()+","+detventa.getCantidad()+","+detventa.getIdventa()+")");
-                String sqldet=("SELECT * from sp_insertardetalleventa(?,?,?,?)"); 
-                detalle=Cbd.conectar().prepareStatement(sqldet);
-                detalle.setLong(1, prod.getIdproducto());
-                detalle.setBigDecimal(2, new BigDecimal(prod.getPrecio()));
-                detalle.setBigDecimal(3, new BigDecimal(prod.getCantidad()));
-                detalle.setLong(4, id);
-                
-                rsdetalle=Cbd.RealizarConsulta(detalle);
-//                mensa="Vendiendo Cod.: "+prod.getCodigo();
-               
-            }
-            
-            while(rsdetalle.next()){
-                if(rsdetalle.getBoolean("valida")==false)
-                {
-                    mensa="No cuenta con stock para venta del producto: "+rsdetalle.getString("mens")+" retire ó edite";
-//                    cnn.rollback();
-                    validadetalle=false;
-//                    break;
-                    
+          long id=0;
+
+        try{
+               /////////////////// cabecera ///////////////////////////////////////
+               if(cliente==true)
+               {
+
+                   String sql=("SELECT * from sp_insertarventa(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");         
+                   cabecera=cnn.prepareStatement(sql);
+                   cabecera.setLong(1, venta.getIdcliente());
+                   cabecera.setLong(2, user.getIdempleado());
+                   cabecera.setLong(3, sucur.getId());
+                   cabecera.setBigDecimal(4,new BigDecimal(venta.getDescuento()));
+                   cabecera.setString(5, venta.getMotivodescuento());
+                   cabecera.setLong(6, venta.getIdmoneda());
+                   cabecera.setBigDecimal(7, new BigDecimal(venta.getTipocambio()));
+                   cabecera.setLong(8,venta.getIdcomprobante());
+                   cabecera.setBigDecimal(9,new  BigDecimal(venta.getTotal()));
+                   cabecera.setString(10, venta.getDocref());
+                   cabecera.setString(11, mov);
+                   //////////////////
+                   cabecera.setString(12, venta.getSerie());
+                   cabecera.setString(13, venta.getNumero());
+                   
+                   cabecera.setString(14, venta.getEnlace());
+                   cabecera.setBoolean(15, venta.isAceptadasunat());
+                   cabecera.setString(16, venta.getSunatdescrip());
+                   cabecera.setString(17, venta.getSunatnote());
+                   cabecera.setString(18, venta.getSuantresposeode());
+                   cabecera.setString(19, venta.getSunatsoap());
+                   cabecera.setString(20, venta.getPdf_zip_base64());
+                   cabecera.setString(21, venta.getXml_zip_base64());
+                   cabecera.setString(22, venta.getCdr_zip_base64());
+                   cabecera.setString(23, venta.getQr());
+                   cabecera.setString(24, venta.getCodhash());
+                   
+               }else
+               {
+
+                   String sql=("SELECT * from sp_insertarventanocliente(?,?,?,?,?,?,?,?,?)");         
+                   cabecera= cnn.prepareStatement(sql);
+
+                   cabecera.setLong(1, user.getIdempleado());
+                   cabecera.setLong(2, sucur.getId());
+                   cabecera.setBigDecimal(3,new BigDecimal(venta.getDescuento()));
+                   cabecera.setString(4, venta.getMotivodescuento());
+                   cabecera.setLong(5, venta.getIdmoneda());
+                   cabecera.setBigDecimal(6, new BigDecimal(venta.getTipocambio()));
+                   cabecera.setLong(7,venta.getIdcomprobante());
+                   cabecera.setBigDecimal(8,new  BigDecimal(venta.getTotal()));
+                   cabecera.setString(9, mov);
+
+               }
+
+               rscabecera= Cbd.RealizarConsulta(cabecera);
+
+               if  (rscabecera.next()){
+                   id=(rscabecera.getLong("vidventa"));
+
+               }
+              if(id!=0)
+
+              {
+              /////////////// detalle /////////////////////////////////////////
+               for(Producto prod :listdet ){
+           //          System.out.println("SELECT * from sp_insertardetalleventa("+detventa.getIdproducto()+","+detventa.getPrecio()+","+detventa.getCantidad()+","+detventa.getIdventa()+")");
+                   String sqldet=("SELECT * from sp_insertardetalleventa(?,?,?,?,?,?,?)"); 
+                   detalle=cnn.prepareStatement(sqldet);
+                   detalle.setLong(1, prod.getIdproducto());
+                   detalle.setBigDecimal(2, new BigDecimal(prod.getPrecio()));
+                   System.out.println("prodcant: "+prod.getCantidad());
+                   detalle.setBigDecimal(3, new BigDecimal(prod.getCantidad()));
+                   detalle.setLong(4, id);
+                   detalle.setLong(5, prod.getIdtipoigv());
+                   detalle.setBigDecimal(6,new BigDecimal(prod.getTotal()));
+   //                detalle.setBigDecimal(7,new BigDecimal(prod.getSaldo()));
+                   detalle.setString(7, op);
+                   rsdetalle=Cbd.RealizarConsulta(detalle);
+   //                mensa="Vendiendo Cod.: "+prod.getCodigo();
+
+               }
+
+               while(rsdetalle.next()){
+                   if(rsdetalle.getBoolean("valida")==false)
+                   {
+                       JOptionPane.showMessageDialog(null,"No cuenta con stock: "+rsdetalle.getString("mens")+" retire ó edite",""
+                       ,JOptionPane.ERROR_MESSAGE);
+   //                    cnn.rollback();
+                       validadetalle=false;
+   //                    break;
+
                 }        
                 
             }
@@ -143,9 +168,15 @@ public class VentasDAO {
                
                validacabecera=false;
            }
+           
            if(validacabecera==true && validadetalle==true)
            {
                cnn.commit();
+               estadoventa=true;
+               if(op.equals("venta"))
+                   JOptionPane.showMessageDialog(null,"Cod.: v"+id,"",JOptionPane.INFORMATION_MESSAGE);
+//               imprimirticketcaja(id);
+               
            }else {
                cnn.rollback();
            }
@@ -155,80 +186,82 @@ public class VentasDAO {
             
       
 	
-        } catch(Exception e)
+        } catch(SQLException e)
             {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-            try {
-                cnn.rollback();
-            } catch (SQLException ex) {
-                Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                estadoventa=false;
+                JOptionPane.showMessageDialog(null, e.getMessage());
+                try {
+                    cnn.rollback();
+                } catch (SQLException ex) {
+                    Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
             }finally{
                 Cbd.desconectar();
-            try {
-                rscabecera.close();
-                cabecera.close();
-                detalle.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                try {
+                    if(rscabecera!=null)
+                    {
+                        rscabecera.close();
+                    }
+                    if(cabecera!=null)
+                    {
+                        cabecera.close();
+                    }
+                    if(detalle!=null)
+                    {
+                        detalle.close();
+                    
+                    }
+                    
+                    
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
                 
             }
-  return mensa;  
-}
-    
-public long insertarnocliente(Ventas venta){
-
-     
-     ConexionBD Cbd = new ConexionBD();   
-      long id=0;
-     try{
-            
-            System.out.println("SELECT * from sp_insertarventanocliente("+venta.getIdcliente()+","+venta.getIdempleado()+")");
-            String sql=("SELECT * from sp_insertarventanocliente(?,?,?,?)");         
-            PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
-          
-            ps.setLong(1, venta.getIdempleado());
-            ps.setLong(2, venta.getId_sucursal());
-            ps.setBigDecimal(3,new BigDecimal(venta.getDescuento()));
-            ps.setString(4, venta.getMotivodescuento());
-            ResultSet rs=Cbd.RealizarConsulta(ps);
-       if  (rs.next()){
-           id=(rs.getLong("vidventa"));
-         
-        }
-	rs.close();
-        ps.close();
-        } catch(Exception e)
-            {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-            }finally{
-               Cbd.desconectar();
-
-}
   return id;  
 }
     
-public Ventas buscarventa(JTable tab,String cod,JLabel nombre,JLabel rut,
-            String op){
-        
-     
+//public long insertarnocliente(Ventas venta){
+//
+//     
+//     ConexionBD Cbd = new ConexionBD();   
+//      long id=0;
+//     try{
+//            
+//            System.out.println("SELECT * from sp_insertarventanocliente("+venta.getIdcliente()+","+venta.getIdempleado()+")");
+//            String sql=("SELECT * from sp_insertarventanocliente(?,?,?,?)");         
+//            PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
+//          
+//            ps.setLong(1, venta.getIdempleado());
+//            ps.setLong(2, venta.getId_sucursal());
+//            ps.setBigDecimal(3,new BigDecimal(venta.getDescuento()));
+//            ps.setString(4, venta.getMotivodescuento());
+//            ResultSet rs=Cbd.RealizarConsulta(ps);
+//       if  (rs.next()){
+//           id=(rs.getLong("vidventa"));
+//         
+//        }
+//	rs.close();
+//        ps.close();
+//        } catch(Exception e)
+//            {
+//            JOptionPane.showMessageDialog(null, e.getMessage());
+//            }finally{
+//               Cbd.desconectar();
+//
+//}
+//  return id;  
+//}
     
+public Ventas buscarventa(List<Producto> listprod,String cod,String op){
+
     ConexionBD Cbd = new ConexionBD();
     Ventas venta= new Ventas();
-    DefaultTableModel tabla=new DefaultTableModel(){
-    public boolean isCellEditable(int row, int column) {
-       //      if (column == 5) return true;
-    //else
-    return false;
-    }
-    };
-    String titulos[]={"CODIGO","PRODUCTO","CANTIDAD","PRECIO","IMPORTE"};
-    tabla.setColumnIdentifiers(titulos);
-  
-
-   
-            
+    
+    
     try{
 	
         System.out.println("SELECT * from sp_busquedaventa('"+cod+"')");
@@ -242,47 +275,61 @@ public Ventas buscarventa(JTable tab,String cod,JLabel nombre,JLabel rut,
      
         
         Object datosR[] = new Object[5];
-        nombre.setText("");
-        rut.setText("");
+       
         double total =0.0,importe=0.0,iva=0.0,subtotal=0.0;
-      
         while (rs.next()){
-            nombre.setText(rs.getString("vnombre"));
-           // System.out.println("NOMBRE: "+rs.getString("vnombre"));
-            rut.setText(rs.getString("vrut"));
+            Producto prod = new Producto();
+           
             venta.setIdventa(rs.getLong("vidventa"));
             venta.setFecha(rs.getDate("vfecha"));
             venta.setDescuento(rs.getDouble("vdescuento"));
-             importe = rs.getDouble("vimporte");
-             datosR[0] = rs.getObject("vcodigo");
+            venta.setSerie(rs.getString("vserie"));
+            venta.setNumero(rs.getString("vnumero"));
+            venta.setIdcliente(rs.getLong("vidcliente"));
+            venta.setClienteRS(rs.getString("vnombre"));
+            venta.setClientenumdoc(rs.getString("vrut"));
+            venta.setClienteemail(rs.getString("vemail"));
+            venta.setClientedirec(rs.getString("vdireccion"));
+            venta.setClientetipodoc(rs.getString("vtipodocop"));
+            venta.setIdcomprobante(rs.getLong("vidcomprobante"));
+            venta.setComprobante(rs.getInt("vcomprobante"));
+            venta.setIdmoneda(rs.getLong("vidmoneda"));
+            venta.setModenaop(rs.getInt("vmoneda"));
+            venta.setAbreviaturamoneda(rs.getString("vsimbolomoneda"));
+            venta.setPorcentajeigv(rs.getInt("vporcentajeigv"));
+            venta.setTipocambio(rs.getDouble("vtipocambio"));
+            venta.setQr(rs.getString("vqr"));
+            
+            
+            importe = rs.getDouble("vimporte");
+            
+            
+            prod.setIdproducto(rs.getLong("vidprod"));
+            prod.setCodigo(rs.getString("vcodigo"));
               
-             datosR[1] = rs.getObject("vproducto");
-             
-             datosR[2] = formatnumeric(rs.getObject("vcantidad"));
-           
-             datosR[3] = formatnumeric(rs.getObject("vprecio"));
-             
-             datosR[4] =formatnumeric(importe);
-             total = total+ importe;
-             tabla.addRow(datosR);
+            prod.setDescripcion(rs.getString("vproducto"));
+            prod.setCantidad(rs.getDouble("vcantidad"));
+            prod.setPrecio(rs.getDouble("vprecio"));
+            prod.setTotal(importe);
+            prod.setIdtipoigv(rs.getLong("vidtipoigv"));
+            prod.setUnidabrev(rs.getString("vunidmed"));
+            prod.setSubtotal(rs.getDouble("vsubtotal"));
+            prod.setIgv(rs.getDouble("vigv"));
+            prod.setTipoigv(rs.getInt("vtipoigv"));
+            prod.setUnidadm(rs.getString("vmedida"));
+            total = total+ importe;
+            listprod.add(prod);
 		
         }
         total=total-venta.getDescuento();
-        subtotal = total/1.19;
+        subtotal = total/1.18;
         iva = total-subtotal;
         venta.setTotal(total);
-        venta.setIva(iva);
-        venta.setSuvtotal(subtotal);
+        venta.setTotaligv(iva);
+        venta.setSubtotal(subtotal);
         
-        tab.setModel(tabla); 
-        TableColumnModel columnModel = tab.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(100);
-        columnModel.getColumn(1).setPreferredWidth(500);
-        columnModel.getColumn(2).setPreferredWidth(50);
-        columnModel.getColumn(3).setPreferredWidth(50);
-        columnModel.getColumn(4).setPreferredWidth(50);
-       
-       
+      
+    
         ps.close();
         rs.close();
 	
@@ -427,11 +474,11 @@ public List<Ventas> mostrarenproceso(JTable tab,long idsucur,JLabel msj){
 //
 //             datosR[4] = rs.getObject("vsucurdirec");
 
-             datosR[2] = formatnumeric(rs.getDouble("vimporte"));
+             datosR[2] = fn.FormatoN(rs.getDouble("vimporte"));
 
-             datosR[3] = formatnumeric(rs.getDouble("vdescuento"));
+             datosR[3] = fn.FormatoN(rs.getDouble("vdescuento"));
              
-             datosR[4] =formatnumeric(venta.getTotal());
+             datosR[4] =fn.FormatoN(venta.getTotal());
              total= total + venta.getTotal();
              
 
@@ -454,7 +501,7 @@ public List<Ventas> mostrarenproceso(JTable tab,long idsucur,JLabel msj){
         if(cont == 0){
             msj.setText("NO SE ENCONTRARON VENTAS EN COLA");
         }else {
-            msj.setText("VENTAS EN COLA "+cont+ " - TOTAL: " +formatnumeric(total));
+            msj.setText("VENTAS EN COLA "+cont+ " - TOTAL: " +fn.FormatoN(total));
         }
 	
         } catch(Exception e)
@@ -481,10 +528,9 @@ public void extornar(long idvent){
         ps.setLong(1, idvent);
        
         ResultSet rs =Cbd.RealizarConsulta(ps);
-        if(rs.next()){
-            JOptionPane.showMessageDialog(null,"VENTA EXTORNADA CON EXITO");
-        }else {
-            JOptionPane.showMessageDialog(null, "LA VENTA SELECCIONADA YA SE EXTORNO O SE CONCRETO");
+        if(!rs.next()){
+          
+            JOptionPane.showMessageDialog(null, "La venta ya se extorno");
         
         }
         
@@ -545,12 +591,11 @@ public List<Ventas> busquedasensitiva(JTable tab,Timestamp desde, Timestamp hast
    
     ConexionBD Cbd = new ConexionBD();
      DefaultTableModel tabla= new DefaultTableModel(
-                new String[]{"COD.","DOCUMENTO","VENDEDOR","CLIENTE","FECHA","IMPORTE","DESC.","MOT.DESC","TOTAL","ANULADA","MOT. ANU","FECHA. ANU","SUCURSAL"}, 0) {
+                new String[]{"Cod.","Serie - Numero","Vendedor","Cliente","Fecha","Importe","Total","Sucursal"}, 0) {
  
             Class[] types = new Class[]{
                  java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,java.lang.Object.class,
-                java.lang.Object.class,java.lang.Object.class,java.lang.Object.class,java.lang.Object.class,java.lang.Object.class
-                    ,java.lang.Boolean.class,java.lang.Object.class,java.lang.Object.class,java.lang.Object.class
+                java.lang.Object.class,java.lang.Object.class,java.lang.Object.class,java.lang.Object.class
             };
  
             public Class getColumnClass(int columnIndex) {
@@ -583,7 +628,7 @@ public List<Ventas> busquedasensitiva(JTable tab,Timestamp desde, Timestamp hast
         ps.setTimestamp(4, hasta);
         ps.setString(5, op);
         ResultSet rs= Cbd.RealizarConsulta(ps);
-        Object datosR[] = new Object[13];
+        Object datosR[] = new Object[8];
         
         
         while (rs.next()){
@@ -606,23 +651,23 @@ public List<Ventas> busquedasensitiva(JTable tab,Timestamp desde, Timestamp hast
 
              datosR[4] = rs.getObject("vfecha");
 
-             datosR[5] =formatnumeric(rs.getObject("vimporte"));
+             datosR[5] =fn.FormatoN(rs.getDouble("vimporte"));
 
 
-             datosR[6] =formatnumeric(rs.getObject("vdescuento"));
-             datosR[7] =(rs.getObject("vmotivodes"));
+////             datosR[6] =fn.FormatoN(rs.getDouble("vdescuento"));
+////             datosR[7] =(rs.getObject("vmotivodes"));
 
-             datosR[8] =formatnumeric(importe);
-             
-             datosR[9] =extor;
-             datosR[10] =(rs.getObject("vmotivo"));
-             datosR[11] =(rs.getObject("vfechaext"));
-             datosR[12] =(rs.getObject("vsucursal"));
+             datosR[6] =fn.FormatoN(importe);
+//             
+//             datosR[9] =extor;
+//             datosR[10] =(rs.getObject("vmotivo"));
+//             datosR[11] =(rs.getObject("vfechaext"));
+             datosR[7] =(rs.getObject("vsucursal"));
             tabla.addRow(datosR);
 	    listventa.add(venta);
            
         }
-        jtotal.setText("Total: "+formatnumeric(total));
+        jtotal.setText("Total: "+fn.FormatoN(total));
         TableColumnModel columnModel = tab.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(50);
         columnModel.getColumn(1).setPreferredWidth(80);
@@ -630,13 +675,13 @@ public List<Ventas> busquedasensitiva(JTable tab,Timestamp desde, Timestamp hast
         columnModel.getColumn(3).setPreferredWidth(300);
         columnModel.getColumn(4).setPreferredWidth(80);
         columnModel.getColumn(5).setPreferredWidth(70);
+//        columnModel.getColumn(6).setPreferredWidth(70);
+//        columnModel.getColumn(7).setPreferredWidth(250);
         columnModel.getColumn(6).setPreferredWidth(70);
-        columnModel.getColumn(7).setPreferredWidth(250);
-        columnModel.getColumn(8).setPreferredWidth(70);
-        columnModel.getColumn(9).setPreferredWidth(70);
-        columnModel.getColumn(10).setPreferredWidth(250);
-        columnModel.getColumn(11).setPreferredWidth(70);
-          columnModel.getColumn(12).setPreferredWidth(300);
+//        columnModel.getColumn(9).setPreferredWidth(70);
+//        columnModel.getColumn(10).setPreferredWidth(250);
+//        columnModel.getColumn(11).setPreferredWidth(70);
+          columnModel.getColumn(7).setPreferredWidth(300);
 	rs.close();
         ps.close();
         } catch(Exception e)
@@ -850,8 +895,17 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
            //se procesa el archivo jasper
            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
            //impresion de reporte
-           // TRUE: muestra la ventana de dialogo "preferencias de impresion"
-           JasperPrintManager.printReport(informe, true);          
+           // TRUE: muestra la ventana de dialogo "preferencias de impresion"  /// no vista previa
+//           JasperPrintManager.printReport(informe, true);     
+           
+           
+           
+            //vista previa ////
+            JasperViewer jv = new JasperViewer(informe,false);  
+        
+             jv.setVisible(true);
+             jv.setTitle(rutaInforme);
+          //////////////////////////////////////
          }
          catch (JRException ex)
          {
@@ -985,6 +1039,120 @@ public List<Ventas> mostrarconcretadasanuladas(JTable tab,Date desde,Date hasta,
      }
     
     }
+    
+    public void actualizarsunat(Ventas venta)
+    {
+    
+        ConexionBD Cbd = new ConexionBD();
+       
+        try{
+
+            System.out.println("idventa"+venta.getIdventa());
+            String sql=("SELECT * from sp_actualizarsunat(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); 
+            PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+            ps.setLong(1, venta.getIdventa());
+            ps.setString(2, venta.getEnlace());
+            ps.setBoolean(3, venta.isAceptadasunat());
+            ps.setString(4, venta.getSunatdescrip());
+            ps.setString(5, venta.getSunatnote());
+            ps.setString(6, venta.getSuantresposeode());
+            ps.setString(7, venta.getSunatsoap());
+            ps.setString(8, venta.getPdf_zip_base64());
+            ps.setString(9, venta.getXml_zip_base64());
+            ps.setString(10, venta.getCdr_zip_base64());
+            ps.setString(11, venta.getQr());
+            ps.setString(12, venta.getCodhash());
+            ps.setString(13, venta.getSerie());
+            ps.setString(14, venta.getNumero());
+
+            Cbd.RealizarConsulta(ps);
+
+            ps.close();
+           
+
+            } catch(SQLException e)
+                {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+                }finally{
+                   Cbd.desconectar();
+                }    
+
+    }
+    
+     public void imprimir(long id)
+  {
+
+        ConexionBD Cbd = new ConexionBD();
+        try
+        {
+
+            String  rutaInforme  = "src/Reportes/Documento.jasper";
+            
+            Map parametros = new HashMap();
+            System.out.println("idventa"+id);
+            java.util.Locale locale = new Locale( "en", "US" );
+            parametros.put( JRParameter.REPORT_LOCALE, locale );
+            parametros.put("idventa",id);
+           //se procesa el archivo jasper
+           JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
+           //impresion de reporte
+           // TRUE: muestra la ventana de dialogo "preferencias de impresion"  /// no vista previa
+//           JasperPrintManager.printReport(informe, true);     
+           
+           
+           
+            //vista previa ////
+            JasperViewer jv = new JasperViewer(informe,false);  
+        
+             jv.setVisible(true);
+             jv.setTitle(rutaInforme);
+          //////////////////////////////////////
+         }
+         catch (JRException ex)
+         {
+           System.err.println( "Error iReport: " + ex.getMessage() );
+         }finally{
+            Cbd.desconectar();
+        }
+
+  }
+     
+     public SerieNumeroRef generarserienumref(int comprobante)
+     {
+         ConexionBD Cbd = new ConexionBD();
+         ResultSet rs=null;
+         PreparedStatement ps=null;
+         String numero="";
+         SerieNumeroRef sn= new SerieNumeroRef();
+        try{
+
+           
+            String sql=("SELECT * from sp_generaserienumeroref(?)"); 
+            ps=Cbd.conectar().prepareStatement(sql);
+            ps.setInt(1, comprobante);
+
+            rs=Cbd.RealizarConsulta(ps);
+            if(rs.next())
+            {
+                sn.setSerie(rs.getString("vserie"));
+                sn.setNumero(rs.getString("vnumero"));
+            
+            }
+
+            ps.close();
+           
+
+            } catch(SQLException e)
+                {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+                }finally{
+                   Cbd.desconectar();
+                }    
+
+     
+        return sn;
+     
+     }
     
     
 }

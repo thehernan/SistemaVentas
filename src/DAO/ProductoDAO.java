@@ -6,6 +6,7 @@
 package DAO;
 
 import ClasesGlobales.ColorRowTabla;
+import ClasesGlobales.FormatoNumerico;
 
 import Conexion.ConexionBD;
 import Pojos.Producto;
@@ -17,10 +18,10 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,9 +35,9 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.view.JasperViewer;
 
 /**
@@ -45,7 +46,7 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class ProductoDAO {
    
-     DecimalFormat nf =new DecimalFormat("#.00");
+    FormatoNumerico fn= new FormatoNumerico();
     public List<Producto> mostrarproducto(JTable tabla,long idsucursal) {
          ConexionBD Cbd = new ConexionBD();
         DefaultTableModel modelo= new DefaultTableModel(){
@@ -55,7 +56,7 @@ public class ProductoDAO {
          return false;
         }
           };      
-         String titulos[]={"CODIGO","DESCRIPCION","FAMILIA"};
+         String titulos[]={"Codigo","Descripción","Familia"};
          modelo.setColumnIdentifiers(titulos);
 //         tabla.setModel(modelo);
           tabla.setModel(modelo);
@@ -126,10 +127,10 @@ public class ProductoDAO {
        return false;
       }
         };      
-    String titulos[]={"CODIGO","DESCRIPCION","FAMILIA"};
+    String titulos[]={"Codigo","Descripción","Familia"};
     modelo.setColumnIdentifiers(titulos);
     tabla.setModel(modelo);
-    tabla.setModel(modelo);
+    
     TableColumnModel columnModel = tabla.getColumnModel();
 //     if (columnModel.getColumnCount()>0){
     columnModel.getColumn(0).setPreferredWidth(120);
@@ -218,7 +219,7 @@ public Producto buscarproducto(String tipoB,long id,long idsucur,String cadena) 
 //Connection miconexion = conectar.Connect();
 //    Statement st=null;
      ConexionBD Cbd = new ConexionBD();
-    ImageIcon imageIcon= new ImageIcon( getClass().getResource("/imagenes/product.png"));
+//    ImageIcon imageIcon= new ImageIcon( getClass().getResource("/imagenes/product.png"));
     Producto producto= new Producto();
   
     PreparedStatement ps=null;
@@ -424,37 +425,43 @@ public void eliminarproducto(long idproducto){
 
 }
 public List<Producto> inventario(JTable tabla,long idsucursal,double stockmin,String tipob){
-         DefaultTableModel modelo= new DefaultTableModel(){
-             
-            public boolean isCellEditable(int row, int column) {
-            //      if (column == 5) return true;
-            //else
-            return false;
-            }
-            };      
-            String titulos[]={"Codigo","Desc. Producto","Moneda","Precio","Precio1","Precio2","Precio3","Inventario","Familia","Sucursal"};
-            modelo.setColumnIdentifiers(titulos);
+    
+    DefaultTableModel modelo= (DefaultTableModel)tabla.getModel();
+    
+     for (int i = 0; i < modelo.getRowCount(); i++) {
+        modelo.removeRow(i);
+        i-=1;
+    }
+//         DefaultTableModel modelo= new DefaultTableModel(){
+//             
+//            public boolean isCellEditable(int row, int column) {
+//            //      if (column == 5) return true;
+//            //else
+//            return false;
+//            }
+//            };      
+//            String titulos[]={"Codigo","Desc. Producto","Precio","Precio1","Precio2","Precio3","Stock","Familia","Sucursal"};
+//            modelo.setColumnIdentifiers(titulos);
             
         
         
       
-        ColorRowTabla colorrow= new ColorRowTabla(7, stockmin);
-        tabla.setDefaultRenderer (Object.class, colorrow );
+      
 ////        tabla.setDefaultRenderer (Object.class, colorrow );
 //        tabla.requestFocus();
-          tabla.setModel(modelo);
+//          tabla.setModel(modelo);
         
          TableColumnModel columnModel = tabla.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(100);
         columnModel.getColumn(1).setPreferredWidth(600);
-        columnModel.getColumn(2).setPreferredWidth(50);
+//        columnModel.getColumn(2).setPreferredWidth(50);
+        columnModel.getColumn(2).setPreferredWidth(80);
         columnModel.getColumn(3).setPreferredWidth(80);
         columnModel.getColumn(4).setPreferredWidth(80);
         columnModel.getColumn(5).setPreferredWidth(80);
         columnModel.getColumn(6).setPreferredWidth(80);
-        columnModel.getColumn(7).setPreferredWidth(80);
+        columnModel.getColumn(7).setPreferredWidth(350);
         columnModel.getColumn(8).setPreferredWidth(350);
-        columnModel.getColumn(9).setPreferredWidth(350);
         List<Producto> listprod= new ArrayList<>();
           ConexionBD Cbd = new ConexionBD();
          ResultSet rs=null;
@@ -467,7 +474,7 @@ public List<Producto> inventario(JTable tabla,long idsucursal,double stockmin,St
              ps.setLong(1, idsucursal);
              ps.setString(2, tipob);
              rs = Cbd.RealizarConsulta(ps);
-             Object datosR[]= new Object[10];
+             Object datosR[]= new Object[9];
              
              while (rs.next()){
                  
@@ -481,24 +488,27 @@ public List<Producto> inventario(JTable tabla,long idsucursal,double stockmin,St
                     prod.setPrecio3(rs.getDouble("vprecio3"));
                     prod.setMoneda(rs.getString("vmoneda"));
                     prod.setCantidad(rs.getDouble("vcantidad"));
-                   
+                    prod.setUnidadm(rs.getString("vmedida"));
+                    prod.setUnidabrev(rs.getString("vabrev"));
+                    
                      datosR[0] = prod.getCodigo();
                                 
                      datosR[1] = prod.getDescripcion();
-                     datosR[2] =prod.getMoneda();
-                     datosR[3] =nf.format(prod.getPrecio());
-                     datosR[4] =nf.format(prod.getPrecio1());
-                     datosR[5] =nf.format(prod.getPrecio2());
-                     datosR[6] =nf.format(prod.getPrecio3());
-                     datosR[7] =(prod.getCantidad());
-                     datosR[8] = rs.getObject("vfamilia");
-                     datosR[9] = rs.getObject("vsucusal");
+//                     datosR[2] =prod.getMoneda();
+                     datosR[2] =fn.FormatoN(prod.getPrecio());
+                     datosR[3] =fn.FormatoN(prod.getPrecio1());
+                     datosR[4] =fn.FormatoN(prod.getPrecio2());
+                     datosR[5] =fn.FormatoN(prod.getPrecio3());
+                     datosR[6] =(prod.getCantidad());
+                     datosR[7] = rs.getObject("vfamilia");
+                     datosR[8] = rs.getObject("vsucusal");
                  
                     modelo.addRow(datosR);
 		listprod.add(prod);
              }
            
-          
+            ColorRowTabla colorrow= new ColorRowTabla(6, stockmin);
+            tabla.setDefaultRenderer (Object.class, colorrow );
 
            //  tabla.changeSelection(0,0,false,true);
             if (tabla.getRowCount()>0){
@@ -525,30 +535,39 @@ public List<Producto> inventario(JTable tabla,long idsucursal,double stockmin,St
  
 public List<Producto> busquedasensitivainventario(JTable tabla,String tipob,String cadena,long idsucur,long idfamilia,double stockmin){
          ConexionBD Cbd = new ConexionBD();
-        DefaultTableModel    modelo= new DefaultTableModel(){
-        public boolean isCellEditable(int row, int column) {
-        //      if (column == 5) return true;
-        //else
-        return false;
-        }
-        };      
-        String titulos[]={"Codigo","Desc. Producto","Moneda","Precio","Precio1","Precio2","Precio3","Inventario","Familia","Sucursal"};
-        modelo.setColumnIdentifiers(titulos);
-        tabla.setModel(modelo);
+         
+    DefaultTableModel modelo= (DefaultTableModel)tabla.getModel();
+    
+     for (int i = 0; i < modelo.getRowCount(); i++) {
+        modelo.removeRow(i);
+        i-=1;
+    }
+         
+//        DefaultTableModel    modelo= new DefaultTableModel(){
+//        public boolean isCellEditable(int row, int column) {
+//        //      if (column == 5) return true;
+//        //else
+//        return false;
+//        }
+//        };      
+//        String titulos[]={"Codigo","Desc. Producto","Precio","Precio1","Precio2","Precio3","Stock","Familia","Sucursal"};
+//        modelo.setColumnIdentifiers(titulos);
+//        tabla.setModel(modelo);
+        
+        
         TableColumnModel columnModel = tabla.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(100);
         columnModel.getColumn(1).setPreferredWidth(600);
-        columnModel.getColumn(2).setPreferredWidth(50);
+//        columnModel.getColumn(2).setPreferredWidth(50);
+        columnModel.getColumn(2).setPreferredWidth(80);
         columnModel.getColumn(3).setPreferredWidth(80);
         columnModel.getColumn(4).setPreferredWidth(80);
         columnModel.getColumn(5).setPreferredWidth(80);
         columnModel.getColumn(6).setPreferredWidth(80);
-        columnModel.getColumn(7).setPreferredWidth(80);
+        columnModel.getColumn(7).setPreferredWidth(350);
         columnModel.getColumn(8).setPreferredWidth(350);
-        columnModel.getColumn(9).setPreferredWidth(350);
             System.out.print(stockmin);
-        ColorRowTabla colorrow= new ColorRowTabla(7, stockmin);
-        tabla.setDefaultRenderer (Object.class, colorrow );
+        
 //        tabla.setDefaultRenderer (Object.class, colorrow );
         
         
@@ -566,7 +585,7 @@ public List<Producto> busquedasensitivainventario(JTable tabla,String tipob,Stri
              ps.setLong(3, idsucur);
              ps.setLong(4, idfamilia);
              ResultSet rs = Cbd.RealizarConsulta(ps);
-             Object datosR[]= new Object[10];
+             Object datosR[]= new Object[9];
              
              while (rs.next()){
                  
@@ -580,23 +599,28 @@ public List<Producto> busquedasensitivainventario(JTable tabla,String tipob,Stri
                     prod.setPrecio3(rs.getDouble("vprecio3"));
                     prod.setCantidad(rs.getDouble("vcantidad"));
                     prod.setMoneda(rs.getString("vmoneda"));
+                    prod.setUnidadm(rs.getString("vmedida"));
+                    prod.setUnidabrev(rs.getString("vabrev"));
                      datosR[0] = prod.getCodigo();
                                 
                      datosR[1] = prod.getDescripcion();
-                     datosR[2] = prod.getMoneda();
-                     datosR[3] = nf.format(prod.getPrecio());
-                     datosR[4] = nf.format(prod.getPrecio1());
-                     datosR[5] = nf.format(prod.getPrecio2());
-                     datosR[6] = nf.format(prod.getPrecio3());
+//                     datosR[2] = prod.getMoneda();
+                     datosR[2] = fn.FormatoN(prod.getPrecio());
+                     datosR[3] = fn.FormatoN(prod.getPrecio1());
+                     datosR[4] = fn.FormatoN(prod.getPrecio2());
+                     datosR[5] = fn.FormatoN(prod.getPrecio3());
                      
                   
-                     datosR[7] = prod.getCantidad();
-                     datosR[8] = rs.getObject("vfamilia");
-                     datosR[9] = rs.getObject("vsucursal");
+                     datosR[6] = prod.getCantidad();
+                     datosR[7] = rs.getObject("vfamilia");
+                     datosR[8] = rs.getObject("vsucursal");
                  
                     modelo.addRow(datosR);
                     listprod.add(prod);
              }
+             
+            ColorRowTabla colorrow= new ColorRowTabla(6, stockmin);
+            tabla.setDefaultRenderer (Object.class, colorrow );
              
              if(tabla.getRowCount()>0){
               tabla.setRowSelectionInterval (0,0); 
@@ -703,8 +727,11 @@ public void imprimirinventario(long idsucur){
             String  rutaInforme  = "src/Reportes/Inventario.jasper";
             
             Map parametros = new HashMap();
+            java.util.Locale locale = new Locale( "en", "US" );
+            parametros.put( JRParameter.REPORT_LOCALE, locale );
            
              parametros.put("idsucur",  idsucur);
+             
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);
             JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
@@ -978,6 +1005,47 @@ public void devolver(Producto prod,JLabel mens){
       hilo.start();
     
   
+}
+
+
+
+public void actulizarprecioporfamilia(double precio,double precio1,double precio2,double precio3,long idfamilia){
+
+// precio=new BigDecimal(producto.getPrecio());
+// cantidad=new BigDecimal(producto.getCantidad());
+     ConexionBD Cbd = new ConexionBD();
+     int filas=0;
+     try{
+	
+      // System.out.println("SELECT * from sp_editaralumno('"+RUT+"','"+NOMBRE+"','"+APELLIDO+"','"+CURSO+"','"+SECCION+"','"+PRIORITARIO+"','"+FOTO+"')");
+        String sql=("SELECT * from sp_actulizarprecioporfamilia(?,?,?,?,?)");         
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+        
+            ps.setLong(1,idfamilia);
+                   
+            ps.setBigDecimal(2, new BigDecimal(precio));
+            ps.setBigDecimal(3, new BigDecimal(precio1));
+            ps.setBigDecimal(4, new BigDecimal(precio2));
+            ps.setBigDecimal(5, new BigDecimal(precio3));
+     
+            if(Cbd.actualizarDatos(ps)==true)
+            {
+                JOptionPane.showMessageDialog(null,"Actualizado con exito","",JOptionPane.INFORMATION_MESSAGE);
+            }
+           
+//       if  (rs.next()){
+//            JOptionPane.showMessageDialog(null,"Producto editado con exitosamente");
+//        }
+	
+        } catch(Exception e)
+            {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            } finally{
+     
+           Cbd.desconectar();
+     }       
+            
+   
 }
     
 

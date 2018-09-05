@@ -5,11 +5,13 @@
  */
 package DAO;
 
+import ClasesGlobales.FormatoNumerico;
 import Conexion.ConexionBD;
 
 import Pojos.Caja;
 import Pojos.DetalleCaja;
 import Pojos.SucursalSingleton;
+import Pojos.Ventas;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,10 +27,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
@@ -36,6 +38,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -44,7 +50,7 @@ import javax.swing.table.TableColumnModel;
 public class CajaDAO {
     SucursalSingleton sucursal = SucursalSingleton.getinstancia();   
     
-    DecimalFormat nf = new DecimalFormat("#.00");
+    FormatoNumerico fn = new FormatoNumerico();
 public Caja insertar(Caja caja){
     ConexionBD Cbd = new ConexionBD();
      try{
@@ -190,7 +196,7 @@ public void cierre(Caja caja){
     return false;
     }
     };      
-    String titulos[]={"CAJERO","FECHA APER.","FECHA CIE.","APER. CON","TOTAL COBRADO","CIERRA CON","ESTADO","MAQUINA","SUCURSAL"};
+    String titulos[]={"Cajero","Fecha apertura","Fecha cierre","Apertura con","Total cobrado","Cierra con","Estado","Dispositivo","Sucursal"};
     modelo.setColumnIdentifiers(titulos);
     tabla.setModel(modelo);
 
@@ -231,9 +237,9 @@ public void cierre(Caja caja){
 
           //   datosR[4] = rs.getObject("vhoracierr");
 
-             datosR[3] = nf.format(caja.getAperturadinero());
-             datosR[4] = nf.format(rs.getDouble("vtotalcobra"));
-             datosR[5] = nf.format(caja.getCierradinero());
+             datosR[3] = fn.FormatoN(caja.getAperturadinero());
+             datosR[4] = fn.FormatoN(rs.getDouble("vtotalcobra"));
+             datosR[5] = fn.FormatoN(caja.getCierradinero());
 
              datosR[6] = rs.getObject("vestado");
 
@@ -256,7 +262,7 @@ public void cierre(Caja caja){
         columnModel.getColumn(8).setPreferredWidth(300);
       
         
-        jmensaje.setText("Total: "+nf.format(total));
+        jmensaje.setText("Total: "+fn.FormatoN(total));
        
 	
         } catch(Exception e)
@@ -272,11 +278,11 @@ public void cierre(Caja caja){
             Timestamp desde, Timestamp hasta, String cadena, long idsucur,String op){
         ConexionBD Cbd = new ConexionBD();
         DefaultTableModel modelo= new DefaultTableModel(
-                new String[]{"DOC.","CAJERO","CLIENTE","TIPO OP.","IMPORTE","FECHA","MOTIVO","ANULADA","SUCURSAL"}, 0) {
+                new String[]{"DOC.","CAJERO","CLIENTE","TIPO OP.","IMPORTE","FECHA","SUCURSAL"}, 0) {
  
         Class[] types = new Class[]{
              java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,java.lang.Object.class,
-            java.lang.Object.class,java.lang.Object.class,java.lang.Object.class,java.lang.Boolean.class,java.lang.Object.class
+            java.lang.Object.class,java.lang.Object.class,java.lang.Object.class
         };
  
         public Class getColumnClass(int columnIndex) {
@@ -307,7 +313,7 @@ public void cierre(Caja caja){
              
              rs = Cbd.RealizarConsulta(ps);
              
-             Object datosR[]= new Object[9];
+             Object datosR[]= new Object[7];
              double vtotal=0.0;
              while (rs.next()){
                  
@@ -323,22 +329,22 @@ public void cierre(Caja caja){
 
                  datosR[2] = rs.getObject("vrazons");
 
-                 datosR[4] = nf.format(detcaja.getAbono());
+                 datosR[4] = fn.FormatoN(detcaja.getAbono());
 
                  datosR[3] = rs.getObject("vtipo");
 
 
 
                  datosR[5] = rs.getObject("vfecha");
-                 datosR[6] = rs.getObject("vmotivo");
-
-                 datosR[7] = rs.getBoolean("vanulada");
-                 datosR[8] = rs.getObject("vsucursal");
+////                 datosR[6] = rs.getObject("vmotivo");
+////
+////                 datosR[7] = rs.getBoolean("vanulada");
+                 datosR[6] = rs.getObject("vsucursal");
                 modelo.addRow(datosR);
                 listdet.add(detcaja);
                   
              }
-             total.setText("Total: "+nf.format(vtotal));
+             total.setText("Total: "+fn.FormatoN(vtotal));
          
              
              TableColumnModel columnModel = tabla.getColumnModel();
@@ -348,9 +354,9 @@ public void cierre(Caja caja){
             columnModel.getColumn(3).setPreferredWidth(80);
             columnModel.getColumn(4).setPreferredWidth(80);
             columnModel.getColumn(5).setPreferredWidth(150);
-            columnModel.getColumn(6).setPreferredWidth(250);
-            columnModel.getColumn(7).setPreferredWidth(60);
-            columnModel.getColumn(8).setPreferredWidth(300);
+//            columnModel.getColumn(6).setPreferredWidth(250);
+//            columnModel.getColumn(7).setPreferredWidth(60);
+            columnModel.getColumn(6).setPreferredWidth(300);
              
         
         
@@ -364,5 +370,6 @@ public void cierre(Caja caja){
          }
          return listdet;
 }
-
+ 
+ 
 }

@@ -5,10 +5,14 @@
  */
 package Formularios;
 
+import ClasesGlobales.FormatoNumerico;
+import DAO.DocumentoDAO;
 import DAO.VentasDAO;
 import Pojos.SucursalSingleton;
 import Pojos.Ventas;
 import java.awt.Frame;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -25,8 +29,10 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
     SucursalSingleton sucursalsingleton = SucursalSingleton.getinstancia();
     List<Ventas> listventa;
     Ventas venta= new Ventas();
-     int posx;
+    int posx;
     int posy;
+    DocumentoDAO daodoc = new DocumentoDAO();
+    FormatoNumerico fn = new FormatoNumerico();
     public JIFEnProceso() {
         initComponents();
        jlblmensajever.setVisible(false);
@@ -41,8 +47,14 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
 //            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
        jlblimagencarga.setVisible(true);
        jlblletracarga.setVisible(true);
-       listventa=daoventas.mostrarenproceso(jtabla, sucursalsingleton.getId(), jlblmsj);
+        double sum=0.0;
+       listventa=daodoc.mostrar(1, jtfbuscar.getText().toUpperCase(), "todonofecha", new Timestamp(new Date().getTime()),
+                new Timestamp(new Date().getTime()), jtabla);
        
+       for(Ventas venta:listventa){
+                   sum=sum+ venta.getTotal();
+                }
+       jlblmsj.setText("Total: "+fn.FormatoN(sum));
        jlblimagencarga.setVisible(false);
       jlblletracarga.setVisible(false);
      }
@@ -97,6 +109,8 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         jLabel8 = new javax.swing.JLabel();
         jlblmensajever = new javax.swing.JLabel();
         jbtnver = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jtfbuscar = new javax.swing.JTextField();
 
         setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
@@ -113,7 +127,7 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         jlblimagencarga.setForeground(new java.awt.Color(255, 255, 255));
         jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
-        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 760, 350));
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 220, -1, 180));
 
         jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
@@ -137,12 +151,12 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtabla);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 114, 805, 468));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 114, 805, 420));
 
         jbtnextornar.setBackground(new java.awt.Color(255, 255, 255));
         jbtnextornar.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
         jbtnextornar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete.png"))); // NOI18N
-        jbtnextornar.setText("Eliminar");
+        jbtnextornar.setToolTipText("Eliminar (supr)");
         jbtnextornar.setBorder(null);
         jbtnextornar.setBorderPainted(false);
         jbtnextornar.setContentAreaFilled(false);
@@ -151,12 +165,12 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
                 jbtnextornarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnextornar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 70, -1, -1));
+        jPanel1.add(jbtnextornar, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 70, -1, -1));
 
         jbtnrefresh.setBackground(new java.awt.Color(255, 255, 255));
         jbtnrefresh.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
         jbtnrefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Refresh_25px.png"))); // NOI18N
-        jbtnrefresh.setText("Refrescar");
+        jbtnrefresh.setToolTipText("Refrescar (F5)");
         jbtnrefresh.setBorder(null);
         jbtnrefresh.setBorderPainted(false);
         jbtnrefresh.setContentAreaFilled(false);
@@ -165,13 +179,14 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
                 jbtnrefreshActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnrefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 70, -1, -1));
+        jPanel1.add(jbtnrefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 70, -1, -1));
 
-        jlblmsj.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jlblmsj.setForeground(new java.awt.Color(255, 51, 51));
-        jPanel1.add(jlblmsj, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 550, 19));
+        jlblmsj.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jlblmsj.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlblmsj.setText("* * *");
+        jPanel1.add(jlblmsj, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 540, 540, -1));
 
-        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
         jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel7MouseDragged(evt);
@@ -185,8 +200,7 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("VENTAS EN COLA");
+        jLabel11.setText("VENTAS EN PROCESO");
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
         jLabel8.setToolTipText("Cerrar");
@@ -204,7 +218,7 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 595, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 553, Short.MAX_VALUE)
                 .addComponent(jLabel8)
                 .addContainerGap())
         );
@@ -223,11 +237,11 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         jlblmensajever.setForeground(new java.awt.Color(0, 0, 0));
         jlblmensajever.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
         jlblmensajever.setText("Cargando detalle ...");
-        jPanel1.add(jlblmensajever, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, -1, -1));
+        jPanel1.add(jlblmensajever, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 60, -1, -1));
 
         jbtnver.setFont(new java.awt.Font("Segoe UI Light", 1, 11)); // NOI18N
         jbtnver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/view25px.png"))); // NOI18N
-        jbtnver.setText("Ver");
+        jbtnver.setToolTipText("Ver detalle (alt + v)");
         jbtnver.setBorder(null);
         jbtnver.setBorderPainted(false);
         jbtnver.setContentAreaFilled(false);
@@ -236,7 +250,11 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
                 jbtnverActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnver, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 70, -1, -1));
+        jPanel1.add(jbtnver, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 70, -1, -1));
+
+        jLabel1.setText("Doc./ Cliente:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
+        jPanel1.add(jtfbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 370, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -271,12 +289,12 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         int index = jtabla.getSelectedRow();
         if(index >= 0){
-            if(JOptionPane.showConfirmDialog(null, "¿Seguro que desea extornar la venta?","EXTORNAR",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){                        
+            if(JOptionPane.showConfirmDialog(null, "¿Seguro que desea extornar la venta?","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){                        
                 venta = listventa.get(jtabla.getSelectedRow());
 //                long idventa= Long.parseLong(jtabla.getValueAt(index, 0).toString());
                 daoventas.extornar(venta.getIdventa());
                 mostrar();
-                jbtnextornar.setEnabled(false);
+                
                 
             }
             
@@ -316,6 +334,7 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
@@ -329,5 +348,6 @@ public class JIFEnProceso extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jlblmensajever;
     private javax.swing.JLabel jlblmsj;
     private javax.swing.JTable jtabla;
+    private javax.swing.JTextField jtfbuscar;
     // End of variables declaration//GEN-END:variables
 }

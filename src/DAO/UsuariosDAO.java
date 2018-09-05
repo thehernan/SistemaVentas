@@ -67,13 +67,24 @@ public class UsuariosDAO {
              user.setVender(rs.getBoolean("vvender"));
              user.setTema(rs.getString("vtema"));
              user.setExtornar(rs.getBoolean("vextornar"));
-
              user.setProdpendientes(rs.getBoolean("vpendienteprod"));
              user.setMermas(rs.getBoolean("vmermas"));
              user.setConsulmermas(rs.getBoolean("vconsulmermas"));
              user.setSucursalida(rs.getBoolean("vsucursalida"));
              user.setSucurentrada(rs.getBoolean("vsucurentrada"));
              user.setConsultasucur(rs.getBoolean("vsucurconsultar"));
+             
+             
+             user.setWeb(rs.getBoolean("vweb"));
+             user.setCotizacion(rs.getBoolean("vnuecotizacion"));
+             user.setBuscar_cot(rs.getBoolean("vbuscotizacion"));
+             user.setMant_prod(rs.getBoolean("vmatprod"));
+             user.setKardex(rs.getBoolean("vkardex"));
+             user.setAct_precios(rs.getBoolean("vactprecio"));
+             user.setFacturas(rs.getBoolean("bfactura"));
+             user.setBoletas(rs.getBoolean("bboletas"));
+             user.setNcredito(rs.getBoolean("bnotacred"));
+             user.setNdebito(rs.getBoolean("bnotadeb"));
 //                    private boolean prodpendientes;
 //    private boolean mermas;
 //    private boolean consulmermas;
@@ -201,7 +212,21 @@ public class UsuariosDAO {
              user.setSucursalida(rs.getBoolean("vsucursalida"));
              user.setSucurentrada(rs.getBoolean("vsucurentrada"));
              user.setConsultasucur(rs.getBoolean("vsucurconsultar"));
+             
              user.setWeb(rs.getBoolean("vweb"));
+             user.setCotizacion(rs.getBoolean("vnuecotizacion"));
+             user.setBuscar_cot(rs.getBoolean("vbuscotizacion"));
+             user.setMant_prod(rs.getBoolean("vmatprod"));
+             user.setKardex(rs.getBoolean("vkardex"));
+             user.setAct_precios(rs.getBoolean("vactprecio"));
+             user.setFacturas(rs.getBoolean("bfactura"));
+             user.setBoletas(rs.getBoolean("bboletas"));
+             user.setNcredito(rs.getBoolean("bnotacred"));
+             user.setNdebito(rs.getBoolean("bnotadeb"));
+             
+             
+             
+             
              datosR[0] = user.getNombreempleado();
              
              datosR[1] =user.getUsuario();
@@ -317,6 +342,17 @@ public Usuarios buscar(String tipoB,long id,JTextField empleado, JTextField rut)
                      user.setSucurentrada(rs.getBoolean("vsucurentrada"));
                      user.setConsultasucur(rs.getBoolean("vsucurconsultar"));
                      
+                    user.setWeb(rs.getBoolean("vweb"));
+                    user.setCotizacion(rs.getBoolean("vnuecotizacion"));
+                    user.setBuscar_cot(rs.getBoolean("vbuscotizacion"));
+                    user.setMant_prod(rs.getBoolean("vmatprod"));
+                    user.setKardex(rs.getBoolean("vkardex"));
+                    user.setAct_precios(rs.getBoolean("vactprecio"));
+                    user.setFacturas(rs.getBoolean("bfactura"));
+                    user.setBoletas(rs.getBoolean("bboletas"));
+                    user.setNcredito(rs.getBoolean("bnotacred"));
+                    user.setNdebito(rs.getBoolean("bnotadeb"));
+                     
                  
 
         }
@@ -337,7 +373,7 @@ public void insertar(Usuarios user){
      ConexionBD Cbd = new ConexionBD();
      try{
        
-            String insertImageSql = "SELECT * from sp_insertaruser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String insertImageSql = "SELECT * from sp_insertaruser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement ps = Cbd.conectar().prepareStatement(insertImageSql);
 
@@ -369,15 +405,19 @@ public void insertar(Usuarios user){
             ps.setBoolean(25, user.isSucursalida());
             ps.setBoolean(26, user.isSucurentrada());
             ps.setBoolean(27, user.isConsultasucur());
+            
             ps.setBoolean(28, user.isWeb());
-            
-//            user.setProdpendientes(rs.getBoolean("vpendienteprod"));
-//                     user.setMermas(rs.getBoolean("vmermas"));
-//                     user.setConsulmermas(rs.getBoolean("vconsulmermas"));
-//                     user.setSucursalida(rs.getBoolean("vsucursalida"));
-//                     user.setSucurentrada(rs.getBoolean("vsucurentrada"));
-//                     user.setConsultasucur(rs.getBoolean("vsucurconsultar"));
-            
+            ps.setBoolean(29, user.isCotizacion());
+            ps.setBoolean(30, user.isBuscar_cot());
+            ps.setBoolean(31, user.isMant_prod());
+            ps.setBoolean(32, user.isKardex());
+            ps.setBoolean(33, user.isAct_precios());
+            ps.setBoolean(34, user.isFacturas());
+            ps.setBoolean(35, user.isBoletas());
+            ps.setBoolean(36, user.isNcredito());
+            ps.setBoolean(37, user.isNdebito());
+   
+//            
             Cbd.actualizarDatos(ps);
             ps.close();
             
@@ -401,7 +441,7 @@ public void editar(Usuarios user){
     ConexionBD Cbd = new ConexionBD();
      try{
 	
-     String sql=("SELECT * from sp_editarusuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");         
+     String sql=("SELECT * from sp_editarusuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");         
        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
        
             ps.setLong(1,user.getId_usuario());
@@ -434,6 +474,15 @@ public void editar(Usuarios user){
             ps.setBoolean(27, user.isSucurentrada());
             ps.setBoolean(28, user.isConsultasucur());
             ps.setBoolean(29, user.isWeb());
+            ps.setBoolean(30, user.isCotizacion());
+            ps.setBoolean(31, user.isBuscar_cot());
+            ps.setBoolean(32, user.isMant_prod());
+            ps.setBoolean(33, user.isKardex());
+            ps.setBoolean(34, user.isAct_precios());
+            ps.setBoolean(35, user.isFacturas());
+            ps.setBoolean(36, user.isBoletas());
+            ps.setBoolean(37, user.isNcredito());
+            ps.setBoolean(38, user.isNdebito());
            Cbd.actualizarDatos(ps);
             JOptionPane.showMessageDialog(null,"Usuario editado con exito");
             ps.close();

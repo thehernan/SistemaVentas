@@ -155,7 +155,7 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
 
-        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -168,9 +168,8 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
 
         jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
-        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 430, 260));
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, 300, 260));
 
-        jtablafamilia.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtablafamilia.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -383,7 +382,7 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
         });
         jPanel1.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 70, -1));
 
-        jPanel3.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel3.setBackground(new java.awt.Color(238, 238, 238));
         jPanel3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel3MouseDragged(evt);
@@ -397,7 +396,6 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 0));
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("REGISTRO DE FAMILIAS");
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -444,7 +442,7 @@ public class JIFFAmilia extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 4, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();

@@ -10,6 +10,8 @@ import DAO.ClienteTipoDocumentoDAO;
 import Pojos.Cliente;
 import Pojos.Cliente_Tipo_Documento;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,30 +25,49 @@ public class JDNuevoCliente extends java.awt.Dialog {
      */
     String doc;
     List<Cliente_Tipo_Documento> listdoc;
+    JIFVenta jifventa;
+    MDIMenu menu;
     public JDNuevoCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
-     public JDNuevoCliente(java.awt.Frame parent, boolean modal,String doc) {
+     public JDNuevoCliente(java.awt.Frame parent, boolean modal,String doc,JIFVenta jifventa,MDIMenu menu) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
         this.doc=doc;
+        int cont= doc.length();
+        jlblcontdig.setText("Dig.: "+cont);
+         llenartipodoc();
+          if(cont==8)
+        {
+            jcbtipodoc.setSelectedItem("1 - DNI - DOC. NACIONAL DE IDENTIDAD");
+        
+        }
+        if(cont==11)
+        {
+        
+            jcbtipodoc.setSelectedItem("6 - RUC - REGISTRO UNICO DE CONTRIBUYENTE");
+        }
+        
+        this.jifventa=jifventa;
         jtfrut.setText(doc);
         jbtnguardar.setEnabled(false);
-        llenartipodoc();
+       
+        this.menu=menu;
+        
     }
     
-    public void llenartipodoc(){
+    private void llenartipodoc(){
         
         ClienteTipoDocumentoDAO docdao = new ClienteTipoDocumentoDAO();
         
-        jcbtipodoc.addItem("<<Seleccione>>");
-        
+               
         listdoc = docdao.mostrar();
         for(Cliente_Tipo_Documento docs:listdoc){
             
             jcbtipodoc.addItem(docs.getOp()+" - "+docs.getDocumento());
+           
         }
     
     
@@ -61,8 +82,7 @@ public class JDNuevoCliente extends java.awt.Dialog {
         String cel=jtfcelular.getText().replaceAll("\\s", "");
         String email=jtfemail.getText().replaceAll("\\s", "");
         
-    if( nombre.length()>0 &&  rut.length()>0 && direc.length()>0 && cel.length()>0 && email.length()>0 &&
-            jcbtipodoc.getSelectedIndex()!=0){
+    if( nombre.length()>0 &&  rut.length()>0 && direc.length()>0 && cel.length()>0 && email.length()>0 ){
         jbtnguardar.setEnabled(true);
     }else {
         jbtnguardar.setEnabled(false);
@@ -93,6 +113,7 @@ public class JDNuevoCliente extends java.awt.Dialog {
         jLabel7 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jcbtipodoc = new javax.swing.JComboBox();
+        jlblcontdig = new javax.swing.JLabel();
         jbtnguardar = new javax.swing.JButton();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -242,11 +263,17 @@ public class JDNuevoCliente extends java.awt.Dialog {
         });
         jPanel2.add(jcbtipodoc, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 330, -1));
 
-        jbtnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
+        jlblcontdig.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel2.add(jlblcontdig, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 80, 40, 20));
+
+        jbtnguardar.setBackground(new java.awt.Color(77, 161, 227));
+        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtnguardar.setForeground(new java.awt.Color(255, 255, 255));
         jbtnguardar.setText("Guardar");
         jbtnguardar.setBorderPainted(false);
         jbtnguardar.setContentAreaFilled(false);
         jbtnguardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jbtnguardar.setOpaque(true);
         jbtnguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnguardarActionPerformed(evt);
@@ -259,10 +286,12 @@ public class JDNuevoCliente extends java.awt.Dialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnguardar, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 480, Short.MAX_VALUE)
+                        .addComponent(jbtnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -271,8 +300,8 @@ public class JDNuevoCliente extends java.awt.Dialog {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jbtnguardar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jbtnguardar, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -304,6 +333,19 @@ public class JDNuevoCliente extends java.awt.Dialog {
     private void jtfrutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfrutKeyReleased
         // TODO add your handling code here:
         validaguardar();
+        
+         int cont=jtfrut.getText().length();
+        jlblcontdig.setText("Dig.: "+(cont));
+        if(cont==8)
+        {
+            jcbtipodoc.setSelectedItem("1 - DNI - DOC. NACIONAL DE IDENTIDAD");
+        
+        }
+        if(cont==11)
+        {
+        
+            jcbtipodoc.setSelectedItem("6 - RUC - REGISTRO UNICO DE CONTRIBUYENTE");
+        }
     }//GEN-LAST:event_jtfrutKeyReleased
 
     private void jtfdireccionFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfdireccionFocusGained
@@ -408,18 +450,59 @@ public class JDNuevoCliente extends java.awt.Dialog {
         ClienteDAO daocliente= new ClienteDAO();
              boolean valida=daocliente.duplicado(0, jtfrut.getText(),"GUARDAR");
                 if(valida==true){
-                    Cliente cliente = new Cliente();
-                    Cliente_Tipo_Documento cdoc = listdoc.get(jcbtipodoc.getSelectedIndex()-1);
-                    cliente.setNombre_razons(jtfnombrerazon.getText().toUpperCase());
-                    cliente.setDireccion(jtfdireccion.getText().toUpperCase());
-                    cliente.setRut(jtfrut.getText());
-                    cliente.setIdtipodoc(cdoc.getId());
-                    cliente.setCelular(jtfcelular.getText());
-                    cliente.setEmail(jtfemail.getText().toUpperCase());
-                    long id=daocliente.insertarcliente(cliente);
-                    cliente.setId_cliente(id);
+                    
+                    Cliente_Tipo_Documento documento;
+                    documento= listdoc.get(jcbtipodoc.getSelectedIndex());
+                    
+                                // Patrón para validar el email
+                    Pattern pattern = Pattern
+                        .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+                     // El email a validar
+
+
+                    Matcher mather = pattern.matcher(jtfemail.getText().toUpperCase());
                     
                     
+                  if(documento.getOp().equals("6") && jtfrut.getText().trim().length()==11 || 
+                  documento.getOp().equals("1") && jtfrut.getText().trim().length()==8 || !documento.getOp().equals("6")
+                  &&  !documento.getOp().equals("1")){
+                    
+                    
+                    if(mather.find() == true)
+                    {
+                        Cliente cliente = new Cliente();
+                        Cliente_Tipo_Documento cdoc = listdoc.get(jcbtipodoc.getSelectedIndex());
+                        cliente.setNombre_razons(jtfnombrerazon.getText().toUpperCase());
+                        cliente.setDireccion(jtfdireccion.getText().toUpperCase());
+                        cliente.setRut(jtfrut.getText());
+                        cliente.setIdtipodoc(cdoc.getId());
+                        cliente.setTipodoc(cdoc.getOp());
+                        cliente.setCelular(jtfcelular.getText());
+                        cliente.setEmail(jtfemail.getText().toUpperCase());
+                        long id=daocliente.insertarcliente(cliente);
+                        cliente.setId_cliente(id);
+                        jifventa.setcliente(cliente);
+                        
+                        this.dispose();
+                        menu.cargarresumen();
+                    
+                    
+                    
+                    }else {
+                        JOptionPane.showMessageDialog(null,"El email ingresado es invalido","",JOptionPane.INFORMATION_MESSAGE);
+                        jtfemail.requestFocus();
+                        jtfemail.selectAll();
+
+                    }
+                    
+                     }else {
+          
+                      JOptionPane.showMessageDialog(null,"Numero de documento ingresado no coincide con tipo de documento","",JOptionPane.ERROR_MESSAGE);
+                      jtfrut.requestFocus();
+                      jtfrut.selectAll();
+
+                    }
                      
 //                     if(id!=0){
 //                         JOptionPane.showMessageDialog(null , "Cliente registrado con exito");
@@ -461,6 +544,7 @@ public class JDNuevoCliente extends java.awt.Dialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton jbtnguardar;
     private javax.swing.JComboBox jcbtipodoc;
+    private javax.swing.JLabel jlblcontdig;
     private javax.swing.JTextField jtfcelular;
     private javax.swing.JTextField jtfdireccion;
     private javax.swing.JTextField jtfemail;

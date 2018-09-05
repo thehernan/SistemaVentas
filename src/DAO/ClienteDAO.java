@@ -14,13 +14,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import org.edisoncor.gui.textField.TextFieldRoundIcon;
 
 /**
  *
@@ -66,6 +64,7 @@ public class ClienteDAO {
              cliente.setEmail(rs.getString("vemail"));
              cliente.setIdtipodoc(rs.getLong("iddocumento"));
              cliente.setDocumento(rs.getString("vdocumento"));
+             cliente.setTipodoc(rs.getString("vtipodoc"));
              datosR[0] = cliente.getRut();
 
              datosR[1] = cliente.getNombre_razons();
@@ -108,7 +107,7 @@ public class ClienteDAO {
     return false;
     }
     };      
-    String titulos[]={"R.U.T.","NOMBRES","CELULAR"};
+    String titulos[]={"Doc.","Nombres","Celular"};
     modelo.setColumnIdentifiers(titulos);
 
      
@@ -131,6 +130,12 @@ public class ClienteDAO {
              cliente.setCelular(rs.getString("vcelular"));
              cliente.setDireccion(rs.getString("vdireccion"));
              cliente.setEmail(rs.getString("vemail"));
+             
+             cliente.setIdtipodoc(rs.getLong("iddocumento"));
+             cliente.setDocumento(rs.getString("vdocumento"));
+             cliente.setTipodoc(rs.getString("vtipodoc"));
+             
+             
              datosR[0] = cliente.getRut();
 
              datosR[1] = cliente.getNombre_razons();
@@ -240,8 +245,8 @@ public boolean duplicado(long id,String cadena,String tipoop){
 
     }
 
-public Cliente  buscarclientevent(String cadena,JLabel msj,
-        JFormattedTextField total,JFormattedTextField venta){
+public Cliente  buscarclientevent(String cadena,JLabel msj
+        ){
   
     ConexionBD Cbd = new ConexionBD();
     ResultSet rs=null;
@@ -256,23 +261,28 @@ public Cliente  buscarclientevent(String cadena,JLabel msj,
       ps.setString(1, cadena);
       rs = Cbd.RealizarConsulta(ps);
 
-      total.setValue(0);
-      venta.setValue(0);
+    
      
       boolean val;
       
         if (rs.next()){
             cliente = new Cliente();
-            cliente.setId_cliente(rs.getLong("idb"));
-            cliente.setNombre_razons(rs.getString("nombre"));
+            cliente.setId_cliente(rs.getLong("id"));
+            cliente.setNombre_razons(rs.getString("vnombre"));
+            cliente.setRut(rs.getString("vrut"));
             cliente.setDireccion(rs.getString("vdireccion"));
+            cliente.setCelular(rs.getString("vcelular"));
             cliente.setEmail(rs.getString("vemail"));
-            total.setValue(rs.getDouble("total"));
-            venta.setValue(rs.getDouble("ventas"));
+            cliente.setIdtipodoc(rs.getLong("iddocumento"));
+            cliente.setDocumento(rs.getString("vdocumento"));
+            cliente.setTipodoc(rs.getString("vtipodoc"));
+            
+//            total.setValue(rs.getDouble("total"));
+//            venta.setValue(rs.getDouble("ventas"));
                    
         msj.setText("");
-        }else {
-        msj.setText("VARIOS - VENTAS MENORES A S/.700.00 Y OTROS");
+//        }else {
+//        msj.setText("VARIOS - VENTAS MENORES A S/.700.00 Y OTROS");
      
         }
 

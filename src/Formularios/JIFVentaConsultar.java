@@ -120,7 +120,6 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jdpdesdeV = new org.jdesktop.swingx.JXDatePicker();
@@ -164,9 +163,6 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
         jLabel11.setText("CONSULTAR VENTAS CONCRETADAS");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
-        jLabel1.setText("Doble clic para Anular");
-
         jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
         jLabel18.setToolTipText("Cerrar");
         jLabel18.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -182,14 +178,9 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 815, Short.MAX_VALUE)
-                        .addComponent(jLabel18))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 815, Short.MAX_VALUE)
+                .addComponent(jLabel18)
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -199,8 +190,7 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
                     .addComponent(jLabel18))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1250, -1));
@@ -356,17 +346,17 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
 
     private void jtablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMouseReleased
         // TODO add your handling code here:
-         int index= jtabla.getSelectedRow();
-        
-//        if(index>=0){
-           
-          
-            if(evt.getClickCount()==2){
-                
-             venta= listventa.get(index);
-             JDMotivoExtorno motextorno =new JDMotivoExtorno(new JFrame(),isVisible(),venta,this);
-             motextorno.setVisible(true);
-            }
+////         int index= jtabla.getSelectedRow();
+////        
+////        if(index>=0){
+////           
+////          
+////            if(evt.getClickCount()==2){
+////                
+////             venta= listventa.get(index);
+////             JDMotivoExtorno motextorno =new JDMotivoExtorno(new JFrame(),isVisible(),venta,this);
+////             motextorno.setVisible(true);
+////            }
         
     }//GEN-LAST:event_jtablaMouseReleased
 
@@ -408,7 +398,6 @@ public class JIFVentaConsultar extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;

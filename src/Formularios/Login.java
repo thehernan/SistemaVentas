@@ -85,7 +85,7 @@ public class Login extends javax.swing.JFrame {
                  System.out.println("i"+i);
                 if(test.ping()==true){
                    
-                   jlblrpruebaconexion.setText("<html><p style=\"color:#5B5B5B\" ;>"+"Estado: En Línea");
+                   jlblrpruebaconexion.setText("<html><p style=\"color:#FFFFFF\" ;>"+"Cloud Habilitado");
 ////                   jlblrpruebaconexion.setIcon(null);
 //                   jcbsucursal.setEnabled(true);
 //                   jtfusuario.setEnabled(true);
@@ -94,7 +94,7 @@ public class Login extends javax.swing.JFrame {
                    
                    
                } else{ 
-                   jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"No se obtuvo conexion con el servidor pongase en contacto con el administrador del sistema");
+                   jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"Cloud Inhabilitado");
                    
                    JDReconexion reconexion= new JDReconexion(new Frame(), isVisible());
                    AWTUtilities.setWindowOpaque(reconexion, false);
@@ -149,9 +149,13 @@ public class Login extends javax.swing.JFrame {
         jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
         getContentPane().add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 110, -1, -1));
 
+        jlblrpruebaconexion.setBackground(new java.awt.Color(77, 161, 227));
         jlblrpruebaconexion.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblrpruebaconexion.setForeground(new java.awt.Color(255, 51, 51));
-        getContentPane().add(jlblrpruebaconexion, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 400, 320, 30));
+        jlblrpruebaconexion.setForeground(new java.awt.Color(255, 255, 255));
+        jlblrpruebaconexion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblrpruebaconexion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cloud_20x20.png"))); // NOI18N
+        jlblrpruebaconexion.setOpaque(true);
+        getContentPane().add(jlblrpruebaconexion, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 400, 210, 30));
 
         jtfusuario.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
         jtfusuario.setText("USUARIO");
@@ -205,8 +209,9 @@ public class Login extends javax.swing.JFrame {
         jcbsucursal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sin conexion" }));
         getContentPane().add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 190, 250, 30));
 
+        jLabel2.setBackground(new java.awt.Color(91, 91, 91));
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(91, 91, 91));
         jLabel2.setText("Desarrollado por: Hernán Augusto Vilchez A.");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 390, 220, -1));
 
@@ -229,7 +234,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 410, -1, -1));
 
         fondo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loginvector3.png"))); // NOI18N
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loginfact.png"))); // NOI18N
         fondo.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 fondoMouseDragged(evt);

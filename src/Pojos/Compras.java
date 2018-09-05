@@ -16,14 +16,88 @@ public class Compras {
     private String documento;
     private String numero;
     private long id_proveedor;
+    private String proveedor;
+    private String docprov;
     private double descuento_global;
     private Date fecha;
     private long id_sucursal;
     private String estado;
     private String tipopago;
     private double abono;
+    private long idcomprobant;
+    private String comprobante;
+    private long idmoneda;
+    private String moneda;
+    private String abrevimoneda;
+    private double tipocambio;
 
     public Compras() {
+    }
+
+    public String getProveedor() {
+        return proveedor;
+    }
+
+    public double getTipocambio() {
+        return tipocambio;
+    }
+
+    public void setTipocambio(double tipocambio) {
+        this.tipocambio = tipocambio;
+    }
+
+    
+
+    public void setProveedor(String proveedor) {
+        this.proveedor = proveedor;
+    }
+
+    public String getDocprov() {
+        return docprov;
+    }
+
+    public void setDocprov(String docprov) {
+        this.docprov = docprov;
+    }
+
+    public long getIdcomprobant() {
+        return idcomprobant;
+    }
+
+    public String getComprobante() {
+        return comprobante;
+    }
+
+    public void setComprobante(String comprobante) {
+        this.comprobante = comprobante;
+    }
+
+    public long getIdmoneda() {
+        return idmoneda;
+    }
+
+    public void setIdmoneda(long idmoneda) {
+        this.idmoneda = idmoneda;
+    }
+
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
+    public String getAbrevimoneda() {
+        return abrevimoneda;
+    }
+
+    public void setAbrevimoneda(String abrevimoneda) {
+        this.abrevimoneda = abrevimoneda;
+    }
+
+    public void setIdcomprobant(long idcomprobant) {
+        this.idcomprobant = idcomprobant;
     }
 
     public Compras(long id_compra, String documento, String numero, long id_proveedor, double descuento_global, Date fecha, long id_sucursal, String estado, String tipopago, double abono) {

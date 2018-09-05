@@ -176,7 +176,7 @@ public final class JIFReparacionesPendientes extends javax.swing.JInternalFrame 
         });
         jPanel1.add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 100, 311, -1));
 
-        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
         jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel7MouseDragged(evt);
@@ -190,7 +190,6 @@ public final class JIFReparacionesPendientes extends javax.swing.JInternalFrame 
 
         jLabel14.setBackground(new java.awt.Color(0, 0, 0));
         jLabel14.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("REPARACIONES PENDIENTES");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N

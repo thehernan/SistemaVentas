@@ -28,11 +28,16 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
     List<Proveedor> listprove;
      int posx;
     int posy;
+    MDIMenu menu;
     public JIFProveedor() {
+        
+    }
+    public JIFProveedor(MDIMenu menu) {
         initComponents();
         bloquearjtf(false, false, false, false, false);
         bloquearjbtn(true, false, false, false, false, true);
         mostrar();
+        this.menu=menu;
     }
     
     public void mostrar(){
@@ -191,7 +196,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
 
-        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
         setPreferredSize(new java.awt.Dimension(1129, 418));
 
@@ -206,9 +211,8 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
 
         jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
-        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 490, 220));
+        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, 180, 220));
 
-        jtablaproveedor.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtablaproveedor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -527,7 +531,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
         );
 
         pack();
@@ -616,8 +620,9 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
                 boolean valida=daoproveedor.duplicado(0, rut,"GUARDAR");
                 if(valida==true){
                     daoproveedor.insertarproveedor(proveedor);
+                    menu.cargarresumen();
                 }else {
-                    JOptionPane.showMessageDialog(null, "EL PROVEEDOR YA SE ENCUENTRA REGISTRADO","SISTEMA",JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "El proveedor ya se encuentra registrado","",JOptionPane.INFORMATION_MESSAGE);
                 }    
                 
                 }
@@ -629,7 +634,7 @@ public class JIFProveedor extends javax.swing.JInternalFrame {
                  if(Vvalida==true){
                       daoproveedor.editarproveedor(proveedor);
                  }else {
-                     JOptionPane.showMessageDialog(null, "EL RUT INGRESADO YA SE ENCUENTRA REGISTRADO","SISTEMA",JOptionPane.INFORMATION_MESSAGE);
+                     JOptionPane.showMessageDialog(null, "El proveedor ya se encuentra registrado","",JOptionPane.INFORMATION_MESSAGE);
                  }
                
                         } 

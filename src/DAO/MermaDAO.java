@@ -6,14 +6,22 @@
 package DAO;
 
 import Conexion.ConexionBD;
+import Pojos.EmpleadoSingleton;
 import Pojos.Merma;
+import Pojos.Producto;
 import java.awt.HeadlessException;
+import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -30,33 +38,106 @@ import net.sf.jasperreports.view.JasperViewer;
 public class MermaDAO {
     
     
-    
-     public long insertar(Merma merma){ 
+    EmpleadoSingleton empleado = EmpleadoSingleton.getinstancia();
+   public boolean insertar(Merma merma,List<Producto> listdet){ 
        
         ConexionBD Cbd = new ConexionBD();
+        Connection cnn=Cbd.getConexion();
+         try {
+             cnn.setAutoCommit(false);
+         } catch (SQLException ex) {
+             Logger.getLogger(MermaDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
+        
        long id=0;
+       boolean validacabecera=true,validadetalle=true,estado=false;
+       PreparedStatement cabecera=null,detalle=null;
+       ResultSet rscabecera=null, rsdetalle=null;
+       String msj="";
+       int cont=0;
      try{
          
             String sql=("SELECT * from sp_insertarmerma(?,?)");         
-            PreparedStatement ps= Cbd.conectar().prepareStatement(sql);
-            ps.setString(1, merma.getMotivo());
-            ps.setDate(2, merma.getFecha());
+            cabecera= cnn.prepareStatement(sql);
+//            cabecera.setString(1, merma.getMotivo());
+            cabecera.setDate(1, merma.getFecha());
+            cabecera.setLong(2,empleado.getId_empleado());
        
-            ResultSet rs= Cbd.RealizarConsulta(ps);
-       if  (rs.next()){
-           id=(rs.getLong("id"));
+            rscabecera= Cbd.RealizarConsulta(cabecera);
+       if  (rscabecera.next()){
+           id=(rscabecera.getLong("id"));
            
            //JOptionPane.showMessageDialog(null,"OPERACIÓN EXITOSA");
         }
-	
-        } catch(Exception e)
+       if(id!=0)
+       {
+            for(Producto det: listdet){
+         
+            String sqldet="SELECT * from sp_insertardetallemerma(?,?,?,?)"; 
+            detalle=cnn.prepareStatement(sqldet);
+            detalle.setLong(1, det.getIdproducto());
+            detalle.setBigDecimal(2,new BigDecimal(det.getCantidad()));
+            detalle.setLong(3, id);
+            detalle.setString(4, det.getMotivo());
+        
+            rsdetalle=Cbd.RealizarConsulta(detalle);
+            msj=("Insertando Item "+cont);
+            cont++;
+         }
+            while(rsdetalle.next())
             {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+                if(rsdetalle.getBoolean("vvalida")==false)
+                {
+                    JOptionPane.showMessageDialog(null,"No cuenta con stock: "+rsdetalle.getString("mens")+" retire ó edite",""
+                    ,JOptionPane.ERROR_MESSAGE);
+//                    cnn.rollback();
+                    validadetalle=false;
+//                    break;
+                    
+                }        
+            
+            }
+    
+       }else {
+           validadetalle=false;
+       }
+        if(validacabecera==true && validadetalle==true)
+           {
+               cnn.commit();
+               estado=true;
+              
+           }else {
+               cnn.rollback();
+               System.err.println("rollback");
+               estado=false;
+           }
+            
+	
+        } catch(SQLException | HeadlessException e)
+            {
+                estado=false;
+                JOptionPane.showMessageDialog(null, e.getMessage());
+                try {
+                    cnn.rollback();
+                } catch (SQLException ex) {
+                    Logger.getLogger(MermaDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }finally{
-               Cbd.desconectar();
+                Cbd.desconectar();
+             try {
+                 rscabecera.close();
+                 rsdetalle.close();
+                 cabecera.close();
+                 detalle.close();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(MermaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+               
+                       
 
 }
-  return id;  
+  return estado;  
 
   }
      

@@ -8,6 +8,7 @@ package Formularios;
 import DAO.ComprasDAO;
 import Pojos.Compras;
 import Pojos.SucursalSingleton;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -38,6 +39,7 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
         this.frmingresoprod= frmingresoprod;
         jbtnaceptar.setEnabled(false);
         this.setLocationRelativeTo(null);
+        jtfnumero.requestFocus();
     }
      
      public void mostrar(){
@@ -100,7 +102,7 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
         jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 370, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel1.setText("N°: ");
+        jLabel1.setText("Documento:");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 69, -1, 20));
 
         jtfnumero.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -110,23 +112,29 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
             }
         });
         jtfnumero.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtfnumeroKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfnumeroKeyReleased(evt);
             }
         });
-        jPanel1.add(jtfnumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(52, 70, 806, -1));
+        jPanel1.add(jtfnumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(92, 70, 700, -1));
 
-        jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setBackground(new java.awt.Color(77, 161, 227));
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtnaceptar.setForeground(new java.awt.Color(255, 255, 255));
         jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
+        jbtnaceptar.setOpaque(true);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(876, 62, -1, -1));
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(816, 62, 160, 40));
 
-        jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -145,14 +153,18 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
                 jtablaMouseReleased(evt);
             }
         });
+        jtabla.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtablaKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtabla);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 102, 958, 408));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 958, 400));
 
-        jPanel4.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel4.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("BUSCAR DOCUMENTO");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -199,7 +211,7 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
             jbtnaceptar.setEnabled(true);
             this.dispose();
         }else {
-            JOptionPane.showMessageDialog(null, "SELECCIONE DOCUMENTO DE LA TABLA");
+            JOptionPane.showMessageDialog(null, "Seleccione Item");
         
         }
     }//GEN-LAST:event_jbtnaceptarActionPerformed
@@ -220,19 +232,43 @@ public class JDBuscarIngresoProducto extends javax.swing.JDialog {
 
     private void jtfnumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnumeroActionPerformed
         // TODO add your handling code here:
-        Runnable runnable = new Runnable() {
-
-         @Override
-         public void run() {
-//             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            sensitiva();
-             
-         }
-     };
-     Thread T = new Thread(runnable);
-     T.start();
+      
         
     }//GEN-LAST:event_jtfnumeroActionPerformed
+
+    private void jtfnumeroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnumeroKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+             Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+       //             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                   sensitiva();
+                   if(listcompra.size()>0)
+                   {
+                       jtabla.requestFocus();
+                   }
+
+                }
+            };
+            Thread T = new Thread(runnable);
+            T.start();
+        
+        
+        }
+         
+    }//GEN-LAST:event_jtfnumeroKeyPressed
+
+    private void jtablaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablaKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+            jbtnaceptar.doClick();
+        
+        }
+    }//GEN-LAST:event_jtablaKeyPressed
 
     /**
      * @param args the command line arguments

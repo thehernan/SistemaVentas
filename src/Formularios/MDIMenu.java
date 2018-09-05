@@ -21,12 +21,12 @@ import Pojos.SucursalSingleton;
 import Pojos.UsuarioSingleton;
 import Pojos.Ventas;
 import com.sun.awt.AWTUtilities;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -39,6 +39,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
  
 
 final class MDIMenu extends javax.swing.JFrame {
@@ -70,9 +76,10 @@ final class MDIMenu extends javax.swing.JFrame {
     //////////////////////
     ResumenDAO daores = new ResumenDAO();
      SucursalDAO daosucur= new SucursalDAO();
-         Sucursal sucur = new Sucursal();
-         List<Sucursal> list;
-    
+     Sucursal sucur = new Sucursal();
+     List<Sucursal> list;
+    int posx;
+    int posy; 
      public MDIMenu() {
         initComponents();
 
@@ -84,21 +91,21 @@ final class MDIMenu extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"no se encontro icono");
         }
-//        this.user= user;
+
         ///ADAPTAR AL TAMAÑO DE PANTALLA
-        dim=super.getToolkit().getScreenSize();
-        super.setSize(dim);
+//        dim=super.getToolkit().getScreenSize();
+//        super.setSize(dim);
        
 //        super.setUndecorated(true);
 //        super.setVisible(true);
         //////////////////////////////////////
-        this.setExtendedState(MAXIMIZED_BOTH);
+//        this.setExtendedState(MAXIMIZED_BOTH);
         this.setExtendedState(EXIT_ON_CLOSE);
-        
+        ///////////////////////////////////////////
         jlbluser.setText(empleadosingleton.getNombre());
         jlblrut.setText(empleadosingleton.getRut());
         jlblsucursal.setText(sucursalsingleton.getNombre()+" - "+sucursalsingleton.getDireccion());
-       
+        jlblusercabecera.setText(empleadosingleton.getNombre());
         
         
         
@@ -115,34 +122,140 @@ final class MDIMenu extends javax.swing.JFrame {
         
         
          
-        list=daosucur.llenarcombo(jcbsucursal);
+//        list=daosucur.llenarcombo(jcbsucursal);
         verresumen();
-        cargarresumendos();
+//        cargarresumendos();
+        cargarresumen();
 //        jpanelresumen.setOpaque(false);
         pruebaconexion();
 //        jpanelresumen.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.5f));
- 
-       
-       
+        
+//        jpanelbanner.setBackground(new Color(255,255,255,80));
       
     }
      
       
      
      public void cargarresumen(){
+
+        Resumen res= daores.mostrar(sucursalsingleton.getId());
         
-        sucur=list.get(jcbsucursal.getSelectedIndex());
-        Resumen res= daores.mostrar(sucur.getId());
-        jlblprodreg.setText(res.getProdreg());
-        jlblprodbajo.setText(res.getProdbajo());
-        jlblclireg.setText(res.getClireg());
-        jlblprovreg.setText(res.getProvreg());
-        jlblemplereg.setText(res.getEmplereg());
-        jlblventaanio.setText(res.getVentanio());
-        jlblventames.setText(res.getVentames());
-        jlblventadia.setText(res.getVentadia());
+        jpanelproductos.setText(String.valueOf(res.getProdreg()));
+        
+        jpanelcliente.setText(String.valueOf(res.getClireg()));
+        jpanelproveedor.setText(String.valueOf(res.getProvreg()));
+        jpanelempleados.setText(String.valueOf(res.getEmplereg()));
+        
+        
+        jlblprodreg.setText("Productos Registrados: "+res.getProdreg());
+        jlblprodbajo.setText("Productos con bajo stock: "+res.getProdbajo());
+        jlblclireg.setText("Clientes Registrados: "+res.getClireg());
+        jlblprovreg.setText("Proveedores Registrados: "+res.getProvreg());
+        jlblemplereg.setText("Empleados Registrados: "+res.getEmplereg());
+        jlblventaanio.setText("Año: "+res.getFactnio()+" - "+res.getBolnio());
+        jlblventames.setText("Mes: "+res.getFactmes()+" - "+res.getBolmes());
+        jlblventadia.setText("Dia: "+res.getFactdia()+" - "+res.getBoldia());
         jlblventproc.setText(res.getVentproc());
         jlblempleadomes.setText(res.getEmpleadomes());
+        
+         DefaultCategoryDataset dataset= new DefaultCategoryDataset();
+//         dataset.setValue(2, "", "Enero");
+//         dataset.setValue(3, "", "Febrero");
+//         dataset.setValue(4, "", "Marzo");
+//         dataset.setValue(5, "", "Abril");
+//         dataset.setValue(6, "", "Mayo");
+//         dataset.setValue(7, "", "Junio");
+//         dataset.setValue(9, "", "Julio");
+//         dataset.setValue(10, "", "Agosto");
+//         dataset.setValue(11, "", "Septiembre");
+//         dataset.setValue(12, "", "Octubre");
+//         dataset.setValue(13, "", "Noviembre");
+//         dataset.setValue(14, "", "Diciembre");
+         
+//         System.out.println("enero"+res.getVentaenero());
+//         System.out.println("enero"+res.getVentafebrero());
+//         System.out.println("enero"+res.getVentamarzo());
+//         System.out.println("enero"+res.getVentamayo());
+//         System.out.println("enero"+res.getVentajunio());
+//         System.out.println("enero"+res.getVentajulio());
+//         System.out.println("enero"+res.getVentaagosto());
+//         System.out.println("enero"+res.getVentasetiembre());
+//         System.out.println("enero"+res.getVentaoctubre());
+//         System.out.println("enero"+res.getVentanoviembre());
+         
+         
+         
+         // FACTURA
+         
+         dataset.setValue(res.getFactenero(), "Factura", "Enero");
+         dataset.setValue(res.getFactfebrero(), "Factura", "Febrero");
+         dataset.setValue(res.getFactmarzo(), "Factura", "Marzo");
+         dataset.setValue(res.getFactabril(), "Factura", "Abril");
+         dataset.setValue(res.getFactmayo(), "Factura", "Mayo");
+         dataset.setValue(res.getFactjunio(), "Factura", "Junio");
+         dataset.setValue(res.getFactjulio(), "Factura", "Julio");
+         dataset.setValue(res.getFactagosto(), "Factura", "Agosto");
+         dataset.setValue(res.getFactsetiembre(), "Factura", "Septiembre");
+         dataset.setValue(res.getFactoctubre(), "Factura", "Octubre");
+         dataset.setValue(res.getFactnoviembre(), "Factura", "Noviembre");
+         dataset.setValue(res.getFactdiciembre(), "Factura", "Diciembre");
+         // BOLETA
+         
+         dataset.setValue(res.getBolenero(), "Boleta", "Enero");
+         dataset.setValue(res.getBolfebrero(), "Boleta", "Febrero");
+         dataset.setValue(res.getBolmarzo(), "Boleta", "Marzo");
+         dataset.setValue(res.getBolabril(), "Boleta", "Abril");
+         dataset.setValue(res.getBolmayo(), "Boleta", "Mayo");
+         dataset.setValue(res.getBoljunio(), "Boleta", "Junio");
+         dataset.setValue(res.getBoljulio(), "Boleta", "Julio");
+         dataset.setValue(res.getBolagosto(), "Boleta", "Agosto");
+         dataset.setValue(res.getBolsetiembre(), "Boleta", "Septiembre");
+         dataset.setValue(res.getBoloctubre(), "Boleta", "Octubre");
+         dataset.setValue(res.getBolnoviembre(), "Boleta", "Noviembre");
+         dataset.setValue(res.getBoldiciembre(), "Boleta", "Diciembre");
+         //NOTA CREDITO
+         dataset.setValue(res.getNotacenero(), "Nota de Crédito", "Enero");
+         dataset.setValue(res.getNotacfebrero(), "Nota de Crédito", "Febrero");
+         dataset.setValue(res.getNotacmarzo(), "Nota de Crédito", "Marzo");
+         dataset.setValue(res.getNotacabril(), "Nota de Crédito", "Abril");
+         dataset.setValue(res.getNotacmayo(), "Nota de Crédito", "Mayo");
+         dataset.setValue(res.getNotacjunio(), "Nota de Crédito", "Junio");
+         dataset.setValue(res.getNotacjulio(), "Nota de Crédito", "Julio");
+         dataset.setValue(res.getNotacagosto(), "Nota de Crédito", "Agosto");
+         dataset.setValue(res.getNotacsetiembre(), "Nota de Crédito", "Septiembre");
+         dataset.setValue(res.getNotacoctubre(), "Nota de Crédito", "Octubre");
+         dataset.setValue(res.getNotacnoviembre(), "Nota de Crédito", "Noviembre");
+         dataset.setValue(res.getNotacdiciembre(), "Nota de Crédito", "Diciembre");
+         
+         //NOTA DEBITO
+         dataset.setValue(res.getNotadenero(), "Nota de Débito", "Enero");
+         dataset.setValue(res.getNotadfebrero(), "Nota de Débito", "Febrero");
+         dataset.setValue(res.getNotadmarzo(), "Nota de Débito", "Marzo");
+         dataset.setValue(res.getNotadabril(), "Nota de Débito", "Abril");
+         dataset.setValue(res.getNotadmayo(), "Nota de Débito", "Mayo");
+         dataset.setValue(res.getNotadjunio(), "Nota de Débito", "Junio");
+         dataset.setValue(res.getNotadjulio(), "Nota de Débito", "Julio");
+         dataset.setValue(res.getNotadagosto(), "Nota de Débito", "Agosto");
+         dataset.setValue(res.getNotadsetiembre(), "Nota de Débito", "Septiembre");
+         dataset.setValue(res.getNotadoctubre(), "Nota de Débito", "Octubre");
+         dataset.setValue(res.getNotadnoviembre(), "Nota de Débito", "Noviembre");
+         dataset.setValue(res.getNotaddiciembre(), "Nota de Débito", "Diciembre");
+         ////
+         
+         
+         JFreeChart chart = ChartFactory.createBarChart("", "", "", dataset,PlotOrientation.VERTICAL,true,true,false);
+         CategoryPlot catplot= chart.getCategoryPlot();
+         catplot.setRangeGridlinePaint(Color.BLACK);
+         ChartPanel chatpanel= new ChartPanel(chart);
+         chatpanel.setBackground(Color.BLUE);
+         chatpanel.setToolTipText("Facturas");
+        
+         jpanelgrafico.removeAll();
+       
+         jpanelgrafico.add(chatpanel,BorderLayout.CENTER);
+       
+         jpanelgrafico.validate();
+           
 //        
 //        if(sucur.getId()!=0){
 //        jbtnimprimir.setEnabled(true);
@@ -150,23 +263,18 @@ final class MDIMenu extends javax.swing.JFrame {
 //        jbtnimprimir.setEnabled(false);
 //        }
      }
-     public void cargarresumendos(){
-        
-        Resumen res= daores.mostrar(sucursalsingleton.getId());
-        jlblproductosmenu2.setText(res.getProdreg());
-        
-        jlblclientemenu2.setText(res.getClireg());
-        jlblproveedormenu2.setText(res.getProvreg());
-        jlblempleadosmenu2.setText(res.getEmplereg());
-        
-        jlblventamenu2.setText(res.getVentadia());
-       
-//        if(sucur.getId()!=0){
-//        jbtnimprimir.setEnabled(true);
-//        }else {
-//        jbtnimprimir.setEnabled(false);
-//        }
-     }
+//     public void cargarresumendos(){
+//        
+//        Resumen res= daores.mostrar(sucursalsingleton.getId());
+//        jpanelproductos.setText(String.valueOf(res.getProdreg()));
+//        
+//        jpanelcliente.setText(String.valueOf(res.getClireg()));
+//        jpanelproveedor.setText(String.valueOf(res.getProvreg()));
+//        jpanelempleados.setText(String.valueOf(res.getEmplereg()));
+//        
+//      
+//
+//     }
      
 //     
      public void verresumen(){
@@ -176,17 +284,17 @@ final class MDIMenu extends javax.swing.JFrame {
                   user.isInventario()==true &&  user.isFamilia()==true && user.isVender()
                      && user.isConsultarventa()==true && user.isApertura() ==true &&
                      user.isMovimientos()==true && user.isNueva()==true && user.isConsultarrepara()
-                     && user.isPendientes()==true && user.isDebe() && user.isHaber()==true 
-                     && user.isExtornar()==true && user.isProdpendientes()==true && 
-                    user.isMermas()==true && user.isConsulmermas()==true && 
-                     user.isSucursalida()==true && user.isSucurentrada()==true && user.isConsultasucur()==true){
+                     && user.isPendientes()==true 
+                     && user.isExtornar()==true && user.isProdpendientes()==true && user.isMant_prod()==true &&
+             user.isKardex()==true && user.isAct_precios()==true && user.isFacturas()==true && user.isBoletas() &&
+             user.isNcredito()==true && user.isNdebito()==true && user.isCotizacion()==true && user.isBuscar_cot()==true){
      ver=true;
      
      }else {
      ver=false;
      }
-     jlbltitulo.setVisible(ver);
-     jcbsucursal.setVisible(ver);
+//     jlbltitulo.setVisible(ver);
+//     jcbsucursal.setVisible(ver);
      jlblprodreg.setVisible(ver);
      jlblprodbajo.setVisible(ver);
      jlblclireg.setVisible(ver);
@@ -199,6 +307,7 @@ final class MDIMenu extends javax.swing.JFrame {
      jlblempleadomes.setVisible(ver);
 //     jbtnimprimir.setVisible(ver);
      jbtnactualizar.setVisible(ver);
+     jpanelgrafico.setVisible(ver);
      
      
      }
@@ -208,7 +317,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         
+          titulo.setForeground(new Color(255,255,255));
          ////////////////////////////////////////////////////////
          if(user.isUseri()==true){
          JButton usuari= new JButton("USUARIOS");
@@ -247,8 +356,15 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(usuari);
          usuari.setBounds(20, 70, 200, 50);
+         
+         usuari.setBorderPainted(false);
+         usuari.setContentAreaFilled(false);
+         usuari.setOpaque(true);
          usuari.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         usuari.setBackground(new java.awt.Color(255, 204, 51));
+         usuari.setBackground(new java.awt.Color(255,255,255));
+         usuari.setForeground(new java.awt.Color(34,75,139));
+//         usuari.setForeground(Color.WHITE);
+         
          }
          /////////////////////////////////////////////////////////
            JButton cerrar= new JButton("CERRAR SESION");
@@ -257,7 +373,7 @@ final class MDIMenu extends javax.swing.JFrame {
              @Override
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                   if(JOptionPane.showConfirmDialog(null, "SEGURO QUE DESEA CERRAR SESIÓN","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+            if(JOptionPane.showConfirmDialog(null, "¿Seguro de cerrar sesión?","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
             int componentes=jDesktop.getComponentCount();
             System.out.println("ventanas "+componentes);
             if(componentes==12){
@@ -281,6 +397,9 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(cerrar);
          cerrar.setBounds(20, 140, 200, 50);
+         cerrar.setBorderPainted(false);
+         cerrar.setContentAreaFilled(false);
+         cerrar.setOpaque(true);
          cerrar.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          cerrar.setBackground(new java.awt.Color(255, 204, 51));
          
@@ -293,7 +412,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         
+          titulo.setForeground(new Color(255, 204, 51));
          ////////////////////////////////////////////////////////
          if(user.isCliente()==true){
          JButton client= new JButton("CLIENTES");
@@ -302,7 +421,7 @@ final class MDIMenu extends javax.swing.JFrame {
              @Override
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                JIFCliente cliente = new JIFCliente();
+                JIFCliente cliente = new JIFCliente(MDIMenu.this);
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = cliente.getSize();
                 cliente.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
@@ -327,8 +446,14 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(client);
          client.setBounds(20, 70, 200, 50);
+       
+         client.setBorderPainted(false);
+         client.setContentAreaFilled(false);
+         client.setOpaque(true);
          client.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          client.setBackground(new java.awt.Color(255, 204, 51));
+         
+         
          }
          /////////////////////////////////////////////////////////
          if(user.isProveedor()==true){
@@ -338,7 +463,7 @@ final class MDIMenu extends javax.swing.JFrame {
              @Override
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                JIFProveedor proveedor = new JIFProveedor();
+                JIFProveedor proveedor = new JIFProveedor(MDIMenu.this);
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = proveedor.getSize();
                 proveedor.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
@@ -363,6 +488,9 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(proveed);
          proveed.setBounds(20, 140, 200, 50);
+         proveed.setBorderPainted(false);
+         proveed.setContentAreaFilled(false);
+         proveed.setOpaque(true);
          proveed.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          proveed.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -374,7 +502,7 @@ final class MDIMenu extends javax.swing.JFrame {
              @Override
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                JIFEmpleados empleado= new JIFEmpleados();
+                JIFEmpleados empleado= new JIFEmpleados(MDIMenu.this);
               Dimension desktopSize = jDesktop.getSize();
               Dimension FrameSize = empleado.getSize();
               empleado.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
@@ -390,6 +518,11 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(emplead);
          emplead.setBounds(20, 210, 200, 50);
+         
+          
+         emplead.setBorderPainted(false);
+         emplead.setContentAreaFilled(false);
+         emplead.setOpaque(true);
          emplead.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          emplead.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -401,9 +534,9 @@ final class MDIMenu extends javax.swing.JFrame {
      public void menuproducto(){
          JLabel titulo = new JLabel("PRODUCTO");
          jpanelcontenedor.add(titulo);
-          titulo.setBounds(60, 10, 200, 50);
+         titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         
+         titulo.setForeground(new Color(255, 204, 51));
          ////////////////////////////////////////////////////////
          if(user.isIngreso()==true){
          JButton ingreso= new JButton("INGRESO");
@@ -427,19 +560,22 @@ final class MDIMenu extends javax.swing.JFrame {
            
          
          jpanelcontenedor.add(ingreso);
-         ingreso.setBounds(20, 70, 200, 50);
+         ingreso.setBounds(20, 70, 200, 40);
+          ingreso.setBorderPainted(false);
+         ingreso.setContentAreaFilled(false);
+         ingreso.setOpaque(true);
          ingreso.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          ingreso.setBackground(new java.awt.Color(255, 204, 51));
          }
          /////////////////////////////////////////////////////////
-         if(user.isProductos()==true){
+         if(user.isMant_prod()==true){
         JButton produc= new JButton("MANT. PRODUCTOS");
          produc.addActionListener(new ActionListener() {
 
              @Override
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                  JIProductos producto= new JIProductos();
+                  JIProductos producto= new JIProductos(MDIMenu.this);
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = producto.getSize();
                 producto.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
@@ -454,19 +590,23 @@ final class MDIMenu extends javax.swing.JFrame {
           
          
          jpanelcontenedor.add(produc);
-         produc.setBounds(20, 140, 200, 50);
+         produc.setBounds(20, 120, 200, 40);
+         
+          produc.setBorderPainted(false);
+         produc.setContentAreaFilled(false);
+         produc.setOpaque(true);
          produc.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          produc.setBackground(new java.awt.Color(255, 204, 51));
          }
          /////////////////////////////////////////////////////////////
-         if(user.isInventario()==true){
+         if(user.isProductos()==true){
              JButton prod= new JButton("PRODUCTOS");
          prod.addActionListener(new ActionListener() {
 
              @Override
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-               JIFrmInventario inventario= new JIFrmInventario();
+               JIFrmBuscarProductos inventario= new JIFrmBuscarProductos();
               Dimension desktopSize = jDesktop.getSize();
               Dimension FrameSize = inventario.getSize();
               inventario.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
@@ -482,7 +622,11 @@ final class MDIMenu extends javax.swing.JFrame {
          
          
          jpanelcontenedor.add(prod);
-         prod.setBounds(20, 210, 200, 50);
+         prod.setBounds(20, 170, 200, 40);
+         
+          prod.setBorderPainted(false);
+         prod.setContentAreaFilled(false);
+         prod.setOpaque(true);
          prod.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          prod.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -509,7 +653,10 @@ final class MDIMenu extends javax.swing.JFrame {
         
          
          jpanelcontenedor.add(famili);
-         famili.setBounds(20, 280, 200, 50);
+         famili.setBounds(20, 220, 200, 40);
+          famili.setBorderPainted(false);
+         famili.setContentAreaFilled(false);
+         famili.setOpaque(true);
          famili.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          famili.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -536,66 +683,78 @@ final class MDIMenu extends javax.swing.JFrame {
           
          
          jpanelcontenedor.add(pendient);
-         pendient.setBounds(20, 350, 200, 50);
+         pendient.setBounds(20, 270, 200, 40);
+         
+          pendient.setBorderPainted(false);
+         pendient.setContentAreaFilled(false);
+         pendient.setOpaque(true);
          pendient.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          pendient.setBackground(new java.awt.Color(255, 204, 51));
          }
          /////////////////////////////////////////////////////////////
-         if(user.isMermas()==true){
-            JButton merm= new JButton("MERMA");
-         merm.addActionListener(new ActionListener() {
-
-             @Override
-             public void actionPerformed(ActionEvent e) {
-                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    JIFMerma merma= new JIFMerma();
-                 Dimension desktopSize = jDesktop.getSize();
-                 Dimension FrameSize = merma.getSize();
-                 merma.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
-                  ((javax.swing.plaf.basic.BasicInternalFrameUI) 
-                    merma.getUI()).setNorthPane(null);
-                 jDesktop.add(merma);
-                 merma.show();
-                  panelconmin();
-//                  jlblmensajeinfo.setText("");
-             }
-         });
-          
-         
-         jpanelcontenedor.add(merm);
-         merm.setBounds(20, 420, 200, 50);
-         merm.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         merm.setBackground(new java.awt.Color(255, 204, 51));
-         }
+//         if(user.isMermas()==true){
+//            JButton merm= new JButton("MERMA");
+//         merm.addActionListener(new ActionListener() {
+//
+//             @Override
+//             public void actionPerformed(ActionEvent e) {
+//                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//                    JIFMerma merma= new JIFMerma();
+//                 Dimension desktopSize = jDesktop.getSize();
+//                 Dimension FrameSize = merma.getSize();
+//                 merma.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+//                  ((javax.swing.plaf.basic.BasicInternalFrameUI) 
+//                    merma.getUI()).setNorthPane(null);
+//                 jDesktop.add(merma);
+//                 merma.show();
+//                  panelconmin();
+////                  jlblmensajeinfo.setText("");
+//             }
+//         });
+//          
+//         
+//         jpanelcontenedor.add(merm);
+//         merm.setBounds(20, 320, 200, 40);
+//         
+//          merm.setBorderPainted(false);
+//         merm.setContentAreaFilled(false);
+//         merm.setOpaque(true);
+//         merm.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
+//         merm.setBackground(new java.awt.Color(255, 204, 51));
+//         }
          /////////////////////////////////////////////
-         if(user.isConsulmermas()==true){
-          JButton conmerma= new JButton("CONSULT. MERMA");
-         conmerma.addActionListener(new ActionListener() {
-
-             @Override
-             public void actionPerformed(ActionEvent e) {
-                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                  JIFConsultarMerma consulmerma= new JIFConsultarMerma();
-                 Dimension desktopSize = jDesktop.getSize();
-                 Dimension FrameSize = consulmerma.getSize();
-                 consulmerma.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
-                 ((javax.swing.plaf.basic.BasicInternalFrameUI) 
-                    consulmerma.getUI()).setNorthPane(null);
-                 jDesktop.add(consulmerma);
-                 consulmerma.show();
-                  panelconmin();
-//                  jlblmensajeinfo.setText("");
-             }
-         });
-         
-         
-         jpanelcontenedor.add(conmerma);
-         conmerma.setBounds(20, 490, 200, 50);
-         conmerma.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         conmerma.setBackground(new java.awt.Color(255, 204, 51));
-         ///////////////////////////////////////////////////////////
-         }
-         if(user.isConsulmermas()==true){
+//         if(user.isConsulmermas()==true){
+//          JButton conmerma= new JButton("CONSULT. MERMA");
+//         conmerma.addActionListener(new ActionListener() {
+//
+//             @Override
+//             public void actionPerformed(ActionEvent e) {
+//                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//                  JIFConsultarMerma consulmerma= new JIFConsultarMerma();
+//                 Dimension desktopSize = jDesktop.getSize();
+//                 Dimension FrameSize = consulmerma.getSize();
+//                 consulmerma.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+//                 ((javax.swing.plaf.basic.BasicInternalFrameUI) 
+//                    consulmerma.getUI()).setNorthPane(null);
+//                 jDesktop.add(consulmerma);
+//                 consulmerma.show();
+//                  panelconmin();
+////                  jlblmensajeinfo.setText("");
+//             }
+//         });
+//         
+//         
+//         jpanelcontenedor.add(conmerma);
+//         conmerma.setBounds(20, 370, 200, 40);
+//         
+//          conmerma.setBorderPainted(false);
+//         conmerma.setContentAreaFilled(false);
+//         conmerma.setOpaque(true);
+//         conmerma.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
+//         conmerma.setBackground(new java.awt.Color(255, 204, 51));
+//         ///////////////////////////////////////////////////////////
+//         }
+         if(user.isKardex()==true){
           JButton conmerma= new JButton("KARDEX");
          conmerma.addActionListener(new ActionListener() {
 
@@ -617,39 +776,46 @@ final class MDIMenu extends javax.swing.JFrame {
          
          
          jpanelcontenedor.add(conmerma);
-         conmerma.setBounds(20, 560, 200, 50);
+         conmerma.setBounds(20, 320, 200, 40);
+         
+         conmerma.setBorderPainted(false);
+         conmerma.setContentAreaFilled(false);
+         conmerma.setOpaque(true);
          conmerma.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          conmerma.setBackground(new java.awt.Color(255, 204, 51));
          ///////////////////////////////////////////////////////////
          }
-         if(user.isConsulmermas()==true){
-          JButton conmerma= new JButton("INVENTARIO");
-         conmerma.addActionListener(new ActionListener() {
+         if(user.isInventario()==true){
+          JButton jbtninven= new JButton("INVENTARIO");
+         jbtninven.addActionListener(new ActionListener() {
 
              @Override
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                  JIFConsultarMerma consulmerma= new JIFConsultarMerma();
+                  JIFInventario invent= new JIFInventario();
                  Dimension desktopSize = jDesktop.getSize();
-                 Dimension FrameSize = consulmerma.getSize();
-                 consulmerma.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+                 Dimension FrameSize = invent.getSize();
+                 invent.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
                  ((javax.swing.plaf.basic.BasicInternalFrameUI) 
-                    consulmerma.getUI()).setNorthPane(null);
-                 jDesktop.add(consulmerma);
-                 consulmerma.show();
+                    invent.getUI()).setNorthPane(null);
+                 jDesktop.add(invent);
+                 invent.show();
                   panelconmin();
 //                  jlblmensajeinfo.setText("");
              }
          });
          
          
-         jpanelcontenedor.add(conmerma);
-         conmerma.setBounds(20, 630, 200, 50);
-         conmerma.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         conmerma.setBackground(new java.awt.Color(255, 204, 51));
+         jpanelcontenedor.add(jbtninven);
+         jbtninven.setBounds(20, 370, 200, 40);
+         jbtninven.setBorderPainted(false);
+         jbtninven.setContentAreaFilled(false);
+         jbtninven.setOpaque(true);
+         jbtninven.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
+         jbtninven.setBackground(new java.awt.Color(255, 204, 51));
          ///////////////////////////////////////////////////////////
          }
-         if(user.isConsulmermas()==true){
+         if(user.isAct_precios()==true){
           JButton jbtnactprecio= new JButton("ACT. PRECIOS");
          jbtnactprecio.addActionListener(new ActionListener() {
 
@@ -671,7 +837,10 @@ final class MDIMenu extends javax.swing.JFrame {
          
          
          jpanelcontenedor.add(jbtnactprecio);
-         jbtnactprecio.setBounds(20, 700, 200, 50);
+         jbtnactprecio.setBounds(20, 420, 200, 40);
+         jbtnactprecio.setBorderPainted(false);
+         jbtnactprecio.setContentAreaFilled(false);
+         jbtnactprecio.setOpaque(true);
          jbtnactprecio.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          jbtnactprecio.setBackground(new java.awt.Color(255, 204, 51));
          ///////////////////////////////////////////////////////////
@@ -686,7 +855,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         
+          titulo.setForeground(new Color(255, 204, 51));
          ////////////////////////////////////////////////////////
          if(user.isVender()==true){
          JButton newventa= new JButton("NUEV. VENTA");
@@ -694,16 +863,16 @@ final class MDIMenu extends javax.swing.JFrame {
 
              @Override
              public void actionPerformed(ActionEvent e) {
-                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                 JIFVenta Nventa = new JIFVenta();
-                Dimension desktopSize = jDesktop.getSize();
-                Dimension FrameSize = Nventa.getSize();
-                Nventa.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
-                ((javax.swing.plaf.basic.BasicInternalFrameUI) 
-                    Nventa.getUI()).setNorthPane(null);
-                jDesktop.add(Nventa);
-                Nventa.show();
-                 panelconmin();
+                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates./
+                JIFVenta Nventa = new JIFVenta(MDIMenu.this);
+            Dimension desktopSize = jDesktop.getSize();
+            Dimension FrameSize = Nventa.getSize();
+            Nventa.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) 
+                Nventa.getUI()).setNorthPane(null);
+            jDesktop.add(Nventa);
+            Nventa.show();
+            panelconmin();
 //                  jlblmensajeinfo.setText("");
              }
          });
@@ -711,6 +880,10 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(newventa);
          newventa.setBounds(20, 70, 200, 50);
+         
+         newventa.setBorderPainted(false);
+         newventa.setContentAreaFilled(false);
+         newventa.setOpaque(true);
          newventa.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          newventa.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -737,6 +910,10 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(proceso);
          proceso.setBounds(20, 140, 200, 50);
+         
+         proceso.setBorderPainted(false);
+         proceso.setContentAreaFilled(false);
+         proceso.setOpaque(true);
          proceso.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          proceso.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -764,6 +941,9 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(consventa);
          consventa.setBounds(20, 210, 200, 50);
+          consventa.setBorderPainted(false);
+         consventa.setContentAreaFilled(false);
+         consventa.setOpaque(true);
          consventa.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          consventa.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -780,7 +960,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         
+         titulo.setForeground(new Color(255, 204, 51));
          ////////////////////////////////////////////////////////
          if(user.isApertura()==true){
          JButton apertur= new JButton("APERTURA CAJA");
@@ -790,13 +970,13 @@ final class MDIMenu extends javax.swing.JFrame {
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                    CajaDAO daocaja= new CajaDAO();
-                    Caja caja = new Caja();
+                    Caja caja;
                     caja=daocaja.validapertura(user.getIdempleado());
                     if(caja.getId_caja()==0){
                         JDAperturaCaja aperturaC = new JDAperturaCaja(new java.awt.Frame(), isVisible(),MDIMenu.this);
                         aperturaC.setVisible(true);
                     }else{
-                        JIFCaja ncaja= new JIFCaja(caja);
+                        JIFCaja ncaja= new JIFCaja(caja,MDIMenu.this);
                         
                         Dimension desktopSize = jDesktop.getSize();
                         Dimension FrameSize = ncaja.getSize();
@@ -818,6 +998,9 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(apertur);
          apertur.setBounds(20, 70, 200, 50);
+         apertur.setBorderPainted(false);
+         apertur.setContentAreaFilled(false);
+         apertur.setOpaque(true);
          apertur.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          apertur.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -845,6 +1028,10 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(movimi);
          movimi.setBounds(20, 140, 200, 50);
+         
+          movimi.setBorderPainted(false);
+         movimi.setContentAreaFilled(false);
+         movimi.setOpaque(true);
          movimi.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          movimi.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -857,11 +1044,11 @@ final class MDIMenu extends javax.swing.JFrame {
      //////////////////////////
      
         public void menureparacion(){
-         JLabel titulo = new JLabel("REPARACION");
+         JLabel titulo = new JLabel("SOPORTE TÉCNICO");
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         
+         titulo.setForeground(new Color(255, 204, 51));
          ////////////////////////////////////////////////////////
           if(user.isNueva()==true){
          JButton nuevar= new JButton("NUEVA");
@@ -888,6 +1075,10 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(nuevar);
          nuevar.setBounds(20, 70, 200, 50);
+         
+           nuevar.setBorderPainted(false);
+         nuevar.setContentAreaFilled(false);
+         nuevar.setOpaque(true);
          nuevar.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          nuevar.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -916,6 +1107,9 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(consultr);
          consultr.setBounds(20, 140, 200, 50);
+           consultr.setBorderPainted(false);
+         consultr.setContentAreaFilled(false);
+         consultr.setOpaque(true);
          consultr.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          consultr.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -944,6 +1138,10 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(rpendient);
          rpendient.setBounds(20, 210, 200, 50);
+         
+         rpendient.setBorderPainted(false);
+         rpendient.setContentAreaFilled(false);
+         rpendient.setOpaque(true);
          rpendient.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          rpendient.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -955,13 +1153,13 @@ final class MDIMenu extends javax.swing.JFrame {
       
        
       public void menuotros(){
-         JLabel titulo = new JLabel("OTROS");
+         JLabel titulo = new JLabel("COTIZACIÓN");
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         
+         titulo.setForeground(new Color(255, 204, 51));
          ////////////////////////////////////////////////////////
-         if(user.isDebe()==true){
+         if(user.isCotizacion()==true){
          JButton debe= new JButton("NUEVA COTIZACION");
          debe.addActionListener(new ActionListener() {
 
@@ -1000,11 +1198,15 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(debe);
          debe.setBounds(20, 70, 200, 50);
+         
+          debe.setBorderPainted(false);
+         debe.setContentAreaFilled(false);
+         debe.setOpaque(true);
          debe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          debe.setBackground(new java.awt.Color(255, 204, 51));
          }
          /////////////////////////////////////////////////////////
-         if(user.isHaber()==true){
+         if(user.isBuscar_cot()==true){
         JButton habe= new JButton("COTIZACIONES");
          habe.addActionListener(new ActionListener() {
 
@@ -1036,6 +1238,10 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(habe);
          habe.setBounds(20, 140, 200, 50);
+         
+         habe.setBorderPainted(false);
+         habe.setContentAreaFilled(false);
+         habe.setOpaque(true);
          habe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          habe.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -1052,7 +1258,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         
+         titulo.setForeground(new Color(255, 204, 51));
          ////////////////////////////////////////////////////////
          if(user.isSucursalida()==true){
          JButton salida= new JButton("SALIDA");
@@ -1086,7 +1292,7 @@ final class MDIMenu extends javax.swing.JFrame {
          if(user.isSucurentrada()==true){
         JButton entrad= new JButton("ENTRADA");
          entrad.addActionListener(new ActionListener() {
-
+             
              @Override
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -1145,9 +1351,9 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         
+         titulo.setForeground(new Color(255, 204, 51));
          ////////////////////////////////////////////////////////
-         if(user.isDebe()==true){
+         if(user.isFacturas()==true){
          JButton debe= new JButton("FACTURAS");
          debe.addActionListener(new ActionListener() {
 
@@ -1155,7 +1361,7 @@ final class MDIMenu extends javax.swing.JFrame {
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                
-                         JIFFacturas factura = new JIFFacturas();
+                         JIFFacturas factura = new JIFFacturas(MDIMenu.this);
                         
                         Dimension desktopSize = jDesktop.getSize();
                         Dimension FrameSize = factura.getSize();
@@ -1186,11 +1392,15 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(debe);
          debe.setBounds(20, 70, 200, 50);
+         
+          debe.setBorderPainted(false);
+         debe.setContentAreaFilled(false);
+         debe.setOpaque(true);
          debe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          debe.setBackground(new java.awt.Color(255, 204, 51));
          }
          /////////////////////////////////////////////////////////
-         if(user.isHaber()==true){
+         if(user.isBoletas()==true){
         JButton habe= new JButton("BOLETAS");
          habe.addActionListener(new ActionListener() {
 
@@ -1198,7 +1408,7 @@ final class MDIMenu extends javax.swing.JFrame {
              public void actionPerformed(ActionEvent e) {
                  //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //                 JIFEstadocuentaHaber estadohaber = new JIFEstadocuentaHaber();
-                 JIFBoletas boletas= new JIFBoletas();
+                 JIFBoletas boletas= new JIFBoletas(MDIMenu.this);
                 Dimension desktopSize = jDesktop.getSize();
                 Dimension FrameSize = boletas.getSize();
                 boletas.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
@@ -1222,11 +1432,14 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(habe);
          habe.setBounds(20, 140, 200, 50);
+           habe.setBorderPainted(false);
+         habe.setContentAreaFilled(false);
+         habe.setOpaque(true);
          habe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          habe.setBackground(new java.awt.Color(255, 204, 51));
          }
          /////////////////////////////////////////////////////////////
-       if(user.isHaber()==true){
+       if(user.isNcredito()==true){
         JButton habe= new JButton("NOTA DE CRÉDITO");
          habe.addActionListener(new ActionListener() {
 
@@ -1258,11 +1471,14 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(habe);
          habe.setBounds(20, 210, 200, 50);
+          habe.setBorderPainted(false);
+         habe.setContentAreaFilled(false);
+         habe.setOpaque(true);
          habe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          habe.setBackground(new java.awt.Color(255, 204, 51));
          }
          /////////////////////////////////////////////////////////
-         if(user.isHaber()==true){
+         if(user.isNdebito()==true){
         JButton habe= new JButton("NOTA DE DÉBITO");
          habe.addActionListener(new ActionListener() {
 
@@ -1294,6 +1510,9 @@ final class MDIMenu extends javax.swing.JFrame {
          
          jpanelcontenedor.add(habe);
          habe.setBounds(20, 280, 200, 50);
+          habe.setBorderPainted(false);
+         habe.setContentAreaFilled(false);
+         habe.setOpaque(true);
          habe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
          habe.setBackground(new java.awt.Color(255, 204, 51));
          }
@@ -1304,22 +1523,21 @@ final class MDIMenu extends javax.swing.JFrame {
       
     public void cargarImagen(){
     try{
-//        JOptionPane.showMessageDialog(null,System.getProperty("java.home"));
-//        jlblcerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrar.png")));
-        InputStream fondo=getClass().getResourceAsStream("/imagenes/fondoblanco.jpg");
-        BufferedImage image=ImageIO.read(fondo);
-        
+
+////        InputStream fondo=getClass().getResourceAsStream("/imagenes/degradado.jpg");
+////        BufferedImage image=ImageIO.read(fondo);
+//        
         InputStream fondoresumen=getClass().getResourceAsStream("/imagenes/fondoresumen.png");
         BufferedImage imageresumen=ImageIO.read(fondoresumen);
         
-        InputStream fondoiconos=getClass().getResourceAsStream("/imagenes/fondoiconos.png");
-        BufferedImage imageiconos=ImageIO.read(fondoiconos);
+//        InputStream fondoiconos=getClass().getResourceAsStream("/imagenes/fondoiconosblack.jpg");
+//        BufferedImage imageiconos=ImageIO.read(fondoiconos);
         
 //        jDesktop.setBorder(new javax.swing.border.Border(getClass().getResource("/imagenes/cerrar.png")));
         
-        jDesktop.setBorder(new ImagenFondo(image));
+////        jDesktop.setBorder(new ImagenFondo(image));
         jpanelresumen.setBorder(new ImagenFondo(imageresumen));
-        jPanel6.setBorder(new ImagenFondo(imageiconos));
+//        jPanel6.setBorder(new ImagenFondo(imageiconos));
     }
     catch (Exception e){
             JOptionPane.showMessageDialog(null,"no se encontro fondo");
@@ -1357,16 +1575,22 @@ final class MDIMenu extends javax.swing.JFrame {
 //    
 //    }
     
-     public void MaximizarJIFrame(javax.swing.JInternalFrame frame){
-    try
-        {
-        frame.setSelected(true);
-        frame.setMaximum(true);
-    }
-    catch (java.beans.PropertyVetoException e) {}
-          frame.show();
-           
-    }
+    
+    
+    
+//     public void MaximizarJIFrame(javax.swing.JInternalFrame frame){
+//    try
+//        {
+//        frame.setSelected(true);
+//        frame.setMaximum(true);
+//    }
+//    catch (java.beans.PropertyVetoException e) {}
+//          frame.show();
+//           
+//    }
+    
+    
+    
      public void setcaja(JIFCaja caja){
       ((javax.swing.plaf.basic.BasicInternalFrameUI) 
                         caja.getUI()).setNorthPane(null);
@@ -1415,7 +1639,7 @@ final class MDIMenu extends javax.swing.JFrame {
         segundos = calendario.get(Calendar.SECOND); 
         String hour = String.format("%02d : %02d : %02d", hora, minutos, segundos); 
         String date = String.format("%02d / %02d / %02d", dia, mes, año); 
-        jlblhora.setText("<html><center><p style=\"color:#000000\";>" + hour + "<br>" + date); 
+        jlblhora.setText("<html><center><p style=\"color:##5B5B5B\";>" + hour + "<br>" + date); 
            } 
         }); 
         timer.start(); 
@@ -1443,14 +1667,14 @@ final class MDIMenu extends javax.swing.JFrame {
                 if(test.ping()==true){
                    
                     
-                   jlblrpruebaconexion.setText("<html><p style=\"color:#333333\";>"+"Estado: En Línea");
-                   jlblrpruebaconexion.setIcon(null);
+                   jlblrpruebaconexion.setText("<html><p style=\"color:#FFFFFF\";>"+"Cloud Habilitado");
+                 
                  
                    
                } else{
                     
                    
-                   jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"No se obtuvo conexión con el servidor pongase en contacto con el administrador del sistema");
+                   jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"Cloud Inhabilitado");
                    JDReconexion reconexion = new JDReconexion(new Frame(),isVisible());
                    AWTUtilities.setWindowOpaque(reconexion, false);
                    reconexion.setVisible(true);
@@ -1498,70 +1722,58 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblmenucaja = new javax.swing.JLabel();
         jlblmenurepara = new javax.swing.JLabel();
         jlblmenuestado = new javax.swing.JLabel();
-        jlblmenusucursal = new javax.swing.JLabel();
         jlblmenuregistro = new javax.swing.JLabel();
         jlblmenufacturacion = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jpanelcontenedor = new javax.swing.JPanel();
         jpanelresumen = new javax.swing.JPanel();
         jlblempleadomes = new javax.swing.JLabel();
         jlbluser = new javax.swing.JLabel();
         jlblemplereg = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jlblrut = new javax.swing.JLabel();
         jlblventadia = new javax.swing.JLabel();
         jlblprodreg = new javax.swing.JLabel();
         jlblresize = new javax.swing.JLabel();
-        jlbltitulo = new javax.swing.JLabel();
         jlblclireg = new javax.swing.JLabel();
         jlblprodbajo = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jlblventames = new javax.swing.JLabel();
         jbtnactualizar = new javax.swing.JButton();
-        jcbsucursal = new javax.swing.JComboBox();
         jlblventproc = new javax.swing.JLabel();
         jlblventaanio = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jlblprovreg = new javax.swing.JLabel();
         jlblsucursal = new javax.swing.JLabel();
         jlblrpruebaconexion = new javax.swing.JLabel();
-        jlblminice = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        jpaneliconoclientes = new javax.swing.JPanel();
+        jpanelcliente = new javax.swing.JLabel();
         jlblclienteaccesodir = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jlblclientemenu2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jlblempleadoaccesodir = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jlblempleadosmenu2 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
+        jlblminice = new javax.swing.JLabel();
+        jlblusercabecera = new javax.swing.JLabel();
+        jlblcerrar = new javax.swing.JLabel();
+        jlblmax = new javax.swing.JLabel();
+        jpaneliconoproveedores = new javax.swing.JPanel();
+        jpanelproveedor = new javax.swing.JLabel();
         jlblproveedoraccesodir = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jlblproveedormenu2 = new javax.swing.JLabel();
-        jPanel8 = new javax.swing.JPanel();
-        jPanel9 = new javax.swing.JPanel();
-        jlblproductosaccesodir = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jlblproductosmenu2 = new javax.swing.JLabel();
-        jPanel12 = new javax.swing.JPanel();
-        jPanel13 = new javax.swing.JPanel();
-        jlblventaaccesodir = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jlblventamenu2 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
+        jpaneliconoproductos = new javax.swing.JPanel();
+        jpanelproductos = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jpaneliconoventa = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jpanelventa = new javax.swing.JLabel();
+        jpaneliconoempleados = new javax.swing.JPanel();
+        jpanelempleados = new javax.swing.JLabel();
+        jlblempleadoaccesodir1 = new javax.swing.JLabel();
+        jpanelbanner = new javax.swing.JPanel();
+        jpanelgrafico = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Menu Principal");
         setBackground(new java.awt.Color(0, 0, 0));
         setUndecorated(true);
-        setPreferredSize(super.getToolkit().getScreenSize());
 
         jDesktop.setBackground(new java.awt.Color(255, 255, 255));
-        jDesktop.setForeground(new java.awt.Color(255, 255, 255));
+        jDesktop.setForeground(new java.awt.Color(51, 51, 51));
         jDesktop.setEnabled(false);
-        jDesktop.setOpaque(false);
         jDesktop.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jDesktopMouseReleased(evt);
@@ -1569,23 +1781,23 @@ final class MDIMenu extends javax.swing.JFrame {
         });
 
         jlblhora.setBackground(new java.awt.Color(0, 0, 0));
-        jlblhora.setFont(new java.awt.Font("Segoe UI Light", 1, 55)); // NOI18N
-        jlblhora.setForeground(new java.awt.Color(255, 255, 255));
+        jlblhora.setFont(new java.awt.Font("Segoe UI Light", 1, 45)); // NOI18N
+        jlblhora.setForeground(new java.awt.Color(0, 0, 0));
         jlblhora.setText("* * *");
 
-        jPanel6.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel6.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel6.setOpaque(false);
+        jPanel6.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel6.setForeground(new java.awt.Color(77, 161, 227));
+        jPanel6.setPreferredSize(new java.awt.Dimension(46, 791));
         jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jPanel6MouseReleased(evt);
             }
         });
 
-        jlblmenuproducto.setBackground(new java.awt.Color(220, 151, 96));
+        jlblmenuproducto.setBackground(new java.awt.Color(238, 238, 238));
         jlblmenuproducto.setForeground(new java.awt.Color(220, 151, 96));
         jlblmenuproducto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblmenuproducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Product2.png"))); // NOI18N
+        jlblmenuproducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/barcode40x40.png"))); // NOI18N
         jlblmenuproducto.setToolTipText("Productos");
         jlblmenuproducto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblmenuproducto.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1600,10 +1812,10 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        jlblmenuuser.setBackground(new java.awt.Color(220, 151, 96));
+        jlblmenuuser.setBackground(new java.awt.Color(238, 238, 238));
         jlblmenuuser.setForeground(new java.awt.Color(220, 151, 96));
         jlblmenuuser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblmenuuser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Key.png"))); // NOI18N
+        jlblmenuuser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/user40x40b.png"))); // NOI18N
         jlblmenuuser.setToolTipText("Usuario");
         jlblmenuuser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblmenuuser.setRequestFocusEnabled(false);
@@ -1619,10 +1831,10 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        jlblmenuventa.setBackground(new java.awt.Color(220, 151, 96));
+        jlblmenuventa.setBackground(new java.awt.Color(238, 238, 238));
         jlblmenuventa.setForeground(new java.awt.Color(220, 151, 96));
         jlblmenuventa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblmenuventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ventaaa.png"))); // NOI18N
+        jlblmenuventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/buy40x40b.png"))); // NOI18N
         jlblmenuventa.setToolTipText("Venta");
         jlblmenuventa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblmenuventa.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1637,10 +1849,10 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        jlblmenucaja.setBackground(new java.awt.Color(220, 151, 96));
+        jlblmenucaja.setBackground(new java.awt.Color(238, 238, 238));
         jlblmenucaja.setForeground(new java.awt.Color(220, 151, 96));
         jlblmenucaja.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblmenucaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ATM.png"))); // NOI18N
+        jlblmenucaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/money40x40b.png"))); // NOI18N
         jlblmenucaja.setToolTipText("Caja");
         jlblmenucaja.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblmenucaja.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1655,11 +1867,11 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        jlblmenurepara.setBackground(new java.awt.Color(220, 151, 96));
+        jlblmenurepara.setBackground(new java.awt.Color(238, 238, 238));
         jlblmenurepara.setForeground(new java.awt.Color(220, 151, 96));
         jlblmenurepara.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblmenurepara.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/repair.png"))); // NOI18N
-        jlblmenurepara.setToolTipText("Reparaciones");
+        jlblmenurepara.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/repair40x40.png"))); // NOI18N
+        jlblmenurepara.setToolTipText("Soporte Técnico");
         jlblmenurepara.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblmenurepara.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -1673,11 +1885,11 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        jlblmenuestado.setBackground(new java.awt.Color(220, 151, 96));
+        jlblmenuestado.setBackground(new java.awt.Color(238, 238, 238));
         jlblmenuestado.setForeground(new java.awt.Color(220, 151, 96));
         jlblmenuestado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblmenuestado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/otros.png"))); // NOI18N
-        jlblmenuestado.setToolTipText("Otros (Cotizacion, Orden Compra)");
+        jlblmenuestado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/docs40x40b.png"))); // NOI18N
+        jlblmenuestado.setToolTipText("Cotizaciones");
         jlblmenuestado.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblmenuestado.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -1691,28 +1903,10 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        jlblmenusucursal.setBackground(new java.awt.Color(220, 151, 96));
-        jlblmenusucursal.setForeground(new java.awt.Color(220, 151, 96));
-        jlblmenusucursal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblmenusucursal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Office.png"))); // NOI18N
-        jlblmenusucursal.setToolTipText("Sucursal (Envio de productos)");
-        jlblmenusucursal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblmenusucursal.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jlblmenusucursalMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jlblmenusucursalMouseExited(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblmenusucursalMouseReleased(evt);
-            }
-        });
-
-        jlblmenuregistro.setBackground(new java.awt.Color(220, 151, 96));
+        jlblmenuregistro.setBackground(new java.awt.Color(238, 238, 238));
         jlblmenuregistro.setForeground(new java.awt.Color(220, 151, 96));
         jlblmenuregistro.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblmenuregistro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/user+.png"))); // NOI18N
+        jlblmenuregistro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/group40x40b.png"))); // NOI18N
         jlblmenuregistro.setToolTipText("Mantenimiento Registro");
         jlblmenuregistro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblmenuregistro.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1727,10 +1921,10 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        jlblmenufacturacion.setBackground(new java.awt.Color(220, 151, 96));
+        jlblmenufacturacion.setBackground(new java.awt.Color(238, 238, 238));
         jlblmenufacturacion.setForeground(new java.awt.Color(220, 151, 96));
         jlblmenufacturacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblmenufacturacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fileopen40x40.png"))); // NOI18N
+        jlblmenufacturacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/factu40x40b.png"))); // NOI18N
         jlblmenufacturacion.setToolTipText("Facturación");
         jlblmenufacturacion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblmenufacturacion.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1745,27 +1939,32 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/menu40x40b.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jlblmenuregistro, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlblmenuregistro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                     .addComponent(jlblmenuuser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlblmenuproducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlblmenuventa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlblmenucaja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlblmenurepara, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlblmenuestado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlblmenusucursal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlblmenufacturacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jlblmenuproducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlblmenuventa, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlblmenucaja, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlblmenurepara, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlblmenuestado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlblmenufacturacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel2)
+                .addGap(50, 50, 50)
                 .addComponent(jlblmenuuser, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jlblmenuregistro, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1780,8 +1979,6 @@ final class MDIMenu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jlblmenuestado)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jlblmenusucursal)
-                .addGap(18, 18, 18)
                 .addComponent(jlblmenufacturacion)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1814,8 +2011,9 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblempleadomes.setText("* * *");
 
         jlbluser.setBackground(new java.awt.Color(255, 255, 255));
-        jlbluser.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jlbluser.setFont(new java.awt.Font("Segoe UI Light", 1, 14)); // NOI18N
         jlbluser.setForeground(new java.awt.Color(255, 255, 255));
+        jlbluser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/userblanco40x40.png"))); // NOI18N
         jlbluser.setText("---");
 
         jlblemplereg.setBackground(new java.awt.Color(255, 255, 255));
@@ -1823,14 +2021,10 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblemplereg.setForeground(new java.awt.Color(255, 255, 255));
         jlblemplereg.setText("* * *");
 
-        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Bienvenido");
-
         jlblrut.setBackground(new java.awt.Color(255, 255, 255));
         jlblrut.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblrut.setForeground(new java.awt.Color(255, 255, 255));
+        jlblrut.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jlblrut.setText("---");
 
         jlblventadia.setBackground(new java.awt.Color(255, 255, 255));
@@ -1855,11 +2049,6 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        jlbltitulo.setBackground(new java.awt.Color(255, 255, 255));
-        jlbltitulo.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jlbltitulo.setForeground(new java.awt.Color(255, 255, 255));
-        jlbltitulo.setText("Resumen:");
-
         jlblclireg.setBackground(new java.awt.Color(255, 255, 255));
         jlblclireg.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblclireg.setForeground(new java.awt.Color(255, 255, 255));
@@ -1869,11 +2058,6 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblprodbajo.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblprodbajo.setForeground(new java.awt.Color(255, 255, 255));
         jlblprodbajo.setText("* * *");
-
-        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("D.N.I:");
 
         jlblventames.setBackground(new java.awt.Color(255, 255, 255));
         jlblventames.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
@@ -1889,14 +2073,6 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        jcbsucursal.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jcbsucursal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jcbsucursal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbsucursalActionPerformed(evt);
-            }
-        });
-
         jlblventproc.setBackground(new java.awt.Color(255, 255, 255));
         jlblventproc.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblventproc.setForeground(new java.awt.Color(255, 255, 255));
@@ -1907,18 +2083,13 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblventaanio.setForeground(new java.awt.Color(255, 255, 255));
         jlblventaanio.setText("* * *");
 
-        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Sucursal:");
-
         jlblprovreg.setBackground(new java.awt.Color(255, 255, 255));
         jlblprovreg.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblprovreg.setForeground(new java.awt.Color(255, 255, 255));
         jlblprovreg.setText("* * *");
 
         jlblsucursal.setBackground(new java.awt.Color(255, 255, 255));
-        jlblsucursal.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jlblsucursal.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jlblsucursal.setForeground(new java.awt.Color(255, 255, 255));
         jlblsucursal.setText("---");
 
@@ -1931,86 +2102,46 @@ final class MDIMenu extends javax.swing.JFrame {
                     .addGroup(jpanelresumenLayout.createSequentialGroup()
                         .addGap(2, 2, 2)
                         .addComponent(jlblresize)
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jlbluser, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jlbluser, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpanelresumenLayout.createSequentialGroup()
                         .addGap(38, 38, 38)
-                        .addComponent(jLabel4)
-                        .addGap(12, 12, 12)
-                        .addComponent(jlblrut))
+                        .addGroup(jpanelresumenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlblrut, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblsucursal)))
                     .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jLabel2)
-                        .addGap(12, 12, 12)
-                        .addComponent(jlblsucursal))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jlbltitulo)
-                        .addGap(12, 12, 12)
-                        .addComponent(jcbsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jlblventaanio, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jlblventames, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jlblventadia, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jlblventproc, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jlblempleadomes, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jlblprodreg, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jlblprodbajo, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jlblclireg, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jlblprovreg, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jlblemplereg, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(308, 308, 308)
-                        .addComponent(jbtnactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(21, 21, 21)
+                        .addGroup(jpanelresumenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlblventaanio, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblventames, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblventadia, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblventproc, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblempleadomes, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblprodreg, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblprodbajo, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblclireg, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblprovreg, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblemplereg, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jpanelresumenLayout.createSequentialGroup()
+                                .addGap(270, 270, 270)
+                                .addComponent(jbtnactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         jpanelresumenLayout.setVerticalGroup(
             jpanelresumenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpanelresumenLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
                 .addGroup(jpanelresumenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlblresize)
                     .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jpanelresumenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jlbluser))))
-                .addGap(10, 10, 10)
-                .addGroup(jpanelresumenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jlblrut))
-                .addGap(12, 12, 12)
-                .addGroup(jpanelresumenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jlblsucursal))
-                .addGap(12, 12, 12)
-                .addGroup(jpanelresumenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlbltitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(jlblresize))
                     .addGroup(jpanelresumenLayout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jcbsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(6, 6, 6)
+                        .addGap(6, 6, 6)
+                        .addComponent(jlbluser)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlblrut)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlblsucursal)
+                .addGap(18, 18, 18)
                 .addComponent(jlblventaanio)
                 .addGap(12, 12, 12)
                 .addComponent(jlblventames)
@@ -2035,11 +2166,86 @@ final class MDIMenu extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jlblrpruebaconexion.setFont(new java.awt.Font("Segoe UI Light", 1, 18)); // NOI18N
-        jlblrpruebaconexion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jlblrpruebaconexion.setBackground(new java.awt.Color(77, 161, 227));
+        jlblrpruebaconexion.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jlblrpruebaconexion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblrpruebaconexion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cloud_20x20.png"))); // NOI18N
         jlblrpruebaconexion.setText("* * *");
+        jlblrpruebaconexion.setOpaque(true);
 
-        jlblminice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/minimize3.png"))); // NOI18N
+        jpaneliconoclientes.setBackground(new java.awt.Color(255, 255, 255));
+        jpaneliconoclientes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(238, 238, 238)));
+        jpaneliconoclientes.setForeground(new java.awt.Color(255, 255, 255));
+        jpaneliconoclientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jpaneliconoclientesMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jpaneliconoclientesMouseExited(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jpaneliconoclientesMouseReleased(evt);
+            }
+        });
+
+        jpanelcliente.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        jpanelcliente.setForeground(new java.awt.Color(91, 91, 91));
+        jpanelcliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jpanelcliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cliente.png"))); // NOI18N
+        jpanelcliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jpanelclienteMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jpanelclienteMouseExited(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jpanelclienteMouseReleased(evt);
+            }
+        });
+
+        jlblclienteaccesodir.setFont(new java.awt.Font("Segoe UI Light", 1, 15)); // NOI18N
+        jlblclienteaccesodir.setForeground(new java.awt.Color(51, 51, 51));
+        jlblclienteaccesodir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblclienteaccesodir.setText("CLIENTES");
+        jlblclienteaccesodir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblclienteaccesodir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlblclienteaccesodirMouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jpaneliconoclientesLayout = new javax.swing.GroupLayout(jpaneliconoclientes);
+        jpaneliconoclientes.setLayout(jpaneliconoclientesLayout);
+        jpaneliconoclientesLayout.setHorizontalGroup(
+            jpaneliconoclientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jpanelcliente, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+            .addComponent(jlblclienteaccesodir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jpaneliconoclientesLayout.setVerticalGroup(
+            jpaneliconoclientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpaneliconoclientesLayout.createSequentialGroup()
+                .addComponent(jpanelcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(jlblclienteaccesodir)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(34, 75, 139));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(238, 238, 238)));
+        jPanel3.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel3MouseDragged(evt);
+            }
+        });
+        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel3MousePressed(evt);
+            }
+        });
+
+        jlblminice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Minimizeblanco40x40.png"))); // NOI18N
         jlblminice.setToolTipText("Minimizar");
         jlblminice.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblminice.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2048,143 +2254,83 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(91, 91, 91)));
-        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
+        jlblusercabecera.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jlblusercabecera.setForeground(new java.awt.Color(255, 255, 255));
+        jlblusercabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/userblanco40x40.png"))); // NOI18N
+        jlblusercabecera.setText("jLabel1");
 
-        jPanel2.setBackground(new java.awt.Color(91, 91, 91));
-        jPanel2.setForeground(new java.awt.Color(238, 238, 238));
-
-        jlblclienteaccesodir.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jlblclienteaccesodir.setForeground(new java.awt.Color(255, 255, 255));
-        jlblclienteaccesodir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblclienteaccesodir.setText("Clientes");
-        jlblclienteaccesodir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblclienteaccesodir.addMouseListener(new java.awt.event.MouseAdapter() {
+        jlblcerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/shutdownblanco40x40.png"))); // NOI18N
+        jlblcerrar.setToolTipText("Cerrar Sesión");
+        jlblcerrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblcerrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblclienteaccesodirMouseReleased(evt);
+                jlblcerrarMouseReleased(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jlblclienteaccesodir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jlblclienteaccesodir)
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cliente.png"))); // NOI18N
-
-        jlblclientemenu2.setText("* * *");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jlblclientemenu2)))
-                .addGap(30, 30, 30))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlblclientemenu2)
-                .addContainerGap())
-        );
-
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(91, 91, 91)));
-        jPanel3.setForeground(new java.awt.Color(255, 255, 255));
-
-        jPanel4.setBackground(new java.awt.Color(91, 91, 91));
-        jPanel4.setForeground(new java.awt.Color(238, 238, 238));
-
-        jlblempleadoaccesodir.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jlblempleadoaccesodir.setForeground(new java.awt.Color(255, 255, 255));
-        jlblempleadoaccesodir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblempleadoaccesodir.setText("Empleados");
-        jlblempleadoaccesodir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblempleadoaccesodir.addMouseListener(new java.awt.event.MouseAdapter() {
+        jlblmax.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/resize40x40.png"))); // NOI18N
+        jlblmax.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblempleadoaccesodirMouseReleased(evt);
+                jlblmaxMouseReleased(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jlblempleadoaccesodir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jlblempleadoaccesodir)
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/empleados.png"))); // NOI18N
-
-        jlblempleadosmenu2.setText("* * *");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jlblempleadosmenu2)))
-                .addGap(30, 30, 30))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addComponent(jlblusercabecera, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jlblminice)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlblmax)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlblcerrar)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jlblcerrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jlblminice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jlblusercabecera, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jlblempleadosmenu2)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jlblmax))
         );
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(91, 91, 91)));
-        jPanel5.setForeground(new java.awt.Color(255, 255, 255));
+        jpaneliconoproveedores.setBackground(new java.awt.Color(255, 255, 255));
+        jpaneliconoproveedores.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(238, 238, 238)));
+        jpaneliconoproveedores.setForeground(new java.awt.Color(255, 255, 255));
+        jpaneliconoproveedores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jpaneliconoproveedoresMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jpaneliconoproveedoresMouseExited(evt);
+            }
+        });
 
-        jPanel7.setBackground(new java.awt.Color(91, 91, 91));
-        jPanel7.setForeground(new java.awt.Color(238, 238, 238));
+        jpanelproveedor.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        jpanelproveedor.setForeground(new java.awt.Color(91, 91, 91));
+        jpanelproveedor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jpanelproveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/provee.png"))); // NOI18N
+        jpanelproveedor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jpanelproveedorMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jpanelproveedorMouseExited(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jpanelproveedorMouseReleased(evt);
+            }
+        });
 
-        jlblproveedoraccesodir.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jlblproveedoraccesodir.setForeground(new java.awt.Color(255, 255, 255));
+        jlblproveedoraccesodir.setFont(new java.awt.Font("Segoe UI Light", 1, 15)); // NOI18N
+        jlblproveedoraccesodir.setForeground(new java.awt.Color(51, 51, 51));
         jlblproveedoraccesodir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblproveedoraccesodir.setText("Proveedores");
+        jlblproveedoraccesodir.setText("PROVEEDORES");
         jlblproveedoraccesodir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblproveedoraccesodir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -2192,180 +2338,218 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jlblproveedoraccesodir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        javax.swing.GroupLayout jpaneliconoproveedoresLayout = new javax.swing.GroupLayout(jpaneliconoproveedores);
+        jpaneliconoproveedores.setLayout(jpaneliconoproveedoresLayout);
+        jpaneliconoproveedoresLayout.setHorizontalGroup(
+            jpaneliconoproveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jlblproveedoraccesodir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+            .addComponent(jpanelproveedor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jlblproveedoraccesodir)
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/provee.png"))); // NOI18N
-
-        jlblproveedormenu2.setText("* * * ");
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jlblproveedormenu2)))
-                .addGap(30, 30, 30))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jpaneliconoproveedoresLayout.setVerticalGroup(
+            jpaneliconoproveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpaneliconoproveedoresLayout.createSequentialGroup()
+                .addComponent(jpanelproveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlblproveedormenu2)
-                .addContainerGap())
+                .addComponent(jlblproveedoraccesodir, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(91, 91, 91)));
-        jPanel8.setForeground(new java.awt.Color(255, 255, 255));
-
-        jPanel9.setBackground(new java.awt.Color(91, 91, 91));
-        jPanel9.setForeground(new java.awt.Color(238, 238, 238));
-
-        jlblproductosaccesodir.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jlblproductosaccesodir.setForeground(new java.awt.Color(255, 255, 255));
-        jlblproductosaccesodir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblproductosaccesodir.setText("Productos");
-        jlblproductosaccesodir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblproductosaccesodir.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblproductosaccesodirMouseReleased(evt);
+        jpaneliconoproductos.setBackground(new java.awt.Color(255, 255, 255));
+        jpaneliconoproductos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(238, 238, 238)));
+        jpaneliconoproductos.setForeground(new java.awt.Color(255, 255, 255));
+        jpaneliconoproductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jpaneliconoproductosMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jpaneliconoproductosMouseExited(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jlblproductosaccesodir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jlblproductosaccesodir)
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/producto.png"))); // NOI18N
-
-        jlblproductosmenu2.setText("* * * ");
-
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jlblproductosmenu2)))
-                .addGap(30, 30, 30))
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlblproductosmenu2)
-                .addContainerGap())
-        );
-
-        jPanel12.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(91, 91, 91)));
-        jPanel12.setForeground(new java.awt.Color(255, 255, 255));
-
-        jPanel13.setBackground(new java.awt.Color(91, 91, 91));
-        jPanel13.setForeground(new java.awt.Color(91, 91, 91));
-
-        jlblventaaccesodir.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jlblventaaccesodir.setForeground(new java.awt.Color(255, 255, 255));
-        jlblventaaccesodir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblventaaccesodir.setText("Venta");
-        jlblventaaccesodir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jlblventaaccesodir.addMouseListener(new java.awt.event.MouseAdapter() {
+        jpanelproductos.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        jpanelproductos.setForeground(new java.awt.Color(91, 91, 91));
+        jpanelproductos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jpanelproductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/producto.png"))); // NOI18N
+        jpanelproductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jpanelproductosMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jpanelproductosMouseExited(evt);
+            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jlblventaaccesodirMouseReleased(evt);
+                jpanelproductosMouseReleased(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
-        jPanel13.setLayout(jPanel13Layout);
-        jPanel13Layout.setHorizontalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jlblventaaccesodir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel13Layout.setVerticalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel13Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jlblventaaccesodir)
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
+        jButton2.setFont(new java.awt.Font("Segoe UI Light", 1, 15)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(51, 51, 51));
+        jButton2.setMnemonic('p');
+        jButton2.setText("PRODUCTOS");
+        jButton2.setToolTipText("alt + p");
+        jButton2.setBorderPainted(false);
+        jButton2.setContentAreaFilled(false);
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/clien.png"))); // NOI18N
-
-        jlblventamenu2.setText("* * *");
-
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jlblventamenu2)))
-                .addGap(30, 30, 30))
+        javax.swing.GroupLayout jpaneliconoproductosLayout = new javax.swing.GroupLayout(jpaneliconoproductos);
+        jpaneliconoproductos.setLayout(jpaneliconoproductosLayout);
+        jpaneliconoproductosLayout.setHorizontalGroup(
+            jpaneliconoproductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+            .addComponent(jpanelproductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jpaneliconoproductosLayout.setVerticalGroup(
+            jpaneliconoproductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpaneliconoproductosLayout.createSequentialGroup()
+                .addComponent(jpanelproductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel14)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jlblventamenu2)
-                .addGap(0, 12, Short.MAX_VALUE))
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/nosotros.png"))); // NOI18N
-        jLabel15.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jpaneliconoventa.setBackground(new java.awt.Color(255, 255, 255));
+        jpaneliconoventa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(238, 238, 238)));
+        jpaneliconoventa.setForeground(new java.awt.Color(255, 255, 255));
+        jpaneliconoventa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jpaneliconoventaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jpaneliconoventaMouseExited(evt);
+            }
+        });
+
+        jButton1.setBackground(new java.awt.Color(77, 161, 227));
+        jButton1.setFont(new java.awt.Font("Segoe UI Light", 1, 15)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(51, 51, 51));
+        jButton1.setMnemonic('v');
+        jButton1.setText("VENTA");
+        jButton1.setToolTipText("Alt + v");
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jpanelventa.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        jpanelventa.setForeground(new java.awt.Color(255, 255, 255));
+        jpanelventa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jpanelventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/clien.png"))); // NOI18N
+        jpanelventa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jpanelventaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jpanelventaMouseExited(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jpanelventaMouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jpaneliconoventaLayout = new javax.swing.GroupLayout(jpaneliconoventa);
+        jpaneliconoventa.setLayout(jpaneliconoventaLayout);
+        jpaneliconoventaLayout.setHorizontalGroup(
+            jpaneliconoventaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+            .addComponent(jpanelventa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jpaneliconoventaLayout.setVerticalGroup(
+            jpaneliconoventaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpaneliconoventaLayout.createSequentialGroup()
+                .addComponent(jpanelventa, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jpaneliconoempleados.setBackground(new java.awt.Color(255, 255, 255));
+        jpaneliconoempleados.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(238, 238, 238)));
+        jpaneliconoempleados.setForeground(new java.awt.Color(255, 255, 255));
+        jpaneliconoempleados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jpaneliconoempleadosMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jpaneliconoempleadosMouseExited(evt);
+            }
+        });
+
+        jpanelempleados.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        jpanelempleados.setForeground(new java.awt.Color(91, 91, 91));
+        jpanelempleados.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jpanelempleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/empleados.png"))); // NOI18N
+        jpanelempleados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jpanelempleadosMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jpanelempleadosMouseExited(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jpanelempleadosMouseReleased(evt);
+            }
+        });
+
+        jlblempleadoaccesodir1.setFont(new java.awt.Font("Segoe UI Light", 1, 15)); // NOI18N
+        jlblempleadoaccesodir1.setForeground(new java.awt.Color(51, 51, 51));
+        jlblempleadoaccesodir1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblempleadoaccesodir1.setText("EMPLEADOS");
+        jlblempleadoaccesodir1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jlblempleadoaccesodir1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlblempleadoaccesodir1MouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jpaneliconoempleadosLayout = new javax.swing.GroupLayout(jpaneliconoempleados);
+        jpaneliconoempleados.setLayout(jpaneliconoempleadosLayout);
+        jpaneliconoempleadosLayout.setHorizontalGroup(
+            jpaneliconoempleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jlblempleadoaccesodir1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+            .addComponent(jpanelempleados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jpaneliconoempleadosLayout.setVerticalGroup(
+            jpaneliconoempleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpaneliconoempleadosLayout.createSequentialGroup()
+                .addComponent(jpanelempleados, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jlblempleadoaccesodir1))
+        );
+
+        jpanelbanner.setBackground(new java.awt.Color(255, 255, 255));
+        jpanelbanner.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jpanelbannerMouseDragged(evt);
+            }
+        });
+        jpanelbanner.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jpanelbannerMousePressed(evt);
+            }
+        });
+
+        jpanelgrafico.setBackground(new java.awt.Color(0, 0, 0));
+        jpanelgrafico.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(238, 238, 238)));
+        jpanelgrafico.setForeground(new java.awt.Color(0, 0, 0));
+        jpanelgrafico.setLayout(new java.awt.BorderLayout());
+
+        javax.swing.GroupLayout jpanelbannerLayout = new javax.swing.GroupLayout(jpanelbanner);
+        jpanelbanner.setLayout(jpanelbannerLayout);
+        jpanelbannerLayout.setHorizontalGroup(
+            jpanelbannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jpanelgrafico, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jpanelbannerLayout.setVerticalGroup(
+            jpanelbannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpanelbannerLayout.createSequentialGroup()
+                .addComponent(jpanelgrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 9, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jDesktopLayout = new javax.swing.GroupLayout(jDesktop);
         jDesktop.setLayout(jDesktopLayout);
@@ -2375,75 +2559,71 @@ final class MDIMenu extends javax.swing.JFrame {
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpanelcontenedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jpanelbanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jDesktopLayout.createSequentialGroup()
-                        .addComponent(jlblhora, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 392, Short.MAX_VALUE)
-                        .addComponent(jpanelresumen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(199, 199, 199))
-                    .addGroup(jDesktopLayout.createSequentialGroup()
-                        .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jlblrpruebaconexion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jDesktopLayout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jDesktopLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jlblminice)
-                                .addContainerGap())
+                                .addComponent(jlblhora, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 361, Short.MAX_VALUE)
+                                .addComponent(jpanelresumen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jDesktopLayout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jlblrpruebaconexion, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jDesktopLayout.createSequentialGroup()
+                                        .addComponent(jpaneliconoclientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jpaneliconoempleados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jpaneliconoproductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jpaneliconoproveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jpaneliconoventa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         jDesktopLayout.setVerticalGroup(
             jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpanelcontenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopLayout.createSequentialGroup()
-                .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlblminice)
-                    .addGroup(jDesktopLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 844, Short.MAX_VALUE)
+            .addGroup(jDesktopLayout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jpanelcontenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE)
                     .addGroup(jDesktopLayout.createSequentialGroup()
-                        .addComponent(jlblrpruebaconexion, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 472, Short.MAX_VALUE)
+                        .addComponent(jpanelbanner, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jpanelresumen, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jlblhora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jDesktopLayout.createSequentialGroup()
-                        .addComponent(jLabel15)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(jDesktopLayout.createSequentialGroup()
+                                .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jpaneliconoproductos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jpaneliconoempleados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jpaneliconoproveedores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jpaneliconoventa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jpaneliconoclientes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jlblrpruebaconexion, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                                .addComponent(jlblhora, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jpanelresumen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
         );
         jDesktop.setLayer(jlblhora, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktop.setLayer(jPanel6, javax.swing.JLayeredPane.MODAL_LAYER);
         jDesktop.setLayer(jpanelcontenedor, javax.swing.JLayeredPane.MODAL_LAYER);
         jDesktop.setLayer(jpanelresumen, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktop.setLayer(jlblrpruebaconexion, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jlblminice, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpaneliconoclientes, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktop.setLayer(jPanel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jPanel5, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jPanel8, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jPanel12, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jLabel15, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpaneliconoproveedores, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpaneliconoproductos, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpaneliconoventa, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpaneliconoempleados, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpanelbanner, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -2453,9 +2633,7 @@ final class MDIMenu extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jDesktop)
-                .addGap(0, 0, 0))
+            .addComponent(jDesktop)
         );
 
         pack();
@@ -2553,19 +2731,6 @@ final class MDIMenu extends javax.swing.JFrame {
        panelconmax();
     }//GEN-LAST:event_jlblmenuestadoMouseReleased
 
-    private void jlblmenusucursalMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblmenusucursalMouseReleased
-        // TODO add your handling code here:
-         System.out.println(jpanelcontenedor.getComponentCount());
-      if(jpanelcontenedor.getComponentCount()==0){
-          menusucursal();
-      }else {
-          jpanelcontenedor.removeAll();
-          jpanelcontenedor.repaint();
-        menusucursal();
-      }
-       panelconmax();
-    }//GEN-LAST:event_jlblmenusucursalMouseReleased
-
     private void jlblmenuuserMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblmenuuserMouseEntered
         // TODO add your handling code here:
         jlblmenuuser.setOpaque(true);
@@ -2591,13 +2756,6 @@ final class MDIMenu extends javax.swing.JFrame {
         cargarresumen();
     }//GEN-LAST:event_jbtnactualizarActionPerformed
 
-    private void jcbsucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbsucursalActionPerformed
-        // TODO add your handling code here:
-        if(list.size()>0){
-            cargarresumen();
-        }
-    }//GEN-LAST:event_jcbsucursalActionPerformed
-
     private void jlblresizeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblresizeMouseReleased
         // TODO add your handling code here:
         ImageIcon imageIcon;
@@ -2608,7 +2766,7 @@ final class MDIMenu extends javax.swing.JFrame {
                  System.out.println("agrandar");
                 imageIcon= new ImageIcon( getClass().getResource("/imagenes/abajo.png"));
                 jlblresize.setIcon(imageIcon);
-                dimm= new Dimension(376, 493);
+                dimm= new Dimension(376, 416);
                 jpanelresumen.setPreferredSize(dimm);
 //                jpanelresumen.repaint();
                 jpanelresumen.revalidate();
@@ -2718,20 +2876,6 @@ final class MDIMenu extends javax.swing.JFrame {
           jlblmenuestado.revalidate();
     }//GEN-LAST:event_jlblmenuestadoMouseExited
 
-    private void jlblmenusucursalMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblmenusucursalMouseEntered
-        // TODO add your handling code here:
-       jlblmenusucursal.setOpaque(true);
-          jlblmenusucursal.repaint();
-          jlblmenusucursal.revalidate();
-    }//GEN-LAST:event_jlblmenusucursalMouseEntered
-
-    private void jlblmenusucursalMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblmenusucursalMouseExited
-        // TODO add your handling code here:
-           jlblmenusucursal.setOpaque(false);
-          jlblmenusucursal.repaint();
-          jlblmenusucursal.revalidate();
-    }//GEN-LAST:event_jlblmenusucursalMouseExited
-
     private void jlblmenucajaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblmenucajaMouseExited
         // TODO add your handling code here:
         jlblmenucaja.setOpaque(false);
@@ -2742,24 +2886,24 @@ final class MDIMenu extends javax.swing.JFrame {
     private void jlblminiceMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblminiceMouseReleased
         // TODO add your handling code here:
           setExtendedState(JFrame.CROSSHAIR_CURSOR);
+          
+                 ///ADAPTAR AL TAMAÑO DE PANTALLA
+//        dim=super.getToolkit().getScreenSize();
+//        super.setSize(dim);
+       
+      
+       
     }//GEN-LAST:event_jlblminiceMouseReleased
 
     private void jlblclienteaccesodirMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblclienteaccesodirMouseReleased
         // TODO add your handling code here:
-        JIFCliente cliente = new JIFCliente();
-        Dimension desktopSize = jDesktop.getSize();
-        Dimension FrameSize = cliente.getSize();
-        cliente.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
-        ((javax.swing.plaf.basic.BasicInternalFrameUI) 
-            cliente.getUI()).setNorthPane(null);
-        jDesktop.add(cliente);
-        cliente.show();
+       
         
     }//GEN-LAST:event_jlblclienteaccesodirMouseReleased
 
     private void jlblproveedoraccesodirMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblproveedoraccesodirMouseReleased
         // TODO add your handling code here:
-        JIFProveedor proveedor = new JIFProveedor();
+        JIFProveedor proveedor = new JIFProveedor(MDIMenu.this);
         Dimension desktopSize = jDesktop.getSize();
         Dimension FrameSize = proveedor.getSize();
         proveedor.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
@@ -2768,42 +2912,6 @@ final class MDIMenu extends javax.swing.JFrame {
         jDesktop.add(proveedor);
         proveedor.show();
     }//GEN-LAST:event_jlblproveedoraccesodirMouseReleased
-
-    private void jlblempleadoaccesodirMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblempleadoaccesodirMouseReleased
-        // TODO add your handling code here:
-        JIFEmpleados empleado= new JIFEmpleados();
-      Dimension desktopSize = jDesktop.getSize();
-      Dimension FrameSize = empleado.getSize();
-      empleado.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
-      ((javax.swing.plaf.basic.BasicInternalFrameUI) 
-            empleado.getUI()).setNorthPane(null);
-      jDesktop.add(empleado);
-      empleado.show();
-    }//GEN-LAST:event_jlblempleadoaccesodirMouseReleased
-
-    private void jlblproductosaccesodirMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblproductosaccesodirMouseReleased
-        // TODO add your handling code here:
-        JIFrmInventario inventario= new JIFrmInventario();
-      Dimension desktopSize = jDesktop.getSize();
-      Dimension FrameSize = inventario.getSize();
-      inventario.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
-      ((javax.swing.plaf.basic.BasicInternalFrameUI) 
-            inventario.getUI()).setNorthPane(null);
-      jDesktop.add(inventario);
-      inventario.show();
-    }//GEN-LAST:event_jlblproductosaccesodirMouseReleased
-
-    private void jlblventaaccesodirMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblventaaccesodirMouseReleased
-        // TODO add your handling code here:
-        JIFVenta Nventa = new JIFVenta();
-        Dimension desktopSize = jDesktop.getSize();
-        Dimension FrameSize = Nventa.getSize();
-        Nventa.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
-        ((javax.swing.plaf.basic.BasicInternalFrameUI) 
-            Nventa.getUI()).setNorthPane(null);
-        jDesktop.add(Nventa);
-        Nventa.show();
-    }//GEN-LAST:event_jlblventaaccesodirMouseReleased
 
     private void jlblmenufacturacionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblmenufacturacionMouseEntered
         // TODO add your handling code here:
@@ -2831,6 +2939,312 @@ final class MDIMenu extends javax.swing.JFrame {
         }
          panelconmax();
     }//GEN-LAST:event_jlblmenufacturacionMouseReleased
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if(user.isVender()==true)
+        {
+            JIFVenta Nventa = new JIFVenta(MDIMenu.this);
+            Dimension desktopSize = jDesktop.getSize();
+            Dimension FrameSize = Nventa.getSize();
+            Nventa.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) 
+                Nventa.getUI()).setNorthPane(null);
+            jDesktop.add(Nventa);
+            Nventa.show();
+        
+        }else {
+             JOptionPane.showMessageDialog(null, "No tiene permiso para obtener acceso a venta","",JOptionPane.INFORMATION_MESSAGE);
+        
+        }
+         
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        if(user.isProductos()==true){
+            JIFrmBuscarProductos inventario= new JIFrmBuscarProductos();
+          Dimension desktopSize = jDesktop.getSize();
+          Dimension FrameSize = inventario.getSize();
+          inventario.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+          ((javax.swing.plaf.basic.BasicInternalFrameUI) 
+                inventario.getUI()).setNorthPane(null);
+          jDesktop.add(inventario);
+          inventario.show();
+        }else {
+         JOptionPane.showMessageDialog(null, "No tiene permiso para obtener acceso a productos","",JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        
+          
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jlblempleadoaccesodir1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblempleadoaccesodir1MouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jlblempleadoaccesodir1MouseReleased
+
+    private void jPanel3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MousePressed
+        // TODO add your handling code here:
+        
+         posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel3MousePressed
+
+    private void jPanel3MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseDragged
+        // TODO add your handling code here:
+         int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel3MouseDragged
+
+    private void jpaneliconoclientesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpaneliconoclientesMouseEntered
+        // TODO add your handling code here:
+      
+    }//GEN-LAST:event_jpaneliconoclientesMouseEntered
+
+    private void jpaneliconoclientesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpaneliconoclientesMouseExited
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jpaneliconoclientesMouseExited
+
+    private void jpaneliconoclientesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpaneliconoclientesMouseReleased
+        // TODO add your handling code here:
+         
+    }//GEN-LAST:event_jpaneliconoclientesMouseReleased
+
+    private void jpaneliconoempleadosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpaneliconoempleadosMouseEntered
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jpaneliconoempleadosMouseEntered
+
+    private void jpaneliconoempleadosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpaneliconoempleadosMouseExited
+        // TODO add your handling code here:
+         
+    }//GEN-LAST:event_jpaneliconoempleadosMouseExited
+
+    private void jpaneliconoventaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpaneliconoventaMouseEntered
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jpaneliconoventaMouseEntered
+
+    private void jpaneliconoventaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpaneliconoventaMouseExited
+        // TODO add your handling code here:
+         
+    }//GEN-LAST:event_jpaneliconoventaMouseExited
+
+    private void jpaneliconoproveedoresMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpaneliconoproveedoresMouseEntered
+        // TODO add your handling code here:
+         
+    }//GEN-LAST:event_jpaneliconoproveedoresMouseEntered
+
+    private void jpaneliconoproveedoresMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpaneliconoproveedoresMouseExited
+        // TODO add your handling code here:
+         
+    }//GEN-LAST:event_jpaneliconoproveedoresMouseExited
+
+    private void jpaneliconoproductosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpaneliconoproductosMouseEntered
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jpaneliconoproductosMouseEntered
+
+    private void jpaneliconoproductosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpaneliconoproductosMouseExited
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jpaneliconoproductosMouseExited
+
+    private void jpanelempleadosMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelempleadosMouseReleased
+        // TODO add your handling code here:
+        if(user.isCkempleado()==true)
+        {
+            JIFEmpleados empleado= new JIFEmpleados(MDIMenu.this);
+              Dimension desktopSize = jDesktop.getSize();
+              Dimension FrameSize = empleado.getSize();
+              empleado.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+              ((javax.swing.plaf.basic.BasicInternalFrameUI) 
+                    empleado.getUI()).setNorthPane(null);
+              jDesktop.add(empleado);
+              empleado.show();
+               panelconmin();
+        
+        
+        }else{
+             JOptionPane.showMessageDialog(null, "No tiene permiso para obtener acceso a empleados","",JOptionPane.INFORMATION_MESSAGE);
+        
+        }
+         
+    }//GEN-LAST:event_jpanelempleadosMouseReleased
+
+    private void jpanelventaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelventaMouseReleased
+        // TODO add your handling code here:
+        if(user.isVender()==true)
+        {
+            JIFVenta Nventa = new JIFVenta(MDIMenu.this);
+            Dimension desktopSize = jDesktop.getSize();
+            Dimension FrameSize = Nventa.getSize();
+            Nventa.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) 
+                Nventa.getUI()).setNorthPane(null);
+            jDesktop.add(Nventa);
+            Nventa.show();
+        
+        
+        }else {
+        
+            JOptionPane.showMessageDialog(null, "No tiene permiso para obtener acceso a venta","",JOptionPane.INFORMATION_MESSAGE);
+        }
+          
+    }//GEN-LAST:event_jpanelventaMouseReleased
+
+    private void jpanelproveedorMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelproveedorMouseReleased
+        // TODO add your handling code here:
+        if(user.isProveedor()==true)
+        {
+             JIFProveedor proveedor = new JIFProveedor(MDIMenu.this);
+            Dimension desktopSize = jDesktop.getSize();
+            Dimension FrameSize = proveedor.getSize();
+            proveedor.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) 
+                proveedor.getUI()).setNorthPane(null);
+            jDesktop.add(proveedor);
+            proveedor.show();
+        
+        }else {
+            
+             JOptionPane.showMessageDialog(null, "No tiene permiso para obtener acceso a proveedores","",JOptionPane.INFORMATION_MESSAGE);
+        
+        }
+          
+    }//GEN-LAST:event_jpanelproveedorMouseReleased
+
+    private void jpanelproductosMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelproductosMouseReleased
+        // TODO add your handling code here:
+        if(user.isProductos()==true)
+        {
+            JIFrmBuscarProductos inventario= new JIFrmBuscarProductos();
+          Dimension desktopSize = jDesktop.getSize();
+          Dimension FrameSize = inventario.getSize();
+          inventario.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+          ((javax.swing.plaf.basic.BasicInternalFrameUI) 
+                inventario.getUI()).setNorthPane(null);
+          jDesktop.add(inventario);
+          inventario.show();
+        
+        }else {
+             JOptionPane.showMessageDialog(null, "No tiene permiso para obtener acceso a productos","",JOptionPane.INFORMATION_MESSAGE);
+        
+        }
+      
+    }//GEN-LAST:event_jpanelproductosMouseReleased
+
+    private void jpanelclienteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelclienteMouseEntered
+        // TODO add your handling code here:
+          jpaneliconoclientes.setBackground(new java.awt.Color(77,161,227));
+    }//GEN-LAST:event_jpanelclienteMouseEntered
+
+    private void jpanelclienteMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelclienteMouseExited
+        // TODO add your handling code here:
+          jpaneliconoclientes.setBackground(new java.awt.Color(255,255,255));
+    }//GEN-LAST:event_jpanelclienteMouseExited
+
+    private void jpanelclienteMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelclienteMouseReleased
+        // TODO add your handling code here:
+        if(user.isCliente()==true)
+        {
+            JIFCliente cliente = new JIFCliente(MDIMenu.this);
+            Dimension desktopSize = jDesktop.getSize();
+            Dimension FrameSize = cliente.getSize();
+            cliente.setLocation((desktopSize.width - FrameSize.width)/2, (desktopSize.height- FrameSize.height)/2);
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) 
+                cliente.getUI()).setNorthPane(null);
+            jDesktop.add(cliente);
+            cliente.show();
+        }else {
+             JOptionPane.showMessageDialog(null, "No tiene permiso para obtener acceso a clientes","",JOptionPane.INFORMATION_MESSAGE);
+        
+        }
+        
+    }//GEN-LAST:event_jpanelclienteMouseReleased
+
+    private void jpanelempleadosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelempleadosMouseEntered
+        // TODO add your handling code here:
+          jpaneliconoempleados.setBackground(new java.awt.Color(77,161,227));
+        
+    }//GEN-LAST:event_jpanelempleadosMouseEntered
+
+    private void jpanelempleadosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelempleadosMouseExited
+        // TODO add your handling code here:
+          jpaneliconoempleados.setBackground(new java.awt.Color(255,255,255));
+       
+    }//GEN-LAST:event_jpanelempleadosMouseExited
+
+    private void jpanelventaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelventaMouseEntered
+        // TODO add your handling code here:
+         jpaneliconoventa.setBackground(new java.awt.Color(77,161,227));
+    }//GEN-LAST:event_jpanelventaMouseEntered
+
+    private void jpanelventaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelventaMouseExited
+        // TODO add your handling code here:
+         jpaneliconoventa.setBackground(new java.awt.Color(255,255,255));
+    }//GEN-LAST:event_jpanelventaMouseExited
+
+    private void jpanelproveedorMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelproveedorMouseEntered
+        // TODO add your handling code here:
+        jpaneliconoproveedores.setBackground(new java.awt.Color(77,161,227));
+    }//GEN-LAST:event_jpanelproveedorMouseEntered
+
+    private void jpanelproveedorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelproveedorMouseExited
+        // TODO add your handling code here:
+        jpaneliconoproveedores.setBackground(new java.awt.Color(255,255,255));
+    }//GEN-LAST:event_jpanelproveedorMouseExited
+
+    private void jpanelproductosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelproductosMouseEntered
+        // TODO add your handling code here:
+          jpaneliconoproductos.setBackground(new java.awt.Color(77,161,227));
+    }//GEN-LAST:event_jpanelproductosMouseEntered
+
+    private void jpanelproductosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelproductosMouseExited
+        // TODO add your handling code here:
+          jpaneliconoproductos.setBackground(new java.awt.Color(255,255,255));
+    }//GEN-LAST:event_jpanelproductosMouseExited
+
+    private void jlblcerrarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblcerrarMouseReleased
+        // TODO add your handling code here:
+        if(JOptionPane.showConfirmDialog(null, "¿Seguro de cerrar sesión?","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+            int componentes=jDesktop.getComponentCount();
+            System.out.println("ventanas "+componentes);
+            if(componentes==12){
+                user.getdestruir();
+                empleadosingleton.getdestruir();
+                sucursalsingleton.getdestruir();
+                MDIMenu.this.dispose();
+                Login nuevaSesion = new Login();
+                AWTUtilities.setWindowOpaque(nuevaSesion, false);
+                nuevaSesion.setVisible(true);
+
+            }else{
+                JOptionPane.showMessageDialog(null, "Imposible cerrar sesión, cierre todas las ventanas abiertas e intente nuevamente","",JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        }
+        
+    }//GEN-LAST:event_jlblcerrarMouseReleased
+
+    private void jpanelbannerMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelbannerMouseDragged
+        // TODO add your handling code here:
+      
+    }//GEN-LAST:event_jpanelbannerMouseDragged
+
+    private void jpanelbannerMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelbannerMousePressed
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jpanelbannerMousePressed
+
+    private void jlblmaxMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlblmaxMouseReleased
+        // TODO add your handling code here:
+          this.setExtendedState(MAXIMIZED_BOTH);
+        
+        
+    }//GEN-LAST:event_jlblmaxMouseReleased
 
     /**
      * @param args the command line arguments
@@ -2869,67 +3283,57 @@ final class MDIMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JDesktopPane jDesktop;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JButton jbtnactualizar;
-    private javax.swing.JComboBox jcbsucursal;
+    private javax.swing.JLabel jlblcerrar;
     private javax.swing.JLabel jlblclienteaccesodir;
-    private javax.swing.JLabel jlblclientemenu2;
     private javax.swing.JLabel jlblclireg;
-    private javax.swing.JLabel jlblempleadoaccesodir;
+    private javax.swing.JLabel jlblempleadoaccesodir1;
     private javax.swing.JLabel jlblempleadomes;
-    private javax.swing.JLabel jlblempleadosmenu2;
     private javax.swing.JLabel jlblemplereg;
     private javax.swing.JLabel jlblhora;
+    private javax.swing.JLabel jlblmax;
     private javax.swing.JLabel jlblmenucaja;
     private javax.swing.JLabel jlblmenuestado;
     private javax.swing.JLabel jlblmenufacturacion;
     private javax.swing.JLabel jlblmenuproducto;
     private javax.swing.JLabel jlblmenuregistro;
     private javax.swing.JLabel jlblmenurepara;
-    private javax.swing.JLabel jlblmenusucursal;
     private javax.swing.JLabel jlblmenuuser;
     private javax.swing.JLabel jlblmenuventa;
     private javax.swing.JLabel jlblminice;
     private javax.swing.JLabel jlblprodbajo;
     private javax.swing.JLabel jlblprodreg;
-    private javax.swing.JLabel jlblproductosaccesodir;
-    private javax.swing.JLabel jlblproductosmenu2;
     private javax.swing.JLabel jlblproveedoraccesodir;
-    private javax.swing.JLabel jlblproveedormenu2;
     private javax.swing.JLabel jlblprovreg;
     private javax.swing.JLabel jlblresize;
     private javax.swing.JLabel jlblrpruebaconexion;
     private javax.swing.JLabel jlblrut;
     private javax.swing.JLabel jlblsucursal;
-    private javax.swing.JLabel jlbltitulo;
     private javax.swing.JLabel jlbluser;
-    private javax.swing.JLabel jlblventaaccesodir;
+    private javax.swing.JLabel jlblusercabecera;
     private javax.swing.JLabel jlblventaanio;
     private javax.swing.JLabel jlblventadia;
-    private javax.swing.JLabel jlblventamenu2;
     private javax.swing.JLabel jlblventames;
     private javax.swing.JLabel jlblventproc;
+    private javax.swing.JPanel jpanelbanner;
+    private javax.swing.JLabel jpanelcliente;
     private javax.swing.JPanel jpanelcontenedor;
+    private javax.swing.JLabel jpanelempleados;
+    private javax.swing.JPanel jpanelgrafico;
+    private javax.swing.JPanel jpaneliconoclientes;
+    private javax.swing.JPanel jpaneliconoempleados;
+    private javax.swing.JPanel jpaneliconoproductos;
+    private javax.swing.JPanel jpaneliconoproveedores;
+    private javax.swing.JPanel jpaneliconoventa;
+    private javax.swing.JLabel jpanelproductos;
+    private javax.swing.JLabel jpanelproveedor;
     private javax.swing.JPanel jpanelresumen;
+    private javax.swing.JLabel jpanelventa;
     // End of variables declaration//GEN-END:variables
 }

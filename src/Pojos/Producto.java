@@ -31,11 +31,94 @@ public class Producto {
     private long idunidm;
     private String unidadm;
     private String unidabrev;
+    private long idtipoigv;
+    private int tipoigv;
+    private double igv;
+    private double total;
+    private double subtotal;
+    private double descuento;
+    private double valor;
+    private double saldo;
+    private String motivo;
+    
     public Producto() {
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public int getTipoigv() {
+        return tipoigv;
+    }
+
+    public void setTipoigv(int tipoigv) {
+        this.tipoigv = tipoigv;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+    
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
     }
 
     public String getUnidabrev() {
         return unidabrev;
+    }
+
+    public double getValor() {
+        return valor;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+
+    public long getIdtipoigv() {
+        return idtipoigv;
+    }
+
+    public void setIdtipoigv(long idtipoigv) {
+        this.idtipoigv = idtipoigv;
+    }
+
+    public double getIgv() {
+        return igv;
+    }
+
+    public void setIgv(double igv) {
+        this.igv = igv;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public double getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(double descuento) {
+        this.descuento = descuento;
     }
 
     public void setUnidabrev(String unidabrev) {

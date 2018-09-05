@@ -59,18 +59,19 @@ public class JDCambiarClave extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jbtncambiar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtncambiar.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
-        jbtncambiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
+        jbtncambiar.setBackground(new java.awt.Color(77, 161, 227));
+        jbtncambiar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtncambiar.setForeground(new java.awt.Color(255, 255, 255));
         jbtncambiar.setText("Aceptar");
         jbtncambiar.setBorderPainted(false);
         jbtncambiar.setContentAreaFilled(false);
+        jbtncambiar.setOpaque(true);
         jbtncambiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtncambiarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtncambiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, -1, -1));
+        jPanel1.add(jbtncambiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, 120, 40));
 
         jtfantiguaclave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtfantiguaclave.addActionListener(new java.awt.event.ActionListener() {
@@ -108,7 +109,7 @@ public class JDCambiarClave extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
         );
 
         pack();

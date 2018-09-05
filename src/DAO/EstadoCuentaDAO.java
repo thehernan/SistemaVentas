@@ -36,7 +36,7 @@ public class EstadoCuentaDAO {
         return false;
        }
        };      
-      String titulos[]={"ID","NOMBRE RAZON S.","RUT","TOTAL","ABONO","SALDO"};
+      String titulos[]={"ID","Nombres","Doc","Total","Abono","Saldo"};
       modelo.setColumnIdentifiers(titulos);
       tabla.setModel(modelo);
       tabla.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -161,7 +161,7 @@ public class EstadoCuentaDAO {
        return false;
       }
       };      
-     String titulos[]={"ID","NOMBRE RAZON S.","RUT","CELULAR","IMPORTE","ABONO","SALDO"};
+     String titulos[]={"ID","Nombres","Doc.","Celular","Importe","Abono","Saldo"};
      modelo.setColumnIdentifiers(titulos);
      tabla.setModel(modelo);
      tabla.getColumnModel().getColumn(0).setMaxWidth(0);

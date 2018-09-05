@@ -133,19 +133,18 @@ public class ReparacionDAO {
      }
      
 }
-    public Reparacion buscarcaja(JTable tab,String cod,JLabel cliente,JLabel rut,JFormattedTextField total,
-        JFormattedTextField subtotal,JFormattedTextField iva,JFormattedTextField abono,JFormattedTextField descuento){
+    public Reparacion buscarcaja(JTable tab,String cod,JLabel cliente,JLabel rut){
        ConexionBD Cbd = new ConexionBD();
  
-        Reparacion repara= new Reparacion();
+        Reparacion repara=null;
         DefaultTableModel tabla=new DefaultTableModel(){
         public boolean isCellEditable(int row, int column) {
            //      if (column == 5) return true;
         //else
         return false;
-    }
-  }; 
-    String titulos[]={"CODIGO","PRODUCTO","CANTIDAD","PRECIO","IMPORTE"};
+        }
+      }; 
+    String titulos[]={"Codigo","Producto","Cantidad","Precio","Importe"};
     tabla.setColumnIdentifiers(titulos);
     NumberFormat nf=NumberFormat.getInstance();
     try{
@@ -159,24 +158,21 @@ public class ReparacionDAO {
         Object datosR[] = new Object[5];
         cliente.setText("");
         rut.setText("");
-        total.setValue(0);
-        subtotal.setValue(0);
-        iva.setValue(0);
-        abono.setValue(0);
-        descuento.setValue(0);
+      
         int cont = 0;
-        while (rs.next()){
-            cont++;
+        if (rs.next()){
+           repara = new Reparacion();
            repara.setIdreparacion(rs.getLong("vidreparacion"));
            // System.out.println("NOMBRE: "+rs.getString("vnombre"));
            repara.setCodigo(rs.getString("vcodigo"));
-           cliente.setText(rs.getString("vcliente"));
-           rut.setText(rs.getString("vrut"));
-           total.setValue(rs.getBigDecimal("vimporte"));
-           subtotal.setValue(rs.getBigDecimal("vsubtotal"));
-           iva.setValue(rs.getBigDecimal("viva"));
-           abono.setValue(rs.getBigDecimal("vabono"));
-            descuento.setValue(rs.getBigDecimal("vdescuento"));
+           cliente.setText("Cliente: "+rs.getString("vcliente"));
+           rut.setText("Doc.: "+rs.getString("vrut"));
+           repara.setTotal(rs.getDouble("vimporte"));
+           repara.setSubtotal(rs.getDouble("vsubtotal"));
+           repara.setIgv(rs.getDouble("viva"));
+           repara.setAbono(rs.getDouble("vabono"));
+           repara.setDescuento(rs.getDouble("vdescuento"));
+         
                      datosR[0] = repara.getCodigo();
                      
                      datosR[1] = rs.getObject("vproducto");
@@ -196,10 +192,10 @@ public class ReparacionDAO {
         tab.setModel(tabla);
         TableColumnModel columnModel = tab.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(100);
-        columnModel.getColumn(1).setPreferredWidth(500);
-        columnModel.getColumn(2).setPreferredWidth(50);
-        columnModel.getColumn(3).setPreferredWidth(50);
-        columnModel.getColumn(4).setPreferredWidth(50);
+        columnModel.getColumn(1).setPreferredWidth(600);
+        columnModel.getColumn(2).setPreferredWidth(100);
+        columnModel.getColumn(3).setPreferredWidth(100);
+        columnModel.getColumn(4).setPreferredWidth(100);
         if (cont==0){
             JOptionPane.showMessageDialog(null,"La reparación se encuentra en proceso o ya fue cancelada","",JOptionPane.INFORMATION_MESSAGE);//SI NO ENCUENTRA LA REPARACION O ESTA EN PROCESO
         }
@@ -212,7 +208,7 @@ public class ReparacionDAO {
                Cbd.desconectar();
                        
             }    
-return repara;
+    return repara;
     
     }
     
@@ -319,7 +315,7 @@ return repara;
     return false;
     }
     }; 
-    String titulos[]={"COD.","TECNICO","CLIENTE","FECHA RECEP.","IMPORTE","DESCUENTO","TOTAL","SUCURSAL"};
+    String titulos[]={"Cod.","Técnico","Cliente","Fecha Recep.","Importe","Descuento","Total","Sucursal"};
     tabla.setColumnIdentifiers(titulos);
     tab.setModel(tabla);
 

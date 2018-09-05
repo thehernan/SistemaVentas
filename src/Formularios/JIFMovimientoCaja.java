@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -157,6 +158,7 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
         jlblmensaje = new javax.swing.JLabel();
+        jbtnvercaja = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jdpdesdeM = new org.jdesktop.swingx.JXDatePicker();
@@ -172,13 +174,14 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jtablaM = new javax.swing.JTable();
         jlbltotalM = new javax.swing.JLabel();
+        jbtnvermovi = new javax.swing.JButton();
 
-        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
         jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel7MouseDragged(evt);
@@ -192,7 +195,6 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("CONSULTAR CAJA ");
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -344,11 +346,20 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
 
         jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 106, 1244, 317));
 
-        jlblmensaje.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblmensaje.setForeground(new java.awt.Color(255, 51, 51));
+        jlblmensaje.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
         jlblmensaje.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlblmensaje.setText("* * *");
         jPanel3.add(jlblmensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(693, 429, 563, -1));
+
+        jbtnvercaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/view25px.png"))); // NOI18N
+        jbtnvercaja.setBorderPainted(false);
+        jbtnvercaja.setContentAreaFilled(false);
+        jbtnvercaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnvercajaActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jbtnvercaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 70, -1, -1));
 
         jTabbedPane1.addTab("Caja", jPanel3);
 
@@ -449,7 +460,7 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
 
             }
         ));
-        jtablaM.setToolTipText("Doble Clic para ver detalle");
+        jtablaM.setToolTipText("");
         jtablaM.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jtablaM.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -460,11 +471,20 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
 
         jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 111, 1244, 310));
 
-        jlbltotalM.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlbltotalM.setForeground(new java.awt.Color(255, 51, 51));
+        jlbltotalM.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
         jlbltotalM.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlbltotalM.setText("* * *");
-        jPanel4.add(jlbltotalM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1038, 427, 218, -1));
+        jPanel4.add(jlbltotalM, new org.netbeans.lib.awtextra.AbsoluteConstraints(796, 427, 460, -1));
+
+        jbtnvermovi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/view25px.png"))); // NOI18N
+        jbtnvermovi.setBorderPainted(false);
+        jbtnvermovi.setContentAreaFilled(false);
+        jbtnvermovi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnvermoviActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jbtnvermovi, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 70, -1, -1));
 
         jTabbedPane1.addTab("Movimientos", jPanel4);
 
@@ -480,7 +500,7 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -510,29 +530,7 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jtablaMousePressed
 
     private void jtablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMouseReleased
-        // TODO add your handling code here:
-         if (evt.getClickCount()==2){
-                int index = jtabla.getSelectedRow();
-                if(index>=0){
-//                    Caja caja= new Caja();
-//                    caja.setId_caja(Long.parseLong(jtabla.getValueAt(index, 0).toString()));
-//                    caja.setAperturadinero(Double.parseDouble(jtabla.getValueAt(index, 6).toString()));
-////                    caja.setFechahora_apertura(Timestamp.valueOf(jtabla.getValueAt(index, 6).toString()));
-//                    try {
-//                        caja.setCierradinero(Double.parseDouble(jtabla.getValueAt(index, 7).toString()));
-//                        
-//                    } catch (NullPointerException e) {
-//                    }
-                    
-                    
-                    caja = listcaja.get(index);
-                    JDDetalleMovimientoCaja detmovcaja= new JDDetalleMovimientoCaja(new java.awt.Frame(),isVisible(),
-                    caja);
-                    detmovcaja.setVisible(true);
-            
-            }
         
-        }
     }//GEN-LAST:event_jtablaMouseReleased
 
     private void jtfbuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfbuscarKeyReleased
@@ -577,20 +575,7 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
 
     private void jtablaMMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMMouseReleased
         // TODO add your handling code here:
-        if(evt.getClickCount()==2){
-            detcajaM = listdetcaja.get(jtablaM.getSelectedRow());
-            System.out.println("idventa"+detcajaM.getIdventa());
-          if(detcajaM.getIdventa()!=0){
-              JDMostrarVenta mostraventa= new JDMostrarVenta(new Frame(), isVisible(),detcajaM.getIdventa());
-              mostraventa.setVisible(true);
-          }
-            System.out.println("idrepara"+detcajaM.getIdreparacion());
-          if(detcajaM.getIdreparacion()!=0){
-              JDMostrarReparacion mostrarrepara= new JDMostrarReparacion(new Frame(), isVisible(),detcajaM.getIdreparacion());
-              mostrarrepara.setVisible(true);
-          }
-        
-        }
+       
     }//GEN-LAST:event_jtablaMMouseReleased
 
     private void jtfbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfbuscarActionPerformed
@@ -621,6 +606,62 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
         this.setLocation(xp, yp);
     }//GEN-LAST:event_jPanel7MouseDragged
 
+    private void jbtnvercajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnvercajaActionPerformed
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        
+                int index = jtabla.getSelectedRow();
+                if(index>=0){
+//                    Caja caja= new Caja();
+//                    caja.setId_caja(Long.parseLong(jtabla.getValueAt(index, 0).toString()));
+//                    caja.setAperturadinero(Double.parseDouble(jtabla.getValueAt(index, 6).toString()));
+////                    caja.setFechahora_apertura(Timestamp.valueOf(jtabla.getValueAt(index, 6).toString()));
+//                    try {
+//                        caja.setCierradinero(Double.parseDouble(jtabla.getValueAt(index, 7).toString()));
+//                        
+//                    } catch (NullPointerException e) {
+//                    }
+                    
+                    
+                    caja = listcaja.get(index);
+                    JDDetalleMovimientoCaja detmovcaja= new JDDetalleMovimientoCaja(new java.awt.Frame(),isVisible(),
+                    caja);
+                    detmovcaja.setVisible(true);
+            
+            }else {
+                    JOptionPane.showMessageDialog(null, "Seleccione un item","",JOptionPane.INFORMATION_MESSAGE);
+                }
+        
+        
+    }//GEN-LAST:event_jbtnvercajaActionPerformed
+
+    private void jbtnvermoviActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnvermoviActionPerformed
+        // TODO add your handling code here:
+        int index = jtablaM.getSelectedRow();
+                
+        if(index>=0)
+        {
+             detcajaM = listdetcaja.get(jtablaM.getSelectedRow());
+                System.out.println("idventa"+detcajaM.getIdventa());
+              if(detcajaM.getIdventa()!=0){
+                  JDMostrarVenta mostraventa= new JDMostrarVenta(new Frame(), isVisible(),detcajaM.getIdventa());
+                  mostraventa.setVisible(true);
+              }
+                System.out.println("idrepara"+detcajaM.getIdreparacion());
+              if(detcajaM.getIdreparacion()!=0){
+                  JDMostrarReparacion mostrarrepara= new JDMostrarReparacion(new Frame(), isVisible(),detcajaM.getIdreparacion());
+                  mostrarrepara.setVisible(true);
+              }
+        
+        
+        }else {
+            JOptionPane.showMessageDialog(null,"Seleccione un item","",JOptionPane.INFORMATION_MESSAGE);
+        }
+           
+        
+        
+    }//GEN-LAST:event_jbtnvermoviActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -642,6 +683,8 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JButton jbtnvercaja;
+    private javax.swing.JButton jbtnvermovi;
     private javax.swing.JComboBox jcbsucursal;
     private javax.swing.JComboBox jcbsucursalM;
     private org.jdesktop.swingx.JXDatePicker jdpdesde;

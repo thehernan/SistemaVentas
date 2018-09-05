@@ -40,6 +40,7 @@ public class MonedaDAO {
              moneda.setTipo_cambio(rs.getDouble(3));
              moneda.setOp(rs.getInt(4));
              moneda.setAbrev(rs.getString(5));
+             moneda.setSimbolo(rs.getString(6));
             listmoneda.add(moneda);
 		
         }

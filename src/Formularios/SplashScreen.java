@@ -25,7 +25,7 @@ public class SplashScreen extends javax.swing.JFrame {
     
    
     boolean valida;
-    javax.swing.Timer timer;
+   
 //    Login login= new Login() ;
    
     public  SplashScreen() {
@@ -233,6 +233,8 @@ public class SplashScreen extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jProgressInicio.setString("");
+
         jlblMensaje.setBackground(new java.awt.Color(255, 255, 255));
         jlblMensaje.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
         jlblMensaje.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/codprod.png"))); // NOI18N
@@ -270,8 +272,8 @@ public class SplashScreen extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jlblMensaje)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jProgressInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46))
+                .addComponent(jProgressInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56))
         );
 
         pack();

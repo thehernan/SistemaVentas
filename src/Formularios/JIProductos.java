@@ -5,6 +5,7 @@
  */
 package Formularios;
 
+import ClasesGlobales.FormatoNumerico;
 import ClasesGlobales.Mayusculas;
 import DAO.FamiliaDAO;
 import DAO.ProductoDAO;
@@ -22,6 +23,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -52,7 +54,12 @@ public class JIProductos extends javax.swing.JInternalFrame {
     int posx;
     int posy;
     List<Unidad_Medida> listunidad;
+    FormatoNumerico fn = new FormatoNumerico();
+    MDIMenu menu;
     public JIProductos() {
+        
+    }
+    public JIProductos(MDIMenu menu) {
         initComponents();
         jlblcargando.setVisible(false);
         jlblcargafoto.setVisible(false);
@@ -63,6 +70,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
         
         mostrar();    
         mostrarunidadm();
+        this.menu=menu;
     }
     public void mostrar() {
         Runnable runnable = new Runnable() {
@@ -126,25 +134,35 @@ public class JIProductos extends javax.swing.JInternalFrame {
     jtaobservacion.setText("OBSERVACION");
     jtffamilia.setText("FAMILIA");
     jlblImageProducto.setIcon(null);
-    jtfprecio.setValue(0);
-    jtfprecio1.setValue(0);
-    jtfprecio2.setValue(0);
-    jtfprecio3.setValue(0);
+    jtfprecio.setText("");
+    jtfprecio1.setText("");
+    jtfprecio2.setText("");
+    jtfprecio3.setText("");
     familia = new Familia();
     }
     public void validaguardar(){
-        String cod= jtfcodigo.getText().replaceAll("\\s","");
-        String jfamilia= jtffamilia.getText().replaceAll("\\s","");
-        String desc = jtfdescripcion.getText().replaceAll("\\s","");
-    if(!cod.equals("CODIGO") && cod.length() > 4 && !jfamilia.equals("FAMILIA") && !jfamilia.equals("") &&
-            Double.parseDouble(jtfprecio.getValue().toString()) >=0 && Double.parseDouble(jtfprecio1.getValue().toString()) >=0 &&
-            Double.parseDouble(jtfprecio2.getValue().toString()) >=0 &&Double.parseDouble(jtfprecio3.getValue().toString()) >=0 && desc.length() > 0
-            && !jtfdescripcion.getText().equals("DESCRIPCION")){
-        bloquearjbtn(false, false, true,false ,true, true,true,false,true);
-    }else {
-         bloquearjbtn(true, false, false, false, true, true,true,false,true);
-    
-    }
+        try {
+            String cod= jtfcodigo.getText().replaceAll("\\s","");
+            String jfamilia= jtffamilia.getText().replaceAll("\\s","");
+            String desc = jtfdescripcion.getText().replaceAll("\\s","");
+            if(!cod.equals("CODIGO") && cod.length() > 4 && !jfamilia.equals("FAMILIA") && !jfamilia.equals("") &&
+                    Double.parseDouble(jtfprecio.getText()) >=0 && Double.parseDouble(jtfprecio1.getText()) >=0 &&
+                    Double.parseDouble(jtfprecio2.getText()) >=0 &&Double.parseDouble(jtfprecio3.getText()) >=0 && desc.length() > 0
+                    && !jtfdescripcion.getText().equals("DESCRIPCION")){
+                bloquearjbtn(false, false, true,false ,true, true,true,false,true);
+            }else {
+                 bloquearjbtn(true, false, false, false, true, true,true,false,true);
+
+            }
+            
+            
+            
+            
+            
+        } catch (Exception e) {
+            bloquearjbtn(true, false, false, false, true, true,true,false,true);
+        }
+       
     
     }
     public void setfamilia(Familia familia){
@@ -153,7 +171,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
     
     }
     public  void buscar(){
-        try {
+//        try {
         if(jtablaproducto.getSelectedRow()>=0){
         Producto prodb;
         jlblcargafoto.setVisible(true);
@@ -162,7 +180,8 @@ public class JIProductos extends javax.swing.JInternalFrame {
         if(listprod.size()==jtablaproducto.getRowCount()){
         prodb = listprod.get(jtablaproducto.getSelectedRow());
 //        id = Long.parseLong(jtablaproducto.getValueAt(jtablaproducto.getSelectedRow(), 0).toString());
-        producto = daoproducto.buscarproducto("ID", prodb.getIdproducto(),sucursalsingleton.getId(),null);
+            System.out.println("idprod: "+prodb.getIdproducto());
+        producto = daoproducto.buscarproducto("ID", prodb.getIdproducto(),sucursalsingleton.getId(),"");
         
         /// mostrar imagen ///
         ImageIcon imageIcon = new ImageIcon(this.producto.getFoto());
@@ -179,10 +198,10 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jtffamilia.setText(producto.getDescripfamilia());
         familia.setIdfamilia(producto.getIdfamilia());
         fotoB= producto.getFoto();
-        jtfprecio.setValue(producto.getPrecio());
-        jtfprecio1.setValue(producto.getPrecio1());
-        jtfprecio2.setValue(producto.getPrecio2());
-        jtfprecio3.setValue(producto.getPrecio3());
+        jtfprecio.setText(fn.FormatoN(producto.getPrecio()));
+        jtfprecio1.setText(fn.FormatoN(producto.getPrecio1()));
+        jtfprecio2.setText(fn.FormatoN(producto.getPrecio2()));
+        jtfprecio3.setText(fn.FormatoN(producto.getPrecio3()));
         jcbunidmedida.setSelectedItem(producto.getUnidadm()+" - "+producto.getUnidabrev());
 //        jcbmoneda.setSelectedItem(producto.getMoneda());
 //        jspmargen.setValue(producto.getMargenG());
@@ -198,9 +217,9 @@ public class JIProductos extends javax.swing.JInternalFrame {
 
             }
          
-        } catch (Exception e) {
-            System.out.println(" b"+e);
-        }
+//        } catch (Exception e) {
+//            System.out.println(" b"+e);
+//        }
     jlblcargafoto.setVisible(false);    
    
     }
@@ -258,11 +277,13 @@ public class JIProductos extends javax.swing.JInternalFrame {
     {
         UnidadMedidaDAO  unddao = new UnidadMedidaDAO();
         listunidad = unddao.mostrar();
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
         for(Unidad_Medida unid: listunidad)
         {
-            jcbunidmedida.addItem(unid.getMedida()+" - "+unid.getAbreviatura());
+            model.addElement(unid.getMedida()+" - "+unid.getAbreviatura());
         
         }
+        jcbunidmedida.setModel(model);
         
         
     
@@ -297,25 +318,24 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jtffamilia = new javax.swing.JTextField();
         jbtnbuscarfamilia = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        panelNice1 = new org.edisoncor.gui.panel.PanelNice();
-        jbtnfoto = new javax.swing.JButton();
-        jbtngeneracodigobarras = new javax.swing.JButton();
-        jlblcargafoto = new javax.swing.JLabel();
-        jlblImageProducto = new javax.swing.JLabel();
-        jtfprecio = new javax.swing.JFormattedTextField();
         jcbfamilia = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jtfprecio3 = new javax.swing.JFormattedTextField();
-        jtfprecio1 = new javax.swing.JFormattedTextField();
-        jtfprecio2 = new javax.swing.JFormattedTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jlbltiempoproceso = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jcbunidmedida = new javax.swing.JComboBox();
+        jlblImageProducto = new javax.swing.JLabel();
+        jbtnfoto = new javax.swing.JButton();
+        jbtngeneracodigobarras = new javax.swing.JButton();
+        jlblcargafoto = new javax.swing.JLabel();
+        jtfprecio = new javax.swing.JTextField();
+        jtfprecio1 = new javax.swing.JTextField();
+        jtfprecio2 = new javax.swing.JTextField();
+        jtfprecio3 = new javax.swing.JTextField();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         setClosable(true);
@@ -359,14 +379,13 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jlblcargandoletra.setForeground(new java.awt.Color(0, 0, 0));
         jlblcargandoletra.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblcargandoletra.setText("Cargando Productos ...");
-        jPanel4.add(jlblcargandoletra, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 400, 220, -1));
+        jPanel4.add(jlblcargandoletra, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 410, 220, -1));
 
         jlblcargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblcargando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
-        jPanel4.add(jlblcargando, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 114, 690, 400));
+        jPanel4.add(jlblcargando, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, 210, 210));
 
         jtablaproducto.setBackground(new java.awt.Color(255, 255, 255));
-        jtablaproducto.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtablaproducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -469,7 +488,6 @@ public class JIProductos extends javax.swing.JInternalFrame {
         });
         jPanel4.add(jbtncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 70, 90, -1));
 
-        jtfcodigo.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jtfcodigo.setText("CODIGO");
         jtfcodigo.setToolTipText("Codigo");
         jtfcodigo.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -490,7 +508,6 @@ public class JIProductos extends javax.swing.JInternalFrame {
         });
         jPanel4.add(jtfcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 310, 210, -1));
 
-        jtfdescripcion.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jtfdescripcion.setText("DESCRIPCION");
         jtfdescripcion.setToolTipText("Descripcion");
         jtfdescripcion.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -512,7 +529,6 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jPanel4.add(jtfdescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 470, 460, -1));
 
         jtaobservacion.setColumns(20);
-        jtaobservacion.setFont(new java.awt.Font("Segoe UI Light", 0, 10)); // NOI18N
         jtaobservacion.setRows(5);
         jtaobservacion.setText("OBSERVACIONES");
         jtaobservacion.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -545,7 +561,6 @@ public class JIProductos extends javax.swing.JInternalFrame {
         });
         jPanel4.add(jbtngenerarcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 310, -1, 20));
 
-        jtffamilia.setFont(new java.awt.Font("Segoe UI Light", 1, 10)); // NOI18N
         jtffamilia.setText("FAMILIA");
         jtffamilia.setEnabled(false);
         jPanel4.add(jtffamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 440, 300, -1));
@@ -564,65 +579,6 @@ public class JIProductos extends javax.swing.JInternalFrame {
         jLabel1.setText("Precio 3:");
         jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 400, -1, 20));
 
-        panelNice1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jbtnfoto.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnfoto.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jbtnfoto.setForeground(new java.awt.Color(255, 255, 255));
-        jbtnfoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/FOTO.png"))); // NOI18N
-        jbtnfoto.setText("Foto Referencial");
-        jbtnfoto.setBorderPainted(false);
-        jbtnfoto.setContentAreaFilled(false);
-        jbtnfoto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnfotoActionPerformed(evt);
-            }
-        });
-        panelNice1.add(jbtnfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, 160, 40));
-
-        jbtngeneracodigobarras.setBackground(new java.awt.Color(255, 255, 255));
-        jbtngeneracodigobarras.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jbtngeneracodigobarras.setForeground(new java.awt.Color(255, 255, 255));
-        jbtngeneracodigobarras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/codprod.png"))); // NOI18N
-        jbtngeneracodigobarras.setText("Generar Cod. Barras");
-        jbtngeneracodigobarras.setBorderPainted(false);
-        jbtngeneracodigobarras.setContentAreaFilled(false);
-        jbtngeneracodigobarras.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jbtngeneracodigobarrasMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jbtngeneracodigobarrasMousePressed(evt);
-            }
-        });
-        jbtngeneracodigobarras.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtngeneracodigobarrasActionPerformed(evt);
-            }
-        });
-        panelNice1.add(jbtngeneracodigobarras, new org.netbeans.lib.awtextra.AbsoluteConstraints(292, 60, -1, 50));
-
-        jlblcargafoto.setFont(new java.awt.Font("Segoe Script", 0, 10)); // NOI18N
-        jlblcargafoto.setForeground(new java.awt.Color(238, 238, 238));
-        jlblcargafoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
-        jlblcargafoto.setText("Cargando vista previa");
-        panelNice1.add(jlblcargafoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 200, -1));
-
-        jlblImageProducto.setBackground(new java.awt.Color(255, 255, 255));
-        jlblImageProducto.setForeground(new java.awt.Color(255, 255, 255));
-        jlblImageProducto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        panelNice1.add(jlblImageProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 240, 180));
-
-        jPanel4.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 104, 480, 200));
-
-        jtfprecio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jtfprecio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfprecioKeyReleased(evt);
-            }
-        });
-        jPanel4.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 370, 130, -1));
-
         jcbfamilia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbfamiliaActionPerformed(evt);
@@ -638,30 +594,6 @@ public class JIProductos extends javax.swing.JInternalFrame {
 
         jLabel6.setText("Precio 2:");
         jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 400, -1, 20));
-
-        jtfprecio3.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jtfprecio3.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfprecio3KeyReleased(evt);
-            }
-        });
-        jPanel4.add(jtfprecio3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 400, 130, -1));
-
-        jtfprecio1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jtfprecio1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfprecio1KeyReleased(evt);
-            }
-        });
-        jPanel4.add(jtfprecio1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 370, 130, -1));
-
-        jtfprecio2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jtfprecio2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfprecio2KeyReleased(evt);
-            }
-        });
-        jPanel4.add(jtfprecio2, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 400, 130, -1));
 
         jPanel1.setBackground(new java.awt.Color(238, 238, 238));
         jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -719,7 +651,84 @@ public class JIProductos extends javax.swing.JInternalFrame {
 
         jLabel8.setText("Unid. Medida:");
         jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 340, -1, 20));
+
+        jcbunidmedida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbunidmedidaActionPerformed(evt);
+            }
+        });
         jPanel4.add(jcbunidmedida, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 340, 270, -1));
+
+        jlblImageProducto.setBackground(new java.awt.Color(255, 255, 255));
+        jlblImageProducto.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel4.add(jlblImageProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 100, 260, 180));
+
+        jbtnfoto.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnfoto.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtnfoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/FOTO.png"))); // NOI18N
+        jbtnfoto.setText("Foto Referencial");
+        jbtnfoto.setBorderPainted(false);
+        jbtnfoto.setContentAreaFilled(false);
+        jbtnfoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnfotoActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jbtnfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 120, 160, 40));
+
+        jbtngeneracodigobarras.setBackground(new java.awt.Color(255, 255, 255));
+        jbtngeneracodigobarras.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jbtngeneracodigobarras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/codprod.png"))); // NOI18N
+        jbtngeneracodigobarras.setText("Generar Cod. Barras");
+        jbtngeneracodigobarras.setBorderPainted(false);
+        jbtngeneracodigobarras.setContentAreaFilled(false);
+        jbtngeneracodigobarras.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jbtngeneracodigobarrasMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jbtngeneracodigobarrasMousePressed(evt);
+            }
+        });
+        jbtngeneracodigobarras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtngeneracodigobarrasActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jbtngeneracodigobarras, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 170, -1, 50));
+
+        jlblcargafoto.setFont(new java.awt.Font("Segoe Script", 0, 10)); // NOI18N
+        jlblcargafoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading4.gif"))); // NOI18N
+        jlblcargafoto.setText("Cargando vista previa");
+        jPanel4.add(jlblcargafoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 160, 200, -1));
+
+        jtfprecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfprecioKeyReleased(evt);
+            }
+        });
+        jPanel4.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 370, 130, -1));
+
+        jtfprecio1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfprecio1KeyReleased(evt);
+            }
+        });
+        jPanel4.add(jtfprecio1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 370, 130, -1));
+
+        jtfprecio2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfprecio2KeyReleased(evt);
+            }
+        });
+        jPanel4.add(jtfprecio2, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 400, 130, -1));
+
+        jtfprecio3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfprecio3KeyReleased(evt);
+            }
+        });
+        jPanel4.add(jtfprecio3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 400, 130, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -854,10 +863,10 @@ public class JIProductos extends javax.swing.JInternalFrame {
         producto.setCodigo(codigo);
         producto.setDescripcion(descripcion);
         producto.setObservacion(observacion);
-        producto.setPrecio(Double.parseDouble(jtfprecio.getValue().toString()));
-        producto.setPrecio1(Double.parseDouble(jtfprecio1.getValue().toString()));
-        producto.setPrecio2(Double.parseDouble(jtfprecio2.getValue().toString()));
-        producto.setPrecio3(Double.parseDouble(jtfprecio3.getValue().toString()));
+        producto.setPrecio(Double.parseDouble(jtfprecio.getText()));
+        producto.setPrecio1(Double.parseDouble(jtfprecio1.getText()));
+        producto.setPrecio2(Double.parseDouble(jtfprecio2.getText()));
+        producto.setPrecio3(Double.parseDouble(jtfprecio3.getText()));
        producto.setIdunidm(und.getId());
 //        try {
 //             producto.setMoneda(jcbmoneda.getSelectedItem().toString());
@@ -876,10 +885,11 @@ public class JIProductos extends javax.swing.JInternalFrame {
                    if(valida==true){
                        producto.setCantidad(0.0);
                        daoproducto.insertarproducto(producto);
+                       menu.cargarresumen();
                        refrescar=true;
                         bloquearjtf(false, false, false,false,false,false,false,false);   
                    }else{
-                    JOptionPane.showMessageDialog(null, "El prodcuto ya se encuentra registrado","",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "El producto ya se encuentra registrado","",JOptionPane.ERROR_MESSAGE);
                 }    
                  
                 }
@@ -893,7 +903,7 @@ public class JIProductos extends javax.swing.JInternalFrame {
                       refrescar=true;
                        bloquearjtf(false, false, false,false,false,false,false,false);   
                  }else {
-                     JOptionPane.showMessageDialog(null, "EL PRODUCTO YA SE ENCUENTRA REGISTRADO","SISTEMA",JOptionPane.INFORMATION_MESSAGE);
+                     JOptionPane.showMessageDialog(null, "El producto ya se encuentra registrado","",JOptionPane.INFORMATION_MESSAGE);
                  }
                    
                    
@@ -1109,14 +1119,14 @@ public class JIProductos extends javax.swing.JInternalFrame {
 
     private void jtfcodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcodigoKeyTyped
         // TODO add your handling code here:
-         char c = evt.getKeyChar();
-        if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)
-                ) {
-                evt.consume();
-            }
-            if (c == '.' && jtfcodigo.getText().contains(".")) {
-                evt.consume();
-                } 
+//         char c = evt.getKeyChar();
+//        if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)
+//                ) {
+//                evt.consume();
+//            }
+//            if (c == '.' && jtfcodigo.getText().contains(".")) {
+//                evt.consume();
+//                } 
         
     }//GEN-LAST:event_jtfcodigoKeyTyped
 
@@ -1181,6 +1191,11 @@ public class JIProductos extends javax.swing.JInternalFrame {
          }
     }//GEN-LAST:event_jtfbuscarproductoKeyPressed
 
+    private void jcbunidmedidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbunidmedidaActionPerformed
+        // TODO add your handling code here:
+        validaguardar();
+    }//GEN-LAST:event_jcbunidmedidaActionPerformed
+
     private void jtfprecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecioKeyReleased
         // TODO add your handling code here:
         validaguardar();
@@ -1237,10 +1252,9 @@ public class JIProductos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jtfcodigo;
     private javax.swing.JTextField jtfdescripcion;
     private javax.swing.JTextField jtffamilia;
-    private javax.swing.JFormattedTextField jtfprecio;
-    private javax.swing.JFormattedTextField jtfprecio1;
-    private javax.swing.JFormattedTextField jtfprecio2;
-    private javax.swing.JFormattedTextField jtfprecio3;
-    private org.edisoncor.gui.panel.PanelNice panelNice1;
+    private javax.swing.JTextField jtfprecio;
+    private javax.swing.JTextField jtfprecio1;
+    private javax.swing.JTextField jtfprecio2;
+    private javax.swing.JTextField jtfprecio3;
     // End of variables declaration//GEN-END:variables
 }

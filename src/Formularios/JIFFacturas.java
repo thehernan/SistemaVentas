@@ -5,13 +5,13 @@
  */
 package Formularios;
 
+import ClasesGlobales.FormatoNumerico;
 import DAO.DocumentoDAO;
+import DAO.VentasDAO;
 import Pojos.Ventas;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -28,20 +28,21 @@ public class JIFFacturas extends javax.swing.JInternalFrame {
     List<Ventas> listdoc;
      int posx;
     int posy;        
+    FormatoNumerico fn = new FormatoNumerico();
+    VentasDAO daovent = new VentasDAO();
+    MDIMenu menu;
+    DocumentoDAO daodoc = new DocumentoDAO();
     public JIFFacturas() {
+        
+    }
+    public JIFFacturas(MDIMenu menu) {
         initComponents();
         jdpdesde.setDate(new Date());
         jdphasta.setDate(new Date());
         filtrar();
+        this.menu=menu;
     }
-     public String formatnumeric(Object n){
-     DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
-     simbolos.setDecimalSeparator('.');   
-     DecimalFormat nf=new DecimalFormat("#.00",simbolos);
-     String num = nf.format(n);
      
-     return num;
-     }
     
     public void filtrar(){
         
@@ -55,12 +56,12 @@ public class JIFFacturas extends javax.swing.JInternalFrame {
                     double sum=0.0;
                 jlblloading.setVisible(true);
                 DocumentoDAO daodoc = new DocumentoDAO();
-                listdoc=daodoc.mostrar(1, jtfbuscar.getText().toUpperCase(), "sucursal", new Timestamp(jdpdesde.getDate().getTime()),
+                listdoc=daodoc.mostrar(1, jtfbuscar.getText().toUpperCase(), "comprobante", new Timestamp(jdpdesde.getDate().getTime()),
                 new Timestamp(jdphasta.getDate().getTime()), jtablafactura);
                 for(Ventas venta:listdoc){
                    sum=sum+ venta.getTotal();
                 }
-                jlbltotal.setText("Total: "+formatnumeric(sum));
+                jlbltotal.setText("Total: "+fn.FormatoN(sum));
                 jlblloading.setVisible(false);
                 
                 }else {
@@ -104,6 +105,7 @@ public class JIFFacturas extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         jbtnnotacredito = new javax.swing.JButton();
         jbtnnotadebito = new javax.swing.JButton();
+        imprimirbusqueda = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -185,11 +187,17 @@ public class JIFFacturas extends javax.swing.JInternalFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 74, -1, -1));
 
         jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
+        jbtnimprimir.setText("Print documento");
         jbtnimprimir.setToolTipText("Imprimir Comprobante");
         jbtnimprimir.setBorderPainted(false);
         jbtnimprimir.setContentAreaFilled(false);
         jbtnimprimir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1043, 149, -1, -1));
+        jbtnimprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnimprimirActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 150, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(238, 238, 238));
         jPanel2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -246,7 +254,7 @@ public class JIFFacturas extends javax.swing.JInternalFrame {
                 jbtnverdetalleActionPerformed(evt);
             }
         });
-        getContentPane().add(jbtnverdetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(979, 149, -1, -1));
+        getContentPane().add(jbtnverdetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 150, -1, -1));
 
         jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
         jlbltotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -300,6 +308,17 @@ public class JIFFacturas extends javax.swing.JInternalFrame {
         );
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 70, -1, 50));
+
+        imprimirbusqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
+        imprimirbusqueda.setText("Print Busqueda");
+        imprimirbusqueda.setBorderPainted(false);
+        imprimirbusqueda.setContentAreaFilled(false);
+        imprimirbusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imprimirbusquedaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(imprimirbusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 150, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -355,21 +374,23 @@ public class JIFFacturas extends javax.swing.JInternalFrame {
 
     private void jbtnnotacreditoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnnotacreditoActionPerformed
         // TODO add your handling code here:
-//        if(jtablafactura.getSelectedRow()>=0)
-//        {
-            JDNotaCreditoDebito ncd=new JDNotaCreditoDebito(new Frame() ,isVisible(),"","NOTA DE CRÉDITO",3);
+        if(jtablafactura.getSelectedRow()>=0)
+        {
+            Ventas v = listdoc.get(jtablafactura.getSelectedRow());
+            JDNotaCreditoDebito ncd=new JDNotaCreditoDebito(new Frame() ,isVisible(),"","NOTA DE CRÉDITO",3,v,menu);
             ncd.setVisible(true);
-//        }else 
-//        {
-//            JOptionPane.showMessageDialog(null,"Seleccione Comprobante","",JOptionPane.ERROR_MESSAGE);
-//        }
+        }else 
+        {
+            JOptionPane.showMessageDialog(null,"Seleccione Comprobante","",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jbtnnotacreditoActionPerformed
 
     private void jbtnnotadebitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnnotadebitoActionPerformed
         // TODO add your handling code here:
          if(jtablafactura.getSelectedRow()>=0)
         {
-            JDNotaCreditoDebito ncd=new JDNotaCreditoDebito(new Frame(), isVisible(),"","NOTA DE DÉBITO",4);
+            Ventas v = listdoc.get(jtablafactura.getSelectedRow());
+            JDNotaCreditoDebito ncd=new JDNotaCreditoDebito(new Frame(), isVisible(),"","NOTA DE DÉBITO",4,v,menu);
             ncd.setVisible(true);
             
         }else 
@@ -378,8 +399,29 @@ public class JIFFacturas extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jbtnnotadebitoActionPerformed
 
+    private void jbtnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirActionPerformed
+        // TODO add your handling code here:
+        int index=jtablafactura.getSelectedRow();
+        if(index>=0)
+        {
+            Ventas v = listdoc.get(index);
+            daovent.imprimir(v.getIdventa());
+        
+        }else {
+            JOptionPane.showMessageDialog(null,"Seleccione item","",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jbtnimprimirActionPerformed
+
+    private void imprimirbusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imprimirbusquedaActionPerformed
+        // TODO add your handling code here:
+        daodoc.imprimir(1, jtfbuscar.getText().toUpperCase(), "comprobante", new Timestamp(jdpdesde.getDate().getTime()),
+                new Timestamp(jdphasta.getDate().getTime()));
+       
+    }//GEN-LAST:event_imprimirbusquedaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton imprimirbusqueda;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

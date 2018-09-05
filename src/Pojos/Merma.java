@@ -16,8 +16,17 @@ public class Merma {
     private String motivo;
     private Date fecha;
     private String estado;
+    private long idempleado;
 
     public Merma() {
+    }
+
+    public long getIdempleado() {
+        return idempleado;
+    }
+
+    public void setIdempleado(long idempleado) {
+        this.idempleado = idempleado;
     }
 
     public Merma(long id_merma, String motivo, Date fecha, String estado) {

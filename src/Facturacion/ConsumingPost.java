@@ -19,14 +19,16 @@
 */
 
 package Facturacion;
+import ClasesGlobales.FormatoNumerico;
+import DAO.VentasDAO;
+import Pojos.Producto;
+import Pojos.Ventas;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -36,11 +38,24 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 
 public class ConsumingPost {
-   
+    
+ private Ventas cab;
+ private List<Producto> det;
+    FormatoNumerico fn = new FormatoNumerico();
+    VentasDAO daovent= new VentasDAO();
+    public ConsumingPost(Ventas cab, List<Producto> det) {
+        this.cab = cab;
+        this.det = det;
+    }
+    
+    public ConsumingPost() {
+    }
+ 
+ 
+  
 /*
 #########################################################
 #### PASO 1: CONSEGUIR LA RUTA Y TOKEN ####
@@ -52,12 +67,21 @@ public class ConsumingPost {
 */
 
 //  RUTA para enviar documentos
-    private String RUTA = "AQUI_VA_LA_RUTA";
+    
+    private String RUTA = "https://www.nubefact.com/api/v1/ce386603-0e47-41a5-a62a-4135668a5276"; //Walter 
+
+   
+//    private String RUTA = "https://www.nubefact.com/api/v1/a9716fb6-02eb-43eb-9d1c-333ee2c7a27d"; //demo
+  
     
 //  TOKEN para enviar documentos    
-    private String TOKEN = "AQUI_VA_EL_TOKEN";
+    private String TOKEN = "efa6b67f239a4fae9281ef5b2035b429ba3ef5c5b0bd4cfe9ed4a0327c11e8dd"; //walter
+ 
+//    private String TOKEN = "e2f2c6f49ffd4526a667c504d91971b46aaf85d7610146a68b5ee0c90c203506"; //demo
     
-    public void apiConsume(){     
+    
+    public Ventas apiConsume(){
+        boolean estado=false;
         try {
 /*
 #########################################################
@@ -75,43 +99,92 @@ public class ConsumingPost {
             
             JSONObject objetoCabecera = new JSONObject(); // Instancear el  segundario
             objetoCabecera.put("operacion","generar_comprobante");
-            objetoCabecera.put("tipo_de_comprobante","1");
-            objetoCabecera.put("serie","F001");
-            objetoCabecera.put("numero","1");
+            objetoCabecera.put("tipo_de_comprobante",String.valueOf(cab.getComprobante()));
+            System.out.println("tipocomproba"+cab.getComprobante());
+            objetoCabecera.put("serie",cab.getSerie());
+            System.out.println("seriee"+cab.getSerie());
+            objetoCabecera.put("numero",cab.getNumero());
+            System.out.println("nunmeri"+cab.getNumero());
             objetoCabecera.put("sunat_transaction","1");
-            objetoCabecera.put("cliente_tipo_de_documento","6");
-            objetoCabecera.put("cliente_numero_de_documento","20600695771");
-            objetoCabecera.put("cliente_denominacion","NUBEFACT SA");
-            objetoCabecera.put("cliente_direccion","CALLE LIBERTAD 116 MIRAFLORES - LIMA - PERU");
-            objetoCabecera.put("cliente_email","tucliente@gmail.com");
+            objetoCabecera.put("cliente_tipo_de_documento",cab.getClientetipodoc());
+            System.out.println("clientetipodoc"+cab.getClientetipodoc());
+            objetoCabecera.put("cliente_numero_de_documento",cab.getClientenumdoc());
+            System.out.println("clientenDoc"+cab.getClientenumdoc());
+            objetoCabecera.put("cliente_denominacion",cab.getClienteRS());
+            System.out.println("clientedenom"+cab.getClienteRS());
+            objetoCabecera.put("cliente_direccion",cab.getClientedirec());
+            System.out.println("clientedi"+cab.getClientedirec());
+            objetoCabecera.put("cliente_email",cab.getClienteemail());
+            System.out.println("clienteemail"+cab.getClienteemail());
             objetoCabecera.put("cliente_email_1","");
             objetoCabecera.put("cliente_email_2","");
-            objetoCabecera.put("fecha_de_emision", "12-05-2017");
-            objetoCabecera.put("fecha_de_vencimiento","");
-            objetoCabecera.put("moneda","1");
-            objetoCabecera.put("tipo_de_cambio","");
-            objetoCabecera.put("porcentaje_de_igv","18.00");
+            System.out.println("fechaemision"+String.valueOf(cab.getFecha()));
+            objetoCabecera.put("fecha_de_emision", String.valueOf(cab.getFecha()));
+            objetoCabecera.put("fecha_de_vencimiento",String.valueOf(cab.getFecha()));
+            System.out.println("moneda"+String.valueOf(cab.getModenaop()));
+            objetoCabecera.put("moneda",String.valueOf(cab.getModenaop()));
+            System.out.println("tipocambio"+fn.FormatoN(cab.getTipocambio()));
+            objetoCabecera.put("tipo_de_cambio",fn.FormatoN(cab.getTipocambio()));
+            System.out.println("porcentaje"+fn.FormatoN(cab.getPorcentajeigv()));
+            objetoCabecera.put("porcentaje_de_igv",fn.FormatoN(cab.getPorcentajeigv()));
             objetoCabecera.put("descuento_global","");
             objetoCabecera.put("total_descuento","");
             objetoCabecera.put("total_anticipo","");
-            objetoCabecera.put("total_gravada","600");
+            System.out.println("totalgravada"+fn.FormatoN(cab.getSubtotal()));
+            objetoCabecera.put("total_gravada",fn.FormatoN(cab.getSubtotal()));
             objetoCabecera.put("total_inafecta","");
             objetoCabecera.put("total_exonerada","");
-            objetoCabecera.put("total_igv","108");
+            System.out.println("totaligv"+fn.FormatoN(cab.getTotaligv()));
+            objetoCabecera.put("total_igv",fn.FormatoN(cab.getTotaligv()));
             objetoCabecera.put("total_gratuita","");
             objetoCabecera.put("total_otros_cargos","");
-            objetoCabecera.put("total","708");
+            System.out.println("total"+fn.FormatoN(cab.getTotal()));
+            objetoCabecera.put("total",fn.FormatoN(cab.getTotal()));
             objetoCabecera.put("percepcion_tipo","");
             objetoCabecera.put("percepcion_base_imponible","");
             objetoCabecera.put("total_percepcion","");
             objetoCabecera.put("total_incluido_percepcion","");
-            objetoCabecera.put("detraccion", "false");
+            System.out.println("detraccion"+"false");
+            objetoCabecera.put("detraccion","false");
             objetoCabecera.put("observaciones", "");
-            objetoCabecera.put("documento_que_se_modifica_tipo", "");
-            objetoCabecera.put("documento_que_se_modifica_serie", "");
-            objetoCabecera.put("documento_que_se_modifica_numero", "");
-            objetoCabecera.put("tipo_de_nota_de_credito", "");
-            objetoCabecera.put("tipo_de_nota_de_debito", "");
+            
+            String doc_q_mod_ti = "";
+            if(cab.getTipo_doc_modifica()!=null){
+                doc_q_mod_ti=cab.getTipo_doc_modifica();
+                 
+            }
+            System.out.println("docuemntomod"+doc_q_mod_ti);
+            objetoCabecera.put("documento_que_se_modifica_tipo", doc_q_mod_ti);
+            String doc_mod_serie="";
+            
+            if(cab.getDoc_modifica_serie()!=null){
+                doc_mod_serie=cab.getDoc_modifica_serie();
+            }
+           
+            System.out.println("documentomodserie"+doc_mod_serie);
+            objetoCabecera.put("documento_que_se_modifica_serie", doc_mod_serie);
+            
+            String doc_mod_num="";
+            if(cab.getDoc_modifica_numero()!=null){
+                doc_mod_num=cab.getDoc_modifica_numero();
+            }
+            System.out.println("docmodnumero"+doc_mod_num);
+            objetoCabecera.put("documento_que_se_modifica_numero",doc_mod_num);
+            
+            String tipo_not_cred="";
+            if(cab.getTipo_nota_cred()!=null){
+                tipo_not_cred=cab.getTipo_nota_cred();
+            }
+            
+            System.out.println("tiponota"+tipo_not_cred);
+            objetoCabecera.put("tipo_de_nota_de_credito", tipo_not_cred);
+            
+            String tipo_not_deb="";
+            if(cab.getTipo_nota_deb()!=null){
+                tipo_not_deb=cab.getTipo_nota_deb();
+            }
+            System.out.println("tipodeb"+tipo_not_deb);
+            objetoCabecera.put("tipo_de_nota_de_debito", tipo_not_deb);
             objetoCabecera.put("enviar_automaticamente_a_la_sunat", "true");
             objetoCabecera.put("enviar_automaticamente_al_cliente", "false");
             objetoCabecera.put("codigo_unico", "");
@@ -122,43 +195,61 @@ public class ConsumingPost {
             objetoCabecera.put("tabla_personalizada_codigo", "");
             objetoCabecera.put("formato_de_pdf", "");
             
+            
             JSONArray lista = new JSONArray();
-            JSONObject detalle_linea_1 = new JSONObject();
             
-            detalle_linea_1.put("unidad_de_medida", "NIU");
-            detalle_linea_1.put("codigo", "001");
-            detalle_linea_1.put("descripcion", "DETALLE DEL PRODUCTO");
-            detalle_linea_1.put("cantidad", "1");
-            detalle_linea_1.put("valor_unitario", "500");
-            detalle_linea_1.put("precio_unitario", "590");
-            detalle_linea_1.put("descuento", "");
-            detalle_linea_1.put("subtotal", "500");
-            detalle_linea_1.put("tipo_de_igv", "1");
-            detalle_linea_1.put("igv", "90");
-            detalle_linea_1.put("total", "590");
-            detalle_linea_1.put("anticipo_regularizacion", "false");
-            detalle_linea_1.put("anticipo_serie", "");
-            detalle_linea_1.put("anticipo_documento_numero", "");
             
-            JSONObject detalle_linea_2 = new JSONObject();
+            for (Producto detalle : det )
+            {
+                JSONObject detalle_linea_1 = new JSONObject();
+                System.out.println("unidmed"+detalle.getUnidabrev());
+               detalle_linea_1.put("unidad_de_medida",detalle.getUnidabrev());
+                System.out.println("codigo"+detalle.getCodigo());
+               detalle_linea_1.put("codigo", detalle.getCodigo());
+                System.out.println("descripcion"+detalle.getDescripcion());
+               detalle_linea_1.put("descripcion", detalle.getDescripcion());
+                System.out.println("cantidad"+String.valueOf(detalle.getCantidad()));
+               detalle_linea_1.put("cantidad", String.valueOf(detalle.getCantidad()));
+                System.out.println("valoruni"+fn.FormatoN(detalle.getPrecio()));
+               detalle_linea_1.put("valor_unitario",fn.FormatoN(detalle.getPrecio()));
+                System.out.println("preciouni"+fn.FormatoN(detalle.getPrecio()));
+               detalle_linea_1.put("precio_unitario", fn.FormatoN(detalle.getPrecio()));
+               detalle_linea_1.put("descuento", "");
+                System.out.println("subtotal"+ fn.FormatoN(detalle.getSubtotal()));
+               detalle_linea_1.put("subtotal",fn.FormatoN(detalle.getSubtotal()));
+                System.out.println("tipoigv"+detalle.getTipoigv());
+               detalle_linea_1.put("tipo_de_igv",detalle.getTipoigv());
+                System.out.println("igv"+fn.FormatoN(detalle.getIgv()));
+               detalle_linea_1.put("igv", fn.FormatoN(detalle.getIgv()));
+                System.out.println("total"+fn.FormatoN(detalle.getTotal()));
+               detalle_linea_1.put("total",fn.FormatoN(detalle.getTotal()));
+               detalle_linea_1.put("anticipo_regularizacion", "false");
+               detalle_linea_1.put("anticipo_serie", "");
+               detalle_linea_1.put("anticipo_documento_numero", "");
+               
+               lista.add(detalle_linea_1);
+            }
+           
             
-            detalle_linea_2.put("unidad_de_medida", "ZZ");
-            detalle_linea_2.put("codigo", "001");
-            detalle_linea_2.put("descripcion", "DETALLE DEL SERVICIO");
-            detalle_linea_2.put("cantidad", "5");
-            detalle_linea_2.put("valor_unitario", "20");
-            detalle_linea_2.put("precio_unitario", "23.60");
-            detalle_linea_2.put("descuento", "");
-            detalle_linea_2.put("subtotal", "100");
-            detalle_linea_2.put("tipo_de_igv", "1");
-            detalle_linea_2.put("igv", "18");
-            detalle_linea_2.put("total", "118");
-            detalle_linea_2.put("anticipo_regularizacion", "false");
-            detalle_linea_2.put("anticipo_serie", "");
-            detalle_linea_2.put("anticipo_documento_numero", "");
-            
-            lista.add(detalle_linea_1);
-            lista.add(detalle_linea_2);
+//            JSONObject detalle_linea_2 = new JSONObject();
+//            
+//            detalle_linea_2.put("unidad_de_medida", "ZZ");
+//            detalle_linea_2.put("codigo", "001");
+//            detalle_linea_2.put("descripcion", "DETALLE DEL SERVICIO");
+//            detalle_linea_2.put("cantidad", "5");
+//            detalle_linea_2.put("valor_unitario", "20");
+//            detalle_linea_2.put("precio_unitario", "23.60");
+//            detalle_linea_2.put("descuento", "");
+//            detalle_linea_2.put("subtotal", "100");
+//            detalle_linea_2.put("tipo_de_igv", "1");
+//            detalle_linea_2.put("igv", "18");
+//            detalle_linea_2.put("total", "118");
+//            detalle_linea_2.put("anticipo_regularizacion", "false");
+//            detalle_linea_2.put("anticipo_serie", "");
+//            detalle_linea_2.put("anticipo_documento_numero", "");
+//            
+//            
+//            lista.add(detalle_linea_2);
             
             objetoCabecera.put("items", lista);
 /*
@@ -178,7 +269,7 @@ public class ConsumingPost {
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 
-            StringEntity parametros = new StringEntity(objetoCabecera.toString());
+            StringEntity parametros = new StringEntity(objetoCabecera.toString(),"UTF-8");
             post.setEntity(parametros);
             HttpResponse response = cliente.execute(post);     
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));           
@@ -201,9 +292,11 @@ public class ConsumingPost {
 */                
                 if(json_rspta.get("errors") != null ){
                     System.out.println("Error => " + json_rspta.get("errors"));
+                    JOptionPane.showMessageDialog(null,json_rspta.get("errors") ,"",JOptionPane.ERROR_MESSAGE);
+                    cab=null;
                 }else{
                     
-                    
+                    estado=true;
                     JSONParser parsearRsptaDetalleOK = new JSONParser();
                     JSONObject json_rspta_ok = (JSONObject) parsearRsptaDetalleOK.parse(json_rspta.get("invoice").toString());
                     
@@ -219,16 +312,90 @@ public class ConsumingPost {
                     System.out.println(json_rspta_ok.get("pdf_zip_base64"));
                     System.out.println(json_rspta_ok.get("xml_zip_base64"));
                     System.out.println(json_rspta_ok.get("cdr_zip_base64"));
-                    System.out.println(json_rspta_ok.get("cadena_para_codigo_qr"));
+                    System.out.println("QR: "+json_rspta_ok.get("cadena_para_codigo_qr"));
                     System.out.println(json_rspta_ok.get("codigo_hash"));
+                    /////////////////////////////////////////////////////////////////////////////
+                    cab.setSerie(json_rspta_ok.get("serie").toString());
+                    cab.setNumero(json_rspta_ok.get("numero").toString());
+                    
+                    if(json_rspta_ok.get("enlace")!=null){
+                        cab.setEnlace(json_rspta_ok.get("enlace").toString());
+                    }else {
+                        cab.setEnlace("");
+                    }
+                    if(json_rspta_ok.get("aceptada_por_sunat")!=null){
+                        cab.setAceptadasunat(Boolean.parseBoolean(json_rspta_ok.get("aceptada_por_sunat").toString()));
+                    }else{
+                        cab.setAceptadasunat(false);
+                    }
+                    if(json_rspta_ok.get("sunat_description")!=null){
+                        cab.setSunatdescrip(json_rspta_ok.get("sunat_description").toString());
+                    }else{
+                        cab.setSunatdescrip("");
+                    }
+                    if(json_rspta_ok.get("sunat_note")!=null){
+                        cab.setSunatnote(json_rspta_ok.get("sunat_note").toString());
+                    }else{
+                        cab.setSunatnote("");
+                    
+                    }
+                    if(json_rspta_ok.get("sunat_responsecode")!=null){
+                        cab.setSuantresposeode(json_rspta_ok.get("sunat_responsecode").toString());
+                    }else{
+                        cab.setSuantresposeode("");
+                    
+                    }
+                    if(json_rspta_ok.get("sunat_soap_error")!=null){
+                        cab.setSunatsoap(json_rspta_ok.get("sunat_soap_error").toString());
+                    }else{
+                        cab.setSunatsoap("");
+                    
+                    }
+                    if(json_rspta_ok.get("pdf_zip_base64")!=null){
+                        cab.setPdf_zip_base64(json_rspta_ok.get("pdf_zip_base64").toString());
+                    }else{
+                        cab.setPdf_zip_base64("");
+                    
+                    }
+                    if(json_rspta_ok.get("xml_zip_base64")!=null){
+                        cab.setXml_zip_base64(json_rspta_ok.get("xml_zip_base64").toString());
+                    }else{
+                        cab.setXml_zip_base64("");
+                    
+                    }
+                    if(json_rspta_ok.get("cdr_zip_base64")!=null){
+                        cab.setCdr_zip_base64(json_rspta_ok.get("cdr_zip_base64").toString());
+                    }else{
+                        cab.setCdr_zip_base64("");
+                    
+                    }
+                    if(json_rspta_ok.get("cadena_para_codigo_qr")!=null){
+                         cab.setQr(json_rspta_ok.get("cadena_para_codigo_qr").toString());
+                    }else{
+                         cab.setQr("");
+                    
+                    }
+                    if(json_rspta_ok.get("codigo_hash")!=null){
+                        cab.setCodhash(json_rspta_ok.get("codigo_hash").toString());
+                    }else{
+                        cab.setCodhash("");
+                    
+                    }
+//                    daovent.actualizarsunat(cab);
+                    
                 } 
             }   
         } catch (UnsupportedEncodingException ex1) {
             System.err.println("Error UnsupportedEncodingException: "+ex1.getMessage());
+            cab=null;
         } catch (IOException ex2) {
             System.err.println("Error IOException: "+ex2.getMessage());
+            cab=null;
+            JOptionPane.showMessageDialog(null,"Error al conectar con servidor sunat, intente nuevamente","",JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex3){
             System.err.println("Exepction: "+ex3.getMessage());
+            cab=null;
         }
+        return cab;
     }
 }

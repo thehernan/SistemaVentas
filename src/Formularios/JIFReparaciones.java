@@ -183,7 +183,7 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
 
-        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
         setToolTipText("");
 
@@ -382,18 +382,20 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         });
         jPanel1.add(jbtnfoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 90, 40, 40));
 
-        jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save20x20.png"))); // NOI18N
-        jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setBackground(new java.awt.Color(77, 161, 227));
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
+        jbtnaceptar.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setText("Guardar");
         jbtnaceptar.setBorderPainted(false);
         jbtnaceptar.setContentAreaFilled(false);
+        jbtnaceptar.setOpaque(true);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 560, -1, 40));
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(926, 540, 160, 50));
 
         jlblnombre.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblnombre.setText("* * *");
@@ -492,7 +494,7 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
         });
         jPanel1.add(jtfpreciorevision, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 350, 220, -1));
 
-        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
         jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel7MouseDragged(evt);
@@ -506,7 +508,6 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
 
         jLabel14.setBackground(new java.awt.Color(0, 0, 0));
         jLabel14.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("NUEVA REPARACION");
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
@@ -547,7 +548,7 @@ public class JIFReparaciones extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 1, Short.MAX_VALUE))
+                .addGap(0, 5, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

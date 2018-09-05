@@ -5,6 +5,7 @@
  */
 package Formularios;
 
+import ClasesGlobales.FormatoNumerico;
 import ClasesGlobales.Mayusculas;
 import DAO.ClienteDAO;
 import DAO.DetalleVentaDAO;
@@ -17,19 +18,19 @@ import Pojos.Moneda;
 import Pojos.Producto;
 import Pojos.SucursalSingleton;
 import Pojos.Tipo_Comprobante;
-import Pojos.UsuarioSingleton;
 import Pojos.Ventas;
-import java.awt.Frame;
-import java.awt.Image;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -47,38 +48,40 @@ public class JIFVenta extends javax.swing.JInternalFrame {
     Cliente cliente = null;
     byte[]  fotoB;
     Ventas venta= new Ventas();
-    VentasDAO daoventa= new VentasDAO();
+    boolean errorventa=false ;
+    
+
     DetalleVentaDAO daodetventa = new DetalleVentaDAO();
 //    Empleado empleadologin;
 //    Usuarios user;
-    UsuarioSingleton user= UsuarioSingleton.getintancia();
+    
     SucursalSingleton sucursalsingleton = SucursalSingleton.getinstancia();
-    DefaultTableModel modelo= new DefaultTableModel(){
-    public boolean isCellEditable(int row, int column) {
-          if (column == 2 || column ==3) return true;
-        else
-        return false;
-    }
-  }; 
+    DefaultTableModel modelo;
   
     Mayusculas mayus = new Mayusculas();
     List<Producto> listprod= new ArrayList<>();
      int posx;
     int posy;
-    DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
+ 
     
        
     
     List<Tipo_Comprobante> listcomprobante;
     List<Moneda> listmoneda;
-    public JIFVenta() {
+    FormatoNumerico fn = new FormatoNumerico();
+    MDIMenu menu;
+     public JIFVenta() {
+         
+     }
+    public JIFVenta(MDIMenu menu) {
         initComponents();
         
         // tabla
-        simbolos.setDecimalSeparator('.');
-        String titulos[]={"Codigo","Descripción","Cantidad","Precio","Importe"};
-        modelo.setColumnIdentifiers(titulos);
-        jtabla.setModel(modelo);
+     
+//        String titulos[]={"Codigo","Descripción","Cantidad","Precio","Importe"};
+//        modelo.setColumnIdentifiers(titulos);
+//        jtabla.setModel(modelo);
+        modelo= (DefaultTableModel)jtabla.getModel();
         TableColumnModel columnModel = jtabla.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(100);
         columnModel.getColumn(1).setPreferredWidth(500);
@@ -90,7 +93,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 //        this.user= user;
 //       jtfdescuento.setValue(0);
 //       jtadescripprod.setLineWrap(true);
-        jlblcargarventa.setVisible(false);
+//        jlblcargarventa.setVisible(false);
     
        ////// IMAGEN DEL PRODUCTO POR DEFAULT////////////////
 //       ImageIcon imageIcon= new ImageIcon( getClass().getResource("/imagenes/product.png"));
@@ -104,19 +107,131 @@ public class JIFVenta extends javax.swing.JInternalFrame {
        mostracomprobante();
        mostrarmoneda();
        jtfingresecodigo.requestFocus();
+       jbtnretirar.setMnemonic(KeyEvent.VK_DELETE);
+        anadeListenerAlModelo(jtabla);
+        jprogres.setVisible(false);
+        this.menu=menu;
+    }
+    
+    /**
+     * Se añade el listener al modelo y se llama a actualizaSumas(), que es el método 
+     * encargado de actualizar las sumas de las celdas no editables.
+     */
+    private void anadeListenerAlModelo(JTable tabla) {
+        tabla.getModel().addTableModelListener(new TableModelListener() {
+
+            @Override
+            public void tableChanged(TableModelEvent evento) {
+                actualizaimporte(evento);
+            }
+        });
+    }
+    
+    protected void actualizaimporte(TableModelEvent evento)
+    {
+          
+              if(evento.getType() == TableModelEvent.UPDATE)
+        {
+
+                // Se obtiene el modelo de la tabla y la fila/columna que han cambiado.
+            TableModel modelo = ((TableModel) (evento.getSource()));
+            int fila = evento.getFirstRow();
+            int columna = evento.getColumn();
+
+            // Los cambios en la ultima fila y columna se ignoran.
+            // Este return es necesario porque cuando nuestro codigo modifique
+            // los valores de las sumas en esta fila y columna, saltara nuevamente
+            // el evento, metiendonos en un bucle recursivo de llamadas a este
+            // metodo.
+            if (columna == 0 || columna == 1 || columna==4) {
+                return;
+            }
+                
+        try {
+          
+           System.out.println("index "+fila);
+           Producto prod= listprod.get(fila);
+           Double precio= Double.parseDouble(modelo.getValueAt(fila, 3).toString());
+           Double cantidad= Double.parseDouble(modelo.getValueAt(fila, 2).toString());
+
+   //        boolean vprecio=true, vcantidad=true;
+
+               System.out.println("cantidad en tabla "+cantidad);
+               System.out.println("Precio en tabla "+precio);
        
         
+        
+        
+        
+        
+            if(prod.getPrecio3()<=precio){
+                prod.setPrecio(precio);
+
+                modelo.setValueAt(fn.FormatoN(prod.getPrecio()*prod.getCantidad()), fila,4);
+
+
+            }else {
+            JOptionPane.showMessageDialog(null,"Ingrese un precio valido","",JOptionPane.ERROR_MESSAGE);
+                modelo.setValueAt((fn.FormatoN(prod.getPrecio())), fila, 3);
+    //            vprecio = false;
+
+            }
+            if(cantidad>0){
+                prod.setCantidad(cantidad);
+
+                modelo.setValueAt(fn.FormatoN(prod.getPrecio()*prod.getCantidad()), fila,4);
+
+            }else {
+                JOptionPane.showMessageDialog(null,"No cuenta con el stock requerido","",JOptionPane.ERROR_MESSAGE);
+                modelo.setValueAt(fn.FormatoN(prod.getCantidad()), fila, 2);
+                System.out.println("cantidadanterior "+prod.getCantidad());
+    //            vcantidad=false;
+            }
+
+                System.out.print("cantidadenlista" +prod.getCantidad());
+
+            calculatotal();
+
+            errorventa=false;
+
+                System.out.print("entertabla");
+    //        if(vcantidad==true && vprecio==true){
+    //        jtabla.setValueAt(newimporte, index,4);
+    //        
+    //        }
+
+            } catch (NumberFormatException | HeadlessException e) {
+                
+                jlbltotal.setText("Error");
+                errorventa=true;
+            }
+    
     }
+    }
+    
+    
+    
+    
+    
     
     
     public void mostracomprobante(){
         TipoComprobanteDAO comprobanteDAO = new TipoComprobanteDAO();
         
-        jcbtipocomprobante.addItem("<<Seleccione>>");
+     
         
         listcomprobante = comprobanteDAO.mostrar();
         for(Tipo_Comprobante comprobante: listcomprobante){
-            jcbtipocomprobante.addItem(comprobante.getOp()+" - "+comprobante.getComprobante());
+            if(comprobante.getOp()==1 || comprobante.getOp()==2)
+            {
+                jcbtipocomprobante.addItem(comprobante.getOp()+" - "+comprobante.getComprobante());
+                if(comprobante.getOp()==2)
+                {
+                    jcbtipocomprobante.setSelectedItem(comprobante.getOp()+" - "+comprobante.getComprobante());
+                }
+            
+            
+            }
             
         
         }
@@ -134,6 +249,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
             {
             
             jcbmoneda.setSelectedItem(m.getOp()+" - "+m.getMoneda());
+            jlbltipocambio.setText("T.C.: "+m.getTipo_cambio());
             }
             
         
@@ -150,8 +266,8 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 //    }
 //    jtfcantidad.setText(s);
 //    }
-    public void calculatotal(){
-        DecimalFormat nf = new DecimalFormat("#.00",simbolos);
+    public double calculatotal(){
+      
         Double total=0.0,importe=0.0;
         double descuento= 0.0;
       for(Producto prod : listprod){
@@ -159,11 +275,15 @@ public class JIFVenta extends javax.swing.JInternalFrame {
       
       }
       total = importe - descuento;
-       
-      jlbltotal.setText("Total: "+nf.format(total));
+      Moneda moneda = listmoneda.get(jcbmoneda.getSelectedIndex());
+      jlbltotal.setText(moneda.getSimbolo()+fn.FormatoN(total));
+      jlbltipocambio.setText(String.valueOf(moneda.getTipo_cambio()));
 //      jlblsubtotal.setValue(subtotal);
 //      jlbliva.setValue(iva);
+      return total;
     }
+    
+    
     public void newventa(){
         //NUEVO MODELO
         
@@ -183,10 +303,12 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         //TEXTO
        
         jtfrut.setText("DNI o R.U.C CLIENTE");
-      
+        jlblrazonsocial.setText("Razón Social");
+        jlbldireccion.setText("Dirección");
+        jlblemail.setText("Email");
         jtfrut.setEnabled(true);
-        jtfcompras.setValue(0);
-        jtftotalcompras.setValue(0);
+//        jtfcompras.setValue(0);
+//        jtftotalcompras.setValue(0);
 //        jtfdescuento.setValue(0);
     
     }
@@ -215,7 +337,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
             }
             if(repetido==false)
             {
-                JDFOpcionPrecio opprecio = new JDFOpcionPrecio(new Frame(), isVisible(), producto, this);
+                JDFOpcionPrecio opprecio = new JDFOpcionPrecio(new JFrame(), isVisible(), producto, this);
                 opprecio.setVisible(true);
             }else {
                 JOptionPane.showMessageDialog(null,"El producto ya se encuentra agregado","", JOptionPane.ERROR_MESSAGE);
@@ -240,8 +362,9 @@ public class JIFVenta extends javax.swing.JInternalFrame {
     
     public void setproducto(Producto producto){
         this.producto=producto;
-        jtabla.setColumnSelectionInterval(jtabla.getRowCount(), 0);
-        jtabla.requestFocus();
+        System.out.println("Abreviaturaunidmed "+producto.getUnidabrev());
+//        jtabla.setColumnSelectionInterval(jtabla.getRowCount(), 0);
+//        jtabla.requestFocus();
         
         enter();
     
@@ -251,13 +374,24 @@ public class JIFVenta extends javax.swing.JInternalFrame {
     
     
     public void setcliente(Cliente cliente){
-    this.cliente= cliente;
-    jtfrut.setText(cliente.getRut());
-    jlbldireccion.setText(cliente.getDireccion());
-    jlblmensaje.setText("");
+        this.cliente= cliente;
+         if(cliente.getTipodoc().equals("6")){
+            
+               jcbtipocomprobante.setSelectedItem("1 - FACTURA");
+            }else {
+                jcbtipocomprobante.setSelectedItem("2 - BOLETA");
+            
+            }
+        jtfrut.setText(cliente.getRut());
+        jlbldireccion.setText(cliente.getDireccion());
+        jlblrazonsocial.setText(cliente.getNombre_razons());
+        jlblemail.setText(cliente.getEmail());
+        jlblmensaje.setText("");
+    
     }
+    
     public void enter(){
-         DecimalFormat nf = new DecimalFormat("#.00",simbolos);
+         
          try {
 
 //            if(Double.parseDouble(jtfcantidad.getText())>0 && !jtfcantidad.getText().equals("") && !jtfcantidad.getText().equals("CANTIDAD")){ //VALIDO CANTIDAD INGRESADA
@@ -280,11 +414,11 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 //                                Double cant = Double.parseDouble(jtfcantidad.getText());
                                 miarray[0]=producto.getCodigo();
                                 miarray[1]=producto.getDescripcion();
-                                miarray[2]=nf.format(producto.getCantidad());
-                                miarray[3]=nf.format(producto.getPrecio());
+                                miarray[2]=(producto.getCantidad());
+                                miarray[3]=fn.FormatoN(producto.getPrecio());
                                 Double importe= producto.getPrecio()*producto.getCantidad();
 
-                                miarray[4]=nf.format(importe);
+                                miarray[4]=fn.FormatoN(importe);
 
                                 modelo.addRow(miarray);
                                 TableColumnModel columnModel = jtabla.getColumnModel();
@@ -294,7 +428,8 @@ public class JIFVenta extends javax.swing.JInternalFrame {
                                 columnModel.getColumn(3).setPreferredWidth(90);
                                 columnModel.getColumn(4).setPreferredWidth(90);
                                 producto.setCantidad(producto.getCantidad());
-
+                                producto.setIdtipoigv(1);
+                                producto.setTotal(importe);
                                 listprod.add(producto);
                                 calculatotal();
 //                                jtfcantidad.setText("0");
@@ -356,31 +491,30 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 
         windowsUtil1 = new org.edisoncor.gui.util.WindowsUtil();
         jPanel2 = new javax.swing.JPanel();
-        jtfvender = new org.edisoncor.gui.button.ButtonColoredAction();
         panelNice1 = new org.edisoncor.gui.panel.PanelNice();
         jtfingresecodigo = new org.edisoncor.gui.textField.TextFieldRoundIcon();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
         jbtnbuscar = new javax.swing.JButton();
-        jlblcargarventa = new javax.swing.JLabel();
-        jlblmensajeproceso = new javax.swing.JLabel();
         jbtnretirar = new javax.swing.JButton();
-        jlbltotal = new javax.swing.JLabel();
-        jtfrut = new org.edisoncor.gui.textField.TextFieldRoundIcon();
-        jLabel3 = new javax.swing.JLabel();
-        jtfcompras = new javax.swing.JFormattedTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jtftotalcompras = new javax.swing.JFormattedTextField();
-        jLabel9 = new javax.swing.JLabel();
-        jlblmensaje = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jcbtipocomprobante = new javax.swing.JComboBox();
+        jPanel8 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        jlbldireccion = new javax.swing.JLabel();
-        jlblemail = new javax.swing.JLabel();
-        jlblrazonsocial = new javax.swing.JLabel();
+        jcbtipocomprobante = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         jcbmoneda = new javax.swing.JComboBox();
+        jlbltipocambio = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jtfrut = new org.edisoncor.gui.textField.TextFieldRoundIcon();
+        jlblmensaje = new javax.swing.JLabel();
+        jlblrazonsocial = new javax.swing.JLabel();
+        jlbldireccion = new javax.swing.JLabel();
+        jlblemail = new javax.swing.JLabel();
+        jtfvender = new javax.swing.JButton();
+        jlbltotal = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jbtncerrar = new javax.swing.JButton();
+        jprogres = new javax.swing.JProgressBar();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         addKeyListener(new java.awt.event.KeyAdapter() {
@@ -402,26 +536,6 @@ public class JIFVenta extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jtfvender.setBackground(new java.awt.Color(255, 0, 0));
-        jtfvender.setForeground(new java.awt.Color(0, 0, 0));
-        jtfvender.setMnemonic('s');
-        jtfvender.setText("Vender (Alt + s)");
-        jtfvender.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jtfvender.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jtfvenderMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jtfvenderMousePressed(evt);
-            }
-        });
-        jtfvender.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfvenderActionPerformed(evt);
-            }
-        });
-        jPanel2.add(jtfvender, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 10, 120, 50));
 
         panelNice1.setBackground(new java.awt.Color(255, 255, 255));
         panelNice1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -464,15 +578,27 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Codigo", "Descripción", "Cantidad", "Precio", "Importe"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true, true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jtabla.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jtabla.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -489,13 +615,13 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtabla);
 
-        panelNice1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 980, 390));
+        panelNice1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 980, 310));
 
         jbtnbuscar.setBackground(new java.awt.Color(255, 255, 255));
         jbtnbuscar.setForeground(new java.awt.Color(255, 255, 255));
         jbtnbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Searchx32.png"))); // NOI18N
         jbtnbuscar.setMnemonic('b');
-        jbtnbuscar.setToolTipText("Buscar");
+        jbtnbuscar.setToolTipText(" Buscar (Alt + b)");
         jbtnbuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jbtnbuscar.setBorderPainted(false);
         jbtnbuscar.setContentAreaFilled(false);
@@ -507,20 +633,9 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         });
         panelNice1.add(jbtnbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 22, 40, 40));
 
-        jlblcargarventa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loading_cart.gif"))); // NOI18N
-        jlblcargarventa.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        panelNice1.add(jlblcargarventa, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 10, 240, 180));
-
-        jlblmensajeproceso.setBackground(new java.awt.Color(51, 51, 51));
-        jlblmensajeproceso.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
-        jlblmensajeproceso.setForeground(new java.awt.Color(255, 51, 51));
-        jlblmensajeproceso.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jlblmensajeproceso.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        panelNice1.add(jlblmensajeproceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 30, 210, 20));
-
         jbtnretirar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/minus20x20.png"))); // NOI18N
-        jbtnretirar.setMnemonic('x');
-        jbtnretirar.setText("Retirar (Alt + x)");
+        jbtnretirar.setText("Retirar");
+        jbtnretirar.setToolTipText("Supr");
         jbtnretirar.setBorderPainted(false);
         jbtnretirar.setContentAreaFilled(false);
         jbtnretirar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -529,18 +644,37 @@ public class JIFVenta extends javax.swing.JInternalFrame {
                 jbtnretirarActionPerformed(evt);
             }
         });
-        panelNice1.add(jbtnretirar, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 60, -1, -1));
+        panelNice1.add(jbtnretirar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 60, -1, -1));
 
-        jlbltotal.setFont(new java.awt.Font("Dialog", 0, 48)); // NOI18N
-        jlbltotal.setText("* * *");
-        panelNice1.add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 510, 660, 60));
+        jPanel2.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 88, 910, 430));
 
-        jPanel2.add(panelNice1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 78, 980, 590));
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
 
-        jtfrut.setBackground(new java.awt.Color(204, 204, 204));
-        jtfrut.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel10.setText("Comprobante:");
+
+        jcbtipocomprobante.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jcbtipocomprobante.setEnabled(false);
+
+        jLabel1.setText("Moneda:");
+
+        jcbmoneda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbmonedaActionPerformed(evt);
+            }
+        });
+
+        jlbltipocambio.setText("T.C:");
+
+        jLabel9.setBackground(new java.awt.Color(255, 51, 51));
+        jLabel9.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel9.setText("Datos Cliente:");
+
+        jtfrut.setBackground(new java.awt.Color(255, 255, 255));
+        jtfrut.setForeground(new java.awt.Color(34, 75, 139));
         jtfrut.setText("DNI o R.U.C CLIENTE");
-        jtfrut.setFont(new java.awt.Font("Segoe UI Light", 0, 13)); // NOI18N
+        jtfrut.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         jtfrut.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfrutFocusGained(evt);
@@ -559,67 +693,168 @@ public class JIFVenta extends javax.swing.JInternalFrame {
                 jtfrutKeyReleased(evt);
             }
         });
-        jPanel2.add(jtfrut, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 280, 30));
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        jLabel3.setText("Compras:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, 20));
-
-        jtfcompras.setEditable(false);
-        jtfcompras.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jPanel2.add(jtfcompras, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 243, -1));
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        jLabel8.setText("Total Comprado:");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, -1, 20));
-
-        jtftotalcompras.setEditable(false);
-        jtftotalcompras.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jPanel2.add(jtftotalcompras, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 243, -1));
-
-        jLabel9.setBackground(new java.awt.Color(255, 51, 51));
-        jLabel9.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel9.setText("Datos Cliente:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jlblmensaje.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         jlblmensaje.setText("VARIOS - VENTAS MENORES A S/.700.00 Y OTROS");
-        jPanel2.add(jlblmensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 266, -1));
-
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
-        jLabel2.setToolTipText("Cerrar");
-        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jLabel2MouseReleased(evt);
-            }
-        });
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1250, 12, -1, -1));
-
-        jPanel2.add(jcbtipocomprobante, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 10, 520, -1));
-
-        jLabel10.setText("Tipo comprobante:");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, -1, 20));
-
-        jlbldireccion.setText("Dirección");
-        jPanel2.add(jlbldireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
-
-        jlblemail.setText("Email");
-        jPanel2.add(jlblemail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
 
         jlblrazonsocial.setText("Razón Social");
-        jPanel2.add(jlblrazonsocial, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
 
-        jLabel1.setText("Moneda:");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 40, -1, 20));
+        jlbldireccion.setText("Dirección");
 
-        jcbmoneda.setEnabled(false);
-        jcbmoneda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbmonedaActionPerformed(evt);
+        jlblemail.setText("Email");
+
+        jtfvender.setBackground(new java.awt.Color(77, 161, 227));
+        jtfvender.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
+        jtfvender.setForeground(new java.awt.Color(255, 255, 255));
+        jtfvender.setMnemonic('s');
+        jtfvender.setText("Guardar");
+        jtfvender.setToolTipText("Alt + s");
+        jtfvender.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jtfvender.setBorderPainted(false);
+        jtfvender.setContentAreaFilled(false);
+        jtfvender.setOpaque(true);
+        jtfvender.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jtfvenderMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jtfvenderMousePressed(evt);
             }
         });
-        jPanel2.add(jcbmoneda, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 40, 270, -1));
+        jtfvender.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfvenderActionPerformed(evt);
+            }
+        });
+
+        jlbltotal.setBackground(new java.awt.Color(244, 155, 22));
+        jlbltotal.setFont(new java.awt.Font("Dialog", 0, 48)); // NOI18N
+        jlbltotal.setForeground(new java.awt.Color(255, 255, 255));
+        jlbltotal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sale50x50.png"))); // NOI18N
+        jlbltotal.setText("* * *");
+        jlbltotal.setOpaque(true);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jcbtipocomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(jcbmoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jlbltipocambio))
+                    .addComponent(jLabel9)
+                    .addComponent(jtfrut, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblmensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblrazonsocial)
+                    .addComponent(jlbldireccion)
+                    .addComponent(jlblemail))
+                .addGap(24, 24, 24))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addComponent(jlbltotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jtfvender, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addComponent(jlbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcbtipocomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcbmoneda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addComponent(jlbltipocambio, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(jLabel9)
+                .addGap(5, 5, 5)
+                .addComponent(jtfrut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(jlblmensaje)
+                .addGap(6, 6, 6)
+                .addComponent(jlblrazonsocial)
+                .addGap(15, 15, 15)
+                .addComponent(jlbldireccion)
+                .addGap(15, 15, 15)
+                .addComponent(jlblemail)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jtfvender, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 340, 430));
+
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
+        jPanel7.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel7MouseDragged(evt);
+            }
+        });
+        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel7MousePressed(evt);
+            }
+        });
+
+        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        jLabel11.setText("NUEVA VENTA");
+
+        jbtncerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jbtncerrar.setBorderPainted(false);
+        jbtncerrar.setContentAreaFilled(false);
+        jbtncerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtncerrarActionPerformed(evt);
+            }
+        });
+
+        jprogres.setBorderPainted(false);
+        jprogres.setPreferredSize(new java.awt.Dimension(148, 9));
+        jprogres.setString("");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jbtncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jprogres, javax.swing.GroupLayout.PREFERRED_SIZE, 1290, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jbtncerrar)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jprogres, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel2.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 70));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -631,7 +866,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
         );
 
         pack();
@@ -697,71 +932,6 @@ public class JIFVenta extends javax.swing.JInternalFrame {
                
     }//GEN-LAST:event_jtfrutKeyReleased
 
-    private void jtfvenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfvenderActionPerformed
-        // TODO add your handling code here:
-        if(listprod.size()>0 ){
-            if(jcbtipocomprobante.getSelectedIndex()!=0){
-            
-                if (JOptionPane.showConfirmDialog(null, "Seguro de realizar la venta","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-             
-//              if(idcliente ==0 && !jtfrut.getText().equals("R.U.T CLIENTE") && !jtfcliente.getText().equals("NOMBRE CLIENTE")
-//                      && !jtfrut.getText().equals("") && !jtfcliente.getText().equals("") ){ //VALIDO BUSQUEDA DE CLIENTE
-//                    cliente.setRut(jtfrut.getText());
-//                    cliente.setNombre_razons(jtfcliente.getText().trim().toUpperCase());
-//                    idcliente=daocliente.insertarcliente(cliente);
-//                }
-              ////////////////////
-                boolean validacliente=false;
-             
-                venta.setIdempleado(user.getIdempleado());
-                venta.setId_sucursal(sucursalsingleton.getId());
-                venta.setDescuento(0.0);
-//                venta.setMotivodescuento(jtamotivodesc.getText().toUpperCase());
-                if(cliente!=null){
-                 venta.setIdcliente(cliente.getId_cliente());
-                 validacliente=true; 
-//                 venta.setIdventa(daoventa.insertar(venta));
-                }
-             
-                    JOptionPane.showMessageDialog(null,daoventa.insertar(venta,listprod,validacliente),"",JOptionPane.ERROR_MESSAGE);
-
-
-
-             //   daoventa.imprimirticketcaja(venta.getIdventa());
-                newventa();
-            
-            
-                }
-            
-            }else {
-                   JOptionPane.showMessageDialog(null, "Seleccione tipo de comprobante","",JOptionPane.INFORMATION_MESSAGE);
-                  
-                   jcbtipocomprobante.requestFocus();
-            }
-     
-       
-          
-         
-        
-        }else{
-            JOptionPane.showMessageDialog(null, "Ingrese productos");
-            jtfingresecodigo.selectAll();
-            jtfingresecodigo.requestFocus();
-            
-        }
-        
-        
-        ///
-       
-                   
-        
-        
-        
-       
-        
-        
-    }//GEN-LAST:event_jtfvenderActionPerformed
-
     private void jtablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtablaMouseReleased
         // TODO add your handling code here:
         
@@ -777,54 +947,40 @@ public class JIFVenta extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         String rut= jtfrut.getText().trim();
         
-        cliente=daocliente.buscarclientevent(rut,jlblmensaje,jtftotalcompras,jtfcompras);
+        cliente=daocliente.buscarclientevent(rut,jlblmensaje);
         if(cliente==null){
             jlblrazonsocial.setText("Razón Social");
             jlbldireccion.setText("Dirección");
             jlblemail.setText("Email");
          if(JOptionPane.showConfirmDialog(null,"Nuevo cliente identificado desea registrarlo","",JOptionPane.YES_NO_CANCEL_OPTION)==JOptionPane.YES_OPTION)
          {
-            JDNuevoCliente ncliente= new JDNuevoCliente(new JFrame(), isVisible(),rut);
+            JDNuevoCliente ncliente= new JDNuevoCliente(new JFrame(), isVisible(),rut,this,menu);
             ncliente.setVisible(true);
          }
         
              
              
         }else {
+            
+            if(cliente.getTipodoc().equals("6")){
+            
+               jcbtipocomprobante.setSelectedItem("1 - FACTURA");
+            }else {
+                jcbtipocomprobante.setSelectedItem("2 - BOLETA");
+            
+            }
             jlblrazonsocial.setText("R.S: "+cliente.getNombre_razons());
             jlbldireccion.setText("Dirección: "+cliente.getDireccion());
             jlblemail.setText("Email: "+cliente.getEmail());
         }
     }//GEN-LAST:event_jtfrutActionPerformed
 
-    private void jtfvenderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfvenderMousePressed
-        // TODO add your handling code here:
-         
-       
-    }//GEN-LAST:event_jtfvenderMousePressed
-
-    private void jtfvenderMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfvenderMouseExited
-        // TODO add your handling code here:
-      
-    }//GEN-LAST:event_jtfvenderMouseExited
-
     private void jbtnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnbuscarActionPerformed
         // TODO add your handling code here:
-         JDBuscarProductoVenta buscarproducto = new JDBuscarProductoVenta(new java.awt.Frame(),
+         JDBuscarProductoVenta buscarproducto = new JDBuscarProductoVenta(new JFrame(),
                     isVisible(),this,listprod);
             buscarproducto.setVisible(true);
     }//GEN-LAST:event_jbtnbuscarActionPerformed
-
-    private void jLabel2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseReleased
-        // TODO add your handling code here:
-          if(JOptionPane.showConfirmDialog(null, "Seguro que desea cerrar la ventana","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-
-//                    daoproducto.devolverstockrequerido(listprod,jlblmensajeproceso,this);
-
-            this.dispose();
-        
-        }
-    }//GEN-LAST:event_jLabel2MouseReleased
 
     private void panelNice1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelNice1MousePressed
         // TODO add your handling code here:
@@ -838,15 +994,15 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 
     private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
         // TODO add your handling code here:
-           posy=evt.getY();
-        posx=evt.getX();
+//           posy=evt.getY();
+//        posx=evt.getX();
     }//GEN-LAST:event_jPanel2MousePressed
 
     private void jPanel2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseDragged
         // TODO add your handling code here:
-         int xp=evt.getXOnScreen() - posx;
-        int yp=evt.getYOnScreen() - posy;
-        this.setLocation(xp, yp);
+//         int xp=evt.getXOnScreen() - posx;
+//        int yp=evt.getYOnScreen() - posy;
+//        this.setLocation(xp, yp);
     }//GEN-LAST:event_jPanel2MouseDragged
 
     private void jbtnretirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnretirarActionPerformed
@@ -884,68 +1040,7 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 
     private void jtablaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablaKeyReleased
         // TODO add your handling code here:
-         int index=jtabla.getSelectedRow();
-       try {
-        if(evt.getKeyCode()==10){
-        
-           
-            DecimalFormat nf = new DecimalFormat("#.00",simbolos);   
-            System.out.println("index "+index);
-           Producto prod= listprod.get(index);
-           Double precio= Double.parseDouble(jtabla.getValueAt(index, 3).toString());
-           Double cantidad= Double.parseDouble(jtabla.getValueAt(index, 2).toString());
-
-   //        boolean vprecio=true, vcantidad=true;
-
-               System.out.println("cantidad en tabla "+cantidad);
-               System.out.println("Precio en tabla "+precio);
-       
-        
-        
-        
-        
-        
-            if(prod.getPrecio3()<=precio){
-                prod.setPrecio(precio);
-
-                jtabla.setValueAt(nf.format(prod.getPrecio()*prod.getCantidad()), index,4);
-
-
-            }else {
-            JOptionPane.showMessageDialog(null,"Ingrese un precio valido","",JOptionPane.ERROR_MESSAGE);
-                jtabla.setValueAt(nf.format(prod.getPrecio()), index, 3);
-    //            vprecio = false;
-
-            }
-            if(daoproducto.validastockrequerido(prod.getIdproducto(),cantidad)==true && cantidad>0){
-                prod.setCantidad(cantidad);
-
-                jtabla.setValueAt(nf.format(prod.getPrecio()*prod.getCantidad()), index,4);
-
-            }else {
-                JOptionPane.showMessageDialog(null,"No cuenta con el stock requerido","",JOptionPane.ERROR_MESSAGE);
-                jtabla.setValueAt(nf.format(prod.getCantidad()), index, 2);
-                System.out.println("cantidadanterior "+prod.getCantidad());
-    //            vcantidad=false;
-            }
-
-                System.out.print("cantidadenlista" +prod.getCantidad());
-
-            calculatotal();
-
-
-
-                System.out.print("entertabla");
-    //        if(vcantidad==true && vprecio==true){
-    //        jtabla.setValueAt(newimporte, index,4);
-    //        
-    //        }
-        
-        }
-            } catch (Exception e) {
-                
-                jlbltotal.setText("Error");
-            }
+   
            
          
     }//GEN-LAST:event_jtablaKeyReleased
@@ -956,35 +1051,196 @@ public class JIFVenta extends javax.swing.JInternalFrame {
 
     private void jcbmonedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbmonedaActionPerformed
         // TODO add your handling code here:
+        calculatotal();
+        
     }//GEN-LAST:event_jcbmonedaActionPerformed
+
+    private void jbtncerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncerrarActionPerformed
+        // TODO add your handling code here:
+          if(JOptionPane.showConfirmDialog(null, "¿Seguro que desea cerrar la ventana?","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+
+            //                    daoproducto.devolverstockrequerido(listprod,jlblmensajeproceso,this);
+
+            this.dispose();
+
+        }
+    }//GEN-LAST:event_jbtncerrarActionPerformed
+
+    private void jtfvenderMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfvenderMouseExited
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jtfvenderMouseExited
+
+    private void jtfvenderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfvenderMousePressed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jtfvenderMousePressed
+
+    private void jtfvenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfvenderActionPerformed
+        // TODO add your handling code here:
+           if(listprod.size()>0 ){
+               boolean valida =  true;
+            Tipo_Comprobante tc= listcomprobante.get(jcbtipocomprobante.getSelectedIndex());
+//            if(jcbtipocomprobante.getSelectedIndex()!=0){
+                if(cliente!=null)
+                {
+                    if(calculatotal()>700 && cliente.getTipodoc().equals("-")){
+                        JOptionPane.showMessageDialog(null, "Se debe identificar al beneficiario, la entidad no puede ser VARIOS por ser una venta mayor a S/700.00","",JOptionPane.ERROR_MESSAGE);
+                    }else {
+                    
+                    
+                 
+                    if(errorventa==false)
+                    {
+                
+             
+                        if (JOptionPane.showConfirmDialog(null, "Seguro de realizar la venta","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
+                        {
+
+        //              if(idcliente ==0 && !jtfrut.getText().equals("R.U.T CLIENTE") && !jtfcliente.getText().equals("NOMBRE CLIENTE")
+        //                      && !jtfrut.getText().equals("") && !jtfcliente.getText().equals("") ){ //VALIDO BUSQUEDA DE CLIENTE
+        //                    cliente.setRut(jtfrut.getText());
+        //                    cliente.setNombre_razons(jtfcliente.getText().trim().toUpperCase());
+        //                    idcliente=daocliente.insertarcliente(cliente);
+        //                }
+                      ////////////////////    ///////////////////////////  nuevo hilo ////////////////
+                        Runnable runnable=new Runnable() {
+
+                            @Override
+                            public void run() {
+                            boolean validacliente=false;
+                            jprogres.setVisible(true);
+                            jprogres.setMinimum(0);
+                            jprogres.setMaximum(50);
+                            jprogres.setStringPainted(true);
+                                int i = 0;
+                            while(i<=50)
+                            {
+                                 jprogres.setValue(i);
+                                 
+                             
+                                if(i==25)
+                                {
+                                 Moneda moneda= listmoneda.get(jcbmoneda.getSelectedIndex());
+                                Tipo_Comprobante tipocomp= listcomprobante.get(jcbtipocomprobante.getSelectedIndex());
+        //                        venta.setIdempleado(user.getIdempleado());
+                                venta.setId_sucursal(sucursalsingleton.getId());
+                                venta.setDescuento(0.0);
+                                venta.setIdmoneda(moneda.getId());
+                                venta.setTipocambio(moneda.getTipo_cambio());
+                                venta.setIdcomprobante(tipocomp.getId());
+                                venta.setTotal(calculatotal());
+                                venta.setSerie("");
+                                venta.setNumero("");
+                                venta.setDocref("");
+            //                venta.setMotivodescuento(jtamotivodesc.getText().toUpperCase());
+                                if(cliente!=null){
+                                 venta.setIdcliente(cliente.getId_cliente());
+                                 validacliente=true; 
+                //                 venta.setIdventa(daoventa.insertar(venta));
+                                }
+
+        //                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                VentasDAO daoventa= new VentasDAO();
+//                                jlblcargarventa.setVisible(true);
+                                if(daoventa.insertar(venta,listprod,validacliente,"venta","Ventas")!=0)
+                                {
+                                    newventa();
+                                }
+//                                jlblcargarventa.setVisible(false);
+                                
+                            
+                            
+                            }
+                            i++;
+                            }
+                           jprogres.setVisible(false);
+                            }
+                        };
+                        
+                        
+                        
+                        Thread t = new Thread(runnable);
+                        t.start();
+
+
+
+
+                     //   daoventa.imprimirticketcaja(venta.getIdventa());
+
+            
+            
+                        }
+                    }else {
+                        JOptionPane.showMessageDialog(null, "Ingrese valores validos en los productos","",JOptionPane.ERROR_MESSAGE);
+                        
+                    }
+                    
+                    }
+                }else {
+                     JOptionPane.showMessageDialog(null, "Ingrese datos del cliente ó 0000 (VARIOS) ","",JOptionPane.ERROR_MESSAGE);
+                     jtfrut.selectAll();
+                     jtfrut.requestFocus();
+                }
+            
+//            }else {
+//                   JOptionPane.showMessageDialog(null, "Seleccione tipo de comprobante","",JOptionPane.ERROR_MESSAGE);
+//                  
+//                   jcbtipocomprobante.requestFocus();
+//            }
+     
+       
+          
+         
+        
+        }else{
+            JOptionPane.showMessageDialog(null, "Ingrese productos","",JOptionPane.ERROR_MESSAGE);
+            jtfingresecodigo.selectAll();
+            jtfingresecodigo.requestFocus();
+            
+        }
+       
+    }//GEN-LAST:event_jtfvenderActionPerformed
+
+    private void jPanel7MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseDragged
+        // TODO add your handling code here:
+        int xp=evt.getXOnScreen() - posx;
+        int yp=evt.getYOnScreen() - posy;
+        this.setLocation(xp, yp);
+    }//GEN-LAST:event_jPanel7MouseDragged
+
+    private void jPanel7MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MousePressed
+        // TODO add your handling code here:
+        posy=evt.getY();
+        posx=evt.getX();
+    }//GEN-LAST:event_jPanel7MousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnbuscar;
+    private javax.swing.JButton jbtncerrar;
     private javax.swing.JButton jbtnretirar;
     private javax.swing.JComboBox jcbmoneda;
     private javax.swing.JComboBox jcbtipocomprobante;
-    private javax.swing.JLabel jlblcargarventa;
     private javax.swing.JLabel jlbldireccion;
     private javax.swing.JLabel jlblemail;
     private javax.swing.JLabel jlblmensaje;
-    private javax.swing.JLabel jlblmensajeproceso;
     private javax.swing.JLabel jlblrazonsocial;
+    private javax.swing.JLabel jlbltipocambio;
     private javax.swing.JLabel jlbltotal;
+    private javax.swing.JProgressBar jprogres;
     private javax.swing.JTable jtabla;
-    private javax.swing.JFormattedTextField jtfcompras;
     private org.edisoncor.gui.textField.TextFieldRoundIcon jtfingresecodigo;
     private org.edisoncor.gui.textField.TextFieldRoundIcon jtfrut;
-    private javax.swing.JFormattedTextField jtftotalcompras;
-    private org.edisoncor.gui.button.ButtonColoredAction jtfvender;
+    private javax.swing.JButton jtfvender;
     private org.edisoncor.gui.panel.PanelNice panelNice1;
     private org.edisoncor.gui.util.WindowsUtil windowsUtil1;
     // End of variables declaration//GEN-END:variables

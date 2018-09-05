@@ -32,7 +32,7 @@ public class ColorRowTabla extends DefaultTableCellRenderer{
         //Si la celda corresponde a una fila con estado FALSE, se cambia el color de fondo a rojo
         if( Double.parseDouble(table.getValueAt(row,columna_patron).toString())<=stockmin)
         {
-            setBackground(Color.RED);
+            setBackground(new Color(244, 155, 22));
         }
         
 

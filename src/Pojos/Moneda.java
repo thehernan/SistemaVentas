@@ -15,8 +15,17 @@ public class Moneda {
     private double tipo_cambio;
     private int op;
     private String abrev;
+    private String simbolo;
 
     public Moneda() {
+    }
+
+    public String getSimbolo() {
+        return simbolo;
+    }
+
+    public void setSimbolo(String simbolo) {
+        this.simbolo = simbolo;
     }
 
     public Moneda(long id, String moneda, double tipo_cambio, int op, String abrev) {

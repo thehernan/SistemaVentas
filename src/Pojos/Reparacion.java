@@ -39,9 +39,36 @@ public class Reparacion {
     private String motivo;
     private double total;
     private double abono;
+    private double importe;
+    private double subtotal;
+    private double igv;
   
     
     public Reparacion() {
+    }
+
+    public double getImporte() {
+        return importe;
+    }
+
+    public void setImporte(double importe) {
+        this.importe = importe;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public double getIgv() {
+        return igv;
+    }
+
+    public void setIgv(double igv) {
+        this.igv = igv;
     }
 
     

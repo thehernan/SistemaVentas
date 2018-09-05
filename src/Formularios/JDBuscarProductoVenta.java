@@ -12,11 +12,16 @@ import Pojos.Familia;
 import Pojos.Producto;
 import Pojos.SucursalSingleton;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -41,6 +46,9 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
     JIFMerma jifmerma;
     Familia fam = new Familia();
     List<Producto> listprodventa;
+    JDNotaCreditoDebito jdnota;
+    JIFKardexProducto frmkardex;
+    JIFIngresoProducto jifingreso;
     public JDBuscarProductoVenta(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -59,7 +67,8 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         from = "venta";
         listfamilia = daofamilia.llenarcombo(jcbfamilia);
         jbtntodo.setEnabled(false);
-       jtfproducto.requestFocus();
+//       jtfproducto.requestFocus();
+        addEscapeListener(this);
        
     }
     public JDBuscarProductoVenta(java.awt.Frame parent, boolean modal,JIFOrdenSalida jifsalida) {
@@ -73,7 +82,8 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         
         from ="salida";
          listfamilia = daofamilia.llenarcombo(jcbfamilia);
-          jtfproducto.requestFocus();
+//          jtfproducto.requestFocus();
+          addEscapeListener(this);
     }
     
     public JDBuscarProductoVenta(java.awt.Frame parent, boolean modal,JIFCotizacion jifcotiza) {
@@ -88,7 +98,8 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         jbtntodo.setEnabled(false);
         from ="cotiza";
          listfamilia = daofamilia.llenarcombo(jcbfamilia);
-          jtfproducto.requestFocus();
+//          jtfproducto.requestFocus();
+          addEscapeListener(this);
     }
      public JDBuscarProductoVenta(java.awt.Frame parent, boolean modal,JIFMerma jifmerma) {
         super(parent, modal);
@@ -102,7 +113,55 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         jbtntodo.setEnabled(false);
         from ="merma";
          listfamilia = daofamilia.llenarcombo(jcbfamilia);
-         jtfproducto.requestFocus();
+//         jtfproducto.requestFocus();
+          addEscapeListener(this);
+    }
+     public JDBuscarProductoVenta(java.awt.Frame parent, boolean modal,JDNotaCreditoDebito jdnota,List<Producto> listprodventa) {
+        super(parent, modal);
+        initComponents();
+        this.setLocationRelativeTo(null);
+//       listprod= daoproducto.inventario(jtabla, sucursalsingleton.getId(),sucursalsingleton.getStockmin(),"");
+         
+        mostrar();
+        this.jdnota=jdnota;
+         jbtntodo.setEnabled(false);
+        from = "nota";
+        listfamilia = daofamilia.llenarcombo(jcbfamilia);
+        jbtntodo.setEnabled(false);
+//       jtfproducto.requestFocus();
+        addEscapeListener(this);
+        this.listprodventa=listprodventa;
+       
+    }
+         public JDBuscarProductoVenta(java.awt.Frame parent, boolean modal,JIFKardexProducto frmkardex) {
+        super(parent, modal);
+        initComponents();
+        this.setLocationRelativeTo(null);
+//       listprod= daoproducto.inventario(jtabla, sucursalsingleton.getId(),sucursalsingleton.getStockmin(),"");
+         
+        mostrar();
+        this.frmkardex=frmkardex;
+        from = "kardex";
+        listfamilia = daofamilia.llenarcombo(jcbfamilia);
+        jbtntodo.setEnabled(false);
+//       jtfproducto.requestFocus();
+        addEscapeListener(this);
+       
+    }
+          public JDBuscarProductoVenta(java.awt.Frame parent, boolean modal,JIFIngresoProducto jifingreso) {
+        super(parent, modal);
+        initComponents();
+        this.setLocationRelativeTo(null);
+//       listprod= daoproducto.inventario(jtabla, sucursalsingleton.getId(),sucursalsingleton.getStockmin(),"");
+         
+        mostrar();
+        this.jifingreso=jifingreso;
+        from = "ingreso";
+        listfamilia = daofamilia.llenarcombo(jcbfamilia);
+        jbtntodo.setEnabled(false);
+//       jtfproducto.requestFocus();
+        addEscapeListener(this);
+       
     }
     
     public void mostrar(){
@@ -111,15 +170,32 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
          @Override
          public void run() {
 //             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-             jlblimagencarga.setVisible(true);
-             jlblletracarga.setVisible(true);
-             jtfproducto.setEnabled(false);
-             jcbfamilia.setEnabled(false);
-             listprod= daoproducto.inventario(jtabla, sucursalsingleton.getId(),sucursalsingleton.getStockmin(),"");
-              jtfproducto.setEnabled(true);
-             jcbfamilia.setEnabled(true);
-             jlblimagencarga.setVisible(false);
-             jlblletracarga.setVisible(false);
+            jProgressBar1.setVisible(true);
+            jProgressBar1.setMinimum(0);
+            jProgressBar1.setMaximum(10);
+            jProgressBar1.setStringPainted(true);
+                int i = 0;
+            while(i<=10)
+            {
+                 jProgressBar1.setValue(i);
+                 
+                 if(i==5)
+                 {
+                    jtfproducto.setEnabled(false);
+                    jcbfamilia.setEnabled(false);
+                    listprod= daoproducto.inventario(jtabla, sucursalsingleton.getId(),sucursalsingleton.getStockmin(),"");
+                    jtfproducto.requestFocus();
+                    jtfproducto.setEnabled(true);
+                    jcbfamilia.setEnabled(true);
+                 
+                 }
+                 i++;
+                 
+            }     
+             
+             
+           
+             jProgressBar1.setVisible(false);
          }
      };
      Thread T = new Thread(runnable);
@@ -127,6 +203,20 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
      
     
     }
+    public static void addEscapeListener(final JDialog dialog) {
+    ActionListener escListener = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            dialog.setVisible(false);
+        }
+    };
+
+    dialog.getRootPane().registerKeyboardAction(escListener,
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+}
     public void sensitiva(){
         
         Runnable runnable = new Runnable() {
@@ -134,22 +224,40 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
             @Override
             public void run() {
 //                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                String descrip= jtfproducto.getText().toUpperCase();
-       
-                fam = listfamilia.get(jcbfamilia.getSelectedIndex());
-                jlblimagencarga.setVisible(true);
-                jlblletracarga.setVisible(true);
-                if(jcbfamilia.getSelectedIndex()==0){
+                
+            jProgressBar1.setVisible(true);
+            jProgressBar1.setMinimum(0);
+            jProgressBar1.setMaximum(10);
+            jProgressBar1.setStringPainted(true);
+                int i = 0;
+                jProgressBar1.setVisible(true);
+            while(i<=10)
+            {
+                 jProgressBar1.setValue(i);
+                 
+                 if(i==5)
+                {
+                    String descrip= jtfproducto.getText().toUpperCase();
+                
+                    fam = listfamilia.get(jcbfamilia.getSelectedIndex());
+                    
+                    if(jcbfamilia.getSelectedIndex()==0){
 
-                 listprod=daoproducto.busquedasensitivainventario(jtabla, "TODO", descrip,
-                sucursalsingleton.getId(),fam.getIdfamilia(),sucursalsingleton.getStockmin());
+                     listprod=daoproducto.busquedasensitivainventario(jtabla, "TODO", descrip,
+                    sucursalsingleton.getId(),fam.getIdfamilia(),sucursalsingleton.getStockmin());
 
-                }else{
-                  listprod=daoproducto.busquedasensitivainventario(jtabla, "FAMILIA", descrip,
-                sucursalsingleton.getId(),fam.getIdfamilia(),sucursalsingleton.getStockmin());
+                    }else{
+                      listprod=daoproducto.busquedasensitivainventario(jtabla, "FAMILIA", descrip,
+                    sucursalsingleton.getId(),fam.getIdfamilia(),sucursalsingleton.getStockmin());
+                    }
+                    
+                    
                 }
-                jlblimagencarga.setVisible(false);
-                jlblletracarga.setVisible(false);
+                 i++;
+            }
+                
+                jtfproducto.requestFocus();
+                jProgressBar1.setVisible(false);
        
                 
             }
@@ -173,8 +281,6 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jlblletracarga = new javax.swing.JLabel();
-        jlblimagencarga = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabla = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -186,8 +292,10 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         jbtnver = new javax.swing.JButton();
         jbtntodo = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jProgressBar1 = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 formKeyReleased(evt);
@@ -197,29 +305,25 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jlblletracarga.setBackground(new java.awt.Color(255, 255, 255));
-        jlblletracarga.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
-        jlblletracarga.setForeground(new java.awt.Color(0, 0, 0));
-        jlblletracarga.setText("Cargando Productos ...");
-        jPanel1.add(jlblletracarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 400, -1, -1));
-
-        jlblimagencarga.setBackground(new java.awt.Color(255, 255, 255));
-        jlblimagencarga.setForeground(new java.awt.Color(255, 255, 255));
-        jlblimagencarga.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
-        jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 130, 430, 350));
-
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {},
-                {},
-                {},
-                {}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-
+                "Codigo", "Descripción", "Precio", "Precio 1", "Precio 2", "Precio 3", "Stock", "Familia", "Sucursal"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jtabla.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtabla.getTableHeader().setReorderingAllowed(false);
@@ -238,11 +342,11 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jtabla);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 108, 1160, 394));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 1180, 370));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("Buscar:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
 
         jtfproducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtfproducto.addActionListener(new java.awt.event.ActionListener() {
@@ -261,24 +365,28 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                 jtfproductoKeyTyped(evt);
             }
         });
-        jPanel1.add(jtfproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 70, 490, -1));
+        jPanel1.add(jtfproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, 490, -1));
 
-        jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setBackground(new java.awt.Color(77, 161, 227));
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtnaceptar.setForeground(new java.awt.Color(255, 255, 255));
         jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
+        jbtnaceptar.setOpaque(true);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 70, -1, -1));
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 80, 120, 40));
 
         jcbfamilia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbfamiliaActionPerformed(evt);
             }
         });
-        jPanel1.add(jcbfamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 70, 340, -1));
+        jPanel1.add(jcbfamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 80, 340, -1));
 
         jPanel7.setBackground(new java.awt.Color(238, 238, 238));
 
@@ -288,7 +396,9 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
 
         jbtnver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/view25px.png"))); // NOI18N
         jbtnver.setMnemonic('v');
-        jbtnver.setText("(Alt + v)");
+        jbtnver.setToolTipText("(Alt + v)");
+        jbtnver.setBorderPainted(false);
+        jbtnver.setContentAreaFilled(false);
         jbtnver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnverActionPerformed(evt);
@@ -302,21 +412,21 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 830, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 892, Short.MAX_VALUE)
                 .addComponent(jbtnver)
-                .addGap(34, 34, 34))
+                .addGap(25, 25, 25))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel11)
                     .addComponent(jbtnver))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1190, -1));
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 60));
 
         jbtntodo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/selectall.png"))); // NOI18N
         jbtntodo.setToolTipText("Agregar todos los productos en tabla");
@@ -325,19 +435,21 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                 jbtntodoActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtntodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 70, -1, -1));
+        jPanel1.add(jbtntodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 80, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel2.setText("Familia:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 70, -1, 20));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 80, -1, 20));
+
+        jProgressBar1.setBorderPainted(false);
+        jProgressBar1.setString("");
+        jPanel1.add(jProgressBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1200, 8));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 1, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1201, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,7 +490,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                 }
                 if(repetido==false)
                 {
-                    JDFOpcionPrecio opprecio= new JDFOpcionPrecio(new Frame(), isVisible(),prod,frmventa,this);
+                    JDFOpcionPrecio opprecio= new JDFOpcionPrecio(new JFrame(), isVisible(),prod,frmventa,this);
                     opprecio.setVisible(true);
                 }else {
                     JOptionPane.showMessageDialog(null,"El producto ya se encuentra agregado","", JOptionPane.ERROR_MESSAGE);
@@ -389,7 +501,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
 
                 } 
                 if(from.equals("cotiza")){
-                JDFOpcionPrecio opprecio= new JDFOpcionPrecio(new Frame(), isVisible(),prod,jifcotiza,this); 
+                JDFOpcionPrecio opprecio= new JDFOpcionPrecio(new JFrame(), isVisible(),prod,jifcotiza,this); 
                 opprecio.setVisible(true);
                 
 //                this.dispose();
@@ -400,20 +512,56 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                     this.dispose();
                 }
                 
+                if(from.equals("salida")){
+//                prod= listprod.get(jtabla.getSelectedRow());
+                JDCantidadSalida jdcantidad= new JDCantidadSalida(new JFrame(), isVisible(),jifsalida,prod,this);
+
+                jdcantidad.setVisible(true);
+    //            this.dispose();
+                }
+                if(from.equals("nota")){
+                    
+                        boolean repetido=false;               
+                    for(Producto p:listprodventa ){
+                        if(p.getIdproducto()==prod.getIdproducto()){
+                            repetido=true;
+                        }
+                    }
+                     if(repetido==false)
+                    {
+    //                      prod= listprod.get(jtabla.getSelectedRow());
+                        JDFOpcionPrecio opprecio= new JDFOpcionPrecio(new JFrame(), isVisible(),prod,jdnota,this); 
+                        opprecio.setVisible(true);
+                    }else {
+                        JOptionPane.showMessageDialog(null,"El producto ya se encuentra agregado","", JOptionPane.ERROR_MESSAGE);
+
+                    }
+//                  
+                
+                }
+                 if(from.equals("kardex")){
+//                    prod= listprod.get(jtabla.getSelectedRow());
+                    frmkardex.setbuscar(prod.getCodigo());
+                    this.dispose();
+//                    JDFOpcionPrecio opprecio= new JDFOpcionPrecio(new JFrame(), isVisible(),prod,jdnota,this); 
+//                    opprecio.setVisible(true);
+                
+                }
+                 if(from.equals("ingreso"))
+                 {
+                     jifingreso.buscarprod(prod.getCodigo());
+                     this.dispose();
+                 
+                 }
+                
                 
                 
             }else 
             {
-                JOptionPane.showMessageDialog(null,"SELECCIONE UN PRODUCTO DE LA TABLA","SISTEMA",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Seleccione un item","",JOptionPane.INFORMATION_MESSAGE);
             }
         
-        if(from.equals("salida")){
-            prod= listprod.get(jtabla.getSelectedRow());
-            JDCantidadSalida jdcantidad= new JDCantidadSalida(new Frame(), isVisible(),jifsalida,prod,this);
-            
-            jdcantidad.setVisible(true);
-//            this.dispose();
-        }
+        
         
         
       
@@ -476,7 +624,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
 
     private void jtfproductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfproductoKeyPressed
         // TODO add your handling code here:
-           if(evt.getKeyCode()==10){
+           if(evt.getKeyCode()==KeyEvent.VK_ENTER){
              sensitiva();
             
          }
@@ -484,7 +632,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
 
     private void jtablaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablaKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyCode()==10){
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
         
             jbtnaceptar.doClick();
         }
@@ -512,8 +660,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
         // TODO add your handling code here:
-        if(evt.getKeyCode()==27)
-            this.dispose();
+       
     }//GEN-LAST:event_formKeyReleased
 
     /**
@@ -564,13 +711,12 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnaceptar;
     private javax.swing.JButton jbtntodo;
     private javax.swing.JButton jbtnver;
     private javax.swing.JComboBox jcbfamilia;
-    private javax.swing.JLabel jlblimagencarga;
-    private javax.swing.JLabel jlblletracarga;
     private javax.swing.JTable jtabla;
     private javax.swing.JTextField jtfproducto;
     // End of variables declaration//GEN-END:variables

@@ -6,6 +6,7 @@
 package DAO;
 
 
+import ClasesGlobales.FormatoNumerico;
 import Conexion.ConexionBD;
 import Pojos.Compras;
 import Pojos.DetalleCompras;
@@ -14,15 +15,12 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
@@ -36,7 +34,7 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class ComprasDAO {
     
-    DecimalFormat formatea = new DecimalFormat("#.00");
+    FormatoNumerico fn = new FormatoNumerico();
     
     public long insertar(Compras compra){
     ConexionBD Cbd= new ConexionBD();    
@@ -45,7 +43,7 @@ public class ComprasDAO {
     ResultSet rs=null;
      try{
                     
-        String sql=("SELECT * from sp_insertarcompra(?,?,?,?,?,?,?,?)");         
+        String sql=("SELECT * from sp_insertarcompra(?,?,?,?,?,?,?,?,?,?,?)");         
         ps= Cbd.conectar().prepareStatement(sql);
         ps.setString(1, compra.getDocumento());
         ps.setString(2, compra.getNumero());
@@ -55,6 +53,9 @@ public class ComprasDAO {
         ps.setString(6, compra.getEstado());
         ps.setString(7, compra.getTipopago());
         ps.setBigDecimal(8,new BigDecimal(compra.getAbono()));
+        ps.setLong(9, compra.getIdcomprobant());
+        ps.setLong(10, compra.getIdmoneda());
+        ps.setBigDecimal(11,new BigDecimal(compra.getTipocambio()));
         rs=Cbd.RealizarConsulta(ps);
        if  (rs.next()){
            id= rs.getLong("vidcompra");
@@ -77,7 +78,7 @@ public void editar(Compras compra){
     
      try{
            
-        String sql=("SELECT * from sp_editarcompra(?,?,?,?,?,?,?,?)");         
+        String sql=("SELECT * from sp_editarcompra(?,?,?,?,?,?,?,?,?,?,?)");         
         ps= Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, compra.getId_compra());
         ps.setString(2, compra.getDocumento());
@@ -87,7 +88,11 @@ public void editar(Compras compra){
         ps.setString(6, compra.getEstado());
         ps.setString(7, compra.getTipopago());
         ps.setBigDecimal(8,new BigDecimal(compra.getAbono()));
-       
+        ps.setLong(9, compra.getIdcomprobant());
+        
+         ps.setLong(10, compra.getIdmoneda());
+        ps.setBigDecimal(11,new BigDecimal(compra.getTipocambio()));
+        
        if  (Cbd.actualizarDatos(ps)==true){
           
            JOptionPane.showMessageDialog(null,"Editado con exito","",JOptionPane.INFORMATION_MESSAGE);
@@ -111,7 +116,7 @@ public void editar(Compras compra){
    return false;
   }
   };      
-    String titulos[]={"Documento","Numero","Proveedor","Fecha","Tipo Pago","Abono"};
+    String titulos[]={"Fecha","Documento","Razon Social","TM","Total"};
     modelo.setColumnIdentifiers(titulos);
     tabla.setModel(modelo);
     TableColumnModel columnModel = tabla.getColumnModel();
@@ -120,12 +125,12 @@ public void editar(Compras compra){
     columnModel.getColumn(2).setPreferredWidth(450);
     columnModel.getColumn(3).setPreferredWidth(50);
     columnModel.getColumn(4).setPreferredWidth(50);
-    columnModel.getColumn(5).setPreferredWidth(50);
+  
   
     List<Compras> listcompra= new ArrayList<>();
     PreparedStatement ps=null; 
     ResultSet rs=null;
-    Object datosR[] = new Object[6];
+    Object datosR[] = new Object[5];
     try{
 	
       
@@ -139,17 +144,17 @@ public void editar(Compras compra){
            compra.setId_compra(rs.getLong("id"));
            
             
-             datosR[0] = rs.getObject("vdocumento");
+             datosR[0] = rs.getObject("vfecha");
 
              datosR[1] = rs.getObject("vnumero");
 
              datosR[2] = rs.getObject("vproveedor");
 
-             datosR[3] = rs.getObject("vfecha");
+             datosR[3] = rs.getObject("vabreviatura");
 
-             datosR[4] = rs.getObject("vtipopago");
+             datosR[4] = fn.FormatoN(rs.getDouble("vtotal"));
 
-             datosR[5] = rs.getObject("vabono");
+            
                
             listcompra.add(compra);
             modelo.addRow(datosR);
@@ -176,7 +181,7 @@ public List<Compras> pendientes(JTable tabla,long idsucur){
       }
       };      
     
-     String titulos[]={"DOCUMENTO","NUMERO","PROVEEDOR","R.U.T","FECHA"};
+     String titulos[]={"Documento","Numero","Proveedor","Doc.","Fecha"};
      modelo.setColumnIdentifiers(titulos);
      tabla.setModel(modelo);
     TableColumnModel columnModel = tabla.getColumnModel();
@@ -239,7 +244,7 @@ public List<Compras> busquedasensitivapendientes(JTable tabla,long idsucur,Strin
   }
   };      
 // String titulos[]={"DOCUMENTO","NUMERO","PROVEEDOR","R.U.T","FECHA","CODIGO","PRODUCTO","CANTIDAD LLEGO","CANTIDAD ACORDADA"};
-    String titulos[]={"DOCUMENTO","NUMERO","PROVEEDOR","R.U.T","FECHA"};
+    String titulos[]={"Documento","Numero","Proveedor","Doc.","Fecha"};
     modelo.setColumnIdentifiers(titulos);
     tabla.setModel(modelo);
    TableColumnModel columnModel = tabla.getColumnModel();
@@ -358,7 +363,7 @@ public List<Compras> busquedasensitivapendientes(JTable tabla,long idsucur,Strin
    return false;
   }
   };      
-    String titulos[]={"ID","DOCUMENTO","NUMERO","PROVEEDOR","FECHA","TIPO PAGO","ABONO"};
+    String titulos[]={"ID","Documento","Numero","Proveedor","FEcha","Tipo pago","Abono"};
     modelo.setColumnIdentifiers(titulos);
     tabla.setModel(modelo);
     tabla.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -408,13 +413,13 @@ public List<Compras> busquedasensitivapendientes(JTable tabla,long idsucur,Strin
     
     }
      
-public DefaultTableModel  buscar(JTable tabla,long idcompra,JTextField proveedor,JTextField proveerut,
+public DefaultTableModel  buscar(JTable tabla,long idcompra,
         Compras compra,List<DetalleCompras> listdet){//,JFormattedTextField total,JFormattedTextField subtotal,
 //        JFormattedTextField iva){
     ConexionBD Cbd= new ConexionBD();
         
         DefaultTableModel modelo= new DefaultTableModel(
-                new String[]{"CODIGO","DESCRIPCION","CANT. LLEGO","CANT. ACORDADA","PRECIO","IMPORTE"}, 0) {
+                new String[]{"Codigo","Descripcion","Cant. Llego","Cant. Acordada","Precio","Importe"}, 0) {
    
              public boolean isCellEditable(int row, int column) {
 //        //      if (column == 5) return true;
@@ -442,10 +447,15 @@ public DefaultTableModel  buscar(JTable tabla,long idcompra,JTextField proveedor
             compra.setId_proveedor(rs.getLong("vidproveedor"));
             compra.setFecha(rs.getDate("vfecha"));
             compra.setTipopago(rs.getString("vtipopago"));
-            proveedor.setText(rs.getString("vproveedor"));
-            proveerut.setText(rs.getString("vrut"));
+            compra.setProveedor(rs.getString("vproveedor"));
+            compra.setDocprov(rs.getString("vrut"));
             compra.setAbono(rs.getDouble("vabono"));
-            
+            compra.setIdmoneda(rs.getLong("vidmoneda"));
+            compra.setMoneda(rs.getString("vmoneda"));
+            compra.setTipocambio(rs.getDouble("vtipocambio"));
+            compra.setIdcomprobant(rs.getLong("vidcomprobante"));
+            compra.setComprobante(rs.getString("vcomprobante"));
+            compra.setAbrevimoneda(rs.getString("vabreviaturamon"));
                     
              DetalleCompras detcompra= new DetalleCompras();
              iddet=rs.getLong("viddetalle");
@@ -463,13 +473,13 @@ public DefaultTableModel  buscar(JTable tabla,long idcompra,JTextField proveedor
 
              datosR[1] = rs.getObject("vdescripcion");
 
-             datosR[2] =formatea.format(detcompra.getCantidad());
+             datosR[2] =fn.FormatoN(detcompra.getCantidad());
 
-             datosR[3] = formatea.format(detcompra.getCantidadacord());
+             datosR[3] = fn.FormatoN(detcompra.getCantidadacord());
 
-             datosR[4] = formatea.format(detcompra.getPrecio());
+             datosR[4] =fn.FormatoN(detcompra.getPrecio());
 
-             datosR[5] = formatea.format(detcompra.getImporte());
+             datosR[5] =fn.FormatoN(detcompra.getImporte());
 
 
 
@@ -479,12 +489,12 @@ public DefaultTableModel  buscar(JTable tabla,long idcompra,JTextField proveedor
         }
         tabla.setModel(modelo);
           TableColumnModel columnModel = tabla.getColumnModel();
-            columnModel.getColumn(0).setPreferredWidth(50);
-            columnModel.getColumn(1).setPreferredWidth(450);
-            columnModel.getColumn(2).setPreferredWidth(50);
-            columnModel.getColumn(3).setPreferredWidth(50);
-            columnModel.getColumn(4).setPreferredWidth(50);
-            columnModel.getColumn(5).setPreferredWidth(50);
+            columnModel.getColumn(0).setPreferredWidth(100);
+            columnModel.getColumn(1).setPreferredWidth(550);
+            columnModel.getColumn(2).setPreferredWidth(100);
+            columnModel.getColumn(3).setPreferredWidth(100);
+            columnModel.getColumn(4).setPreferredWidth(100);
+            columnModel.getColumn(5).setPreferredWidth(100);
       
 	
         } catch(Exception e)

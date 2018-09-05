@@ -16,12 +16,14 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
@@ -200,7 +202,8 @@ public class CotizacionDAO {
             String  rutaInforme  = "src/Reportes/Cotizacion.jasper";
             
             Map parametros = new HashMap();
-           
+            java.util.Locale locale = new Locale( "en", "US" );
+            parametros.put( JRParameter.REPORT_LOCALE, locale );
             parametros.put("idcotizacion",  idcotizacion);
 //            parametros.put("fecha",fecha);
 //            parametros.put("motivodet", motdet);

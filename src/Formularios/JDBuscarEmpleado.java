@@ -9,7 +9,9 @@ import ClasesGlobales.Mayusculas;
 import DAO.EmpleadoDAO;
 import Pojos.Empleado;
 import Pojos.Usuarios;
+import java.awt.event.KeyEvent;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -42,6 +44,7 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
         this.fromuser=frmuser;
         this.setLocationRelativeTo(null);
         tipoB= "USUARIO";
+        jtfnombre.requestFocus();
     }
      public JDBuscarEmpleado(java.awt.Frame parent, boolean modal,JIFReparaciones frmreparacion) {//CONTRUCTOR REPARACION
         super(parent, modal);
@@ -50,6 +53,7 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         this.frmreparacion= frmreparacion;
         tipoB="REPARACION";
+        jtfnombre.requestFocus();
     }
      
      public void mostrar(){
@@ -96,6 +100,7 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
         jtfnombre = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -110,7 +115,6 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
         jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
         jPanel1.add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, 190, 200));
 
-        jtabla.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -124,23 +128,30 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
         ));
         jtabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtabla.getTableHeader().setReorderingAllowed(false);
+        jtabla.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtablaKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtabla);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 122, 774, 420));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 112, 774, 430));
 
-        jbtnaceptar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setBackground(new java.awt.Color(77, 161, 227));
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtnaceptar.setForeground(new java.awt.Color(255, 255, 255));
         jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
+        jbtnaceptar.setOpaque(true);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(671, 73, -1, -1));
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(631, 63, 150, 40));
 
         jtfnombre.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jtfnombre.setText("NOMBRE");
         jtfnombre.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtfnombreFocusGained(evt);
@@ -155,6 +166,9 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
             }
         });
         jtfnombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtfnombreKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfnombreKeyReleased(evt);
             }
@@ -162,13 +176,12 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
                 jtfnombreKeyTyped(evt);
             }
         });
-        jPanel1.add(jtfnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 80, 401, -1));
+        jPanel1.add(jtfnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, 530, -1));
 
-        jPanel7.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel7.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("BUSCAR EMPLEADO");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -189,6 +202,9 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
         );
 
         jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 798, -1));
+
+        jLabel1.setText("Señor(es):");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -234,22 +250,22 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
             
             
             this.dispose();
+        }else {
+            JOptionPane.showMessageDialog(null, "Seleccione Item");
+        
+        
         }
         
     }//GEN-LAST:event_jbtnaceptarActionPerformed
 
     private void jtfnombreFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnombreFocusGained
         // TODO add your handling code here:
-        if (jtfnombre.getText().equals("NOMBRE")){
-            jtfnombre.setText("");
-        }
+       
     }//GEN-LAST:event_jtfnombreFocusGained
 
     private void jtfnombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnombreFocusLost
         // TODO add your handling code here:
-          if (jtfnombre.getText().equals("")){
-            jtfnombre.setText("NOMBRE");
-        }
+        
     }//GEN-LAST:event_jtfnombreFocusLost
 
     private void jtfnombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnombreKeyTyped
@@ -259,17 +275,39 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
 
     private void jtfnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnombreActionPerformed
         // TODO add your handling code here:
-        Runnable runnable = new Runnable() {
-
-            @Override
-            public void run() {
-//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                sensitiva();
-            }
-        };
-        Thread T = new Thread(runnable);
-        T.start();
+       
     }//GEN-LAST:event_jtfnombreActionPerformed
+
+    private void jtfnombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfnombreKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+    //                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    sensitiva();
+                    if(listempleado.size()>0){
+                        jtabla.requestFocus();
+                    
+                    }
+                }
+            };
+            Thread T = new Thread(runnable);
+            T.start();
+        }
+         
+    }//GEN-LAST:event_jtfnombreKeyPressed
+
+    private void jtablaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablaKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+            jbtnaceptar.doClick();
+
+        }
+    }//GEN-LAST:event_jtablaKeyPressed
 
     /**
      * @param args the command line arguments
@@ -314,6 +352,7 @@ public class JDBuscarEmpleado extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel7;

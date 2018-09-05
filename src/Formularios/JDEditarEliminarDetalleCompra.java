@@ -5,8 +5,10 @@
  */
 package Formularios;
 
+import ClasesGlobales.FormatoNumerico;
 import DAO.DetalleComprasDAO;
 import Pojos.DetalleCompras;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,6 +22,8 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
     DetalleCompras detcompra = new DetalleCompras();
     JIFIngresoProducto frmingresoprod;
     DetalleComprasDAO daodetc= new DetalleComprasDAO();
+    FormatoNumerico fn = new FormatoNumerico();
+    boolean valida=true;
     public JDEditarEliminarDetalleCompra(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -32,26 +36,39 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
         jlblcodigo.setText(cod);
         jlbldescripcion.setText(descrip);
                 
-        jtfcantllego.setValue(detcompra.getCantidad());
-        jtfcantacord.setValue(detcompra.getCantidadacord());
-        jtfprecio.setValue(detcompra.getPrecio());
-        jtfimporte.setValue(Double.parseDouble(jtfcantllego.getValue().toString())
-                *Double.parseDouble(jtfprecio.getValue().toString()));
+        jtfcantllego.setText(fn.FormatoN(detcompra.getCantidad()));
+        jtfcantacord.setText(fn.FormatoN(detcompra.getCantidadacord()));
+        jtfprecio.setText(fn.FormatoN(detcompra.getPrecio()));
+        jtfimporte.setText(fn.FormatoN(Double.parseDouble(jtfcantllego.getText())
+                *Double.parseDouble(jtfprecio.getText())));
         this.frmingresoprod= frmingresoprod;
+        
+        jtfenable(false, false, false, false);
         this.setLocationRelativeTo(null);
     }
     public void importe(){
         try {
             
-            double cant=Double.parseDouble(jtfcantllego.getValue().toString());          
-            double precio = Double.parseDouble(jtfprecio.getValue().toString());
+            double cant=Double.parseDouble(jtfcantllego.getText());          
+            double precio = Double.parseDouble(jtfprecio.getText());
             
             double impor = cant*precio;
-            jtfimporte.setValue(impor);
+            jtfimporte.setText(fn.FormatoN(impor));
+            
         } catch (NumberFormatException e) {
+            valida=false;
+            jtfimporte.setText("Error");
         }
     
     
+    }
+    public void jtfenable(boolean cantacor,boolean cantllego, boolean precio,
+    boolean importe)
+    {
+        jtfcantacord.setEnabled(cantacor);
+        jtfcantllego.setEnabled(cantllego);
+        jtfprecio.setEnabled(precio);
+        jtfimporte.setEditable(importe);
     }
 
     /**
@@ -66,17 +83,17 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jlblcodigo = new javax.swing.JLabel();
         jlbldescripcion = new javax.swing.JLabel();
-        jtfcantllego = new javax.swing.JFormattedTextField();
-        jtfcantacord = new javax.swing.JFormattedTextField();
-        jtfprecio = new javax.swing.JFormattedTextField();
-        jtfimporte = new javax.swing.JFormattedTextField();
         jbtneliminar = new javax.swing.JButton();
         jbtneditar = new javax.swing.JButton();
-        jbtnguardar = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jtfcantllego = new javax.swing.JTextField();
+        jtfcantacord = new javax.swing.JTextField();
+        jtfprecio = new javax.swing.JTextField();
+        jtfimporte = new javax.swing.JTextField();
+        jbtnguardar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -84,121 +101,108 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jlblcodigo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlblcodigo.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jlblcodigo.setText("jLabel1");
         jPanel1.add(jlblcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        jlbldescripcion.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbldescripcion.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
         jlbldescripcion.setText("jLabel2");
         jPanel1.add(jlbldescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
 
-        jtfcantllego.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jtfcantllego.setEnabled(false);
-        jtfcantllego.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfcantllegoActionPerformed(evt);
-            }
-        });
-        jtfcantllego.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfcantllegoKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jtfcantllegoKeyTyped(evt);
-            }
-        });
-        jPanel1.add(jtfcantllego, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 150, 150, -1));
-
-        jtfcantacord.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jtfcantacord.setEnabled(false);
-        jtfcantacord.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfcantacordActionPerformed(evt);
-            }
-        });
-        jtfcantacord.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfcantacordKeyReleased(evt);
-            }
-        });
-        jPanel1.add(jtfcantacord, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 150, 150, -1));
-
-        jtfprecio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jtfprecio.setEnabled(false);
-        jtfprecio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfprecioActionPerformed(evt);
-            }
-        });
-        jtfprecio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfprecioKeyReleased(evt);
-            }
-        });
-        jPanel1.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 150, -1));
-
-        jtfimporte.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        jtfimporte.setCaretColor(new java.awt.Color(255, 51, 51));
-        jtfimporte.setDisabledTextColor(new java.awt.Color(255, 51, 51));
-        jtfimporte.setEnabled(false);
-        jtfimporte.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jPanel1.add(jtfimporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 180, 150, -1));
-
-        jbtneliminar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/recycle.png"))); // NOI18N
-        jbtneliminar.setToolTipText("Eliminar");
+        jbtneliminar.setBackground(new java.awt.Color(238, 17, 17));
+        jbtneliminar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtneliminar.setForeground(new java.awt.Color(255, 255, 255));
+        jbtneliminar.setText("Eliminar");
+        jbtneliminar.setToolTipText("");
+        jbtneliminar.setBorderPainted(false);
+        jbtneliminar.setContentAreaFilled(false);
+        jbtneliminar.setOpaque(true);
         jbtneliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtneliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+        jPanel1.add(jbtneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 120, 50));
 
-        jbtneditar.setBackground(new java.awt.Color(255, 255, 255));
-        jbtneditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/editlapiz.png"))); // NOI18N
-        jbtneditar.setToolTipText("Editar");
+        jbtneditar.setBackground(new java.awt.Color(244, 155, 22));
+        jbtneditar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtneditar.setForeground(new java.awt.Color(255, 255, 255));
+        jbtneditar.setText("Editar");
+        jbtneditar.setToolTipText("");
+        jbtneditar.setBorderPainted(false);
+        jbtneditar.setContentAreaFilled(false);
+        jbtneditar.setOpaque(true);
         jbtneditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtneditarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, -1, -1));
+        jPanel1.add(jbtneditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 120, 50));
 
-        jbtnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/savedisk.png"))); // NOI18N
-        jbtnguardar.setToolTipText("Guardar");
-        jbtnguardar.setEnabled(false);
+        jLabel9.setText("Cant. Llego:");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, 20));
+
+        jLabel10.setText("Cant. Acordada:");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, -1, 20));
+
+        jLabel11.setText("Precio:");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, 20));
+
+        jLabel3.setText("Importe:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 180, -1, 20));
+
+        jtfcantllego.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfcantllegoKeyReleased(evt);
+            }
+        });
+        jPanel1.add(jtfcantllego, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 150, 150, -1));
+
+        jtfcantacord.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfcantacordKeyReleased(evt);
+            }
+        });
+        jPanel1.add(jtfcantacord, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 160, -1));
+
+        jtfprecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfprecioKeyReleased(evt);
+            }
+        });
+        jPanel1.add(jtfprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 150, -1));
+
+        jtfimporte.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfimporteKeyReleased(evt);
+            }
+        });
+        jPanel1.add(jtfimporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 180, 160, -1));
+
+        jbtnguardar.setBackground(new java.awt.Color(77, 161, 227));
+        jbtnguardar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtnguardar.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnguardar.setText("Guardar");
+        jbtnguardar.setToolTipText("");
+        jbtnguardar.setBorderPainted(false);
+        jbtnguardar.setContentAreaFilled(false);
+        jbtnguardar.setOpaque(true);
         jbtnguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnguardarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, -1, -1));
-
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel9.setText("CANTIDAD LLEGO:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, 20));
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel10.setText("CANTIDAD ACORDADA:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 150, -1, 20));
-
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel11.setText("PRECIO:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, -1, 20));
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setText("IMPORTE:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, -1, 20));
+        jPanel1.add(jbtnguardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 80, 120, 50));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
         );
 
         pack();
@@ -206,75 +210,66 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
 
     private void jbtneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtneliminarActionPerformed
         // TODO add your handling code here:
-        frmingresoprod.seteliminar(detcompra);
-        this.dispose();
+        if(JOptionPane.showConfirmDialog(null,"¿Esta seguro de eliminar el item?","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
+        {
+            frmingresoprod.seteliminar(detcompra);
+            this.dispose();
+        
+        }
+        
     }//GEN-LAST:event_jbtneliminarActionPerformed
 
     private void jbtneditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtneditarActionPerformed
         // TODO add your handling code here:
-        jtfcantacord.setEnabled(true);
-        jtfcantllego.setEnabled(true);
-        jtfprecio.setEnabled(true);
+        jtfenable(true, true, true, false);
     }//GEN-LAST:event_jbtneditarActionPerformed
 
     private void jtfcantllegoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcantllegoKeyReleased
         // TODO add your handling code here:
         importe();
-        if(evt.getKeyCode()!=10)
-        jbtnguardar.setEnabled(false);
     }//GEN-LAST:event_jtfcantllegoKeyReleased
-
-    private void jtfprecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecioKeyReleased
-        // TODO add your handling code here:
-        importe();
-         if(evt.getKeyCode()!=10)
-        jbtnguardar.setEnabled(false);
-    }//GEN-LAST:event_jtfprecioKeyReleased
-
-    private void jbtnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnguardarActionPerformed
-        // TODO add your handling code here:
-        System.out.println("iddet"+detcompra.getIddetallecompra());
-        detcompra.setCantidad(Double.parseDouble(jtfcantllego.getValue().toString()));
-        detcompra.setCantidadacord(Double.parseDouble(jtfcantacord.getValue().toString()));
-        detcompra.setPrecio(Double.parseDouble(jtfprecio.getValue().toString()));
-        detcompra.setImporte(Double.parseDouble(jtfimporte.getValue().toString()));
-        if(detcompra.getIddetallecompra()!=0){
-        
-            System.out.println("idprodguardar"+detcompra.getIdproducto());
-        daodetc.editar(detcompra);
-        frmingresoprod.seteditar(detcompra);
-        }else {
-        frmingresoprod.seteditar(detcompra);
-        
-        }
-        this.dispose();
-    }//GEN-LAST:event_jbtnguardarActionPerformed
-
-    private void jtfcantllegoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcantllegoKeyTyped
-        // TODO add your handling code here:
-         importe();
-    }//GEN-LAST:event_jtfcantllegoKeyTyped
-
-    private void jtfcantllegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfcantllegoActionPerformed
-        // TODO add your handling code here:
-        jbtnguardar.setEnabled(true);
-    }//GEN-LAST:event_jtfcantllegoActionPerformed
-
-    private void jtfprecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfprecioActionPerformed
-        // TODO add your handling code here:
-        jbtnguardar.setEnabled(true);
-    }//GEN-LAST:event_jtfprecioActionPerformed
-
-    private void jtfcantacordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfcantacordActionPerformed
-        // TODO add your handling code here:}
-        jbtnguardar.setEnabled(true);
-    }//GEN-LAST:event_jtfcantacordActionPerformed
 
     private void jtfcantacordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcantacordKeyReleased
         // TODO add your handling code here:
-         if(evt.getKeyCode()!=10)
-        jbtnguardar.setEnabled(false);
+         importe();
     }//GEN-LAST:event_jtfcantacordKeyReleased
+
+    private void jtfprecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecioKeyReleased
+        // TODO add your handling code here:
+         importe();
+    }//GEN-LAST:event_jtfprecioKeyReleased
+
+    private void jtfimporteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfimporteKeyReleased
+        // TODO add your handling code here:
+         importe();
+    }//GEN-LAST:event_jtfimporteKeyReleased
+
+    private void jbtnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnguardarActionPerformed
+        // TODO add your handling code here:
+        if(valida==true)
+        {
+        
+            System.out.println("iddet"+detcompra.getIddetallecompra());
+            detcompra.setCantidad(Double.parseDouble(jtfcantllego.getText()));
+            detcompra.setCantidadacord(Double.parseDouble(jtfcantacord.getText()));
+            detcompra.setPrecio(Double.parseDouble(jtfprecio.getText()));
+            detcompra.setImporte(Double.parseDouble(jtfimporte.getText()));
+            if(detcompra.getIddetallecompra()!=0){
+
+                System.out.println("idprodguardar"+detcompra.getIdproducto());
+            daodetc.editar(detcompra);
+            frmingresoprod.seteditar(detcompra);
+            }else {
+            frmingresoprod.seteditar(detcompra);
+
+            }
+            this.dispose();
+
+        }else {
+            JOptionPane.showMessageDialog(null, "Ingrese datos validos","",JOptionPane.ERROR_MESSAGE);
+        
+        }
+    }//GEN-LAST:event_jbtnguardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -329,9 +324,9 @@ public class JDEditarEliminarDetalleCompra extends javax.swing.JDialog {
     private javax.swing.JButton jbtnguardar;
     private javax.swing.JLabel jlblcodigo;
     private javax.swing.JLabel jlbldescripcion;
-    private javax.swing.JFormattedTextField jtfcantacord;
-    private javax.swing.JFormattedTextField jtfcantllego;
-    private javax.swing.JFormattedTextField jtfimporte;
-    private javax.swing.JFormattedTextField jtfprecio;
+    private javax.swing.JTextField jtfcantacord;
+    private javax.swing.JTextField jtfcantllego;
+    private javax.swing.JTextField jtfimporte;
+    private javax.swing.JTextField jtfprecio;
     // End of variables declaration//GEN-END:variables
 }

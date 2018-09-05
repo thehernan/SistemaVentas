@@ -43,40 +43,94 @@ public class Usuarios {
     private boolean sucursalida;
     private boolean sucurentrada;
     private boolean consultasucur;
+    
     private boolean web;
+    private boolean cotizacion;
+    private boolean buscar_cot;
+    private boolean mant_prod;
+    private boolean kardex;
+    private boolean act_precios;
+    private boolean facturas;
+    private boolean boletas;
+    private boolean ncredito;
+    private boolean ndebito;
+    
+    
     public Usuarios() {
     }
 
-    public Usuarios(long id_usuario, String usuario, String clave, long idempleado, boolean cliente, boolean proveedor, boolean apertura, boolean consultarrepara, boolean consultarventa, boolean debe, boolean ckempleado, boolean familia, boolean haber, boolean ingreso, boolean inventario, boolean movimientos, boolean nueva, boolean pendientes, boolean productos, boolean user, boolean vender, String tema, boolean extornar, boolean prodpendientes, boolean mermas, boolean consulmermas, boolean sucursalida, boolean sucurentrada, boolean consultasucur) {
-        this.id_usuario = id_usuario;
-        this.usuario = usuario;
-        this.clave = clave;
-        this.idempleado = idempleado;
-        this.cliente = cliente;
-        this.proveedor = proveedor;
-        this.apertura = apertura;
-        this.consultarrepara = consultarrepara;
-        this.consultarventa = consultarventa;
-        this.debe = debe;
-        this.ckempleado = ckempleado;
-        this.familia = familia;
-        this.haber = haber;
-        this.ingreso = ingreso;
-        this.inventario = inventario;
-        this.movimientos = movimientos;
-        this.nueva = nueva;
-        this.pendientes = pendientes;
-        this.productos = productos;
-        this.user = user;
-        this.vender = vender;
-        this.tema = tema;
-        this.extornar = extornar;
-        this.prodpendientes = prodpendientes;
-        this.mermas = mermas;
-        this.consulmermas = consulmermas;
-        this.sucursalida = sucursalida;
-        this.sucurentrada = sucurentrada;
-        this.consultasucur = consultasucur;
+    
+
+    public boolean isCotizacion() {
+        return cotizacion;
+    }
+
+    public void setCotizacion(boolean cotizacion) {
+        this.cotizacion = cotizacion;
+    }
+
+    public boolean isBuscar_cot() {
+        return buscar_cot;
+    }
+
+    public void setBuscar_cot(boolean buscar_cot) {
+        this.buscar_cot = buscar_cot;
+    }
+
+    public boolean isMant_prod() {
+        return mant_prod;
+    }
+
+    public void setMant_prod(boolean mant_prod) {
+        this.mant_prod = mant_prod;
+    }
+
+    public boolean isKardex() {
+        return kardex;
+    }
+
+    public void setKardex(boolean kardex) {
+        this.kardex = kardex;
+    }
+
+    public boolean isAct_precios() {
+        return act_precios;
+    }
+
+    public void setAct_precios(boolean act_precios) {
+        this.act_precios = act_precios;
+    }
+
+    public boolean isFacturas() {
+        return facturas;
+    }
+
+    public void setFacturas(boolean facturas) {
+        this.facturas = facturas;
+    }
+
+    public boolean isBoletas() {
+        return boletas;
+    }
+
+    public void setBoletas(boolean boletas) {
+        this.boletas = boletas;
+    }
+
+    public boolean isNcredito() {
+        return ncredito;
+    }
+
+    public void setNcredito(boolean ncredito) {
+        this.ncredito = ncredito;
+    }
+
+    public boolean isNdebito() {
+        return ndebito;
+    }
+
+    public void setNdebito(boolean ndebito) {
+        this.ndebito = ndebito;
     }
 
     public boolean isWeb() {

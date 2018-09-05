@@ -18,20 +18,19 @@ public class Cliente {
     private String email;
     private long idtipodoc;
     private String documento;
+    private String tipodoc;
 
     public Cliente() {
     }
 
-    public Cliente(long id_cliente, String nombre_razons, String rut, String direccion, String celular, String email, long idtipodoc, String documento) {
-        this.id_cliente = id_cliente;
-        this.nombre_razons = nombre_razons;
-        this.rut = rut;
-        this.direccion = direccion;
-        this.celular = celular;
-        this.email = email;
-        this.idtipodoc = idtipodoc;
-        this.documento = documento;
+    public String getTipodoc() {
+        return tipodoc;
     }
+
+    public void setTipodoc(String tipodoc) {
+        this.tipodoc = tipodoc;
+    }
+
 
     public long getIdtipodoc() {
         return idtipodoc;

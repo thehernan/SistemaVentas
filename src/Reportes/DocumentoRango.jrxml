@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6dd804b6-5d95-4ffb-9e31-e15541fd19e9">
+	<queryString language="SQL">
+		<![CDATA[select * from sp_busquedasensitivadoc(' ',3,'05-09-2017','05-09-2018','comprobante',1);]]>
+	</queryString>
+	<field name="vidventa" class="java.lang.Long"/>
+	<field name="vcodigo" class="java.lang.String"/>
+	<field name="vidcliente" class="java.lang.Long"/>
+	<field name="vfecha" class="java.lang.String"/>
+	<field name="vidempleado" class="java.lang.Long"/>
+	<field name="vestado" class="java.lang.String"/>
+	<field name="vdescuento" class="java.math.BigDecimal"/>
+	<field name="vextornado" class="java.lang.Boolean"/>
+	<field name="vmotivodes" class="java.lang.String"/>
+	<field name="vmotivo" class="java.lang.String"/>
+	<field name="vfechaextorno" class="java.lang.String"/>
+	<field name="vidcomprobante" class="java.lang.Long"/>
+	<field name="vserie" class="java.lang.String"/>
+	<field name="vnumero" class="java.lang.String"/>
+	<field name="vcomprobateref" class="java.lang.String"/>
+	<field name="vidsunattrans" class="java.lang.Long"/>
+	<field name="vfechavenci" class="java.lang.String"/>
+	<field name="porcentajeigv" class="java.lang.Integer"/>
+	<field name="descglobal" class="java.math.BigDecimal"/>
+	<field name="totaldesc" class="java.math.BigDecimal"/>
+	<field name="totalanti" class="java.math.BigDecimal"/>
+	<field name="totalgravada" class="java.math.BigDecimal"/>
+	<field name="totalinafec" class="java.math.BigDecimal"/>
+	<field name="totalexo" class="java.math.BigDecimal"/>
+	<field name="totaligv" class="java.math.BigDecimal"/>
+	<field name="totalgratui" class="java.math.BigDecimal"/>
+	<field name="totalotroscar" class="java.math.BigDecimal"/>
+	<field name="vtotal" class="java.math.BigDecimal"/>
+	<field name="percepbaseimpo" class="java.math.BigDecimal"/>
+	<field name="totalpercep" class="java.math.BigDecimal"/>
+	<field name="totalinclu" class="java.math.BigDecimal"/>
+	<field name="vdetraccion" class="java.lang.Boolean"/>
+	<field name="vobservacion" class="java.lang.String"/>
+	<field name="vcondicionpago" class="java.lang.String"/>
+	<field name="venlace" class="java.lang.String"/>
+	<field name="vaceptadasunat" class="java.lang.Boolean"/>
+	<field name="vsunatdesc" class="java.lang.String"/>
+	<field name="vsunatnote" class="java.lang.String"/>
+	<field name="vsunatresponse" class="java.lang.String"/>
+	<field name="vsunarsoaperror" class="java.lang.String"/>
+	<field name="cadenaqr" class="java.lang.String"/>
+	<field name="vcodigohash" class="java.lang.String"/>
+	<field name="vcodbarras" class="java.lang.String"/>
+	<field name="vsunatticket" class="java.lang.String"/>
+	<field name="idpercepcion" class="java.lang.Long"/>
+	<field name="vestadosunat" class="java.lang.String"/>
+	<field name="vrazons" class="java.lang.String"/>
+	<field name="vrut" class="java.lang.String"/>
+	<field name="vabreviatura" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

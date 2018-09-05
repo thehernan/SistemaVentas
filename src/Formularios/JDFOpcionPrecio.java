@@ -5,16 +5,22 @@
  */
 package Formularios;
 
+import ClasesGlobales.FormatoNumerico;
 import DAO.ProductoDAO;
 import Pojos.Producto;
-import java.text.DecimalFormat;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 /**
  *
  * @author HERNAN
  */
-public class JDFOpcionPrecio extends java.awt.Dialog {
+public class JDFOpcionPrecio extends javax.swing.JDialog {
 
     /**
      * Creates new form JDFOpcionPrecio
@@ -25,15 +31,16 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
     JIFCotizacion jifcotiza;
     String op;
     
-    DecimalFormat nf =new  DecimalFormat("#.00");  
+    FormatoNumerico fn= new FormatoNumerico();
     JDBuscarProductoVenta jifbuscarprod;
     ProductoDAO  daoprod = new ProductoDAO();
-    public JDFOpcionPrecio(java.awt.Frame parent, boolean modal) {
+    JDNotaCreditoDebito jdnota ;
+    public JDFOpcionPrecio(javax.swing.JFrame parent, boolean modal) {
         super(parent, modal);
         initComponents();
        
     }
-    public JDFOpcionPrecio(java.awt.Frame parent, boolean modal,Producto prod,JIFVenta jifventa,JDBuscarProductoVenta jifbuscarprod) {
+    public JDFOpcionPrecio(javax.swing.JFrame parent, boolean modal,Producto prod,JIFVenta jifventa,JDBuscarProductoVenta jifbuscarprod) {
         super(parent, modal);
         initComponents();
         
@@ -41,44 +48,60 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
         this.jifventa = jifventa;
         this.jifbuscarprod= jifbuscarprod; 
         jlblproducto.setText(prod.getCodigo()+" - "+(prod.getDescripcion()));
-          jlblopprecio.setText("Precio a negociar > ó = "+nf.format(prod.getPrecio3()));
+          jlblopprecio.setText("Precio a negociar > ó = "+fn.FormatoN(prod.getPrecio3()));
         
 //        jlblcantidad.setVisible(false);
 //        jtfcantidad.setVisible(false);
         
         op="venta";
         this.setLocationRelativeTo(null);
-        
+       addEscapeListener(this);
         
     }
-     public JDFOpcionPrecio(java.awt.Frame parent, boolean modal,Producto prod,JIFVenta jifventa) {
+     public JDFOpcionPrecio(javax.swing.JFrame parent, boolean modal,Producto prod,JIFVenta jifventa) {
         super(parent, modal);
         initComponents();
         this.prod=prod;
         this.jifventa = jifventa;
        
         jlblproducto.setText(prod.getCodigo()+" - "+(prod.getDescripcion()));
-          jlblopprecio.setText("Precio a negociar > ó = "+nf.format(prod.getPrecio3()));
+          jlblopprecio.setText("Precio a negociar > ó = "+fn.FormatoN(prod.getPrecio3()));
 //        jlblcantidad.setVisible(false);
 //        jtfcantidad.setVisible(false);
         
         op="venta";
         this.setLocationRelativeTo(null);
-        
+        addEscapeListener(this);
     }
-    public JDFOpcionPrecio(java.awt.Frame parent, boolean modal,Producto prod,JIFCotizacion jifcotiza,JDBuscarProductoVenta jifbuscarprod) {
+    public JDFOpcionPrecio(javax.swing.JFrame parent, boolean modal,Producto prod,JIFCotizacion jifcotiza,JDBuscarProductoVenta jifbuscarprod) {
         super(parent, modal);
         initComponents();
         this.prod=prod;
         this.jifcotiza = jifcotiza;
         this.jifbuscarprod= jifbuscarprod; 
        jlblproducto.setText(prod.getCodigo()+" - "+(prod.getDescripcion()));
-        jlblopprecio.setText("Precio a negociar > ó = "+nf.format(prod.getPrecio3()));
+        jlblopprecio.setText("Precio a negociar > ó = "+fn.FormatoN(prod.getPrecio3()));
         
         op="cotiza";
         
         this.setLocationRelativeTo(null);
+//        addEscapeListener(new JDialog(this));
+        addEscapeListener(this);
+    }
+    public JDFOpcionPrecio(javax.swing.JFrame parent, boolean modal,Producto prod,JDNotaCreditoDebito jdnota,JDBuscarProductoVenta jifbuscarprod) {
+        super(parent, modal);
+        initComponents();
+        this.prod=prod;
+        this.jdnota=jdnota;
+        this.jifbuscarprod= jifbuscarprod; 
+       jlblproducto.setText(prod.getCodigo()+" - "+(prod.getDescripcion()));
+        jlblopprecio.setText("Precio a negociar > ó = "+fn.FormatoN(prod.getPrecio3()));
         
+        op="nota";
+        
+        this.setLocationRelativeTo(null);
+//        addEscapeListener(new JDialog(this));
+        addEscapeListener(this);
     }
     
     public void validaaceptar(){
@@ -95,7 +118,7 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
                     
                 }
         if(precio < prod.getPrecio3()){
-                         jlblmensaje.setText("Ingrese un precio mayor a "+prod.getPrecio3());
+                         jlblmensaje.setText("Ingrese un precio mayor a "+prod.getPrecio());
                     
                     }
         if(canti<=0){
@@ -109,6 +132,21 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
        
    
     }
+    
+    public static void addEscapeListener(final JDialog dialog) {
+    ActionListener escListener = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            dialog.setVisible(false);
+        }
+    };
+
+    dialog.getRootPane().registerKeyboardAction(escListener,
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+}
     
 //    public double precio(int op){
 //        double precio=0.0;
@@ -207,9 +245,15 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
             }
         });
 
+        jbtnaceptar.setBackground(new java.awt.Color(77, 161, 227));
+        jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtnaceptar.setForeground(new java.awt.Color(255, 255, 255));
         jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
         jbtnaceptar.setText("Aceptar");
+        jbtnaceptar.setBorderPainted(false);
+        jbtnaceptar.setContentAreaFilled(false);
         jbtnaceptar.setEnabled(false);
+        jbtnaceptar.setOpaque(true);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
@@ -234,8 +278,8 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -253,8 +297,8 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
                         .addComponent(jlblcantidad)
                         .addGap(0, 0, 0)
                         .addComponent(jtfcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(jbtnaceptar))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jbtnaceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,7 +307,7 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
                 .addComponent(jlblproducto)
                 .addGap(12, 12, 12)
                 .addComponent(jlblopprecio)
-                .addGap(18, 18, 18)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jtfprecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -271,15 +315,19 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jlblmensaje))))
-                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jlblcantidad))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jtfcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jbtnaceptar)))
+                        .addGap(14, 14, 14)
+                        .addComponent(jbtnaceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(jlblcantidad))
+                            .addComponent(jtfcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(22, 22, 22))))
         );
 
         pack();
@@ -314,34 +362,88 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
 
     private void jbtnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnaceptarActionPerformed
         // TODO add your handling code here:
+        Double precio = Double.parseDouble(jtfprecio.getText());
+        Double cant = Double.parseDouble(jtfcantidad.getText());
         if(op.equals("venta")){
-            Double precio = Double.parseDouble(jtfprecio.getText());
-            Double cant = Double.parseDouble(jtfcantidad.getText());
             
-            if(daoprod.validastockrequerido(prod.getIdproducto(),cant)==true){ ////valida stock venta
+            System.out.println("unidmed"+prod.getUnidadm());
+            if(prod.getUnidadm().equals("PRODUCTO"))
+            {
+                if(daoprod.validastockrequerido(prod.getIdproducto(),cant)==true){ ////valida stock venta
+
+                prod.setPrecio(precio);
+                prod.setCantidad(cant);
+                jifventa.setproducto(prod);
+                 this.dispose();
+                 if(jifbuscarprod!=null){
+                    jifbuscarprod.dispose();
+                 }
+                }else {
+                    JOptionPane.showMessageDialog(null,"No cuenta con stock suficiente","",JOptionPane.INFORMATION_MESSAGE);
+                }     
+            
+            
+            
+            }else {
+                prod.setPrecio(precio);
+                prod.setCantidad(cant);
+                jifventa.setproducto(prod);
+                 this.dispose();
+                 if(jifbuscarprod!=null){
+                    jifbuscarprod.dispose();
+                 }
+            
+            }
+            
+             
+        
+        }
+        if(op.equals("cotiza")){
+           
+            
+           jifcotiza.setagregar(prod, cant,precio);
+           jifcotiza.validagenerar();
+           this.dispose();
+           jifbuscarprod.dispose();
+        }
+        
+        if(op.equals("nota")){
+             if(prod.getUnidadm().equals("PRODUCTO"))
+            {
+            
+             if(daoprod.validastockrequerido(prod.getIdproducto(),cant)==true){ ////valida stock venta
+                 
+                 
             
             prod.setPrecio(precio);
             prod.setCantidad(cant);
-            jifventa.setproducto(prod);
+          
+            jdnota.addproducto(prod);
              this.dispose();
              if(jifbuscarprod!=null){
                 jifbuscarprod.dispose();
              }
             }else {
                 JOptionPane.showMessageDialog(null,"No cuenta con stock suficiente","",JOptionPane.INFORMATION_MESSAGE);
-            }     
+            } 
              
+            }else {
+                prod.setPrecio(precio);
+                prod.setCantidad(cant);
+                jdnota.addproducto(prod);
+                this.dispose();
+                if(jifbuscarprod!=null){
+                    jifbuscarprod.dispose();
+             }
+             
+             
+             
+             }
+        
         
         }
-        if(op.equals("cotiza")){
-           
-            double precio= Double.parseDouble(jtfprecio.getText());
-           jifcotiza.setagregar(prod, Double.parseDouble(jtfcantidad.getText()),precio);
-           jifcotiza.validagenerar();
-           this.dispose();
-           jifbuscarprod.dispose();
-        }
         
+       
         
     }//GEN-LAST:event_jbtnaceptarActionPerformed
 
@@ -372,7 +474,7 @@ public class JDFOpcionPrecio extends java.awt.Dialog {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JDFOpcionPrecio dialog = new JDFOpcionPrecio(new java.awt.Frame(), true);
+                JDFOpcionPrecio dialog = new JDFOpcionPrecio(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosing(java.awt.event.WindowEvent e) {
                         System.exit(0);

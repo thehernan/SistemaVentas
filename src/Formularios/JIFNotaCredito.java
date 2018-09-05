@@ -5,13 +5,12 @@
  */
 package Formularios;
 
+import ClasesGlobales.FormatoNumerico;
 import DAO.DocumentoDAO;
 import Pojos.Ventas;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -20,6 +19,7 @@ import javax.swing.JOptionPane;
  *
  * @author HERNAN
  */
+
 public class JIFNotaCredito extends javax.swing.JInternalFrame {
 
     /**
@@ -28,20 +28,14 @@ public class JIFNotaCredito extends javax.swing.JInternalFrame {
     List<Ventas> listdoc;
      int posx;
     int posy;        
+    FormatoNumerico fn = new FormatoNumerico();
+    DocumentoDAO daodoc = new DocumentoDAO();
     public JIFNotaCredito() {
         initComponents();
         jdpdesde.setDate(new Date());
         jdphasta.setDate(new Date());
         filtrar();
     }
-     public String formatnumeric(Object n){
-     DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
-     simbolos.setDecimalSeparator('.');   
-     DecimalFormat nf=new DecimalFormat("#.00",simbolos);
-     String num = nf.format(n);
-     
-     return num;
-     }
     
     public void filtrar(){
         
@@ -55,12 +49,12 @@ public class JIFNotaCredito extends javax.swing.JInternalFrame {
                     double sum=0.0;
                 jlblloading.setVisible(true);
                 DocumentoDAO daodoc = new DocumentoDAO();
-                listdoc=daodoc.mostrar(3, jtfbuscar.getText().toUpperCase(), "sucursal", new Timestamp(jdpdesde.getDate().getTime()),
+                listdoc=daodoc.mostrar(3, jtfbuscar.getText().toUpperCase(), "comprobante", new Timestamp(jdpdesde.getDate().getTime()),
                 new Timestamp(jdphasta.getDate().getTime()), jtablafactura);
                 for(Ventas venta:listdoc){
                    sum=sum+ venta.getTotal();
                 }
-                jlbltotal.setText("Total: "+formatnumeric(sum));
+                jlbltotal.setText("Total: "+fn.FormatoN(sum));
                 jlblloading.setVisible(false);
                 
                 }else {
@@ -101,6 +95,7 @@ public class JIFNotaCredito extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         jbtnverdetalle = new javax.swing.JButton();
         jlbltotal = new javax.swing.JLabel();
+        imprimirbusqueda = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -182,11 +177,12 @@ public class JIFNotaCredito extends javax.swing.JInternalFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 74, -1, -1));
 
         jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
+        jbtnimprimir.setText("Print documento");
         jbtnimprimir.setToolTipText("Imprimir Comprobante");
         jbtnimprimir.setBorderPainted(false);
         jbtnimprimir.setContentAreaFilled(false);
         jbtnimprimir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1043, 149, -1, -1));
+        getContentPane().add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 150, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(238, 238, 238));
         jPanel2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -243,12 +239,23 @@ public class JIFNotaCredito extends javax.swing.JInternalFrame {
                 jbtnverdetalleActionPerformed(evt);
             }
         });
-        getContentPane().add(jbtnverdetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(979, 149, -1, -1));
+        getContentPane().add(jbtnverdetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 150, -1, -1));
 
         jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
         jlbltotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlbltotal.setText("* * *");
         getContentPane().add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(874, 550, 230, -1));
+
+        imprimirbusqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
+        imprimirbusqueda.setText("Print busqueda");
+        imprimirbusqueda.setBorderPainted(false);
+        imprimirbusqueda.setContentAreaFilled(false);
+        imprimirbusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imprimirbusquedaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(imprimirbusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 150, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -302,8 +309,15 @@ public class JIFNotaCredito extends javax.swing.JInternalFrame {
         this.setLocation(xp, yp);
     }//GEN-LAST:event_jPanel2MouseDragged
 
+    private void imprimirbusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imprimirbusquedaActionPerformed
+        // TODO add your handling code here:
+        daodoc.imprimir(3, jtfbuscar.getText().toUpperCase(), "comprobante", new Timestamp(jdpdesde.getDate().getTime()),
+                new Timestamp(jdphasta.getDate().getTime()));
+    }//GEN-LAST:event_imprimirbusquedaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton imprimirbusqueda;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

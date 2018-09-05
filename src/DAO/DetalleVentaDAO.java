@@ -5,17 +5,6 @@
  */
 package DAO;
 
-import Conexion.ConexionBD;
-
-import Pojos.Producto;
-import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.List;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author info2017

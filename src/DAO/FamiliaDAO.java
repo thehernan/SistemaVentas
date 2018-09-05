@@ -322,7 +322,7 @@ public boolean duplicado(long id,String cadena,String tipoop){
         ps=Cbd.conectar().prepareStatement("SELECT * from sp_mostrarfamilia()"); 
 //        Object datosR[] = new Object[1];
         rs=Cbd.RealizarConsulta(ps);
-        modelo.addElement("Todo");
+        modelo.addElement("<<SELECCIONE>>");
         listfamilia.add(new Familia());
         while (rs.next()){
             Familia familia = new Familia();

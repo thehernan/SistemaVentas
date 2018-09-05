@@ -6,6 +6,7 @@
 package DAO;
 
 
+import ClasesGlobales.FormatoNumerico;
 import Conexion.ConexionBD;
 import Pojos.DetalleCompras;
 import java.awt.HeadlessException;
@@ -14,7 +15,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,7 +28,7 @@ import javax.swing.table.TableColumnModel;
  */
 public class DetalleComprasDAO {
     
-    DecimalFormat  df = new DecimalFormat("#.00");
+    FormatoNumerico fn = new FormatoNumerico();
      public void insertar(List<DetalleCompras> compras,long idcompra,JLabel mes){
          Runnable miRunnable = new Runnable()
       {
@@ -138,7 +138,7 @@ public void editar(DetalleCompras detcompra){
         if  (rs.next()){
             
            
-             JOptionPane.showMessageDialog(null,"EDITADO EXITOSAMENTE");
+             JOptionPane.showMessageDialog(null,"Editado con exito","",JOptionPane.INFORMATION_MESSAGE);
            
  
         }
@@ -161,7 +161,7 @@ public void mostrar(JTable tabla,long idcompra){
          return false;
         }
         };
-        String titulos[]={"CODIGO","PRODUCTO","PRECIO UND.","CANT. LLEGO","CANT. ACORDADA"};
+        String titulos[]={"Codigo","Producto","Precio unid.","Cant. Llego","Cant. Acordada"};
         modelo.setColumnIdentifiers(titulos);
         tabla.setModel(modelo);
         Object datosR[] = new Object[5];
@@ -182,9 +182,9 @@ public void mostrar(JTable tabla,long idcompra){
             
             datosR[0]=rs.getString("vcodigo");
             datosR[1]=rs.getString("vdescripcion");
-            datosR[2]=df.format(rs.getDouble("vprecio"));
-            datosR[3]=df.format(rs.getDouble("vcantidad"));
-            datosR[4]=df.format(rs.getDouble("vcantidadacordada"));
+            datosR[2]=fn.FormatoN(rs.getDouble("vprecio"));
+            datosR[3]=fn.FormatoN(rs.getDouble("vcantidad"));
+            datosR[4]=fn.FormatoN(rs.getDouble("vcantidadacordada"));
           
             modelo.addRow(datosR);
            

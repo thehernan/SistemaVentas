@@ -103,11 +103,12 @@ public class JIFIngresoProdPendiente extends javax.swing.JInternalFrame {
         jlblmensajecarga = new javax.swing.JLabel();
         jbtnver = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel4.setBackground(new java.awt.Color(220, 151, 96));
+        jPanel4.setBackground(new java.awt.Color(238, 238, 238));
         jPanel4.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel4MouseDragged(evt);
@@ -120,7 +121,6 @@ public class JIFIngresoProdPendiente extends javax.swing.JInternalFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("DOCUMENTOS CON PRODUCTOS PENDIENTES POR ENTREGAR");
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N

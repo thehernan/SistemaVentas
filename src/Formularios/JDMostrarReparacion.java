@@ -143,8 +143,6 @@ public class JDMostrarReparacion extends java.awt.Dialog {
         jlbltecnico.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jlbltecnico.setText("tecnico");
 
-        jlblimagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
         jlblmarca.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         jlblmarca.setText("marca");
 

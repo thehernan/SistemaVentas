@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class ClienteTipoDocumentoDAO {
      ConexionBD Cbd = new ConexionBD();
+     
     public List<Cliente_Tipo_Documento> mostrar(){
         
        

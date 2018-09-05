@@ -6,8 +6,10 @@
 package Formularios;
 
 import DAO.FamiliaDAO;
+import DAO.ProductoDAO;
 import Pojos.Familia;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -33,6 +35,37 @@ public class JIFActualizarPrecio extends javax.swing.JInternalFrame {
     
     
     }
+    public void valida()
+    {
+        try {
+           double p = Double.parseDouble(jtfprecio.getText());
+           double p1 = Double.parseDouble(jtfprecio1.getText());
+           double p2 = Double.parseDouble(jtfprecio2.getText());
+           double p3 = Double.parseDouble(jtfprecio3.getText());
+           
+           if(p>0 && p1>0 && p2>0 && p3>0 && jcbfamilia.getSelectedIndex()>0)
+           {
+               jbtnactualizar.setEnabled(true);
+           
+           }else {
+               jbtnactualizar.setEnabled(false);
+           }
+           
+            
+        } catch (Exception e) {
+            jbtnactualizar.setEnabled(false);
+        }
+    
+    }
+    
+    public void nuevo()
+    {
+        jcbfamilia.setSelectedIndex(0);
+        jtfprecio.setText("");
+        jtfprecio1.setText("");
+        jtfprecio2.setText("");
+        jtfprecio3.setText("");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -50,16 +83,16 @@ public class JIFActualizarPrecio extends javax.swing.JInternalFrame {
         jcbfamilia = new javax.swing.JComboBox();
         jtfprecio = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jlblmensaje = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jtfprecio1 = new javax.swing.JTextField();
         jtfprecio2 = new javax.swing.JTextField();
         jtfprecio3 = new javax.swing.JTextField();
+        jbtnactualizar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jPanel1.setBackground(new java.awt.Color(238, 238, 238));
         jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -106,16 +139,58 @@ public class JIFActualizarPrecio extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Familia:");
 
-        jLabel3.setText("Precio:");
+        jcbfamilia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbfamiliaActionPerformed(evt);
+            }
+        });
 
-        jlblmensaje.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
-        jlblmensaje.setText("* * *");
+        jtfprecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfprecioKeyReleased(evt);
+            }
+        });
+
+        jLabel3.setText("Precio:");
 
         jLabel4.setText("Precio 1:");
 
         jLabel5.setText("Precio 3:");
 
         jLabel6.setText("Precio 2:");
+
+        jtfprecio1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfprecio1KeyReleased(evt);
+            }
+        });
+
+        jtfprecio2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfprecio2KeyReleased(evt);
+            }
+        });
+
+        jtfprecio3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfprecio3KeyReleased(evt);
+            }
+        });
+
+        jbtnactualizar.setBackground(new java.awt.Color(0, 163, 0));
+        jbtnactualizar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jbtnactualizar.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnactualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnactualizar.setText("Actualizar");
+        jbtnactualizar.setBorderPainted(false);
+        jbtnactualizar.setContentAreaFilled(false);
+        jbtnactualizar.setEnabled(false);
+        jbtnactualizar.setOpaque(true);
+        jbtnactualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnactualizarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -125,26 +200,31 @@ public class JIFActualizarPrecio extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlblmensaje)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtfprecio3, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtfprecio2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtfprecio1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jcbfamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(282, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtfprecio3, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtfprecio2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jtfprecio1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jtfprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jcbfamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap(68, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jbtnactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -155,24 +235,26 @@ public class JIFActualizarPrecio extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2)
                     .addComponent(jcbfamilia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfprecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jtfprecio1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jtfprecio2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jtfprecio3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jlblmensaje)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jtfprecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jtfprecio1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jtfprecio2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jtfprecio3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(50, 50, 50))
+                    .addComponent(jbtnactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
 
         pack();
@@ -196,6 +278,48 @@ public class JIFActualizarPrecio extends javax.swing.JInternalFrame {
         posx=evt.getX();
     }//GEN-LAST:event_jPanel1MousePressed
 
+    private void jbtnactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnactualizarActionPerformed
+        // TODO add your handling code here:
+        if(JOptionPane.showConfirmDialog(null,"¿Seguro de actualizar?","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
+        {
+           ProductoDAO proddao = new ProductoDAO();
+           double p = Double.parseDouble(jtfprecio.getText());
+           double p1 = Double.parseDouble(jtfprecio1.getText());
+           double p2 = Double.parseDouble(jtfprecio2.getText());
+           double p3 = Double.parseDouble(jtfprecio3.getText());
+           Familia f = listfamilia.get(jcbfamilia.getSelectedIndex());
+           proddao.actulizarprecioporfamilia(p, p1, p2, p3, f.getIdfamilia());
+           nuevo();
+        }
+       
+        
+    }//GEN-LAST:event_jbtnactualizarActionPerformed
+
+    private void jcbfamiliaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbfamiliaActionPerformed
+        // TODO add your handling code here:
+        valida();
+    }//GEN-LAST:event_jcbfamiliaActionPerformed
+
+    private void jtfprecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecioKeyReleased
+        // TODO add your handling code here:
+        valida();
+    }//GEN-LAST:event_jtfprecioKeyReleased
+
+    private void jtfprecio1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecio1KeyReleased
+        // TODO add your handling code here:
+        valida();
+    }//GEN-LAST:event_jtfprecio1KeyReleased
+
+    private void jtfprecio2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecio2KeyReleased
+        // TODO add your handling code here:
+        valida();
+    }//GEN-LAST:event_jtfprecio2KeyReleased
+
+    private void jtfprecio3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfprecio3KeyReleased
+        // TODO add your handling code here:
+        valida();
+    }//GEN-LAST:event_jtfprecio3KeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -205,9 +329,9 @@ public class JIFActualizarPrecio extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton jbtnactualizar;
     private javax.swing.JComboBox jcbfamilia;
     private javax.swing.JLabel jlblcerrar;
-    private javax.swing.JLabel jlblmensaje;
     private javax.swing.JTextField jtfprecio;
     private javax.swing.JTextField jtfprecio1;
     private javax.swing.JTextField jtfprecio2;

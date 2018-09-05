@@ -6,6 +6,7 @@
 package Formularios;
 
 import DAO.DocumentoDAO;
+import DAO.VentasDAO;
 import Pojos.Ventas;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -28,11 +29,18 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
     List<Ventas> listdoc;
      int posx;
     int posy;        
+    VentasDAO daovent= new VentasDAO();
+    MDIMenu menu;
+    DocumentoDAO daodoc = new DocumentoDAO();
     public JIFBoletas() {
+        
+    }
+    public JIFBoletas(MDIMenu menu) {
         initComponents();
         jdpdesde.setDate(new Date());
         jdphasta.setDate(new Date());
         filtrar();
+        this.menu=menu;
     }
      public String formatnumeric(Object n){
      DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
@@ -55,7 +63,7 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
                     double sum=0.0;
                 jlblloading.setVisible(true);
                 DocumentoDAO daodoc = new DocumentoDAO();
-                listdoc=daodoc.mostrar(2, jtfbuscar.getText().toUpperCase(), "sucursal", new Timestamp(jdpdesde.getDate().getTime()),
+                listdoc=daodoc.mostrar(2, jtfbuscar.getText().toUpperCase(), "comprobante", new Timestamp(jdpdesde.getDate().getTime()),
                 new Timestamp(jdphasta.getDate().getTime()), jtablafactura);
                 for(Ventas venta:listdoc){
                    sum=sum+ venta.getTotal();
@@ -101,6 +109,10 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         jbtnverdetalle = new javax.swing.JButton();
         jlbltotal = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jbtnnotacredito = new javax.swing.JButton();
+        jbtnnotadebito = new javax.swing.JButton();
+        imprimirbusqueda = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -182,11 +194,17 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 74, -1, -1));
 
         jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
+        jbtnimprimir.setText("Print documento");
         jbtnimprimir.setToolTipText("Imprimir Comprobante");
         jbtnimprimir.setBorderPainted(false);
         jbtnimprimir.setContentAreaFilled(false);
         jbtnimprimir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1043, 149, -1, -1));
+        jbtnimprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnimprimirActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 150, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(238, 238, 238));
         jPanel2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -243,12 +261,71 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
                 jbtnverdetalleActionPerformed(evt);
             }
         });
-        getContentPane().add(jbtnverdetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(979, 149, -1, -1));
+        getContentPane().add(jbtnverdetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 150, -1, -1));
 
         jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
         jlbltotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlbltotal.setText("* * *");
         getContentPane().add(jlbltotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(874, 550, 230, -1));
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        jbtnnotacredito.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/attachnegro20x20.png"))); // NOI18N
+        jbtnnotacredito.setText("Nota Crédito");
+        jbtnnotacredito.setToolTipText("Nota de Credito");
+        jbtnnotacredito.setBorderPainted(false);
+        jbtnnotacredito.setContentAreaFilled(false);
+        jbtnnotacredito.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jbtnnotacredito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnnotacreditoActionPerformed(evt);
+            }
+        });
+
+        jbtnnotadebito.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/attachceleste20x20.png"))); // NOI18N
+        jbtnnotadebito.setText("Nota Débito");
+        jbtnnotadebito.setBorderPainted(false);
+        jbtnnotadebito.setContentAreaFilled(false);
+        jbtnnotadebito.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jbtnnotadebito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnnotadebitoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jbtnnotacredito)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jbtnnotadebito)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbtnnotacredito)
+                    .addComponent(jbtnnotadebito))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 70, -1, 50));
+
+        imprimirbusqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
+        imprimirbusqueda.setText("Print busqueda");
+        imprimirbusqueda.setBorderPainted(false);
+        imprimirbusqueda.setContentAreaFilled(false);
+        imprimirbusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imprimirbusquedaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(imprimirbusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 150, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -302,16 +379,66 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
         this.setLocation(xp, yp);
     }//GEN-LAST:event_jPanel2MouseDragged
 
+    private void jbtnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirActionPerformed
+        // TODO add your handling code here:
+        int index=jtablafactura.getSelectedRow();
+        if(index>=0)
+        {
+            Ventas v = listdoc.get(index);
+            daovent.imprimir(v.getIdventa());
+        
+        }else {
+            JOptionPane.showMessageDialog(null,"Seleccione item","",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jbtnimprimirActionPerformed
+
+    private void jbtnnotacreditoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnnotacreditoActionPerformed
+        // TODO add your handling code here:
+        if(jtablafactura.getSelectedRow()>=0)
+        {
+            Ventas v = listdoc.get(jtablafactura.getSelectedRow());
+            JDNotaCreditoDebito ncd=new JDNotaCreditoDebito(new Frame() ,isVisible(),"","NOTA DE CRÉDITO",3,v,menu);
+            ncd.setVisible(true);
+        }else
+        {
+            JOptionPane.showMessageDialog(null,"Seleccione Comprobante","",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jbtnnotacreditoActionPerformed
+
+    private void jbtnnotadebitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnnotadebitoActionPerformed
+        // TODO add your handling code here:
+        if(jtablafactura.getSelectedRow()>=0)
+        {
+            Ventas v = listdoc.get(jtablafactura.getSelectedRow());
+            JDNotaCreditoDebito ncd=new JDNotaCreditoDebito(new Frame(), isVisible(),"","NOTA DE DÉBITO",4,v,menu);
+            ncd.setVisible(true);
+
+        }else
+        {
+            JOptionPane.showMessageDialog(null,"Seleccione Comprobante","",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jbtnnotadebitoActionPerformed
+
+    private void imprimirbusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imprimirbusquedaActionPerformed
+        // TODO add your handling code here:
+        daodoc.imprimir(2, jtfbuscar.getText().toUpperCase(), "comprobante", new Timestamp(jdpdesde.getDate().getTime()),
+                new Timestamp(jdphasta.getDate().getTime()));
+    }//GEN-LAST:event_imprimirbusquedaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton imprimirbusqueda;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnimprimir;
+    private javax.swing.JButton jbtnnotacredito;
+    private javax.swing.JButton jbtnnotadebito;
     private javax.swing.JButton jbtnverdetalle;
     private org.jdesktop.swingx.JXDatePicker jdpdesde;
     private org.jdesktop.swingx.JXDatePicker jdphasta;

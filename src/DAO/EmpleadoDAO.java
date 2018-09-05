@@ -38,7 +38,7 @@ public class EmpleadoDAO {
        return false;
       }
       };      
-     String titulos[]={"RUT","NOMBRES","CELULAR"};
+     String titulos[]={"Doc.","Nombres","Celular"};
      modelo.setColumnIdentifiers(titulos);
 
      
