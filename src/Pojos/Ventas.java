@@ -40,6 +40,7 @@ public class Ventas {
     private String serie;
     private String numero;
     private long idsunattrans;
+    private long sunattransaccion;
     private String fechaven;
     private int porcentajeigv;
     private double descuentoglob;
@@ -69,6 +70,9 @@ public class Ventas {
     private String sunatticket;
     private long idpercepcion;
     private String estadosunat;
+    private String ordencompras;
+    private String placavehiculo;
+    
     
     private long idmoneda;
     private int modenaop;
@@ -93,6 +97,31 @@ public class Ventas {
     private String docref;
     
     public Ventas() {
+    }
+
+    public long getSunattransaccion() {
+        return sunattransaccion;
+    }
+
+    public String getOrdencompras() {
+        return ordencompras;
+    }
+
+    public void setOrdencompras(String ordencompras) {
+        this.ordencompras = ordencompras;
+    }
+
+    public String getPlacavehiculo() {
+        return placavehiculo;
+    }
+
+    public void setPlacavehiculo(String placavehiculo) {
+        this.placavehiculo = placavehiculo;
+    }
+    
+
+    public void setSunattransaccion(long sunattransaccion) {
+        this.sunattransaccion = sunattransaccion;
     }
 
     public String getPdf_zip_base64() {

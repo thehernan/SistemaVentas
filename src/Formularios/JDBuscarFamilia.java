@@ -287,9 +287,13 @@ public class JDBuscarFamilia extends javax.swing.JDialog {
     private void jtablafamiliaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablafamiliaKeyPressed
 
         // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
         
-        if(jtablafamilia.getSelectedRow()>=0)
+            if(jtablafamilia.getSelectedRow()>=0)
             jbtnaceptar.doClick();
+            
+        }
+        
      
     }//GEN-LAST:event_jtablafamiliaKeyPressed
 

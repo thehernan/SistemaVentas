@@ -43,7 +43,7 @@ public class ComprasDAO {
     ResultSet rs=null;
      try{
                     
-        String sql=("SELECT * from sp_insertarcompra(?,?,?,?,?,?,?,?,?,?,?)");         
+        String sql=("SELECT * from sp_insertarcompra(?,?,?,?,?,?,?,?,?,?,?,?)");         
         ps= Cbd.conectar().prepareStatement(sql);
         ps.setString(1, compra.getDocumento());
         ps.setString(2, compra.getNumero());
@@ -56,6 +56,7 @@ public class ComprasDAO {
         ps.setLong(9, compra.getIdcomprobant());
         ps.setLong(10, compra.getIdmoneda());
         ps.setBigDecimal(11,new BigDecimal(compra.getTipocambio()));
+        ps.setBoolean(12, compra.isIncluyeigv());
         rs=Cbd.RealizarConsulta(ps);
        if  (rs.next()){
            id= rs.getLong("vidcompra");
@@ -78,7 +79,7 @@ public void editar(Compras compra){
     
      try{
            
-        String sql=("SELECT * from sp_editarcompra(?,?,?,?,?,?,?,?,?,?,?)");         
+        String sql=("SELECT * from sp_editarcompra(?,?,?,?,?,?,?,?,?,?,?,?)");         
         ps= Cbd.conectar().prepareStatement(sql);
         ps.setLong(1, compra.getId_compra());
         ps.setString(2, compra.getDocumento());
@@ -92,7 +93,7 @@ public void editar(Compras compra){
         
          ps.setLong(10, compra.getIdmoneda());
         ps.setBigDecimal(11,new BigDecimal(compra.getTipocambio()));
-        
+        ps.setBoolean(12, compra.isIncluyeigv());
        if  (Cbd.actualizarDatos(ps)==true){
           
            JOptionPane.showMessageDialog(null,"Editado con exito","",JOptionPane.INFORMATION_MESSAGE);
@@ -419,12 +420,14 @@ public DefaultTableModel  buscar(JTable tabla,long idcompra,
     ConexionBD Cbd= new ConexionBD();
         
         DefaultTableModel modelo= new DefaultTableModel(
-                new String[]{"Codigo","Descripcion","Cant. Llego","Cant. Acordada","Precio","Importe"}, 0) {
+                new String[]{"Codigo","Descripcion","Cantidad","Precio","Importe"}, 0) {
    
              public boolean isCellEditable(int row, int column) {
-//        //      if (column == 5) return true;
-//        //else
-            return false;
+                if (column == 2 ) return true;
+                       else if(column==3) return true;
+             //          else if (column==7) return true;
+                       else 
+                       return false;
             }
             };
        
@@ -456,7 +459,7 @@ public DefaultTableModel  buscar(JTable tabla,long idcompra,
             compra.setIdcomprobant(rs.getLong("vidcomprobante"));
             compra.setComprobante(rs.getString("vcomprobante"));
             compra.setAbrevimoneda(rs.getString("vabreviaturamon"));
-                    
+            compra.setIncluyeigv(rs.getBoolean("vincluyeigv"));
              DetalleCompras detcompra= new DetalleCompras();
              iddet=rs.getLong("viddetalle");
              if(iddet!=0){          
@@ -489,13 +492,12 @@ public DefaultTableModel  buscar(JTable tabla,long idcompra,
         }
         tabla.setModel(modelo);
           TableColumnModel columnModel = tabla.getColumnModel();
-            columnModel.getColumn(0).setPreferredWidth(100);
-            columnModel.getColumn(1).setPreferredWidth(550);
+            columnModel.getColumn(0).setPreferredWidth(120);
+            columnModel.getColumn(1).setPreferredWidth(400);
             columnModel.getColumn(2).setPreferredWidth(100);
             columnModel.getColumn(3).setPreferredWidth(100);
             columnModel.getColumn(4).setPreferredWidth(100);
-            columnModel.getColumn(5).setPreferredWidth(100);
-      
+       
 	
         } catch(Exception e)
             {

@@ -116,10 +116,6 @@ Por medio de la presente nos es grato saludarle muy cordialmente y agradecerle l
 				</textElement>
 				<textFieldExpression><![CDATA["RUC "+$F{rutsucur}]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="-16" width="250" height="110" uuid="600ac8d5-ad14-4d85-8b57-80eb7ab663ef"/>
-				<imageExpression><![CDATA["..\\imagenes\\logowalter.png"]]></imageExpression>
-			</image>
 		</band>
 	</title>
 	<columnHeader>

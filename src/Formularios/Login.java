@@ -8,7 +8,7 @@ package Formularios;
 
 import ClasesGlobales.CifradoMD5;
 import ClasesGlobales.LookAndFeel;
-import Conexion.TestConexionServer;
+//import Conexion.TestConexionServer;
 import DAO.EmpleadoDAO;
 import DAO.SucursalDAO;
 import DAO.UsuariosDAO;
@@ -59,68 +59,68 @@ public class Login extends javax.swing.JFrame {
        setLocationRelativeTo(null);
        listsucursal=daosucursal.llenarcombo(jcbsucursal);
        jlblimagencarga.setVisible(false);
-       pruebaconexion();
+//       pruebaconexion();
        
     }
     
-    public void pruebaconexion(){
-     
-     Runnable runnablepc = new Runnable() {
-
-         @Override
-         public void run() {
-             int i=0;
-//             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-             TestConexionServer test= new TestConexionServer();
-             
-             while(true){
-                
-                 try {
-                     Thread.sleep(1000);
-                 } catch (InterruptedException ex) {
-                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                 }
-                  
-                 System.out.println("probando conexion...login");
-                 System.out.println("i"+i);
-                if(test.ping()==true){
-                   
-                   jlblrpruebaconexion.setText("<html><p style=\"color:#FFFFFF\" ;>"+"Cloud Habilitado");
-////                   jlblrpruebaconexion.setIcon(null);
-//                   jcbsucursal.setEnabled(true);
-//                   jtfusuario.setEnabled(true);
-//                   jtfclave.setEnabled(true);
-//                   jbtnaceptar.setEnabled(true);
-                   
-                   
-               } else{ 
-                   jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"Cloud Inhabilitado");
-                   
-                   JDReconexion reconexion= new JDReconexion(new Frame(), isVisible());
-                   AWTUtilities.setWindowOpaque(reconexion, false);
-                   reconexion.setVisible(true);
-                    try {
-                     Thread.sleep(3000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-             
-                    jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"Reconectando ...");
-                  
-               }
-             
-              if(Login.this.isVisible()==false){
-                       break;
-                   }
-             }
-             
-         }
-     };
-     pc = new Thread(runnablepc);
-     pc.start();
-     
-     
-    }
+//    public void pruebaconexion(){
+//     
+//     Runnable runnablepc = new Runnable() {
+//
+//         @Override
+//         public void run() {
+//             int i=0;
+////             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//             TestConexionServer test= new TestConexionServer();
+//             
+//             while(true){
+//                
+//                 try {
+//                     Thread.sleep(1000);
+//                 } catch (InterruptedException ex) {
+//                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+//                 }
+//                  
+//                 System.out.println("probando conexion...login");
+//                 System.out.println("i"+i);
+//                if(test.ping()==true){
+//                   
+//                   jlblrpruebaconexion.setText("<html><p style=\"color:#FFFFFF\" ;>"+"Cloud Habilitado");
+//////                   jlblrpruebaconexion.setIcon(null);
+////                   jcbsucursal.setEnabled(true);
+////                   jtfusuario.setEnabled(true);
+////                   jtfclave.setEnabled(true);
+////                   jbtnaceptar.setEnabled(true);
+//                   
+//                   
+//               } else{ 
+//                   jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"Cloud Inhabilitado");
+//                   
+//                   JDReconexion reconexion= new JDReconexion(new Frame(), isVisible());
+//                   AWTUtilities.setWindowOpaque(reconexion, false);
+//                   reconexion.setVisible(true);
+//                    try {
+//                     Thread.sleep(3000);
+//                    } catch (InterruptedException ex) {
+//                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//             
+//                    jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"Reconectando ...");
+//                  
+//               }
+//             
+//              if(Login.this.isVisible()==false){
+//                       break;
+//                   }
+//             }
+//             
+//         }
+//     };
+//     pc = new Thread(runnablepc);
+//     pc.start();
+//     
+//     
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -132,12 +132,10 @@ public class Login extends javax.swing.JFrame {
     private void initComponents() {
 
         jlblimagencarga = new javax.swing.JLabel();
-        jlblrpruebaconexion = new javax.swing.JLabel();
         jtfusuario = new javax.swing.JTextField();
         jtfclave = new javax.swing.JPasswordField();
         jlblcerrar = new javax.swing.JLabel();
         jcbsucursal = new javax.swing.JComboBox();
-        jLabel2 = new javax.swing.JLabel();
         jbtnaceptar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
@@ -147,15 +145,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jlblimagencarga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ring.gif"))); // NOI18N
-        getContentPane().add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 110, -1, -1));
-
-        jlblrpruebaconexion.setBackground(new java.awt.Color(77, 161, 227));
-        jlblrpruebaconexion.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblrpruebaconexion.setForeground(new java.awt.Color(255, 255, 255));
-        jlblrpruebaconexion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblrpruebaconexion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cloud_20x20.png"))); // NOI18N
-        jlblrpruebaconexion.setOpaque(true);
-        getContentPane().add(jlblrpruebaconexion, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 400, 210, 30));
+        getContentPane().add(jlblimagencarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, -1, -1));
 
         jtfusuario.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
         jtfusuario.setText("USUARIO");
@@ -173,7 +163,7 @@ public class Login extends javax.swing.JFrame {
                 jtfusuarioActionPerformed(evt);
             }
         });
-        getContentPane().add(jtfusuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 240, 230, 30));
+        getContentPane().add(jtfusuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 360, 220, 30));
 
         jtfclave.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
         jtfclave.setText("CLAVE");
@@ -191,29 +181,23 @@ public class Login extends javax.swing.JFrame {
                 jtfclaveActionPerformed(evt);
             }
         });
-        getContentPane().add(jtfclave, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 290, 230, 30));
+        getContentPane().add(jtfclave, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 430, 220, 30));
 
         jlblcerrar.setBackground(new java.awt.Color(255, 255, 255));
         jlblcerrar.setForeground(new java.awt.Color(255, 255, 255));
         jlblcerrar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblcerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cerrarblanco.png"))); // NOI18N
+        jlblcerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancel_close.png"))); // NOI18N
         jlblcerrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jlblcerrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jlblcerrarMousePressed(evt);
             }
         });
-        getContentPane().add(jlblcerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 40, 30, 30));
+        getContentPane().add(jlblcerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 30, -1));
 
         jcbsucursal.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jcbsucursal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sin conexion" }));
-        getContentPane().add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 190, 250, 30));
-
-        jLabel2.setBackground(new java.awt.Color(91, 91, 91));
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(91, 91, 91));
-        jLabel2.setText("Desarrollado por: Hernán Augusto Vilchez A.");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 390, 220, -1));
+        getContentPane().add(jcbsucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 300, 220, 30));
 
         jbtnaceptar.setBackground(new java.awt.Color(0, 0, 0));
         jbtnaceptar.setForeground(new java.awt.Color(0, 0, 0));
@@ -227,14 +211,14 @@ public class Login extends javax.swing.JFrame {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        getContentPane().add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 350, 250, 30));
+        getContentPane().add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 510, 330, 90));
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        jLabel3.setText("Ultima actualización 01/03/2018.");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 410, -1, -1));
+        jLabel3.setText("Ultima actualización 02/01/2019.");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 610, -1, -1));
 
         fondo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loginfact.png"))); // NOI18N
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loginvtech.png"))); // NOI18N
         fondo.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 fondoMouseDragged(evt);
@@ -245,7 +229,7 @@ public class Login extends javax.swing.JFrame {
                 fondoMousePressed(evt);
             }
         });
-        getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 710, 460));
+        getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 350, 620));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -420,13 +404,11 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel fondo;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JButton jbtnaceptar;
     private javax.swing.JComboBox jcbsucursal;
     private javax.swing.JLabel jlblcerrar;
     private javax.swing.JLabel jlblimagencarga;
-    private javax.swing.JLabel jlblrpruebaconexion;
     private javax.swing.JPasswordField jtfclave;
     private javax.swing.JTextField jtfusuario;
     // End of variables declaration//GEN-END:variables

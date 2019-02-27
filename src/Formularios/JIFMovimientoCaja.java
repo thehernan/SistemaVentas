@@ -175,6 +175,7 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
         jtablaM = new javax.swing.JTable();
         jlbltotalM = new javax.swing.JLabel();
         jbtnvermovi = new javax.swing.JButton();
+        jtfutilidad = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
@@ -429,14 +430,14 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
         jPanel4.add(jtfbuscarM, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 84, 413, -1));
 
         jLabel8.setText("Sucursal:");
-        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(655, 86, -1, -1));
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 90, -1, -1));
 
         jcbsucursalM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbsucursalMActionPerformed(evt);
             }
         });
-        jPanel4.add(jcbsucursalM, new org.netbeans.lib.awtextra.AbsoluteConstraints(719, 81, 462, -1));
+        jPanel4.add(jcbsucursalM, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 80, 462, -1));
 
         jlblletracargaM.setFont(new java.awt.Font("Segoe Script", 0, 14)); // NOI18N
         jlblletracargaM.setForeground(new java.awt.Color(0, 0, 0));
@@ -484,7 +485,18 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
                 jbtnvermoviActionPerformed(evt);
             }
         });
-        jPanel4.add(jbtnvermovi, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 70, -1, -1));
+        jPanel4.add(jbtnvermovi, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 70, -1, -1));
+
+        jtfutilidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
+        jtfutilidad.setText("Print Utilidad");
+        jtfutilidad.setBorderPainted(false);
+        jtfutilidad.setContentAreaFilled(false);
+        jtfutilidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfutilidadActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jtfutilidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 70, -1, -1));
 
         jTabbedPane1.addTab("Movimientos", jPanel4);
 
@@ -662,6 +674,11 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jbtnvermoviActionPerformed
 
+    private void jtfutilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfutilidadActionPerformed
+        // TODO add your handling code here:
+        daodetcaja.printutilidad(new Timestamp(jdpdesdeM.getDate().getTime()), new Timestamp(jdphastaM.getDate().getTime()));
+    }//GEN-LAST:event_jtfutilidadActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -701,5 +718,6 @@ public class JIFMovimientoCaja extends javax.swing.JInternalFrame {
     private javax.swing.JTable jtablaM;
     private javax.swing.JTextField jtfbuscar;
     private javax.swing.JTextField jtfbuscarM;
+    private javax.swing.JButton jtfutilidad;
     // End of variables declaration//GEN-END:variables
 }

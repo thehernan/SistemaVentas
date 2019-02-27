@@ -5,7 +5,7 @@
  */
 package Formularios;
 
-import Conexion.TestConexionServer;
+//import Conexion.TestConexionServer;
 import com.sun.awt.AWTUtilities;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,82 +22,82 @@ public class JDReconexion extends java.awt.Dialog {
     public JDReconexion(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        pruebaconexion();
+//        pruebaconexion();
         this.setLocationRelativeTo(null);
     }
-    
-    public void pruebaconexion(){
-     
-     Runnable runnable = new Runnable() {
-
-         @Override
-         public void run() {
-             int i=0;
-//             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-             TestConexionServer test= new TestConexionServer();
-             while(true){
-                
-                 try {
-                     Thread.sleep(1000);
-                 } catch (InterruptedException ex) {
-                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                 }
-                  
-                 System.out.println("probando conexion...reconexion");
-                
-                if(test.ping()==true){
-                   
-                    
-                   jlblrpruebaconexion.setText("<html><p style=\"color:#333333\";>"+"Conexión Restablecida");
-                   jlblrpruebaconexion.setIcon(null);
-                   try {
-                     Thread.sleep(2000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                   JDReconexion.this.dispose();
-                   break;
-                   
-                   
-               } else{ 
-//                   jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"No se obtuvo conexion con el servidor pongase en contacto con el administrador del sistema");
-                   jlblrpruebaconexion.setText("<html><p style=\"color:#333333 \";>"+"Reconectando");
-                 
-                    try {
-                     Thread.sleep(1000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    jlblrpruebaconexion.setText("<html><p style=\"color:#333333 \";>"+"Reconectando .");
-                    try {
-                     Thread.sleep(1000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    jlblrpruebaconexion.setText("<html><p style=\"color:#333333 \";>"+"Reconectando ..");
-                    try {
-                     Thread.sleep(1000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    jlblrpruebaconexion.setText("<html><p style=\"color:#333333 \";>"+"Reconectando ...");
-                    try {
-                     Thread.sleep(1000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                  
-               }
-             
-              
-             }
-             
-         }
-     };
-     Thread T = new Thread(runnable);
-     T.start();
-     
-    }
+//    
+//    public void pruebaconexion(){
+//     
+//     Runnable runnable = new Runnable() {
+//
+//         @Override
+//         public void run() {
+//             int i=0;
+////             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+////             TestConexionServer test= new TestConexionServer();
+//             while(true){
+//                
+//                 try {
+//                     Thread.sleep(1000);
+//                 } catch (InterruptedException ex) {
+//                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+//                 }
+//                  
+//                 System.out.println("probando conexion...reconexion");
+//                
+//                if(test.ping()==true){
+//                   
+//                    
+//                   jlblrpruebaconexion.setText("<html><p style=\"color:#333333\";>"+"Conexión Restablecida");
+//                   jlblrpruebaconexion.setIcon(null);
+//                   try {
+//                     Thread.sleep(2000);
+//                    } catch (InterruptedException ex) {
+//                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                   JDReconexion.this.dispose();
+//                   break;
+//                   
+//                   
+//               } else{ 
+////                   jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"No se obtuvo conexion con el servidor pongase en contacto con el administrador del sistema");
+//                   jlblrpruebaconexion.setText("<html><p style=\"color:#333333 \";>"+"Reconectando");
+//                 
+//                    try {
+//                     Thread.sleep(1000);
+//                    } catch (InterruptedException ex) {
+//                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                    jlblrpruebaconexion.setText("<html><p style=\"color:#333333 \";>"+"Reconectando .");
+//                    try {
+//                     Thread.sleep(1000);
+//                    } catch (InterruptedException ex) {
+//                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                    jlblrpruebaconexion.setText("<html><p style=\"color:#333333 \";>"+"Reconectando ..");
+//                    try {
+//                     Thread.sleep(1000);
+//                    } catch (InterruptedException ex) {
+//                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                    jlblrpruebaconexion.setText("<html><p style=\"color:#333333 \";>"+"Reconectando ...");
+//                    try {
+//                     Thread.sleep(1000);
+//                    } catch (InterruptedException ex) {
+//                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                  
+//               }
+//             
+//              
+//             }
+//             
+//         }
+//     };
+//     Thread T = new Thread(runnable);
+//     T.start();
+//     
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.

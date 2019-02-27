@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Documento_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="79686d78-2bc2-4ade-91e0-c0ef2e74b480">
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idventa" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from tipo_guia where id_venta=$P{idventa}]]>
+	</queryString>
+	<field name="guia_tipo" class="java.lang.String"/>
+	<field name="serienumero" class="java.lang.String"/>
+	<field name="id_venta" class="java.lang.Long"/>
+	<field name="id_guia" class="java.lang.Integer"/>
+	<field name="identguia" class="java.lang.Integer"/>
+	<group name="id_venta">
+		<groupExpression><![CDATA[$F{id_venta}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="188" height="12" uuid="459fca56-3965-4e26-a180-e3bd953dc79a"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{guia_tipo}+" : "+$F{serienumero}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -5,7 +5,7 @@
  */
 package Formularios;
 
-import Conexion.TestConexionServer;
+//import Conexion.TestConexionServer;
 import com.sun.awt.AWTUtilities;
 import static java.lang.Thread.sleep;
 
@@ -123,59 +123,59 @@ public class SplashScreen extends javax.swing.JFrame {
 //                        jlblMensaje.setText("Cargando archivos de configuración...");
 //                            
 //                    }
-                    if(i==5){
-                        jlblMensaje.setText("Obteniendo conexión con el Servidor...");
-                        int k;
-                        TestConexionServer test= new TestConexionServer();
-                         for (k=0;k<=3;k++){
-                         
-                         if(test.ping()==false){
-                              try {
-                                   sleep(900);
-                               } catch (InterruptedException ex) {
-                                   Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
-
-                               }
-                            jlblMensaje.setText("<html>"+"No se obtuvo conexión con el servidor"+"<br>"+"pongase en contacto con el administrador del sistema");
-                            
-                                try {
-                                   sleep(2000);
-                               } catch (InterruptedException ex) {
-                                   Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
-
-                               }
-                               jlblMensaje.setText("Reconectando...");
-                               try {
-                                   sleep(4000);
-                               } catch (InterruptedException ex) {
-                                   Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
-
-                               }
-                            
-                            }else{
-                             jlblMensaje.setText("Conexión exitosa...");
-                            
-                             try {
-                                   sleep(1000);
-                               } catch (InterruptedException ex) {
-                                   Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
-
-                               }
-                             break;
-                            
-                         }
-                        
-                            
-                        }
-                         System.out.println("k"+k);
-                         if(k==4){
-                             jlblMensaje.setText("<html><p style=\"color:#FF3333\";>"+"Imposible conectar con el servidor"+"<br>"+"pongase en contacto con el administrador del sistema");
-                             while (true) {                                 
-                                  System.out.println("k"+k);
-                             }
-                         
-                         }
-                    }
+//                    if(i==5){
+//                        jlblMensaje.setText("Obteniendo conexión con el Servidor...");
+//                        int k;
+//                        TestConexionServer test= new TestConexionServer();
+//                         for (k=0;k<=3;k++){
+//                         
+//                         if(test.ping()==false){
+//                              try {
+//                                   sleep(900);
+//                               } catch (InterruptedException ex) {
+//                                   Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
+//
+//                               }
+//                            jlblMensaje.setText("<html>"+"No se obtuvo conexión con el servidor"+"<br>"+"pongase en contacto con el administrador del sistema");
+//                            
+//                                try {
+//                                   sleep(2000);
+//                               } catch (InterruptedException ex) {
+//                                   Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
+//
+//                               }
+//                               jlblMensaje.setText("Reconectando...");
+//                               try {
+//                                   sleep(4000);
+//                               } catch (InterruptedException ex) {
+//                                   Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
+//
+//                               }
+//                            
+//                            }else{
+//                             jlblMensaje.setText("Conexión exitosa...");
+//                            
+//                             try {
+//                                   sleep(1000);
+//                               } catch (InterruptedException ex) {
+//                                   Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
+//
+//                               }
+//                             break;
+//                            
+//                         }
+//                        
+//                            
+//                        }
+//                         System.out.println("k"+k);
+//                         if(k==4){
+//                             jlblMensaje.setText("<html><p style=\"color:#FF3333\";>"+"Imposible conectar con el servidor"+"<br>"+"pongase en contacto con el administrador del sistema");
+//                             while (true) {                                 
+//                                  System.out.println("k"+k);
+//                             }
+//                         
+//                         }
+//                    }
                     if(i==8){
                           jlblMensaje.setText("Accediendo a la interfaz del login...");
                     }

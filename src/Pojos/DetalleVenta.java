@@ -15,6 +15,8 @@ public class DetalleVenta {
     private double precio;
     private double cantidad;
     private long idventa;
+    private double factor;
+    private String unidmed;
 
     public DetalleVenta() {
     }
@@ -26,6 +28,24 @@ public class DetalleVenta {
         this.cantidad = cantidad;
         this.idventa = idventa;
     }
+
+    public String getUnidmed() {
+        return unidmed;
+    }
+
+    public void setUnidmed(String unidmed) {
+        this.unidmed = unidmed;
+    }
+    
+
+    public double getFactor() {
+        return factor;
+    }
+
+    public void setFactor(double factor) {
+        this.factor = factor;
+    }
+    
 
     public long getIddetalleventa() {
         return iddetalleventa;

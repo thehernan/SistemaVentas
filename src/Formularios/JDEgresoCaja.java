@@ -7,6 +7,7 @@ package Formularios;
 
 import DAO.DetalleCajaDAO;
 import Pojos.DetalleCaja;
+import java.awt.Color;
 
 /**
  *
@@ -35,7 +36,7 @@ public class JDEgresoCaja extends javax.swing.JDialog {
      public void valida(){
       try {
             double impor = Double.parseDouble(jtfimporte.getText());
-            if(impor>0 && jtamotivo.getText().length()>0){
+            if(impor>0 && jtamotivo.getText().replaceAll(" ", "").length()>0 && jtfentrega.getText().replaceAll(" ", "").length()>0){
             jbtnaceptar.setEnabled(true);
             
             }else {
@@ -44,6 +45,31 @@ public class JDEgresoCaja extends javax.swing.JDialog {
         } catch (Exception e) {
             jbtnaceptar.setEnabled(false);
         }
+      
+      if(jtfentrega.getText().replaceAll(" ", "").length()<=0){
+          jtfentrega.setBackground(new Color(248, 193, 186));
+      }else {
+          jtfentrega.setBackground(Color.WHITE);
+      }
+      if(jtamotivo.getText().replaceAll(" ", "").length()<=0){
+          jtamotivo.setBackground(new Color(248, 193, 186));
+      }else {
+             jtamotivo.setBackground(Color.WHITE);
+      }
+      
+         try {
+             if(Double.parseDouble(jtfimporte.getText())<=0){
+                jtfimporte.setBackground(new Color(248, 193, 186));
+            }else {
+                jtfimporte.setBackground(Color.WHITE);
+            }
+             
+         } catch (Exception e) {
+             jtfimporte.setBackground(new Color(248, 193, 186));
+         }
+      
+      
+      
      }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,10 +89,13 @@ public class JDEgresoCaja extends javax.swing.JDialog {
         jtamotivo = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         jbtnaceptar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jtfentrega = new javax.swing.JTextField();
 
         jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -92,14 +121,17 @@ public class JDEgresoCaja extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        getContentPane().add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 463, -1));
+
         jLabel2.setText("Importe:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
 
         jtfimporte.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtfimporteKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfimporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 220, -1));
 
         jtamotivo.setColumns(20);
         jtamotivo.setRows(5);
@@ -110,53 +142,30 @@ public class JDEgresoCaja extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jtamotivo);
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel3.setText("Motivo:");
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 431, 190));
 
-        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ATM.png"))); // NOI18N
-        jbtnaceptar.setText("Aceptar");
+        jLabel3.setText("Concepto de:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+
+        jbtnaceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept2.png"))); // NOI18N
+        jbtnaceptar.setText("Aceptar / Imprimir");
         jbtnaceptar.setEnabled(false);
         jbtnaceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnaceptarActionPerformed(evt);
             }
         });
+        getContentPane().add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 370, 190, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jbtnaceptar)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jtfimporte, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jtfimporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jbtnaceptar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jLabel4.setText("Sirvase entregar a: ");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
+
+        jtfentrega.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfentregaKeyReleased(evt);
+            }
+        });
+        getContentPane().add(jtfentrega, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 430, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -168,8 +177,11 @@ public class JDEgresoCaja extends javax.swing.JDialog {
         detcaja.setAbono(-1*importe);
         detcaja.setMotivoanulacion(motivo);
         detcaja.setIdcaja(id);
-        daodetcaja.insertaregreso(detcaja);
-        this.dispose();
+        detcaja.setEntrega(jtfentrega.getText().toUpperCase());
+        long id =daodetcaja.insertaregreso(detcaja);
+         this.dispose();
+        daodetcaja.printegreso(id);
+       
     }//GEN-LAST:event_jbtnaceptarActionPerformed
 
     private void jtfimporteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfimporteKeyReleased
@@ -181,6 +193,11 @@ public class JDEgresoCaja extends javax.swing.JDialog {
         // TODO add your handling code here:
          valida();
     }//GEN-LAST:event_jtamotivoKeyReleased
+
+    private void jtfentregaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfentregaKeyReleased
+        // TODO add your handling code here:
+        valida();
+    }//GEN-LAST:event_jtfentregaKeyReleased
 
     /**
      * @param args the command line arguments
@@ -229,10 +246,12 @@ public class JDEgresoCaja extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnaceptar;
     private javax.swing.JTextArea jtamotivo;
+    private javax.swing.JTextField jtfentrega;
     private javax.swing.JTextField jtfimporte;
     // End of variables declaration//GEN-END:variables
 }

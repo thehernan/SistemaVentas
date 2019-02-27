@@ -8,7 +8,7 @@ package Formularios;
 import DAO.VentasDAO;
 import ClasesGlobales.ImagenFondo;
 import ClasesGlobales.LookAndFeel;
-import Conexion.TestConexionServer;
+//import Conexion.TestConexionServer;
 import DAO.CajaDAO;
 import DAO.ResumenDAO;
 import DAO.SucursalDAO;
@@ -127,7 +127,7 @@ final class MDIMenu extends javax.swing.JFrame {
 //        cargarresumendos();
         cargarresumen();
 //        jpanelresumen.setOpaque(false);
-        pruebaconexion();
+//        pruebaconexion();
 //        jpanelresumen.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.5f));
         
 //        jpanelbanner.setBackground(new Color(255,255,255,80));
@@ -243,7 +243,7 @@ final class MDIMenu extends javax.swing.JFrame {
          ////
          
          
-         JFreeChart chart = ChartFactory.createBarChart("", "", "", dataset,PlotOrientation.VERTICAL,true,true,false);
+         JFreeChart chart = ChartFactory.createLineChart("", "", "", dataset,PlotOrientation.VERTICAL,true,true,false);
          CategoryPlot catplot= chart.getCategoryPlot();
          catplot.setRangeGridlinePaint(Color.BLACK);
          ChartPanel chatpanel= new ChartPanel(chart);
@@ -317,7 +317,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-          titulo.setForeground(new Color(255,255,255));
+          titulo.setForeground(new Color(34,75,139));
          ////////////////////////////////////////////////////////
          if(user.isUseri()==true){
          JButton usuari= new JButton("USUARIOS");
@@ -361,8 +361,8 @@ final class MDIMenu extends javax.swing.JFrame {
          usuari.setContentAreaFilled(false);
          usuari.setOpaque(true);
          usuari.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         usuari.setBackground(new java.awt.Color(255,255,255));
-         usuari.setForeground(new java.awt.Color(34,75,139));
+         usuari.setBackground(new java.awt.Color(34,75,139));
+         usuari.setForeground(new java.awt.Color(255,255,255));
 //         usuari.setForeground(Color.WHITE);
          
          }
@@ -376,7 +376,7 @@ final class MDIMenu extends javax.swing.JFrame {
             if(JOptionPane.showConfirmDialog(null, "¿Seguro de cerrar sesión?","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
             int componentes=jDesktop.getComponentCount();
             System.out.println("ventanas "+componentes);
-            if(componentes==12){
+            if(componentes==11){
                 user.getdestruir();
                 empleadosingleton.getdestruir();
                 sucursalsingleton.getdestruir();
@@ -401,8 +401,8 @@ final class MDIMenu extends javax.swing.JFrame {
          cerrar.setContentAreaFilled(false);
          cerrar.setOpaque(true);
          cerrar.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         cerrar.setBackground(new java.awt.Color(255, 204, 51));
-         
+         cerrar.setBackground(new java.awt.Color(34,75,139));
+         cerrar.setForeground(new java.awt.Color(255,255,255));
         
      
      }
@@ -412,7 +412,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-          titulo.setForeground(new Color(255, 204, 51));
+          titulo.setForeground(new Color(34,75,139));
          ////////////////////////////////////////////////////////
          if(user.isCliente()==true){
          JButton client= new JButton("CLIENTES");
@@ -451,8 +451,8 @@ final class MDIMenu extends javax.swing.JFrame {
          client.setContentAreaFilled(false);
          client.setOpaque(true);
          client.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         client.setBackground(new java.awt.Color(255, 204, 51));
-         
+         client.setBackground(new java.awt.Color(34,75,139));
+         client.setForeground(new java.awt.Color(255,255,255));
          
          }
          /////////////////////////////////////////////////////////
@@ -492,7 +492,8 @@ final class MDIMenu extends javax.swing.JFrame {
          proveed.setContentAreaFilled(false);
          proveed.setOpaque(true);
          proveed.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         proveed.setBackground(new java.awt.Color(255, 204, 51));
+         proveed.setBackground(new java.awt.Color(34,75,139));
+         proveed.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////////
          if(user.isCkempleado()==true){
@@ -524,7 +525,8 @@ final class MDIMenu extends javax.swing.JFrame {
          emplead.setContentAreaFilled(false);
          emplead.setOpaque(true);
          emplead.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         emplead.setBackground(new java.awt.Color(255, 204, 51));
+         emplead.setBackground(new java.awt.Color(34,75,139));
+         emplead.setForeground(new java.awt.Color(255,255,255));
          }
          ////////////////////////////////////////////////////////
          /////////////////
@@ -536,7 +538,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
          titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         titulo.setForeground(new Color(255, 204, 51));
+         titulo.setForeground(new Color(34,75,139));
          ////////////////////////////////////////////////////////
          if(user.isIngreso()==true){
          JButton ingreso= new JButton("INGRESO");
@@ -565,7 +567,8 @@ final class MDIMenu extends javax.swing.JFrame {
          ingreso.setContentAreaFilled(false);
          ingreso.setOpaque(true);
          ingreso.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         ingreso.setBackground(new java.awt.Color(255, 204, 51));
+         ingreso.setBackground(new java.awt.Color(34,75,139));
+         ingreso.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////
          if(user.isMant_prod()==true){
@@ -596,7 +599,8 @@ final class MDIMenu extends javax.swing.JFrame {
          produc.setContentAreaFilled(false);
          produc.setOpaque(true);
          produc.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         produc.setBackground(new java.awt.Color(255, 204, 51));
+         produc.setBackground(new java.awt.Color(34,75,139));
+         produc.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////////
          if(user.isProductos()==true){
@@ -628,7 +632,8 @@ final class MDIMenu extends javax.swing.JFrame {
          prod.setContentAreaFilled(false);
          prod.setOpaque(true);
          prod.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         prod.setBackground(new java.awt.Color(255, 204, 51));
+         prod.setBackground(new java.awt.Color(34,75,139));
+         prod.setForeground(new java.awt.Color(255,255,255));
          }
          ////////////////////////////////////////////////////////
          if(user.isFamilia()==true){
@@ -658,7 +663,8 @@ final class MDIMenu extends javax.swing.JFrame {
          famili.setContentAreaFilled(false);
          famili.setOpaque(true);
          famili.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         famili.setBackground(new java.awt.Color(255, 204, 51));
+         famili.setBackground(new java.awt.Color(34,75,139));
+         famili.setForeground(new java.awt.Color(255,255,255));
          }
          //////////////////////////////////////////////////////////
          if(user.isProdpendientes()==true){
@@ -689,7 +695,8 @@ final class MDIMenu extends javax.swing.JFrame {
          pendient.setContentAreaFilled(false);
          pendient.setOpaque(true);
          pendient.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         pendient.setBackground(new java.awt.Color(255, 204, 51));
+         pendient.setBackground(new java.awt.Color(34,75,139));
+         pendient.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////////
 //         if(user.isMermas()==true){
@@ -720,7 +727,7 @@ final class MDIMenu extends javax.swing.JFrame {
 //         merm.setContentAreaFilled(false);
 //         merm.setOpaque(true);
 //         merm.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-//         merm.setBackground(new java.awt.Color(255, 204, 51));
+//         merm.setBackground(new java.awt.Color(34,75,139));
 //         }
          /////////////////////////////////////////////
 //         if(user.isConsulmermas()==true){
@@ -751,7 +758,7 @@ final class MDIMenu extends javax.swing.JFrame {
 //         conmerma.setContentAreaFilled(false);
 //         conmerma.setOpaque(true);
 //         conmerma.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-//         conmerma.setBackground(new java.awt.Color(255, 204, 51));
+//         conmerma.setBackground(new java.awt.Color(34,75,139));
 //         ///////////////////////////////////////////////////////////
 //         }
          if(user.isKardex()==true){
@@ -782,7 +789,8 @@ final class MDIMenu extends javax.swing.JFrame {
          conmerma.setContentAreaFilled(false);
          conmerma.setOpaque(true);
          conmerma.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         conmerma.setBackground(new java.awt.Color(255, 204, 51));
+         conmerma.setBackground(new java.awt.Color(34,75,139));
+         conmerma.setForeground(new java.awt.Color(255,255,255));
          ///////////////////////////////////////////////////////////
          }
          if(user.isInventario()==true){
@@ -812,7 +820,8 @@ final class MDIMenu extends javax.swing.JFrame {
          jbtninven.setContentAreaFilled(false);
          jbtninven.setOpaque(true);
          jbtninven.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         jbtninven.setBackground(new java.awt.Color(255, 204, 51));
+         jbtninven.setBackground(new java.awt.Color(34,75,139));
+         jbtninven.setForeground(new java.awt.Color(255,255,255));
          ///////////////////////////////////////////////////////////
          }
          if(user.isAct_precios()==true){
@@ -842,7 +851,8 @@ final class MDIMenu extends javax.swing.JFrame {
          jbtnactprecio.setContentAreaFilled(false);
          jbtnactprecio.setOpaque(true);
          jbtnactprecio.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         jbtnactprecio.setBackground(new java.awt.Color(255, 204, 51));
+         jbtnactprecio.setBackground(new java.awt.Color(34,75,139));
+         jbtnactprecio.setForeground(new java.awt.Color(255,255,255));
          ///////////////////////////////////////////////////////////
          }
      
@@ -855,7 +865,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-          titulo.setForeground(new Color(255, 204, 51));
+          titulo.setForeground(new Color(34,75,139));
          ////////////////////////////////////////////////////////
          if(user.isVender()==true){
          JButton newventa= new JButton("NUEV. VENTA");
@@ -885,7 +895,8 @@ final class MDIMenu extends javax.swing.JFrame {
          newventa.setContentAreaFilled(false);
          newventa.setOpaque(true);
          newventa.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         newventa.setBackground(new java.awt.Color(255, 204, 51));
+         newventa.setBackground(new java.awt.Color(34,75,139));
+         newventa.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////
          if(user.isExtornar()==true){
@@ -915,7 +926,8 @@ final class MDIMenu extends javax.swing.JFrame {
          proceso.setContentAreaFilled(false);
          proceso.setOpaque(true);
          proceso.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         proceso.setBackground(new java.awt.Color(255, 204, 51));
+         proceso.setBackground(new java.awt.Color(34,75,139));
+         proceso.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////////
          if(user.isConsultarventa()==true){
@@ -945,7 +957,8 @@ final class MDIMenu extends javax.swing.JFrame {
          consventa.setContentAreaFilled(false);
          consventa.setOpaque(true);
          consventa.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         consventa.setBackground(new java.awt.Color(255, 204, 51));
+         consventa.setBackground(new java.awt.Color(34,75,139));
+         consventa.setForeground(new java.awt.Color(255,255,255));
          }
          ////////////////////////////////////////////////////////
          /////////////////
@@ -960,7 +973,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         titulo.setForeground(new Color(255, 204, 51));
+         titulo.setForeground(new Color(34,75,139));
          ////////////////////////////////////////////////////////
          if(user.isApertura()==true){
          JButton apertur= new JButton("APERTURA CAJA");
@@ -1002,7 +1015,8 @@ final class MDIMenu extends javax.swing.JFrame {
          apertur.setContentAreaFilled(false);
          apertur.setOpaque(true);
          apertur.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         apertur.setBackground(new java.awt.Color(255, 204, 51));
+         apertur.setBackground(new java.awt.Color(34,75,139));
+         apertur.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////
          if(user.isMovimientos()==true){
@@ -1033,7 +1047,8 @@ final class MDIMenu extends javax.swing.JFrame {
          movimi.setContentAreaFilled(false);
          movimi.setOpaque(true);
          movimi.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         movimi.setBackground(new java.awt.Color(255, 204, 51));
+         movimi.setBackground(new java.awt.Color(34,75,139));
+         movimi.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////////
      
@@ -1048,7 +1063,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         titulo.setForeground(new Color(255, 204, 51));
+         titulo.setForeground(new Color(34,75,139));
          ////////////////////////////////////////////////////////
           if(user.isNueva()==true){
          JButton nuevar= new JButton("NUEVA");
@@ -1080,7 +1095,8 @@ final class MDIMenu extends javax.swing.JFrame {
          nuevar.setContentAreaFilled(false);
          nuevar.setOpaque(true);
          nuevar.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         nuevar.setBackground(new java.awt.Color(255, 204, 51));
+         nuevar.setBackground(new java.awt.Color(34,75,139));
+         nuevar.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////
           if(user.isConsultarrepara()==true){
@@ -1111,7 +1127,8 @@ final class MDIMenu extends javax.swing.JFrame {
          consultr.setContentAreaFilled(false);
          consultr.setOpaque(true);
          consultr.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         consultr.setBackground(new java.awt.Color(255, 204, 51));
+         consultr.setBackground(new java.awt.Color(34,75,139));
+         consultr.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////////
           if(user.isPendientes()==true){
@@ -1143,7 +1160,8 @@ final class MDIMenu extends javax.swing.JFrame {
          rpendient.setContentAreaFilled(false);
          rpendient.setOpaque(true);
          rpendient.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         rpendient.setBackground(new java.awt.Color(255, 204, 51));
+         rpendient.setBackground(new java.awt.Color(34,75,139));
+         rpendient.setForeground(new java.awt.Color(255,255,255));
          }
          ////////////////////////////////////////////////////////
          /////////////////
@@ -1157,7 +1175,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         titulo.setForeground(new Color(255, 204, 51));
+         titulo.setForeground(new Color(34,75,139));
          ////////////////////////////////////////////////////////
          if(user.isCotizacion()==true){
          JButton debe= new JButton("NUEVA COTIZACION");
@@ -1203,7 +1221,8 @@ final class MDIMenu extends javax.swing.JFrame {
          debe.setContentAreaFilled(false);
          debe.setOpaque(true);
          debe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         debe.setBackground(new java.awt.Color(255, 204, 51));
+         debe.setBackground(new java.awt.Color(34,75,139));
+         debe.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////
          if(user.isBuscar_cot()==true){
@@ -1243,7 +1262,8 @@ final class MDIMenu extends javax.swing.JFrame {
          habe.setContentAreaFilled(false);
          habe.setOpaque(true);
          habe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         habe.setBackground(new java.awt.Color(255, 204, 51));
+         habe.setBackground(new java.awt.Color(34,75,139));
+         habe.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////////
      
@@ -1258,7 +1278,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         titulo.setForeground(new Color(255, 204, 51));
+         titulo.setForeground(new Color(34,75,139));
          ////////////////////////////////////////////////////////
          if(user.isSucursalida()==true){
          JButton salida= new JButton("SALIDA");
@@ -1286,7 +1306,8 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(salida);
          salida.setBounds(20, 70, 200, 50);
          salida.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         salida.setBackground(new java.awt.Color(255, 204, 51));
+         salida.setBackground(new java.awt.Color(34,75,139));
+         salida.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////
          if(user.isSucurentrada()==true){
@@ -1312,7 +1333,8 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(entrad);
          entrad.setBounds(20, 140, 200, 50);
          entrad.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         entrad.setBackground(new java.awt.Color(255, 204, 51));
+         entrad.setBackground(new java.awt.Color(34,75,139));
+         entrad.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////////
          if(user.isConsultasucur()==true){
@@ -1339,7 +1361,8 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(conssucur);
          conssucur.setBounds(20, 210, 200, 50);
          conssucur.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         conssucur.setBackground(new java.awt.Color(255, 204, 51));
+         conssucur.setBackground(new java.awt.Color(34,75,139));
+         conssucur.setForeground(new java.awt.Color(255,255,255));
          }
          ////////////////////////////////////////////////////////
          /////////////////
@@ -1351,7 +1374,7 @@ final class MDIMenu extends javax.swing.JFrame {
          jpanelcontenedor.add(titulo);
           titulo.setBounds(60, 10, 200, 50);
          titulo.setFont(new java.awt.Font("Segoe UI Light", 1, 20));
-         titulo.setForeground(new Color(255, 204, 51));
+         titulo.setForeground(new Color(34,75,139));
          ////////////////////////////////////////////////////////
          if(user.isFacturas()==true){
          JButton debe= new JButton("FACTURAS");
@@ -1397,7 +1420,8 @@ final class MDIMenu extends javax.swing.JFrame {
          debe.setContentAreaFilled(false);
          debe.setOpaque(true);
          debe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         debe.setBackground(new java.awt.Color(255, 204, 51));
+         debe.setBackground(new java.awt.Color(34,75,139));
+         debe.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////
          if(user.isBoletas()==true){
@@ -1436,7 +1460,8 @@ final class MDIMenu extends javax.swing.JFrame {
          habe.setContentAreaFilled(false);
          habe.setOpaque(true);
          habe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         habe.setBackground(new java.awt.Color(255, 204, 51));
+         habe.setBackground(new java.awt.Color(34,75,139));
+         habe.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////////
        if(user.isNcredito()==true){
@@ -1475,7 +1500,8 @@ final class MDIMenu extends javax.swing.JFrame {
          habe.setContentAreaFilled(false);
          habe.setOpaque(true);
          habe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         habe.setBackground(new java.awt.Color(255, 204, 51));
+         habe.setBackground(new java.awt.Color(34,75,139));
+         habe.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////
          if(user.isNdebito()==true){
@@ -1514,7 +1540,8 @@ final class MDIMenu extends javax.swing.JFrame {
          habe.setContentAreaFilled(false);
          habe.setOpaque(true);
          habe.setFont(new java.awt.Font("Segoe UI Light", 1, 14));
-         habe.setBackground(new java.awt.Color(255, 204, 51));
+         habe.setBackground(new java.awt.Color(34,75,139));
+          habe.setForeground(new java.awt.Color(255,255,255));
          }
          /////////////////////////////////////////////////////////
          
@@ -1524,8 +1551,8 @@ final class MDIMenu extends javax.swing.JFrame {
     public void cargarImagen(){
     try{
 
-////        InputStream fondo=getClass().getResourceAsStream("/imagenes/degradado.jpg");
-////        BufferedImage image=ImageIO.read(fondo);
+//        InputStream fondo=getClass().getResourceAsStream("/imagenes/fondo.jpg");
+//        BufferedImage image=ImageIO.read(fondo);
 //        
         InputStream fondoresumen=getClass().getResourceAsStream("/imagenes/fondoresumen.png");
         BufferedImage imageresumen=ImageIO.read(fondoresumen);
@@ -1535,7 +1562,7 @@ final class MDIMenu extends javax.swing.JFrame {
         
 //        jDesktop.setBorder(new javax.swing.border.Border(getClass().getResource("/imagenes/cerrar.png")));
         
-////        jDesktop.setBorder(new ImagenFondo(image));
+//        jDesktop.setBorder(new ImagenFondo(image));
         jpanelresumen.setBorder(new ImagenFondo(imageresumen));
 //        jPanel6.setBorder(new ImagenFondo(imageiconos));
     }
@@ -1645,59 +1672,59 @@ final class MDIMenu extends javax.swing.JFrame {
         timer.start(); 
 }
        
-   public void pruebaconexion(){
-     
-     Runnable runnable = new Runnable() {
-
-         @Override
-         public void run() {
-             int i=0;
-//             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-             TestConexionServer test= new TestConexionServer();
-             while(true){
-                
-                 try {
-                     Thread.sleep(1000);
-                 } catch (InterruptedException ex) {
-                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                 }
-                  
-                 System.out.println("probando conexion...menu principal");
-                
-                if(test.ping()==true){
-                   
-                    
-                   jlblrpruebaconexion.setText("<html><p style=\"color:#FFFFFF\";>"+"Cloud Habilitado");
-                 
-                 
-                   
-               } else{
-                    
-                   
-                   jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"Cloud Inhabilitado");
-                   JDReconexion reconexion = new JDReconexion(new Frame(),isVisible());
-                   AWTUtilities.setWindowOpaque(reconexion, false);
-                   reconexion.setVisible(true);
-                 
-//                    try {
-//                     Thread.sleep(3000);
-//                    } catch (InterruptedException ex) {
-//                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
+//   public void pruebaconexion(){
+//     
+//     Runnable runnable = new Runnable() {
+//
+//         @Override
+//         public void run() {
+//             int i=0;
+////             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//             TestConexionServer test= new TestConexionServer();
+//             while(true){
+//                
+//                 try {
+//                     Thread.sleep(1000);
+//                 } catch (InterruptedException ex) {
+//                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+//                 }
+//                  
+//                 System.out.println("probando conexion...menu principal");
+//                
+//                if(test.ping()==true){
+//                   
+//                    
+//                   jlblrpruebaconexion.setText("<html><p style=\"color:#FFFFFF\";>"+"Cloud Habilitado");
+//                 
+//                 
+//                   
+//               } else{
+//                    
+//                   
+//                   jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"Cloud Inhabilitado");
+//                   JDReconexion reconexion = new JDReconexion(new Frame(),isVisible());
+//                   AWTUtilities.setWindowOpaque(reconexion, false);
+//                   reconexion.setVisible(true);
+//                 
+////                    try {
+////                     Thread.sleep(3000);
+////                    } catch (InterruptedException ex) {
+////                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+////                    }
+////             
+////                    jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"Reconectando ...");
+//                  
+//               }
 //             
-//                    jlblrpruebaconexion.setText("<html><p style=\"color:#FF0000 \";>"+"Reconectando ...");
-                  
-               }
-             
-              
-             }
-             
-         }
-     };
-     Thread T = new Thread(runnable);
-     T.start();
-     
-    }
+//              
+//             }
+//             
+//         }
+//     };
+//     Thread T = new Thread(runnable);
+//     T.start();
+//     
+//    }
      
      /////////////// CODIGO PARA CAMBIAR TEMAS /////////////////////////
 //     look.setLook( "com.jtattoo.plaf.noire.NoireLookAndFeel",this);
@@ -1742,7 +1769,6 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblventaanio = new javax.swing.JLabel();
         jlblprovreg = new javax.swing.JLabel();
         jlblsucursal = new javax.swing.JLabel();
-        jlblrpruebaconexion = new javax.swing.JLabel();
         jpaneliconoclientes = new javax.swing.JPanel();
         jpanelcliente = new javax.swing.JLabel();
         jlblclienteaccesodir = new javax.swing.JLabel();
@@ -1757,9 +1783,11 @@ final class MDIMenu extends javax.swing.JFrame {
         jpaneliconoproductos = new javax.swing.JPanel();
         jpanelproductos = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jpaneliconoventa = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jpanelventa = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jpaneliconoempleados = new javax.swing.JPanel();
         jpanelempleados = new javax.swing.JLabel();
         jlblempleadoaccesodir1 = new javax.swing.JLabel();
@@ -1785,7 +1813,7 @@ final class MDIMenu extends javax.swing.JFrame {
         jlblhora.setForeground(new java.awt.Color(0, 0, 0));
         jlblhora.setText("* * *");
 
-        jPanel6.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel6.setBackground(new java.awt.Color(9, 15, 22));
         jPanel6.setForeground(new java.awt.Color(77, 161, 227));
         jPanel6.setPreferredSize(new java.awt.Dimension(46, 791));
         jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2166,13 +2194,6 @@ final class MDIMenu extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jlblrpruebaconexion.setBackground(new java.awt.Color(77, 161, 227));
-        jlblrpruebaconexion.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jlblrpruebaconexion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblrpruebaconexion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cloud_20x20.png"))); // NOI18N
-        jlblrpruebaconexion.setText("* * *");
-        jlblrpruebaconexion.setOpaque(true);
-
         jpaneliconoclientes.setBackground(new java.awt.Color(255, 255, 255));
         jpaneliconoclientes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(238, 238, 238)));
         jpaneliconoclientes.setForeground(new java.awt.Color(255, 255, 255));
@@ -2226,9 +2247,8 @@ final class MDIMenu extends javax.swing.JFrame {
             jpaneliconoclientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpaneliconoclientesLayout.createSequentialGroup()
                 .addComponent(jpanelcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(jlblclienteaccesodir)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jlblclienteaccesodir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(34, 75, 139));
@@ -2395,18 +2415,27 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel1.setText("Alt + p");
+
         javax.swing.GroupLayout jpaneliconoproductosLayout = new javax.swing.GroupLayout(jpaneliconoproductos);
         jpaneliconoproductos.setLayout(jpaneliconoproductosLayout);
         jpaneliconoproductosLayout.setHorizontalGroup(
             jpaneliconoproductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
             .addComponent(jpanelproductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jpaneliconoproductosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpaneliconoproductosLayout.setVerticalGroup(
             jpaneliconoproductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpaneliconoproductosLayout.createSequentialGroup()
                 .addComponent(jpanelproductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addGap(7, 7, 7)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -2452,18 +2481,27 @@ final class MDIMenu extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel3.setText("Alt + v");
+
         javax.swing.GroupLayout jpaneliconoventaLayout = new javax.swing.GroupLayout(jpaneliconoventa);
         jpaneliconoventa.setLayout(jpaneliconoventaLayout);
         jpaneliconoventaLayout.setHorizontalGroup(
             jpaneliconoventaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
             .addComponent(jpanelventa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jpaneliconoventaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpaneliconoventaLayout.setVerticalGroup(
             jpaneliconoventaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpaneliconoventaLayout.createSequentialGroup()
                 .addComponent(jpanelventa, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(4, 4, 4)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -2517,8 +2555,8 @@ final class MDIMenu extends javax.swing.JFrame {
             jpaneliconoempleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpaneliconoempleadosLayout.createSequentialGroup()
                 .addComponent(jpanelempleados, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlblempleadoaccesodir1))
+                .addGap(18, 18, 18)
+                .addComponent(jlblempleadoaccesodir1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jpanelbanner.setBackground(new java.awt.Color(255, 255, 255));
@@ -2548,8 +2586,20 @@ final class MDIMenu extends javax.swing.JFrame {
             jpanelbannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpanelbannerLayout.createSequentialGroup()
                 .addComponent(jpanelgrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 9, Short.MAX_VALUE))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
+
+        jDesktop.setLayer(jlblhora, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jPanel6, javax.swing.JLayeredPane.MODAL_LAYER);
+        jDesktop.setLayer(jpanelcontenedor, javax.swing.JLayeredPane.MODAL_LAYER);
+        jDesktop.setLayer(jpanelresumen, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpaneliconoclientes, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jPanel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpaneliconoproveedores, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpaneliconoproductos, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpaneliconoventa, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpaneliconoempleados, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktop.setLayer(jpanelbanner, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopLayout = new javax.swing.GroupLayout(jDesktop);
         jDesktop.setLayout(jDesktopLayout);
@@ -2570,18 +2620,15 @@ final class MDIMenu extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 361, Short.MAX_VALUE)
                                 .addComponent(jpanelresumen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jDesktopLayout.createSequentialGroup()
-                                .addGroup(jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jlblrpruebaconexion, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jDesktopLayout.createSequentialGroup()
-                                        .addComponent(jpaneliconoclientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jpaneliconoempleados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jpaneliconoproductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jpaneliconoproveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jpaneliconoventa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jpaneliconoclientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jpaneliconoempleados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jpaneliconoproductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jpaneliconoproveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jpaneliconoventa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
@@ -2603,27 +2650,13 @@ final class MDIMenu extends javax.swing.JFrame {
                                     .addComponent(jpaneliconoempleados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jpaneliconoproveedores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jpaneliconoventa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jpaneliconoclientes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jlblrpruebaconexion, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                                    .addComponent(jpaneliconoclientes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
                                 .addComponent(jlblhora, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jpanelresumen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
         );
-        jDesktop.setLayer(jlblhora, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jPanel6, javax.swing.JLayeredPane.MODAL_LAYER);
-        jDesktop.setLayer(jpanelcontenedor, javax.swing.JLayeredPane.MODAL_LAYER);
-        jDesktop.setLayer(jpanelresumen, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jlblrpruebaconexion, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jpaneliconoclientes, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jPanel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jpaneliconoproveedores, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jpaneliconoproductos, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jpaneliconoventa, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jpaneliconoempleados, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktop.setLayer(jpanelbanner, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -3212,7 +3245,7 @@ final class MDIMenu extends javax.swing.JFrame {
         if(JOptionPane.showConfirmDialog(null, "¿Seguro de cerrar sesión?","",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
             int componentes=jDesktop.getComponentCount();
             System.out.println("ventanas "+componentes);
-            if(componentes==12){
+            if(componentes==11){
                 user.getdestruir();
                 empleadosingleton.getdestruir();
                 sucursalsingleton.getdestruir();
@@ -3286,7 +3319,9 @@ final class MDIMenu extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JDesktopPane jDesktop;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JButton jbtnactualizar;
@@ -3312,7 +3347,6 @@ final class MDIMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jlblproveedoraccesodir;
     private javax.swing.JLabel jlblprovreg;
     private javax.swing.JLabel jlblresize;
-    private javax.swing.JLabel jlblrpruebaconexion;
     private javax.swing.JLabel jlblrut;
     private javax.swing.JLabel jlblsucursal;
     private javax.swing.JLabel jlbluser;

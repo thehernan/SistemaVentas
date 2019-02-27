@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8b363855-7d7d-4bdf-9038-b9e7318de5fc">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select fecha, entrega,f_convnl(abono*(-1)) as abono, motivoanulacion from detalle_caja  where id_detallecaja = $P{id}]]>
+	</queryString>
+	<field name="fecha" class="java.sql.Timestamp"/>
+	<field name="entrega" class="java.lang.String"/>
+	<field name="abono" class="java.lang.String"/>
+	<field name="motivoanulacion" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="0" width="555" height="44" backcolor="#224B8B" uuid="036be726-a377-43b0-ac1d-0c387b050d77"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="140" y="7" width="279" height="33" forecolor="#FFFFFF" uuid="d5958fa8-d0b1-4a43-b9f3-cd5bfef89e79"/>
+				<textElement textAlignment="Center">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[EGRESO CAJA CHICA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="255" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="44" width="555" height="134" uuid="dbc742dd-edaf-43ff-a648-d975804cf985"/>
+			</rectangle>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="302" y="11" width="231" height="20" uuid="323e149b-57a0-46db-8ab4-b7cc592df782"/>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="23" y="50" width="510" height="20" uuid="a1b8f4fb-c8ac-40cb-9c4f-3ec42fe09f25"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Sirvase entregar a: "+$F{entrega}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="23" y="74" width="71" height="20" uuid="a41c2b14-d94b-419a-9dbc-9ac718d8d198"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[La suma de:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="95" y="74" width="438" height="20" uuid="8c24a84d-07bb-45ad-9dcf-4cb6c4407909"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abono}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="23" y="100" width="510" height="70" uuid="1b4794c0-f63d-463f-8082-c7ba803e6f5e"/>
+				<textFieldExpression><![CDATA["En concepto de: "+$F{motivoanulacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="94" y="210" width="100" height="20" uuid="1772048d-3f67-4661-b3f2-db9851fd1eca"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[SOLICITANTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="361" y="210" width="100" height="20" uuid="2ce1cd6c-4b87-479c-9e31-6274eadc9cc9"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[AUTORIZADO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="59" y="210" width="174" height="1" uuid="7822c3c6-3d31-4bfd-9f8b-4c83d39464c8"/>
+			</line>
+			<line>
+				<reportElement x="332" y="208" width="167" height="1" uuid="6035d7e6-03a5-4ca6-ab2b-304ad6b8e75d"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

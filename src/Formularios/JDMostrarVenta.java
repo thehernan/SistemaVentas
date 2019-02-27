@@ -7,6 +7,7 @@ package Formularios;
 
 import ClasesGlobales.FormatoNumerico;
 import DAO.VentasDAO;
+import Pojos.GuiaTipo;
 import Pojos.Producto;
 import Pojos.Ventas;
 import java.awt.Graphics;
@@ -50,6 +51,7 @@ public class JDMostrarVenta extends javax.swing.JDialog {
     Ventas ventaB;
     FormatoNumerico fn = new FormatoNumerico();
     List<Producto> listprod=new ArrayList<>();
+    List<GuiaTipo> listguia = new ArrayList<>();
     public JDMostrarVenta(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -58,7 +60,7 @@ public class JDMostrarVenta extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
        
-        ventaB=daoventa.buscarventa(listprod, "v"+idventa,"todo");
+        ventaB=daoventa.buscarventa(listprod,listguia, "v"+idventa,"todo");
         jdpfecha.setDate(ventaB.getFecha());
         jlbldescuento.setText("Descuento: "+fn.FormatoN(ventaB.getDescuento()));
         jlbltotal.setText("Total: "+fn.FormatoN(ventaB.getTotal()));

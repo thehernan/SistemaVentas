@@ -21,6 +21,7 @@
 package Facturacion;
 import ClasesGlobales.FormatoNumerico;
 import DAO.VentasDAO;
+import Pojos.GuiaTipo;
 import Pojos.Producto;
 import Pojos.Ventas;
 import java.io.BufferedReader;
@@ -44,11 +45,13 @@ public class ConsumingPost {
     
  private Ventas cab;
  private List<Producto> det;
+ private List<GuiaTipo> guia;
     FormatoNumerico fn = new FormatoNumerico();
     VentasDAO daovent= new VentasDAO();
-    public ConsumingPost(Ventas cab, List<Producto> det) {
+    public ConsumingPost(Ventas cab, List<Producto> det,List<GuiaTipo> guia) {
         this.cab = cab;
         this.det = det;
+        this.guia=guia;
     }
     
     public ConsumingPost() {
@@ -68,18 +71,23 @@ public class ConsumingPost {
 
 //  RUTA para enviar documentos
     
-    private String RUTA = "https://www.nubefact.com/api/v1/ce386603-0e47-41a5-a62a-4135668a5276"; //Walter 
 
-   
-//    private String RUTA = "https://www.nubefact.com/api/v1/a9716fb6-02eb-43eb-9d1c-333ee2c7a27d"; //demo
+
+//    private String RUTA ="https://api.nubefact.com/api/v1/2c767109-4a72-49af-9c76-83901fe6abf3";  // ferreteria jhon
+//   private String RUTA = "https://api.nubefact.com/api/v1/c9e4a215-45e8-41aa-9f4a-2d0a876ad9f4"; // ferreteria economica
+    private String RUTA = "https://www.nubefact.com/api/v1/a9716fb6-02eb-43eb-9d1c-333ee2c7a27d"; //demo
   
+//   private String RUTA = "https://api.nubefact.com/api/v1/69cac874-e935-4c2e-b350-8e50e391ff70";  // General Service
+//    private String RUTA = "https://api.nubefact.com/api/v1/ce386603-0e47-41a5-a62a-4135668a5276"; // Walter vega
     
 //  TOKEN para enviar documentos    
-    private String TOKEN = "efa6b67f239a4fae9281ef5b2035b429ba3ef5c5b0bd4cfe9ed4a0327c11e8dd"; //walter
- 
-//    private String TOKEN = "e2f2c6f49ffd4526a667c504d91971b46aaf85d7610146a68b5ee0c90c203506"; //demo
+
+//   private String TOKEN = "6461fc7656294eb684bca7cd25abc357f073e34561394c0291f47cbff48c31de";  // General Service
+    private String TOKEN = "e2f2c6f49ffd4526a667c504d91971b46aaf85d7610146a68b5ee0c90c203506"; //demo
+//    private String TOKEN = "26d85bd35a904e2ab22592514d6a94ea56eeb0f09b2a4661841fea65c71134e7"; //ferreteria jhon
     
-    
+//    private String TOKEN = "ccb341824dac4472ac6fe6e3bc40e82cd32d4f9db1054a95bea11cec7315a0aa";  // ferreteria economica
+//    private String TOKEN = "efa6b67f239a4fae9281ef5b2035b429ba3ef5c5b0bd4cfe9ed4a0327c11e8dd";  // walter vega
     public Ventas apiConsume(){
         boolean estado=false;
         try {
@@ -105,7 +113,8 @@ public class ConsumingPost {
             System.out.println("seriee"+cab.getSerie());
             objetoCabecera.put("numero",cab.getNumero());
             System.out.println("nunmeri"+cab.getNumero());
-            objetoCabecera.put("sunat_transaction","1");
+            objetoCabecera.put("sunat_transaction",cab.getSunattransaccion());
+            System.out.println("sunat_transaction"+cab.getSunattransaccion());
             objetoCabecera.put("cliente_tipo_de_documento",cab.getClientetipodoc());
             System.out.println("clientetipodoc"+cab.getClientetipodoc());
             objetoCabecera.put("cliente_numero_de_documento",cab.getClientenumdoc());
@@ -144,8 +153,9 @@ public class ConsumingPost {
             objetoCabecera.put("percepcion_base_imponible","");
             objetoCabecera.put("total_percepcion","");
             objetoCabecera.put("total_incluido_percepcion","");
-            System.out.println("detraccion"+"false");
-            objetoCabecera.put("detraccion","false");
+            
+            System.out.println("detraccion"+cab.isDetraccion());
+            objetoCabecera.put("detraccion",cab.isDetraccion());
             objetoCabecera.put("observaciones", "");
             
             String doc_q_mod_ti = "";
@@ -183,22 +193,39 @@ public class ConsumingPost {
             if(cab.getTipo_nota_deb()!=null){
                 tipo_not_deb=cab.getTipo_nota_deb();
             }
+            String condicion_pago="";
+              if(cab.getCondicionpago()!=null){
+                condicion_pago=cab.getCondicionpago();
+            }
+               String orden_compra="";
+              if(cab.getOrdencompras()!=null){
+                orden_compra=cab.getOrdencompras();
+            }
+                String placa_vehiculo="";
+              if(cab.getPlacavehiculo()!=null){
+                placa_vehiculo=cab.getPlacavehiculo();
+            } 
+             
+              
             System.out.println("tipodeb"+tipo_not_deb);
             objetoCabecera.put("tipo_de_nota_de_debito", tipo_not_deb);
             objetoCabecera.put("enviar_automaticamente_a_la_sunat", "true");
-            objetoCabecera.put("enviar_automaticamente_al_cliente", "false");
+            objetoCabecera.put("enviar_automaticamente_al_cliente", "true");
             objetoCabecera.put("codigo_unico", "");
-            objetoCabecera.put("condiciones_de_pago", "");
+            System.out.println("condiconpago"+condicion_pago);
+            objetoCabecera.put("condiciones_de_pago", condicion_pago);
             objetoCabecera.put("medio_de_pago", "");
-            objetoCabecera.put("placa_vehiculo", "");
-            objetoCabecera.put("orden_compra_servicio", "");
+            System.out.println("placavehiculo"+placa_vehiculo);
+            objetoCabecera.put("placa_vehiculo", placa_vehiculo);
+            System.out.println("ordencompra "+orden_compra);
+            objetoCabecera.put("orden_compra_servicio", orden_compra);
             objetoCabecera.put("tabla_personalizada_codigo", "");
             objetoCabecera.put("formato_de_pdf", "");
             
             
             JSONArray lista = new JSONArray();
             
-            
+            double valorU=0;
             for (Producto detalle : det )
             {
                 JSONObject detalle_linea_1 = new JSONObject();
@@ -206,12 +233,18 @@ public class ConsumingPost {
                detalle_linea_1.put("unidad_de_medida",detalle.getUnidabrev());
                 System.out.println("codigo"+detalle.getCodigo());
                detalle_linea_1.put("codigo", detalle.getCodigo());
+               System.out.println("codigosunat"+detalle.getCodigosunat());
+               detalle_linea_1.put("codigo_producto_sunat", detalle.getCodigosunat());
+               
                 System.out.println("descripcion"+detalle.getDescripcion());
                detalle_linea_1.put("descripcion", detalle.getDescripcion());
                 System.out.println("cantidad"+String.valueOf(detalle.getCantidad()));
+                 
+                
                detalle_linea_1.put("cantidad", String.valueOf(detalle.getCantidad()));
-                System.out.println("valoruni"+fn.FormatoN(detalle.getPrecio()));
-               detalle_linea_1.put("valor_unitario",fn.FormatoN(detalle.getPrecio()));
+               valorU = detalle.getPrecio()/1.18;
+                System.out.println("valoruni"+fn.FormatoN(valorU));
+               detalle_linea_1.put("valor_unitario",fn.FormatoN(valorU));
                 System.out.println("preciouni"+fn.FormatoN(detalle.getPrecio()));
                detalle_linea_1.put("precio_unitario", fn.FormatoN(detalle.getPrecio()));
                detalle_linea_1.put("descuento", "");
@@ -228,6 +261,15 @@ public class ConsumingPost {
                detalle_linea_1.put("anticipo_documento_numero", "");
                
                lista.add(detalle_linea_1);
+            }
+            JSONArray listaguia = new JSONArray();
+            
+            for(GuiaTipo guias: guia){
+                JSONObject guiadet = new JSONObject();
+                guiadet.put("guia_tipo", guias.getIdentguia());
+                guiadet.put("guia_serie_numero", guias.getSerienumero());
+                
+                listaguia.add(guiadet);
             }
            
             
@@ -252,6 +294,7 @@ public class ConsumingPost {
 //            lista.add(detalle_linea_2);
             
             objetoCabecera.put("items", lista);
+            objetoCabecera.put("guias",listaguia);
 /*
 #########################################################
 #### PASO 3: ENVIAR EL ARCHIVO A NUBEFACT ####

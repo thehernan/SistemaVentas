@@ -6,6 +6,7 @@
 package Formularios;
 
 import DAO.DocumentoDAO;
+import DAO.VentasDAO;
 import Pojos.Ventas;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -29,6 +30,7 @@ public class JIFNotaDebito extends javax.swing.JInternalFrame {
      int posx;
     int posy;        
     DocumentoDAO daodoc = new DocumentoDAO();
+     VentasDAO daovent= new VentasDAO();
     public JIFNotaDebito() {
         initComponents();
         jdpdesde.setDate(new Date());
@@ -189,6 +191,11 @@ public class JIFNotaDebito extends javax.swing.JInternalFrame {
         jbtnimprimir.setBorderPainted(false);
         jbtnimprimir.setContentAreaFilled(false);
         jbtnimprimir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jbtnimprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnimprimirActionPerformed(evt);
+            }
+        });
         getContentPane().add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 150, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(238, 238, 238));
@@ -322,6 +329,19 @@ public class JIFNotaDebito extends javax.swing.JInternalFrame {
                 new Timestamp(jdphasta.getDate().getTime()));
               
     }//GEN-LAST:event_imprimirbusquedaActionPerformed
+
+    private void jbtnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnimprimirActionPerformed
+        // TODO add your handling code here:
+        int index=jtablafactura.getSelectedRow();
+        if(index>=0)
+        {
+            Ventas v = listdoc.get(index);
+            daovent.imprimir(v.getIdventa());
+        
+        }else {
+            JOptionPane.showMessageDialog(null,"Seleccione item","",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jbtnimprimirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -9,6 +9,9 @@ import ClasesGlobales.FormatoNumerico;
 import Conexion.ConexionBD;
 import Pojos.SucursalSingleton;
 import Pojos.Ventas;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
@@ -52,6 +55,7 @@ public class DocumentoDAO {
         tab.setModel(tabla);
         List<Ventas> listvent=new ArrayList<>();
        DateFormat df = DateFormat.getDateInstance();
+       String aceptadaS;
         try{
 
             System.out.println("SELECT * from sp_busquedasensitivadoc('"+cadena+"','"+sucursal.getId()+"','"+desde+"','"+hasta+"','"+op+"','"+iddoc+"')");
@@ -73,6 +77,7 @@ public class DocumentoDAO {
                 vent.setTotal(rs.getDouble("vtotal"));
                 vent.setNumero(rs.getString("vnumero"));
                 vent.setSerie(rs.getString("vserie"));
+                vent.setComprobante(rs.getInt("vtipocomprobante"));
                 vent.setDescuento(0.0);
                 vent.setMotivodescuento("");
                 vent.setIdcliente(rs.getLong("vidcliente"));
@@ -86,8 +91,13 @@ public class DocumentoDAO {
                  datosR[3] = rs.getObject("vabreviatura");
 
                  datosR[4] =fn.FormatoN(vent.getTotal());
-
-                 datosR[5] =(rs.getObject("vestadosunat"));
+                 
+                 if(rs.getBoolean("vaceptadasunat")==true){
+                     aceptadaS= "Ha sido aceptada";
+                 } else {
+                     aceptadaS="En proceso";
+                 }
+                 datosR[5] =aceptadaS;
 
                
 
@@ -169,6 +179,38 @@ public class DocumentoDAO {
         }
 
   }
-    
+//    public void actualizarestadosunat(boolean  estado, long id){
+//    
+//     ConexionBD Cbd = new ConexionBD();
+//   
+//    
+//    PreparedStatement  ps=null;       
+//     try{
+//            
+//          
+//            String Sql = "update venta set aceptada_sunat=? where id_venta=?";
+//
+//            ps = Cbd.conectar().prepareStatement(Sql);
+//            
+//
+//            ps.setBoolean(1,estado);
+//            ps.setLong(2,id);
+//          
+//                      
+//           Cbd.actualizarDatos(ps);
+//           
+//
+//        }
+//     catch(Exception e)
+//            {
+//            JOptionPane.showMessageDialog(null, e.getMessage());
+//            }finally {
+//               Cbd.desconectar();
+//
+//                           
+//     }
+//    
+//    }
+//    
     
 }

@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -91,7 +90,7 @@ public class ProductoDAO {
                 prod.setIdproducto(rs.getLong("id"));
                 prod.setCodigo(rs.getString("vcodigo"));
                 prod.setDescripcion(rs.getString("vdescripcion"));
-                
+                prod.setCantidad(rs.getDouble("vcantidad"));
                  datosR[0] =prod.getCodigo() ;
                  datosR[1] = prod.getDescripcion();
                  datosR[2]=rs.getString("vfamilia");
@@ -261,6 +260,20 @@ public Producto buscarproducto(String tipoB,long id,long idsucur,String cadena) 
           producto.setUnidadm(rs.getString("vmedida"));
           producto.setUnidabrev(rs.getString("vabreviatura"));
           System.out.println("imgbytes"+imgBytes);
+          
+          ///////////////
+          producto.setUnidmedv(rs.getString("vunidmv"));
+          producto.setUnidmedc(rs.getString("vunidmc"));
+          producto.setStockmin(rs.getDouble("vstockmin"));
+          producto.setStockmax(rs.getDouble("vstockmax"));
+          producto.setPrecioc(rs.getDouble("vprecioc"));
+          producto.setLocalizacion(rs.getString("vlocalizacion"));
+          producto.setFactor(rs.getDouble("vfactor"));
+          /////////
+          producto.setIdcodsunat(rs.getLong("vidcodsunat"));
+          producto.setCodigosunat(rs.getString("vcodsunat"));
+                  
+          
                       
                       
                       
@@ -305,7 +318,7 @@ public void insertarproducto(Producto producto){
      try{
             
           
-            String Sql = "SELECT * from sp_insertarproducto(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String Sql = "SELECT * from sp_insertarproducto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             ps = Cbd.conectar().prepareStatement(Sql);
             
@@ -327,8 +340,16 @@ public void insertarproducto(Producto producto){
             ps.setBigDecimal(12, new BigDecimal(producto.getMargenG()));
             ps.setLong(13, producto.getId_sucursal());
             ps.setLong(14, producto.getIdunidm());
-            
-            
+            ///// new 
+            ps.setString(15,producto.getUnidmedv());
+            ps.setString(16,producto.getUnidmedc());
+            ps.setBigDecimal(17,new BigDecimal(producto.getStockmin()));
+            ps.setBigDecimal(18,new BigDecimal(producto.getStockmax()));
+            ps.setBigDecimal(19,new BigDecimal(producto.getPrecioc()));
+            ps.setString(20,producto.getLocalizacion());
+            ps.setBigDecimal(21,new BigDecimal(producto.getFactor()));
+            ps.setLong(22, producto.getIdcodsunat());
+                    
            Cbd.actualizarDatos(ps);
            
 
@@ -364,7 +385,7 @@ public void editarproducto(Producto producto){
 	InputStream fis = new ByteArrayInputStream(FOTO); 
        
       // System.out.println("SELECT * from sp_editaralumno('"+RUT+"','"+NOMBRE+"','"+APELLIDO+"','"+CURSO+"','"+SECCION+"','"+PRIORITARIO+"','"+FOTO+"')");
-        String sql=("SELECT * from sp_editarproducto(?,?,?,?,?,?,?,?,?,?,?,?,?)");         
+        String sql=("SELECT * from sp_editarproducto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");         
         PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
         
             ps.setLong(1,producto.getIdproducto());
@@ -383,6 +404,17 @@ public void editarproducto(Producto producto){
             ps.setBigDecimal(11, new BigDecimal(producto.getPrecio3()));
              ps.setString(12,producto.getMoneda());
              ps.setLong(13, producto.getIdunidm());
+             
+             //////////////////////////////////////
+             
+            ps.setString(14,producto.getUnidmedv());
+            ps.setString(15,producto.getUnidmedc());
+            ps.setBigDecimal(16,new BigDecimal(producto.getStockmin()));
+            ps.setBigDecimal(17,new BigDecimal(producto.getStockmax()));
+            ps.setBigDecimal(18,new BigDecimal(producto.getPrecioc()));
+            ps.setString(19,producto.getLocalizacion());
+            ps.setBigDecimal(20,new BigDecimal(producto.getFactor()));
+            ps.setLong(21, producto.getIdcodsunat());
             Cbd.actualizarDatos(ps);
            
 //       if  (rs.next()){
@@ -453,15 +485,21 @@ public List<Producto> inventario(JTable tabla,long idsucursal,double stockmin,St
         
          TableColumnModel columnModel = tabla.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(100);
-        columnModel.getColumn(1).setPreferredWidth(600);
+        columnModel.getColumn(1).setPreferredWidth(450);
 //        columnModel.getColumn(2).setPreferredWidth(50);
         columnModel.getColumn(2).setPreferredWidth(80);
         columnModel.getColumn(3).setPreferredWidth(80);
         columnModel.getColumn(4).setPreferredWidth(80);
         columnModel.getColumn(5).setPreferredWidth(80);
         columnModel.getColumn(6).setPreferredWidth(80);
-        columnModel.getColumn(7).setPreferredWidth(350);
-        columnModel.getColumn(8).setPreferredWidth(350);
+        columnModel.getColumn(7).setPreferredWidth(80);
+        columnModel.getColumn(8).setPreferredWidth(80);
+        columnModel.getColumn(9).setPreferredWidth(50);
+        columnModel.getColumn(10).setPreferredWidth(80);
+        columnModel.getColumn(11).setPreferredWidth(50);
+        columnModel.getColumn(12).setPreferredWidth(100);
+        columnModel.getColumn(13).setPreferredWidth(300);
+        columnModel.getColumn(14).setPreferredWidth(350);
         List<Producto> listprod= new ArrayList<>();
           ConexionBD Cbd = new ConexionBD();
          ResultSet rs=null;
@@ -474,7 +512,7 @@ public List<Producto> inventario(JTable tabla,long idsucursal,double stockmin,St
              ps.setLong(1, idsucursal);
              ps.setString(2, tipob);
              rs = Cbd.RealizarConsulta(ps);
-             Object datosR[]= new Object[9];
+             Object datosR[]= new Object[15];
              
              while (rs.next()){
                  
@@ -490,6 +528,13 @@ public List<Producto> inventario(JTable tabla,long idsucursal,double stockmin,St
                     prod.setCantidad(rs.getDouble("vcantidad"));
                     prod.setUnidadm(rs.getString("vmedida"));
                     prod.setUnidabrev(rs.getString("vabrev"));
+                    prod.setUnidmedv(rs.getString("vunidmv"));
+                    prod.setUnidmedc(rs.getString("vunidmc"));
+                    prod.setStockmin(rs.getDouble("vstockmin"));
+                    prod.setStockmax(rs.getDouble("vstockmax"));
+                    prod.setPrecioc(rs.getDouble("vprecioc"));
+                    prod.setLocalizacion(rs.getString("vlocalizacion"));
+                    prod.setFactor(rs.getDouble("vfactor"));
                     
                      datosR[0] = prod.getCodigo();
                                 
@@ -499,16 +544,25 @@ public List<Producto> inventario(JTable tabla,long idsucursal,double stockmin,St
                      datosR[3] =fn.FormatoN(prod.getPrecio1());
                      datosR[4] =fn.FormatoN(prod.getPrecio2());
                      datosR[5] =fn.FormatoN(prod.getPrecio3());
-                     datosR[6] =(prod.getCantidad());
-                     datosR[7] = rs.getObject("vfamilia");
-                     datosR[8] = rs.getObject("vsucusal");
-                 
+                     datosR[6] =fn.FormatoN(prod.getStockmin());
+                     datosR[7] =fn.FormatoN(prod.getStockmax());
+                     datosR[8] =fn.FormatoN(prod.getCantidad());
+                     datosR[9] =prod.getUnidmedc();
+                     datosR[10] =fn.FormatoN(rs.getDouble("vcantidadv"));
+                     datosR[11] =prod.getUnidmedv();
+                     datosR[12] =prod.getLocalizacion();
+                     datosR[13] = rs.getObject("vfamilia");
+                     datosR[14] = rs.getObject("vsucusal");
+                    
+                    
                     modelo.addRow(datosR);
-		listprod.add(prod);
+                    ColorRowTabla colorrow= new ColorRowTabla(8, 6,7);
+                    tabla.setDefaultRenderer (Object.class, colorrow );
+                    
+                    listprod.add(prod);
              }
            
-            ColorRowTabla colorrow= new ColorRowTabla(6, stockmin);
-            tabla.setDefaultRenderer (Object.class, colorrow );
+            
 
            //  tabla.changeSelection(0,0,false,true);
             if (tabla.getRowCount()>0){
@@ -557,15 +611,21 @@ public List<Producto> busquedasensitivainventario(JTable tabla,String tipob,Stri
         
         TableColumnModel columnModel = tabla.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(100);
-        columnModel.getColumn(1).setPreferredWidth(600);
+        columnModel.getColumn(1).setPreferredWidth(450);
 //        columnModel.getColumn(2).setPreferredWidth(50);
         columnModel.getColumn(2).setPreferredWidth(80);
         columnModel.getColumn(3).setPreferredWidth(80);
         columnModel.getColumn(4).setPreferredWidth(80);
         columnModel.getColumn(5).setPreferredWidth(80);
         columnModel.getColumn(6).setPreferredWidth(80);
-        columnModel.getColumn(7).setPreferredWidth(350);
-        columnModel.getColumn(8).setPreferredWidth(350);
+        columnModel.getColumn(7).setPreferredWidth(80);
+        columnModel.getColumn(8).setPreferredWidth(80);
+        columnModel.getColumn(9).setPreferredWidth(50);
+        columnModel.getColumn(10).setPreferredWidth(80);
+        columnModel.getColumn(11).setPreferredWidth(50);
+        columnModel.getColumn(12).setPreferredWidth(100);
+        columnModel.getColumn(13).setPreferredWidth(300);
+        columnModel.getColumn(14).setPreferredWidth(350);
             System.out.print(stockmin);
         
 //        tabla.setDefaultRenderer (Object.class, colorrow );
@@ -585,7 +645,7 @@ public List<Producto> busquedasensitivainventario(JTable tabla,String tipob,Stri
              ps.setLong(3, idsucur);
              ps.setLong(4, idfamilia);
              ResultSet rs = Cbd.RealizarConsulta(ps);
-             Object datosR[]= new Object[9];
+             Object datosR[]= new Object[15];
              
              while (rs.next()){
                  
@@ -597,30 +657,46 @@ public List<Producto> busquedasensitivainventario(JTable tabla,String tipob,Stri
                     prod.setPrecio1(rs.getDouble("vprecio1"));
                     prod.setPrecio2(rs.getDouble("vprecio2"));
                     prod.setPrecio3(rs.getDouble("vprecio3"));
-                    prod.setCantidad(rs.getDouble("vcantidad"));
                     prod.setMoneda(rs.getString("vmoneda"));
+                    prod.setCantidad(rs.getDouble("vcantidad"));
                     prod.setUnidadm(rs.getString("vmedida"));
                     prod.setUnidabrev(rs.getString("vabrev"));
+                    prod.setUnidmedv(rs.getString("vunidmv"));
+                    prod.setUnidmedc(rs.getString("vunidmc"));
+                    prod.setStockmin(rs.getDouble("vstockmin"));
+                    prod.setStockmax(rs.getDouble("vstockmax"));
+                    prod.setPrecioc(rs.getDouble("vprecioc"));
+                    prod.setLocalizacion(rs.getString("vlocalizacion"));
+                    prod.setFactor(rs.getDouble("vfactor"));
+                    
                      datosR[0] = prod.getCodigo();
                                 
                      datosR[1] = prod.getDescripcion();
-//                     datosR[2] = prod.getMoneda();
-                     datosR[2] = fn.FormatoN(prod.getPrecio());
-                     datosR[3] = fn.FormatoN(prod.getPrecio1());
-                     datosR[4] = fn.FormatoN(prod.getPrecio2());
-                     datosR[5] = fn.FormatoN(prod.getPrecio3());
+//                     datosR[2] =prod.getMoneda();
+                     datosR[2] =fn.FormatoN(prod.getPrecio());
+                     datosR[3] =fn.FormatoN(prod.getPrecio1());
+                     datosR[4] =fn.FormatoN(prod.getPrecio2());
+                     datosR[5] =fn.FormatoN(prod.getPrecio3());
+                     datosR[6] =fn.FormatoN(prod.getStockmin());
+                     datosR[7] =fn.FormatoN(prod.getStockmax());
+                     datosR[8] =fn.FormatoN(prod.getCantidad());
+                     datosR[9] =prod.getUnidmedc();
+                     datosR[10] =fn.FormatoN(rs.getDouble("vcantidadv"));
+                     datosR[11] =prod.getUnidmedv();
+                     datosR[12] =prod.getLocalizacion();
+                     datosR[13] = rs.getObject("vfamilia");
+                     datosR[14] = rs.getObject("vsucursal");
+                    
                      
-                  
-                     datosR[6] = prod.getCantidad();
-                     datosR[7] = rs.getObject("vfamilia");
-                     datosR[8] = rs.getObject("vsucursal");
-                 
                     modelo.addRow(datosR);
+                     ColorRowTabla colorrow= new ColorRowTabla(8, 6,7);
+                    tabla.setDefaultRenderer (Object.class, colorrow );
+                    
                     listprod.add(prod);
              }
              
-            ColorRowTabla colorrow= new ColorRowTabla(6, stockmin);
-            tabla.setDefaultRenderer (Object.class, colorrow );
+//            ColorRowTabla colorrow= new ColorRowTabla(6, stockmin);
+//            tabla.setDefaultRenderer (Object.class, colorrow );
              
              if(tabla.getRowCount()>0){
               tabla.setRowSelectionInterval (0,0); 
@@ -1046,6 +1122,130 @@ public void actulizarprecioporfamilia(double precio,double precio1,double precio
      }       
             
    
+}
+
+public boolean ajustarexistencia(long id, double cantidad){
+     ConexionBD Cbd = new ConexionBD();
+     boolean val=false;
+     try{
+	
+     
+        String sql=("UPDATE producto SET cantidad=? WHERE id_producto=?;");         
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+         
+        ps.setDouble(1, (cantidad));
+        ps.setLong(2,id);
+      
+        val =Cbd.update(ps);
+       
+//            if(Cbd.actualizarDatos(ps)==true)
+//            {
+//                 JOptionPane.showMessageDialog(null,"Exisistencias ajustadas con éxito","",JOptionPane.INFORMATION_MESSAGE);
+//            }
+           
+//       if  (rs.next()){
+//            JOptionPane.showMessageDialog(null,"Producto editado con exitosamente");
+//        }
+	
+        } catch(Exception e)
+            {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            } finally{
+     
+           Cbd.desconectar();
+     }       
+
+
+
+
+
+return val;
+
+}
+
+
+public boolean actualizaprecios(Producto prod){
+     ConexionBD Cbd = new ConexionBD();
+     boolean val=false;
+     try{
+	
+     
+        String sql=("UPDATE producto SET precio=?,precio1=?,precio2=?,precio3=?,preciocompra=? WHERE id_producto=?;");         
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+         
+        ps.setDouble(1, prod.getPrecio());
+        ps.setDouble(1, prod.getPrecio1());
+        ps.setDouble(1, prod.getPrecio2());
+        ps.setDouble(1, prod.getPrecio3());
+        ps.setDouble(1, prod.getPrecioc());
+        ps.setLong(2,prod.getIdproducto());
+      
+        val =Cbd.update(ps);
+       
+//            if(Cbd.actualizarDatos(ps)==true)
+//            {
+//                 JOptionPane.showMessageDialog(null,"Exisistencias ajustadas con éxito","",JOptionPane.INFORMATION_MESSAGE);
+//            }
+           
+//       if  (rs.next()){
+//            JOptionPane.showMessageDialog(null,"Producto editado con exitosamente");
+//        }
+	
+        } catch(Exception e)
+            {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            } finally{
+     
+           Cbd.desconectar();
+     }       
+
+
+
+
+
+return val;
+
+}
+
+
+public boolean actualizapreciocompra(double precioc , long id){
+     ConexionBD Cbd = new ConexionBD();
+     boolean val=false;
+     try{
+	
+     
+        String sql=("UPDATE producto SET preciocompra=? WHERE id_producto=?;");         
+        PreparedStatement ps=Cbd.conectar().prepareStatement(sql);
+         
+        ps.setDouble(1, precioc);
+ 
+        ps.setLong(2,id);
+      
+        val =Cbd.update(ps);
+       
+//            if(Cbd.actualizarDatos(ps)==true)
+//            {
+//                 JOptionPane.showMessageDialog(null,"Exisistencias ajustadas con éxito","",JOptionPane.INFORMATION_MESSAGE);
+//            }
+           
+//       if  (rs.next()){
+//            JOptionPane.showMessageDialog(null,"Producto editado con exitosamente");
+//        }
+	
+        } catch(Exception e)
+            {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            } finally{
+     
+           Cbd.desconectar();
+     }       
+
+
+
+
+
+return val;
+
 }
     
 

@@ -1,0 +1,85 @@
+
+BASE DE DATOS UTILIZADA bdferreteriaeconomica2
+
+
+Actualizaciones V1.0
+tabla sucursal
+
+
+
+
+
+
+
+Actualizaciones 15/10/2018 Sistema punto de venta  V2.0
+ 
+
+Base de datos 
+
+tabla unidmedfisica -  ----*
+
+sp_insertarproducto --- *
+
+tabla producto --- * 
+sp_busquedaproducto --*
+sp_mostrarresumen --- *
+sp_editarproducto -- * 
+
+sp_mostrarinventario -- *
+
+sp_mostrarinventario -- *
+sp_busquedasensitivainventario -- * 
+detalle_venta -- * 
+sp_insertardetalleventa -- * 
+
+sp_busquedaventa  -- *
+sp_extornarventa -- *
+
+sp_insertardetallecajaegreso -- * 
+
+detalle_caja --- * 
+sp_insertarcompra  -- * 
+sp_editarcompra  -- * 
+sp_busquedacompras -- * 
+
+compras agregar factor de compra
+sp_mostrarresumen -- * 
+sp_utilidad -- *
+
+////////// ESTO FALTA AGREGAR A FERRETERIA JHON
+sp_validastockrequerido *
+detalle_venta  *
+detalle_compra   *
+sp_insertardetalleventa * 
+sp_insertardetallecompra
+tabla sucursal * 
+
+Falta Ferreteria La Economica 
+
+sp_busquedasensitivadoc
+
+tabla tipo_guia
+sp_insertarventa
+tabla venta
+ident_guia
+
+sp_busquedaventa
+sp_insertarproducto
+codigo_sunat_producto   tabla
+producto tabla
+sp_editarproducto
+sp_busquedaproducto
+sp_busquedaventa
+
+[9,15,22]
+compras -- incluyeigv
+/// proximas actualizaciones ////
+- Al ir ingresando productos en la compra pueda ingresar modificar el precio compra y margenes de ganancia 
+por producto 
+
+- Reporte en excel de los productos 
+- Mostrar los egresos en movimiento de caja 
+- atajo de teclado para los registros
+
+
+

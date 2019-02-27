@@ -30,7 +30,7 @@ public class Compras {
     private String moneda;
     private String abrevimoneda;
     private double tipocambio;
-
+    private boolean  incluyeigv;
     public Compras() {
     }
 
@@ -44,6 +44,14 @@ public class Compras {
 
     public void setTipocambio(double tipocambio) {
         this.tipocambio = tipocambio;
+    }
+
+    public boolean isIncluyeigv() {
+        return incluyeigv;
+    }
+
+    public void setIncluyeigv(boolean incluyeigv) {
+        this.incluyeigv = incluyeigv;
     }
 
     

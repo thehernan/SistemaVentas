@@ -9,6 +9,7 @@ package DAO;
 import ClasesGlobales.FormatoNumerico;
 import Conexion.ConexionBD;
 import Pojos.DetalleCompras;
+import Pojos.Producto;
 import java.awt.HeadlessException;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
@@ -29,6 +30,7 @@ import javax.swing.table.TableColumnModel;
 public class DetalleComprasDAO {
     
     FormatoNumerico fn = new FormatoNumerico();
+    ProductoDAO proddao = new ProductoDAO();
      public void insertar(List<DetalleCompras> compras,long idcompra,JLabel mes){
          Runnable miRunnable = new Runnable()
       {
@@ -38,6 +40,7 @@ public class DetalleComprasDAO {
               ConexionBD Cbd = new ConexionBD();
              int i = 1;
               System.out.println("com"+compras.size());
+              Producto prod ;
             
              //Iterator<DetalleCompras> it= compras.iterator();
             try{
@@ -45,18 +48,34 @@ public class DetalleComprasDAO {
                for(DetalleCompras det: compras){
             
               if (det.getIddetallecompra()==0){
-                String insertImageSql = "SELECT * from sp_insertardetallecompra(?,?,?,?,?)";
+                  //////////////////// insertar detallee/////////////////
+                String insertImageSql = "SELECT * from sp_insertardetallecompra(?,?,?,?,?,?)";
             
                 PreparedStatement ps = Cbd.conectar().prepareStatement(insertImageSql);
                 mes.setText("Insertando Item "+i);
                 i++;
                 ps.setLong(1,det.getIdproducto());
+                System.out.print("idprodinsert"+det.getIdproducto());
+                System.out.print("insertcantidad"+det.getCantidad());
+                System.out.print("insertprecio"+det.getPrecio());
+                
                 ps.setBigDecimal(2,new BigDecimal(det.getCantidad()));
                 ps.setBigDecimal(3,new BigDecimal(det.getPrecio()));
                 ps.setLong(4,idcompra);
                 ps.setBigDecimal(5,new  BigDecimal(det.getCantidadacord()));
+                ps.setString(6, det.getUnidmed());
                 Cbd.actualizarDatos(ps);
-               
+                //////////////////// editar precios /////////////////////////////////
+                
+                prod = new Producto();
+                prod.setPrecio(det.getPrecio1());
+                prod.setPrecio1(det.getPrecio2());
+                prod.setPrecio2(det.getPrecio3());
+                prod.setPrecio3(det.getPrecio4());
+                prod.setPrecioc(det.getPrecio());
+                prod.setIdproducto(det.getIdproducto());
+                proddao.actualizaprecios(prod);
+  
               }
             
             }

@@ -9,15 +9,25 @@ import ClasesGlobales.FormatoNumerico;
 import Conexion.ConexionBD;
 import Pojos.Caja;
 import Pojos.DetalleCaja;
+import java.awt.HeadlessException;
 import java.math.BigDecimal;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -104,22 +114,25 @@ public class DetalleCajaDAO {
     
     }
      
-    public void insertaregreso(DetalleCaja detallecaja){    
+    public long insertaregreso(DetalleCaja detallecaja){    
         ConexionBD Cbd = new ConexionBD();
+        long id = 0;
      try{
                
             
-            String insertImageSql = "SELECT * from sp_insertardetallecajaegreso(?,?,?)";
+            String insertImageSql = "SELECT * from sp_insertardetallecajaegreso(?,?,?,?)";
             
-
+            
            PreparedStatement ps = Cbd.conectar().prepareStatement(insertImageSql);                  
            ps.setLong(1, detallecaja.getIdcaja());
            ps.setString(2, detallecaja.getMotivoanulacion());
            ps.setBigDecimal(3,new BigDecimal(detallecaja.getAbono()));
-          
-           
-           
-            Cbd.RealizarConsulta(ps);
+           ps.setString(4, detallecaja.getEntrega());  
+            ResultSet rs =Cbd.RealizarConsulta(ps);
+            if(rs.next()){
+               id= rs.getLong("vid");
+            
+            }
           
 
         }
@@ -130,6 +143,7 @@ public class DetalleCajaDAO {
             Cbd.desconectar();
             
      }
+     return id;
 
 }
     public Caja mostrar(JTable tabla,long idcaja){
@@ -226,5 +240,90 @@ public class DetalleCajaDAO {
          return c;
  
 }
+    
+    public void printegreso(long id){
+    
+        ConexionBD Cbd = new ConexionBD();
+        try{
+        ///////////////////////// formato fecha ////////////////////////////
+    //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    //           datepicker.setFormats(dateFormat);   
+    //           java.util.Date fecha =((datepicker.getDate())); 
+
+        ////////////////////////////////////////////////////////////////////    
+           
+          
+            
+                      
+            String  rutaInforme  = "src/Reportes/Egreso.jasper";
+            
+            Map parametros = new HashMap();
+            java.util.Locale locale = new Locale( "en", "US" );
+            parametros.put( JRParameter.REPORT_LOCALE, locale );
+            parametros.put("id",id);
+           
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
+            JasperViewer jv = new JasperViewer(informe,false);  
+        
+             jv.setVisible(true);
+             jv.setTitle(rutaInforme);
+          
+        }catch (HeadlessException | JRException ex) {
+        JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null,ex.getMessage());
+        }finally{
+            Cbd.desconectar();
+        }
+     
+     
+        
+    
+    }
+    
+    
+    public void printutilidad(Date desde, Date hasta){
+    
+        ConexionBD Cbd = new ConexionBD();
+        try{
+        ///////////////////////// formato fecha ////////////////////////////
+    //            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    //           datepicker.setFormats(dateFormat);   
+    //           java.util.Date fecha =((datepicker.getDate())); 
+
+        ////////////////////////////////////////////////////////////////////    
+           
+          
+            
+                      
+            String  rutaInforme  = "src/Reportes/Utilidad.jasper";
+            
+            Map parametros = new HashMap();
+            java.util.Locale locale = new Locale( "en", "US" );
+            parametros.put( JRParameter.REPORT_LOCALE, locale );
+            parametros.put("desde",desde);
+            parametros.put("hasta",hasta);
+           
+            JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros,Cbd.conectar());
+            JasperViewer jv = new JasperViewer(informe,false);  
+        
+             jv.setVisible(true);
+             jv.setTitle(rutaInforme);
+          
+        }catch (HeadlessException | JRException ex) {
+        JOptionPane.showMessageDialog(null, "ERROR EN EL REPORTE", "ERROR",JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null,ex.getMessage());
+        }finally{
+            Cbd.desconectar();
+        }
+     
+     
+        
+    
+    }
+    
+    
+
+    public DetalleCajaDAO() {
+    }
     
 }

@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6dd804b6-5d95-4ffb-9e31-e15541fd19e9">
-	<queryString language="SQL">
-		<![CDATA[select * from sp_busquedasensitivadoc(' ',3,'05-09-2017','05-09-2018','comprobante',1);]]>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DocumentoRango" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6dd804b6-5d95-4ffb-9e31-e15541fd19e9">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="52"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="cadena" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="idsucursal" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="desde" class="java.sql.Timestamp">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="hasta" class="java.sql.Timestamp">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="op" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="iddoc" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from sp_busquedasensitivadoc($P{cadena},$P{idsucursal},$P{desde},$P{hasta},$P{op},$P{iddoc});]]>
 	</queryString>
 	<field name="vidventa" class="java.lang.Long"/>
 	<field name="vcodigo" class="java.lang.String"/>
@@ -52,28 +73,161 @@
 	<field name="vrazons" class="java.lang.String"/>
 	<field name="vrut" class="java.lang.String"/>
 	<field name="vabreviatura" class="java.lang.String"/>
+	<variable name="vtotal_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{vtotal}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch"/>
+		<band height="60" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="0" width="555" height="47" backcolor="#224B8B" uuid="d9e3af49-a463-4f99-8c35-2ca8e8e0ce63"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="22" y="13" width="170" height="24" forecolor="#FFFFFF" uuid="ebbb0ad4-d97d-43ad-857d-022473ef5004"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COMPROBANTES]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="334" y="13" width="83" height="24" forecolor="#FFFFFF" uuid="20efcf21-d472-44c7-bbc3-5579712cb99a"/>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{desde}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="445" y="13" width="79" height="24" forecolor="#FFFFFF" uuid="331795b9-9701-48f0-9ce5-13fa910febdb"/>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{hasta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="417" y="13" width="28" height="24" forecolor="#FFFFFF" uuid="8e5bf428-d7da-4524-bb94-88915694b33f"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- ]]></text>
+			</staticText>
+		</band>
 	</title>
-	<pageHeader>
-		<band height="35" splitType="Stretch"/>
-	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch"/>
+		<band height="22" splitType="Immediate">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="20" backcolor="#224B8B" uuid="aceececd-0e48-4416-89ca-5e8603708284"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="65" height="20" forecolor="#FFFFFF" uuid="c7fd2c76-fc7d-413c-b242-46a325705ba9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="65" y="0" width="104" height="20" forecolor="#FFFFFF" uuid="926f4d62-8cc0-4530-85f7-c8c8823bd169"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="437" y="0" width="51" height="20" forecolor="#FFFFFF" uuid="8f6125e7-bac4-4bcf-8eba-e92691f82e0e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="488" y="0" width="67" height="20" forecolor="#FFFFFF" uuid="b0b1b55b-8442-4aed-8841-1e3b3f88109c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="0" width="268" height="20" forecolor="#FFFFFF" uuid="ef3a7675-a653-4b0b-bc2d-1936b8f32d3b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Razón Social]]></text>
+			</staticText>
+		</band>
 	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch"/>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="65" height="12" uuid="3bca8a16-8e47-4413-a0dd-7f8ab2ff405e"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vfecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="65" y="0" width="104" height="12" uuid="a5d2af96-9080-4fa3-852a-64168f6e1129"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vserie}+" -  "+$F{vnumero}+" Ref. "+$F{vcomprobateref}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="437" y="0" width="51" height="12" uuid="a71eaa0b-ef68-4727-9faa-eff3b22a0979"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vabreviatura}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="488" y="0" width="67" height="12" uuid="56d2e439-8b4f-45d0-ac13-bdcec5dac304"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vtotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="0" width="268" height="12" isPrintWhenDetailOverflows="true" uuid="d1c2d2dc-e439-4245-9600-f6a58efc8ffc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vrazons}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="12" width="555" height="1" forecolor="#EEEEEE" backcolor="#EEEEEE" uuid="bd03fee7-a13c-4055-a2ad-99f61aa592c9"/>
+			</line>
+		</band>
 	</detail>
 	<columnFooter>
-		<band height="45" splitType="Stretch"/>
+		<band height="60" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="54" splitType="Stretch"/>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="400" height="13" uuid="7f50cc0b-fd9d-4764-9195-a62d0edf0eab"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Desarrollado por: Vtechnology de Hernán Augusto Vilchez Acaro Cel.: 913859657]]></text>
+			</staticText>
+		</band>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="50">
+			<staticText>
+				<reportElement x="426" y="0" width="29" height="20" uuid="b8df769a-70be-4783-a3da-c5671f9eb2c1"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField pattern="###0.00">
+				<reportElement x="455" y="0" width="100" height="20" uuid="2aaa3f15-5071-4cb6-a140-2069cb13ed26"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vtotal_1}]]></textFieldExpression>
+			</textField>
+		</band>
 	</summary>
 </jasperReport>

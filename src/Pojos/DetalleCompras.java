@@ -17,6 +17,13 @@ public class DetalleCompras {
     private long idcompra;
     private double cantidadacord;
     private double importe;
+    private String unidmed;
+    
+    private double precio1;
+    private double precio2;
+    private double precio3;
+    private double precio4;
+    
     public DetalleCompras() {
     }
 
@@ -28,6 +35,50 @@ public class DetalleCompras {
         this.idcompra = idcompra;
         this.cantidadacord = cantidadacord;
     }
+
+    public double getPrecio1() {
+        return precio1;
+    }
+
+    public void setPrecio1(double precio1) {
+        this.precio1 = precio1;
+    }
+
+    public double getPrecio2() {
+        return precio2;
+    }
+
+    public void setPrecio2(double precio2) {
+        this.precio2 = precio2;
+    }
+
+    public double getPrecio3() {
+        return precio3;
+    }
+
+    public void setPrecio3(double precio3) {
+        this.precio3 = precio3;
+    }
+
+    public double getPrecio4() {
+        return precio4;
+    }
+
+    public void setPrecio4(double precio4) {
+        this.precio4 = precio4;
+    }
+    
+    
+
+    public String getUnidmed() {
+        return unidmed;
+    }
+
+    public void setUnidmed(String unidmed) {
+        this.unidmed = unidmed;
+    }
+    
+    
 
     public double getImporte() {
         return importe;

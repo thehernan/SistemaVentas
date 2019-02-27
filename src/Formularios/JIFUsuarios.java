@@ -1182,13 +1182,13 @@ public class JIFUsuarios extends javax.swing.JInternalFrame {
             //
             //        }
         int index= jtabla.getSelectedRow();
-        long id = Long.parseLong(jtabla.getValueAt(index, 0).toString());
+        usuario = listuser.get(index);
         if (index<0){
             JOptionPane.showMessageDialog(this, "SELECCIONE USUARIO A ELIMINAR EN LA TABLA");
         }else {
             if (JOptionPane.showConfirmDialog(null, "ESTA SEGURO DE ELIMINAR EL USUARIO","ELIMINAR",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-                daousuario.eliminar(id);
-                daousuario.mostrar(jtabla);
+                daousuario.eliminar(usuario.getId_usuario());
+                mostrar("");
       
                 bloquearjbtn(true, false, false, false, false, true,false,false);
                

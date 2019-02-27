@@ -20,6 +20,7 @@ public class DetalleCaja {
     private double abono;
     private boolean anulada;
     private String motivoanulacion;
+    private String entrega;
    
     public DetalleCaja() {
     }
@@ -35,6 +36,14 @@ public class DetalleCaja {
         this.abono = abono;
         this.anulada = anulada;
         this.motivoanulacion = motivoanulacion;
+    }
+
+    public String getEntrega() {
+        return entrega;
+    }
+
+    public void setEntrega(String entrega) {
+        this.entrega = entrega;
     }
 
    

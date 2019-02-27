@@ -1,6 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ To change this license header, choose License Headers in Project Properties. * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package Conexion;
@@ -33,7 +32,7 @@ public class ConexionBD {
     private String servidor="localhost:5432";
     private String usuario="postgres";
     private String contrasena="hernan$123";
-    private String bd="BDVentaWalter";
+    private String bd="BDGeneralServiceFact";
     
     private Connection conexion;
     private Statement sentencia;
@@ -243,7 +242,23 @@ public class ConexionBD {
            
         }catch (SQLException e) {
             realizado=false;
-            System.out.println(e.getMessage());
+            System.out.println("msj conexion "+e.getMessage());
+        }
+        return realizado;
+    }
+    
+        public boolean update(PreparedStatement ps){
+       
+        boolean realizado;
+        try{
+            
+            ps.executeUpdate();
+            this.ps=ps;
+            realizado=true;
+           
+        }catch (SQLException e) {
+            realizado=false;
+            System.out.println("msj conexion "+e.getMessage());
         }
         return realizado;
     }

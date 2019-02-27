@@ -135,17 +135,17 @@ sum (detalle_venta.precio*detalle_venta.cantidad) as importe, venta.descuento, s
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="18" y="160" width="114" height="24" uuid="0ff3fbef-f1af-4c79-91ec-1b99bb3a9e28"/>
+				<reportElement x="18" y="160" width="114" height="34" uuid="0ff3fbef-f1af-4c79-91ec-1b99bb3a9e28"/>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="true" checksumRequired="false">
 					<jr:codeExpression><![CDATA[$F{codigo}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
 			<staticText>
-				<reportElement x="0" y="184" width="100" height="11" uuid="2238d38e-dcaa-478e-bbc4-ea1533400435"/>
+				<reportElement x="0" y="194" width="100" height="11" uuid="2238d38e-dcaa-478e-bbc4-ea1533400435"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="5"/>
 				</textElement>
-				<text><![CDATA[www.Infosegurity.pe   cel.: +51913859657]]></text>
+				<text><![CDATA[www.vtechnology.org  cel.: +51913859657]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="13" width="162" height="13" uuid="6eb8c2f8-4a1a-475e-9c78-55860d41cbbd"/>

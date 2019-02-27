@@ -7,6 +7,8 @@ package Formularios;
 
 import DAO.DocumentoDAO;
 import DAO.VentasDAO;
+import Facturacion.ConsultarEstado;
+import Facturacion.ConsumingPost;
 import Pojos.Ventas;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -15,6 +17,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -113,6 +116,9 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
         jbtnnotacredito = new javax.swing.JButton();
         jbtnnotadebito = new javax.swing.JButton();
         imprimirbusqueda = new javax.swing.JButton();
+        jbtnticket = new javax.swing.JButton();
+        btnconsultarsunat = new javax.swing.JButton();
+        jprogres = new javax.swing.JProgressBar();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -144,7 +150,7 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
                 jtfbuscarKeyReleased(evt);
             }
         });
-        getContentPane().add(jtfbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 165, 506, -1));
+        getContentPane().add(jtfbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 165, 450, -1));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Rango de Fecha"));
 
@@ -191,7 +197,7 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 74, -1, -1));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
         jbtnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
         jbtnimprimir.setText("Print documento");
@@ -204,7 +210,7 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
                 jbtnimprimirActionPerformed(evt);
             }
         });
-        getContentPane().add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 150, -1, -1));
+        getContentPane().add(jbtnimprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 150, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(238, 238, 238));
         jPanel2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -236,7 +242,7 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1028, Short.MAX_VALUE)
                 .addComponent(jlblcerrar)
                 .addContainerGap())
         );
@@ -250,7 +256,7 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1114, -1));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, -1));
 
         jbtnverdetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/view25px.png"))); // NOI18N
         jbtnverdetalle.setToolTipText("Ver detalle del comprobante");
@@ -261,7 +267,7 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
                 jbtnverdetalleActionPerformed(evt);
             }
         });
-        getContentPane().add(jbtnverdetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 150, -1, -1));
+        getContentPane().add(jbtnverdetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 150, 40, -1));
 
         jlbltotal.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
         jlbltotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -314,7 +320,7 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 70, -1, 50));
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 80, -1, 50));
 
         imprimirbusqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
         imprimirbusqueda.setText("Print busqueda");
@@ -325,7 +331,33 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
                 imprimirbusquedaActionPerformed(evt);
             }
         });
-        getContentPane().add(imprimirbusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 150, -1, -1));
+        getContentPane().add(imprimirbusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 150, -1, -1));
+
+        jbtnticket.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/print.png"))); // NOI18N
+        jbtnticket.setText("Ticket");
+        jbtnticket.setBorderPainted(false);
+        jbtnticket.setContentAreaFilled(false);
+        jbtnticket.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnticketActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jbtnticket, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 150, -1, -1));
+
+        btnconsultarsunat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logosunat.png"))); // NOI18N
+        btnconsultarsunat.setText("Consultar estado");
+        btnconsultarsunat.setToolTipText("Consultar estado SUNAT");
+        btnconsultarsunat.setBorderPainted(false);
+        btnconsultarsunat.setContentAreaFilled(false);
+        btnconsultarsunat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnconsultarsunatActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnconsultarsunat, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 150, 180, 40));
+
+        jprogres.setString("");
+        getContentPane().add(jprogres, new org.netbeans.lib.awtextra.AbsoluteConstraints(-2, 60, 1170, 10));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -425,8 +457,104 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
                 new Timestamp(jdphasta.getDate().getTime()));
     }//GEN-LAST:event_imprimirbusquedaActionPerformed
 
+    private void jbtnticketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnticketActionPerformed
+        // TODO add your handling code here:
+        int index=jtablafactura.getSelectedRow();
+        if(index>=0)
+        {
+            Ventas v = listdoc.get(index);
+            daovent.imprimirticket(v.getIdventa());
+        
+        }else {
+            JOptionPane.showMessageDialog(null,"Seleccione item","",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jbtnticketActionPerformed
+
+    private void btnconsultarsunatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnconsultarsunatActionPerformed
+        // TODO add your handling code here:
+           int index=jtablafactura.getSelectedRow();
+        if(index>=0)
+        {
+            Ventas v = listdoc.get(index);
+
+            Runnable runnable=new Runnable() {
+
+                            @Override
+                            public void run() {
+                                ConsumingPost api;
+                          
+                            jprogres.setVisible(true);
+                            jprogres.setMinimum(0);
+                            jprogres.setMaximum(100);
+                            jprogres.setStringPainted(true);
+                            Ventas nv=null;
+                            ConsultarEstado consultars=null;
+                                int i = 0;
+                            while(i<=100)
+                            {
+                                 jprogres.setValue(i);
+                            
+                             
+                                if(i==10){
+                                     consultars= new ConsultarEstado(v);
+                                    
+                                }
+                                if(i==15){
+                                    nv= consultars.apiConsume();
+                                    
+                                
+                                }
+                                if(i==25)
+                                {
+                                    if(nv!=null){
+                                        System.out.println("insertando cab");
+                                        JDConsultarEstadoSunat consE= new JDConsultarEstadoSunat(new JFrame(), isVisible(),nv);
+                                        consE.setVisible(true);
+                                    }else{
+                                        JOptionPane.showMessageDialog(null,"Error al consultar sunat","Error",JOptionPane.ERROR_MESSAGE);
+                                    }
+                                    
+                                    
+                                }
+                                if(i==40)
+                                {
+                                    if(nv!=null){
+//                                    daodoc.actualizarestadosunat(nv.isAceptadasunat(), nv.getIdventa());
+//                                     if(cab!=null){
+                                        System.out.println("actualizando datos sunat");
+                                        daovent.actualizarsunat(nv);
+//                                         
+                                     }
+                                   
+                                    
+                                }
+                                if(i==50){
+                                    filtrar();
+                                
+                                }
+   
+                              
+                                    
+                                
+                               
+                            i++;
+                            }
+                           jprogres.setVisible(false);
+                            }
+                        };
+
+                        Thread t = new Thread(runnable);
+                        t.start();
+            
+
+        }else {
+            JOptionPane.showMessageDialog(null,"Seleccione item","",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnconsultarsunatActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnconsultarsunat;
     private javax.swing.JButton imprimirbusqueda;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -439,12 +567,14 @@ public class JIFBoletas extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbtnimprimir;
     private javax.swing.JButton jbtnnotacredito;
     private javax.swing.JButton jbtnnotadebito;
+    private javax.swing.JButton jbtnticket;
     private javax.swing.JButton jbtnverdetalle;
     private org.jdesktop.swingx.JXDatePicker jdpdesde;
     private org.jdesktop.swingx.JXDatePicker jdphasta;
     private javax.swing.JLabel jlblcerrar;
     private javax.swing.JLabel jlblloading;
     private javax.swing.JLabel jlbltotal;
+    private javax.swing.JProgressBar jprogres;
     private javax.swing.JTable jtablafactura;
     private javax.swing.JTextField jtfbuscar;
     // End of variables declaration//GEN-END:variables

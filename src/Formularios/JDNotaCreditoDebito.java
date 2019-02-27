@@ -12,6 +12,7 @@ import DAO.TipoNotaDAO;
 import DAO.VentasDAO;
 import Facturacion.ConsumingPost;
 import Pojos.Cliente;
+import Pojos.GuiaTipo;
 import Pojos.Moneda;
 import Pojos.Producto;
 import Pojos.SerieNumeroRef;
@@ -25,7 +26,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
-import javax.rmi.CORBA.Util;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -54,7 +54,7 @@ public class JDNotaCreditoDebito extends javax.swing.JDialog {
     Ventas ventaB= new Ventas();
     VentasDAO daoventa= new VentasDAO();
     List<Producto> listprod=new ArrayList<>();
-    
+    List<GuiaTipo> listguia = new ArrayList<>();
     FormatoNumerico fn = new FormatoNumerico();
     boolean validacredito=true;
     boolean validadebito=true;
@@ -80,7 +80,7 @@ public class JDNotaCreditoDebito extends javax.swing.JDialog {
 //         mostrartipoigv();
 //        if(op==3)  //////////////// nota de credito ///////////////////////////////
 //        {
-            ventaB=daoventa.buscarventa(listprod, "v"+v.getIdventa(), "todo");
+            ventaB=daoventa.buscarventa(listprod,listguia, "v"+v.getIdventa(), "todo");
             jlblcliente.setText(ventaB.getClienteRS());
             jlblclientedireccion.setText(ventaB.getClientedirec());
             jlbldocumento.setText(ventaB.getClientenumdoc());
@@ -959,10 +959,16 @@ public class JDNotaCreditoDebito extends javax.swing.JDialog {
                         ////////////////////////////////////////////////////////////////
                 }
                 if(i==15){
-                    System.out.println("Consumiendo api");
-                    api=new ConsumingPost(ventaB,listprod);
+                         System.out.println("Consumiendo api");
+                  
+                    api=new ConsumingPost(ventaB,listprod,listguia);
 
-                    cab=api.apiConsume();
+                     cab=api.apiConsume();
+                  
+                    
+                     
+                    
+                    
 
 
                 }
@@ -970,7 +976,8 @@ public class JDNotaCreditoDebito extends javax.swing.JDialog {
                 {
                     if(cab!=null){
                         System.out.println("insertando cab");
-                        id=daoventa.insertar(cab, listprod, true, tipo, mov);
+                        id=daoventa.insertar(cab, listprod,listguia, true, tipo, mov);
+                        JOptionPane.showMessageDialog(null, id);
                     }
 
 

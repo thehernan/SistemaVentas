@@ -41,7 +41,91 @@ public class Producto {
     private double saldo;
     private String motivo;
     
+    private String unidmedc;
+    private String unidmedv;
+    private double stockmin;
+    private double stockmax;
+    private double precioc;
+    private String localizacion;
+    private double factor;
+    
+    private String codigosunat;
+    private long idcodsunat;
+    
     public Producto() {
+    }
+
+    public String getCodigosunat() {
+        return codigosunat;
+    }
+
+    public void setCodigosunat(String codigosunat) {
+        this.codigosunat = codigosunat;
+    }
+
+    public long getIdcodsunat() {
+        return idcodsunat;
+    }
+
+    public void setIdcodsunat(long idcodsunat) {
+        this.idcodsunat = idcodsunat;
+    }
+    
+
+    public String getUnidmedc() {
+        return unidmedc;
+    }
+
+    public void setUnidmedc(String unidmedc) {
+        this.unidmedc = unidmedc;
+    }
+
+    public String getUnidmedv() {
+        return unidmedv;
+    }
+
+    public void setUnidmedv(String unidmedv) {
+        this.unidmedv = unidmedv;
+    }
+
+    public double getStockmin() {
+        return stockmin;
+    }
+
+    public void setStockmin(double stockmin) {
+        this.stockmin = stockmin;
+    }
+
+    public double getStockmax() {
+        return stockmax;
+    }
+
+    public void setStockmax(double stockmax) {
+        this.stockmax = stockmax;
+    }
+
+    public double getPrecioc() {
+        return precioc;
+    }
+
+    public void setPrecioc(double precioc) {
+        this.precioc = precioc;
+    }
+
+    public String getLocalizacion() {
+        return localizacion;
+    }
+
+    public void setLocalizacion(String localizacion) {
+        this.localizacion = localizacion;
+    }
+
+    public double getFactor() {
+        return factor;
+    }
+
+    public void setFactor(double factor) {
+        this.factor = factor;
     }
 
     public String getMotivo() {

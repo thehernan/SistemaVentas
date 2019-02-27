@@ -17,11 +17,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public class ColorRowTabla extends DefaultTableCellRenderer{
     private final int columna_patron ;
-    private final double stockmin;
+//    private final double cantidad;
+    private final int Colstockmax;
+    private final int Colstockm;
     
-    public ColorRowTabla(int Colpatron,double stockm){
+    public ColorRowTabla(int Colpatron,int Colstockm,int Colstockmax){ // double stockm,double stockmax
       this.columna_patron = Colpatron;
-      stockmin=stockm;
+//      this.cantidad = cant;
+      this.Colstockmax=Colstockmax;
+      this.Colstockm=Colstockm;
     }
     
     @Override
@@ -30,10 +34,20 @@ public class ColorRowTabla extends DefaultTableCellRenderer{
         setBackground(Color.white);//color de fondo
         table.setForeground(Color.black);//color de texto
         //Si la celda corresponde a una fila con estado FALSE, se cambia el color de fondo a rojo
-        if( Double.parseDouble(table.getValueAt(row,columna_patron).toString())<=stockmin)
+        if( Double.parseDouble(table.getValueAt(row,columna_patron).toString())<=Double.parseDouble(table.getValueAt(row,Colstockm).toString()))
+//        if( cantidad<=stockmin)
         {
-            setBackground(new Color(244, 155, 22));
+            setBackground(new Color(248, 193, 186));
         }
+           if( Double.parseDouble(table.getValueAt(row,columna_patron).toString())>Double.parseDouble(table.getValueAt(row,Colstockmax).toString()))
+//        if( cantidad<=stockmin)
+        {
+            setBackground(new Color(183, 219, 243));
+        }
+//        if( cantidad<=stockmax)
+//        {
+//            setBackground(new Color(183, 219, 243));
+//        }
         
 
         super.getTableCellRendererComponent(table, value, selected, focused, row, column);

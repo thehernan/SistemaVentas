@@ -8,10 +8,11 @@ package Formularios;
 import ClasesGlobales.Mayusculas;
 import DAO.FamiliaDAO;
 import DAO.ProductoDAO;
+import DAO.TipoIgvDAO;
 import Pojos.Familia;
 import Pojos.Producto;
 import Pojos.SucursalSingleton;
-import java.awt.Frame;
+import Pojos.Tipo_Igv;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -40,6 +41,8 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
     String from;
     List<Producto> listprod;
     Producto prod = new Producto();
+    List<Tipo_Igv> listtipoigv;
+    TipoIgvDAO tipoigvdao = new TipoIgvDAO();
     FamiliaDAO daofamilia = new FamiliaDAO();
     List<Familia> listfamilia= new ArrayList<>();
     JIFCotizacion jifcotiza;
@@ -65,7 +68,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         this.frmventa=frmventa;
         this.listprodventa=listprodventa;
         from = "venta";
-        listfamilia = daofamilia.llenarcombo(jcbfamilia);
+        mostrartipoigv();
         jbtntodo.setEnabled(false);
 //       jtfproducto.requestFocus();
         addEscapeListener(this);
@@ -81,7 +84,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         this.jifsalida=jifsalida;
         
         from ="salida";
-         listfamilia = daofamilia.llenarcombo(jcbfamilia);
+//         listfamilia = daofamilia.llenarcombo(jcbfamilia);
 //          jtfproducto.requestFocus();
           addEscapeListener(this);
     }
@@ -97,7 +100,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         
         jbtntodo.setEnabled(false);
         from ="cotiza";
-         listfamilia = daofamilia.llenarcombo(jcbfamilia);
+//         listfamilia = daofamilia.llenarcombo(jcbfamilia);
 //          jtfproducto.requestFocus();
           addEscapeListener(this);
     }
@@ -126,7 +129,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         this.jdnota=jdnota;
          jbtntodo.setEnabled(false);
         from = "nota";
-        listfamilia = daofamilia.llenarcombo(jcbfamilia);
+//        listfamilia = daofamilia.llenarcombo(jcbfamilia);
         jbtntodo.setEnabled(false);
 //       jtfproducto.requestFocus();
         addEscapeListener(this);
@@ -142,7 +145,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         mostrar();
         this.frmkardex=frmkardex;
         from = "kardex";
-        listfamilia = daofamilia.llenarcombo(jcbfamilia);
+//        listfamilia = daofamilia.llenarcombo(jcbfamilia);
         jbtntodo.setEnabled(false);
 //       jtfproducto.requestFocus();
         addEscapeListener(this);
@@ -157,7 +160,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         mostrar();
         this.jifingreso=jifingreso;
         from = "ingreso";
-        listfamilia = daofamilia.llenarcombo(jcbfamilia);
+//        listfamilia = daofamilia.llenarcombo(jcbfamilia);
         jbtntodo.setEnabled(false);
 //       jtfproducto.requestFocus();
         addEscapeListener(this);
@@ -189,6 +192,9 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                     jcbfamilia.setEnabled(true);
                  
                  }
+                 if(i==7){
+                     listfamilia = daofamilia.llenarcombo(jcbfamilia);
+                 }
                  i++;
                  
             }     
@@ -201,6 +207,14 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
      Thread T = new Thread(runnable);
      T.start();
      
+    
+    }
+    public void mostrartipoigv(){
+         listtipoigv= tipoigvdao.mostrar();
+        for(Tipo_Igv tigv : listtipoigv){
+            jcbtipoigv.addItem(tigv.getDescripcion());
+        }
+        
     
     }
     public static void addEscapeListener(final JDialog dialog) {
@@ -286,12 +300,14 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jtfproducto = new javax.swing.JTextField();
         jbtnaceptar = new javax.swing.JButton();
-        jcbfamilia = new javax.swing.JComboBox();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jbtnver = new javax.swing.JButton();
-        jbtntodo = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jcbfamilia = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        jcbtipoigv = new javax.swing.JComboBox<>();
+        jbtntodo = new javax.swing.JButton();
         jProgressBar1 = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -307,17 +323,17 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
 
         jtabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Codigo", "Descripción", "Precio", "Precio 1", "Precio 2", "Precio 3", "Stock", "Familia", "Sucursal"
+                "Codigo", "Descripción", "P. Publico", "P. Min. Publico", "P. Mayorista", "P. Otros", "Stock Min.", "Stock Max.", "Existencias C.", "UnidC.", "Existencias V.", "UnidV.", "Localización", "Familia", "Sucursal"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -342,11 +358,10 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jtabla);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 1180, 370));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 1210, 370));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
         jLabel1.setText("Buscar:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
 
         jtfproducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtfproducto.addActionListener(new java.awt.event.ActionListener() {
@@ -365,7 +380,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                 jtfproductoKeyTyped(evt);
             }
         });
-        jPanel1.add(jtfproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, 490, -1));
+        jPanel1.add(jtfproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 370, 20));
 
         jbtnaceptar.setBackground(new java.awt.Color(77, 161, 227));
         jbtnaceptar.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
@@ -379,14 +394,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                 jbtnaceptarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 80, 120, 40));
-
-        jcbfamilia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbfamiliaActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jcbfamilia, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 80, 340, -1));
+        jPanel1.add(jbtnaceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 80, 120, 40));
 
         jPanel7.setBackground(new java.awt.Color(238, 238, 238));
 
@@ -405,6 +413,17 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        jLabel2.setText("Familia:");
+
+        jcbfamilia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbfamiliaActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Tipo IGV.:");
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -412,7 +431,15 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 892, Short.MAX_VALUE)
+                .addGap(58, 58, 58)
+                .addComponent(jLabel2)
+                .addGap(13, 13, 13)
+                .addComponent(jcbfamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcbtipoigv, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
                 .addComponent(jbtnver)
                 .addGap(25, 25, 25))
         );
@@ -421,12 +448,18 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jcbfamilia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
+                            .addComponent(jcbtipoigv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel11)
                     .addComponent(jbtnver))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 60));
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1230, 60));
 
         jbtntodo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/selectall.png"))); // NOI18N
         jbtntodo.setToolTipText("Agregar todos los productos en tabla");
@@ -435,21 +468,17 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                 jbtntodoActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtntodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 80, -1, -1));
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
-        jLabel2.setText("Familia:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 80, -1, 20));
+        jPanel1.add(jbtntodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 80, -1, -1));
 
         jProgressBar1.setBorderPainted(false);
         jProgressBar1.setString("");
-        jPanel1.add(jProgressBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1200, 8));
+        jPanel1.add(jProgressBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1230, 8));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1201, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -490,6 +519,8 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                 }
                 if(repetido==false)
                 {
+                    Tipo_Igv igv =listtipoigv.get(jcbtipoigv.getSelectedIndex());
+                    prod.setIdtipoigv(igv.getId());
                     JDFOpcionPrecio opprecio= new JDFOpcionPrecio(new JFrame(), isVisible(),prod,frmventa,this);
                     opprecio.setVisible(true);
                 }else {
@@ -549,8 +580,10 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
                 }
                  if(from.equals("ingreso"))
                  {
-                     jifingreso.buscarprod(prod.getCodigo());
-                     this.dispose();
+                     JDInfoProducto infoprod= new JDInfoProducto(new JFrame(), isVisible(),prod,jifingreso);
+                     infoprod.setVisible(true);
+//                     jifingreso.buscarprod(prod.getCodigo());
+//                     this.dispose();
                  
                  }
                 
@@ -632,7 +665,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
 
     private void jtablaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtablaKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        if(evt.getKeyCode()==10){
         
             jbtnaceptar.doClick();
         }
@@ -709,6 +742,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JProgressBar jProgressBar1;
@@ -717,6 +751,7 @@ public class JDBuscarProductoVenta extends javax.swing.JDialog {
     private javax.swing.JButton jbtntodo;
     private javax.swing.JButton jbtnver;
     private javax.swing.JComboBox jcbfamilia;
+    private javax.swing.JComboBox<String> jcbtipoigv;
     private javax.swing.JTable jtabla;
     private javax.swing.JTextField jtfproducto;
     // End of variables declaration//GEN-END:variables
